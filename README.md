@@ -12,7 +12,7 @@ The primary goal of this game is to provide each player with a unique narrative 
 
 In order to achieve that goal, the game will be developed to provide a massive amount of control to the player such that their choices matter.
 
-The secondary goal of this game is to provide a "realistic" experience for the player. What this means is not that it will resemble non-fiction (there will be fictional elements), but rather that no subject matter is off limits. Players should be warned that this may create uncomfortable plot developments.
+The secondary goal of this game is to provide a "realistic" experience for the player. What this means is not that it will resemble non-fiction (there will be fictional elements), but rather that no subject matter is off limits. This may create uncomfortable plot developments. Ye be warned...
 
 The scope of the main project will inevitably be large. As such, the development process will take a long time... I hope to finish before I die.
 
