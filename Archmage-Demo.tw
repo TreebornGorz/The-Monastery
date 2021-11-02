@@ -4,7 +4,7 @@ Archmage Demo
 :: StoryData
 {
     "ifid": "954D2221-3680-494F-A851-E66CC67FA3BC",
-    "format": "sugarcube",
+    "format": "SugarCube",
     "format-version": "2.35.0"
 }
 
