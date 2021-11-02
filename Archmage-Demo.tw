@@ -86,7 +86,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
     You are worried that you are not supposed to be here and that someboy might catch you snooping around.
 
     [[Leave]]
-    [[Snoop Anyway]]
+    [[Sneak Away]]
     <<else>>.
 
     [[Explore]]
