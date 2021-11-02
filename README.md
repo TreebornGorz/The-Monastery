@@ -1,21 +1,22 @@
 # The-Archmage-Demo
 
-A demo for the interactive fiction game "The Archmage" which is currently under private development. 
+Installation instructions:
+1) Download the html file
+2) Open in web browser
+3) Play
 
-Any developers interested in working with me on this project can contact me @thearchmagedev@gmail.com to express their interest.
+This is a demo for the currently in-development interactive fiction project "The Archmage", a project intended to be a narrative-driven interactive fiction fantasy which provides the player with _significant_ agency.
 
-This project is being developed in Twine 2.0 (SugarCube).
+This demo provides players with a teaser for the main project without spoiling major story elements. It is intended to display gameplay mechanics without widening the scope (and timeline) to unwieldy levels inevitably required for developing the main project. 
 
-It is a text-based interactive fiction (CYOA) game with a fantasy story of my personal creation.
+The final version of the demo will contain: Multiple Endings, Replayability, Environmental Interactions, and Basic Agency. 
 
-The primary goal of this game is to provide each player with a unique narrative experience based on their personality and decisions.
+I expect the main project to contain extreme adult (NSFW) content in order to make player agency achievable. However, this demo may have a toggle option to censor adult content in the future.
 
-In order to achieve that goal, the game will be developed to provide a massive amount of control to the player such that their choices matter.
+Any players that wish to contribute to development can contact me @thearchmagedev@gmail.com
 
-The secondary goal of this game is to provide a "realistic" experience for the player. What this means is not that it will resemble non-fiction (there will be fictional elements), but rather that no subject matter is off limits. This may create uncomfortable plot developments. Ye be warned...
+-Black Dahlia Studios
 
-The scope of the main project will inevitably be large. As such, the development process will take a long time... I hope to finish before I die.
+Note: This project is greatly inspired by Zork. Interactive Fiction engines give players a great deal of agency, but generally lack a developed narrative. Visual novels contain developed narratives but often rob players of their agency. My dream is to combine these elements in a single project. 
 
-The purpose of this demo to provide a proof of concept and also tease the players without ruining the story.
-
-This is my first game development project, so I may require some grace from time to time.
+Alpha Version 0.0
