@@ -1,0 +1,316 @@
+﻿:: StoryTitle
+Archmage Demo
+
+:: StoryData
+{
+    "ifid": "954D2221-3680-494F-A851-E66CC67FA3BC",
+    "format": "sugarcube",
+    "format-version": "2.35.0"
+}
+
+:: UserScript[script]
+
+
+:: UserStylesheet[stylesheet]
+
+
+
+:: StoryInit
+
+<<set $Show to false>>
+<<set $Male to true>>
+<<set $Day to 0>>
+
+
+:: Start
+This is a demo for the currently in-development interactive fiction project "The Archmage". 
+
+This demo provides players with a teaser for the game without spoiling the story.
+
+-Black Dahlia Studios
+
+[[Begin Demo|Character]]
+
+:: Demo
+You arrive on campus. There are several areas to explore.
+
+What do you want to do? 
+
+[[Explore the Dormitories|Dormitory]]
+[[Pray in the Temple|Temple]]
+[[Take a stroll in the Cloister|Cloister]]
+[[Dine in the Refectory|Refectory]]
+[[Study in the Library|Library]]
+[[Study in the Laboratory|Laboratory]]
+[[Bathe in the Balneary|Balneary]]
+[[Work in the Infirmary|Infirmary]]
+[[Work in the Barn|Barn]]
+[[Work in the Forge|Forge]]
+[[Work in the Brewery|Brewery]]
+
+[[Wait until classes start|Class]]
+
+<<set $Show to true>>
+
+
+:: Dormitory
+You enter the dormitory.
+
+The hallway forks. One direction leads to the male dorm, the other leads to the female dorm. You also notice a latch on the ceiling with a warning sign warning you not to pull it.
+
+[[Male dorm]]
+[[Female dorm]]
+[[Pull latch]]
+
+
+:: Temple
+You enter the temple.
+
+This is probably the most magnificent room in the entire campus. It is open and spacious, but also majestically decorated.
+
+The stained glass windows depict epic scenes in glorious colors as sunlight shines through, flooding the room. 
+
+Wooden pews line the stone floors and an imposing statue watches over the space.
+
+[[Pray at a pew]] 
+[[Pray to the statue]]
+[[Search the temple]]
+
+
+:: Cloister
+You enter the cloister.
+
+There is a large tree in the center of the field surrounded by a large patch of open grass. Four walls surround the area in a square shape. Various bushes and flowers line the walls. 
+
+[[Inspect the plants]]
+[[Daydream]]
+
+
+:: Refectory
+You enter the refectory.
+
+The vacuous hall has two long wooden dining tables that extend the length of the room. Atop the tables lie lace tablecloths with chalices and dishes placed intermittently. In the center, a few candles burn. 
+
+The stone floor is immaculate and the ceiling meets at a point with wooden rafters clearly visible. The walls are bare, giving the room an orderly and prestigious air.
+
+
+:: Library
+You enter the library.
+
+You notice many bookshelves and various students spread out across the room, diligently studying in silence. 
+
+[[Study]]
+[[Interrupt another student]]
+[[Find a librarian]]
+
+
+:: Laboratory
+You enter the laboratory.
+
+There are beakers, test tubes, and other unrecognizable instruments neatly and fastidiously arranged around the room.
+
+You notice a metal chamber that has been locked shut. There must be an experiment in progress.
+
+
+
+:: Balneary
+You enter the balneary.
+
+There is a large fountain in the middle of the room and a sink that spans across the entire back wall.
+
+:: Infirmary
+You enter the infirmary.
+
+There are a few beds with sheets hanging beside them and a closed door that you suspect is most likely an office.
+
+You notice a tray with various medical tools strewn across, such as a scalpel, thermometer, and needles. 
+
+
+:: Barn
+You enter the barn.
+
+You open up the large doors and swing them on their hinges. As the doors swing open, they reveal the animals to you. 
+
+You notice horses in their stables. Cows, sheep, and pigs in their pens. Chickens in their coup. Dogs in their kennels. However, there are no people to be seen. 
+
+
+
+[[Look for a person]] 
+[[Approach the animals]]
+
+
+:: Forge
+You enter the forge.
+
+You see an anvil and a hulking furnace. Various tools such as tongs and hammers are strewn across the floor and workbench. 
+
+Whoever used them last must not be too organized.
+
+
+:: Brewery
+You enter the brewery.
+
+This is where the magic happens. The students love the reprieve of refreshing ale after a hard day's work. 
+
+You see kettles, kegs, a boiler, tanks, and ingredients such as mash. 
+
+
+:: Class
+You sit down in an empty chair in the classroom and wait for class to start. There are no students or teachers in sight.
+
+After waiting for a few minutes, you become impatient. 
+
+<i> Is anybody else coming...?</i>
+
+[[Wait Patiently]]
+[[Search the Classroom]]
+
+
+:: Search the Classroom
+You can't handle waiting for class to start and your curiosity gets the better of you.
+
+You survey the classroom and notice a few objects of interest.
+
+[[Search the bookshelf]]
+[[Open the desk drawers]]
+[[Open the cabinet]]
+[[Search the trash can]]
+
+:: Search the bookshelf
+Double-click this passage to edit it.
+
+:: Open the desk drawers
+Double-click this passage to edit it.
+
+:: Open the cabinet
+Double-click this passage to edit it.
+
+:: Search the trash can
+Double-click this passage to edit it.
+
+:: Wait Patiently
+You figure that scouring through random items in the classroom might not be a good idea, so you decide to wait for class to start...
+
+Eventually, students begin filtering into the classroom, and settling into their respective seats. 
+
+A large, muscular brute of a man walks through the door. His school uniform doesn't seem to fit him quite right as certain muscles on his body bulge out, stretching the fabric in odd places. You chuckle quietly at the sight of him, but do your best to contain the noise since you imagine he could easily smash your skull should he ever decide to...
+
+Much to your surprise, he walks directly towards you and taps on your shoulder, letting out nothing but a grunt.
+
+A bead of sweat runs down your brow. 
+
+<i> Did he hear my laughter?</i>
+
+[[Ask how you can help him]]
+[[Ignore him]]
+[[Lash out in self defense]]
+
+:: Ignore him
+Double-click this passage to edit it.
+
+:: Lash out in self defense
+Double-click this passage to edit it.
+
+:: Ask how you can help him
+Double-click this passage to edit it.
+
+:: Male dorm
+You enter the male dorm<<if $Male is false>> even though you are female. 
+
+You are worried that you are not supposed to be here and that someboy might catch you snooping around.
+
+[[Leave]]
+[[Snoop Anyway]]
+<<else>>.
+
+[[Explore]]
+[[Sleep]]<</if>>
+
+:: Female dorm
+You enter the female dorm<<if $Male is true>>  even though you are male. 
+
+You are worried that you are not supposed to be here and that someboy might catch you snooping around.
+
+[[Leave]]
+[[Snoop Anyway]]
+<<else>>.
+
+[[Explore]]
+[[Sleep]]<</if>>
+
+:: Pull latch
+Double-click this passage to edit it.
+
+:: Pray at a pew
+Double-click this passage to edit it.
+
+:: Pray to the statue
+Double-click this passage to edit it.
+
+:: Search the temple
+Double-click this passage to edit it.
+
+:: Inspect the plants
+Double-click this passage to edit it.
+
+:: Daydream
+Double-click this passage to edit it.
+
+:: Study
+Double-click this passage to edit it.
+
+:: Interrupt another student
+Double-click this passage to edit it.
+
+:: Find a librarian
+Double-click this passage to edit it.
+
+:: Look for a person
+Double-click this passage to edit it.
+
+:: Approach the animals
+You decide to approach the animals. 
+
+Which animal are you interested in?
+
+[[Horse]]
+[[Cow]]
+[[Chicken]]
+
+
+:: Character
+Are you Male or Female?
+
+[[Male|Demo][$Day to 1]]
+[[Female|Demo][$Male to false, $Day to 1]]
+
+
+
+:: Leave
+You leave and make your way back to where you started.
+
+[[Choose a dormitory|Dormitory]]
+[[Choose a different area of the cmapus|Demo]]
+
+:: Snoop Anyway
+Double-click this passage to edit it.
+
+:: Explore
+Double-click this passage to edit it.
+
+:: Sleep
+You go to sleep.
+
+You dream of an odd future that awaits you, but you can't quite tell what happens.
+
+Maybe it involves unicorns...?
+
+[[Wake Up|Demo]]
+<<set $Day to $Day + 1>>
+
+:: StoryCaption
+<<if $Show is true>>Sex: <<if $Male is true>>Male<<else>>Female<</if>><</if>> 
+
+<<if $Day == 0>><<else>>Day: $Day<</if>>
+
+
