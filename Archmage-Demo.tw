@@ -159,9 +159,8 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
         [[Enter the darkness]]
 
 :: Enter the darkness
-
             You swing a door down and climb into the ceiling.
-
+/* Develop Teacher's Dorm */
 :: Explore
         You explore the dormitory.
 
@@ -555,11 +554,3 @@ After waiting for a few minutes, you become impatient.
 
 :: Open the desk drawers
         Open the desk drawers
-
-
-
-
-
-
-
-
