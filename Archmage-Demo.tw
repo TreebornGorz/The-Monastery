@@ -146,7 +146,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
         You explore the dormitory.
         
 :: Sleep
-        <<set $Day to $Day + 1>>
+        <<set $Day += 1>>
         You go to sleep.
 
         You dream of an odd future that awaits you, but you can't quite tell what happens.
