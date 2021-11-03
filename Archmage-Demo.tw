@@ -17,6 +17,8 @@ Archmage Demo
 <<set $Show to false>>
 <<set $Male to true>>
 <<set $Day to 0>>
+<<set $CeilingKey to false>>
+<<set $Holy to 0>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -51,9 +53,9 @@ Are you Male or Female?
 [[Female|Demo][$Male to false, $Day to 1]]
 
 :: Demo
-You arrive on campus. There are several areas to explore.
+You are on campus. There are several areas to explore.
 
-What do you want to do? 
+Where do you want to go? 
 
 [[Explore the Dormitories|Dormitory]]
 [[Pray in the Temple|Temple]]
@@ -74,7 +76,7 @@ What do you want to do?
 :: Dormitory
 You enter the dormitory.
 
-The hallway forks. One direction leads to the male dorm, the other leads to the female dorm. You also notice a latch on the ceiling with a warning sign warning you not to pull it.
+The hallway forks. One direction leads to the male dorm, the other leads to the female dorm. You also notice a latch on the ceiling.
 
 [[Male dorm]]
 [[Female dorm]]
@@ -86,7 +88,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
     You are worried that you are not supposed to be here and that someboy might catch you snooping around.
 
     [[Leave]]
-    [[Sneak Away]]
+    [[Stick around]]
     <<else>>.
 
     [[Explore]]
@@ -98,7 +100,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
     You are worried that you are not supposed to be here and that someboy might catch you snooping around.
 
     [[Leave]]
-    [[Sneak Away]]
+    [[Stick around]]
     <<else>>.
 
     [[Explore]]
@@ -106,19 +108,42 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
 
 
 :: Leave
-        You leave and make your way back to where you started.
+        You leave the dorm and make your way back to where you started.
 
         [[Choose a dormitory|Dormitory]]
         [[Choose a different area of the cmapus|Demo]]
 
-:: Pull latch
-    Pull latch.
-
-:: Sneak Away
-        Sneak Away
+:: Stick around
+        Even though you probably shouldn't be in this dorm, you decide to stay anyway.
         
+        Fortunately, there aren't many students around and you manage to avoid detection as you sneak your way through the dorm rooms.
+        
+        [[Search student's personal effects]]
+        [[Eavesdrop]]
+                
+:: Search student's personal effects
+            Search.
+
+:: Eavesdrop
+            Eavesdrop.
+
+:: Pull latch
+    You pull the latch. 
+    
+    The door is locked, but you don't see a keyhole of any kind. 
+    
+    Maybe <<if $CeilingKey is false>>there is some other way of opening<<else>>the passphrase you learned will open<</if>> this door?
+    
+    [[Choose a dormitory|Dormitory]]<<if $ceilingKey is true>>
+    [[Utter the passphrase|Passphrase]]<</if>>
+        
+:: Passphrase
+        You utter the passphrase.
+        
+        You hear a clicking noise and the latch unlocks.
+
 :: Explore
-        Explore
+        You explore the dormitory.
         
 :: Sleep
         <<set $Day to $Day + 1>>
@@ -140,14 +165,32 @@ The stained glass windows depict epic scenes in glorious colors as sunlight shin
 Wooden pews line the stone floors and an imposing statue watches over the space.
 
 [[Pray at a pew]] 
-[[Pray to the statue]]
+[[Pray to the statue][$Holy += 1]]
 [[Search the temple]]
 
 :: Pray at a pew
-    Pray at a pew
+    You locate a pew that seems comfortable enough.
+    
+    You immerse yourself in prayer, increasing your reverence and probably making you a more likeable person.
+    
+    You spend the remainder of your day in deep introspection despite still feeling like a relatively similar person afterwards.
+    
+    [[Eat dinner]]
+    [[Go to sleep|Sleep]]
 
 :: Pray to the statue
-    Pray to the statue
+    You kneel before the statue and begin praying to the imposing figure before you.<<if $Holy is 1>>
+    
+    For a second you lose focus and your eyes open, revealing the statue before you. The figure's eyes are glowing a deep blue color.
+    
+    In surprise, you blink a couple times and reinspect the statue's face. The glow is gone.<<elseif $Holy is 4>>Your homage progresses entirely normally. However, when you finish your prayer and stand up to face the statue, something strange happens.
+    
+    You stare into the face of the statue and your own face stares back. Suddenly the eyes in the statue turn blue again and glow intensely until fizzling out and leaving behind the normal face of the statue. You feel tingling in your limbs. You have been imbued with a holy power.<</if>>
+    
+    <<if $Holy isnot 4>>You spend the remainder of your day paying homage to the figure before you.<</if>>
+    
+    [[Eat dinner]]
+    [[Go to sleep|Sleep]]
 
 :: Search the temple
     Search the temple
@@ -172,6 +215,26 @@ You enter the refectory.
 The vacuous hall has two long wooden dining tables that extend the length of the room. Atop the tables lie lace tablecloths with chalices and dishes placed intermittently in front of chairs. Candles burn in the center of the tables. 
 
 The stone floor is immaculate and the ceiling meets at a point with wooden rafters clearly visible. The walls are bare, giving the room an orderly and prestigious air.
+
+:: Eat dinner
+    After a hard day's work, you enter the refectory for a meal.
+    
+    You take a seat at a table and eat your meal surrounded by the other students.
+    
+    [[Listen to gossip]]
+    [[Eat in peace]]
+
+:: Listen to gossip
+        You decide that your life is boring enough that you require information about the lives of others.
+        
+        While eating your meal, you inconsipicuously listen into the conversations of the other stduents and glean some juicy gossip.
+        
+        You finish your meal and turn in your dishes. 
+        
+        [[Go to sleep|Sleep]]
+
+:: Eat in peace
+        Eat.
 
 :: Library
 You enter the library.
@@ -202,25 +265,35 @@ You enter the balneary.
 
 There is a large fountain in the middle of the room and a sink that spans across the entire back wall.
 
+There are numbered faucets on both the fountain and the sink, although none of them are running at the moment.
+
+Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
+
 :: Infirmary
 You enter the infirmary.
 
-There are a few beds with sheets hanging beside them and a closed door that you suspect is most likely an office.
+There are a few beds with privacy sheets hanging beside them and an office behind a closed door.
 
 You notice a tray with various medical tools strewn across, such as a scalpel, thermometer, and needles. 
+
+There is a locked cabinet containing various prescription drugs. 
 
 :: Barn
 You enter the barn.
 
 You open up the large doors and swing them on their hinges. As the doors swing open, they reveal the animals to you. 
 
-You notice horses in their stables, cows in their pen, and chickens in their coup. There are no people to be seen. 
+You notice horses in their stables, cows in the barn, and chickens in their coup. There are no people to be seen. 
 
 [[Look for a person]] 
 [[Approach the animals]]
 
 :: Look for a person
-    Look for a person
+    You decide to look for a person instead of blindly messing around with their animals.
+    
+    After a bit of searching, you eventually make contact with the campus farmer. She works as a professor and tends to the animals in her down time with the help of some of the students.
+    
+    In return for assisting her with her work, you will get access to the animals when she is not around.
     
 :: Approach the animals
     You decide to approach the animals. 
@@ -232,13 +305,13 @@ You notice horses in their stables, cows in their pen, and chickens in their cou
     [[Chicken]]
 
 :: Horse
-        Horse
+        You enter the stables and find a few horses. Some of them don't appear too friendly based on their body language.
 
 :: Cow
-        Cow
+        You enter the barn and notice a dairy cow that seems to be in need of milking.
 
 :: Chicken
-        Chicken
+        You enter the coup and find a few chickens running around. 
         
 :: Forge
 You enter the forge.
@@ -251,9 +324,9 @@ Whoever used them last must not be too organized.
 :: Brewery
 You enter the brewery.
 
-This is where the magic happens. The students love the reprieve of refreshing ale after a hard day's work. 
+This is where the real magic happens. Students love the reprieve of refreshing ale after a hard day's work. 
 
-You see kettles, kegs, a boiler, tanks, and ingredients such as mash. 
+You notice kettles, kegs, a boiler, tanks, and ingredients such as mash. 
 
 
 :: Class
@@ -305,7 +378,6 @@ After waiting for a few minutes, you become impatient.
 
 :: Open the desk drawers
         Open the desk drawers
-
 
 
 
