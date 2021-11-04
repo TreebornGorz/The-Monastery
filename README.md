@@ -15,7 +15,7 @@ The final version of the demo will contain: Multiple Endings, Replayability, Env
 
 I expect the main project to contain extreme adult (NSFW) content in order to make player agency achievable. However, this demo may have a toggle option to censor adult content in the future.
 
-Any players that wish to contribute to development can contact me @thearchmagedev@gmail.com
+Any players that wish to report bugs, ask questions, or contribute to development can contact me @thearchmagedev@gmail.com
 
 -Black Dahlia Studios
 
