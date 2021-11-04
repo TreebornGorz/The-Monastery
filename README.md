@@ -13,12 +13,16 @@ This demo provides players with a teaser for the main project without spoiling m
 
 The final version of the demo will contain: Multiple Endings, Replayability, Environmental Interactions, and Basic Agency. 
 
-I expect the main project to contain extreme adult (NSFW) content in order to make player agency achievable. However, this demo may have a toggle option to censor adult content in the future.
+The main project will contain _extreme_ adult (NSFW) content in order to make player agency actually achievable. However, this demo will not contain any of that content.
 
-Any players that wish to report bugs, ask questions, or contribute to development can contact me @thearchmagedev@gmail.com
+Any players that wish to report bugs or ask questions can contact me @thearchmagedev@gmail.com
 
 -Black Dahlia Studios
 
 Note: This project is greatly inspired by Zork. Interactive Fiction engines give players a great deal of agency, but generally lack a developed narrative. Visual novels contain developed narratives but often rob players of their agency. My dream is to combine these elements in a single project. 
 
-Alpha Version 0.0
+Current Version: Alpha V0.0
+Description: Passages, Endings, and Interactions are currently under development.
+
+Next Version: Alpha V0.1
+Upcoming Features: _Basic_ Player Agency, Multiple Endings, and numerous Interactions
