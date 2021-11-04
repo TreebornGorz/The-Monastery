@@ -21,6 +21,7 @@ Archmage Demo
 <<set $CeilingKey to false>>
 <<set $Holy to 0>>
 <<set $NurseWork to false>>
+<<set $Dream = ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> /* 16 elements */
 
 
 :: StoryCaption
@@ -56,7 +57,7 @@ Are you Male or Female?
 [[Female|Demo][$Male to false, $Day to 1]]
 
 :: Demo
-You are on campus. There are several areas to explore.
+<<if$Day lt 6>>You are on campus. There are several areas to explore.
 
 Where do you want to go? 
 
@@ -74,7 +75,15 @@ Where do you want to go?
 
 [[Wait until classes start|Class]]
 
-<<set $Show to true>>
+<<set $Show to true>><<else>>It would seem that you decided to spend your time on campus doing a whole lot of nothing. Maybe you could have taken some more risks.
+
+Despite the fact that you had high hopes for your life beyond school, you turned out entirely ordinarily and accomplished nothing of note for the rest of your life.
+
+On the bright side, at least accomplishing nothing means you didn't really screw anything up either. That's an accomplishment.
+
+It's the small things in life that count, right...?
+
+<b>Bad End - Boring Player</b><</if>>
 
 :: Dormitory
 You enter the dormitory.
@@ -94,6 +103,8 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
     [[Stick around]]
     <<else>>.
 
+    This is where you belong. 
+
     [[Explore]]
     [[Sleep]]<</if>>
 
@@ -106,6 +117,8 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
     [[Stick around]]
     <<else>>.
 
+    This is where you belong.
+
     [[Explore]]
     [[Sleep]]<</if>>
 
@@ -113,8 +126,8 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
 :: Leave
         You leave the dorm and make your way back to where you started.
 
-        [[Choose a dormitory|Dormitory]]
-        [[Choose a different area of the cmapus|Demo]]
+        [[Choose another dormitory|Dormitory]]
+        [[Choose a different area of the campus|Demo]]
 
 :: Stick around
         Even though you probably shouldn't be in this dorm, you decide to stay anyway.
@@ -166,7 +179,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
 
         You find nothing of interest.
 
-        [[Leave]]
+        [[Leave|Demo]]
         [[Stick around]]
         
 :: Sleep
@@ -175,7 +188,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
 
         You dream of an odd future that awaits you, but you can't quite tell what happens.
 
-        Maybe it involves unicorns...?
+        Maybe it involves <<print $Dream.random()>>...?
 
         [[Wake Up|Demo]]
 
@@ -224,6 +237,7 @@ You enter the cloister.
 
 There is a large tree in the center of the field surrounded by a large patch of open grass. Four walls surround the area in a square shape. Various bushes and flowers line the walls. 
 
+[[Leave|Demo]]
 [[Inspect the plants]]
 [[Daydream]]
 
@@ -252,6 +266,12 @@ The vacuous hall has two long wooden dining tables that extend the length of the
 
 The stone floor is immaculate and the ceiling meets at a point with wooden rafters clearly visible. The walls are bare, giving the room an orderly and prestigious air.
 
+[[Help prepare dinner]]
+[[Leave|Demo]]
+
+:: Help prepare dinner
+    You enter the kitchen.
+
 :: Eat dinner
     After a hard day's work, you enter the refectory for a meal.
     
@@ -272,7 +292,7 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 :: Eat in peace
         You decide to eat in peace.
 
-        You grabe your meal and move to a location at a different table that isn't quite so noisy.
+        You grab your meal and move to a location at a different table that isn't quite so noisy.
 
         You enjoy your meal and feel satisfied.
 
@@ -287,7 +307,9 @@ You notice many bookshelves and various students spread out across the room, dil
 [[Interrupt another student]]
 [[Find a librarian]]
 :: Study
-    Study
+    You decide to brush up on your reading. 
+
+    Choose a book.
 
 :: Interrupt another student
     Interrupt another student
@@ -300,7 +322,7 @@ You enter the laboratory.
 
 There are beakers, test tubes, and other unrecognizable instruments neatly and fastidiously arranged around the room.
 
-You notice a metal chamber that has been locked shut. There must be an experiment in progress.
+You notice a metal chamber that has been locked shut. An experiment is in progress.
 
 A strange lady sits in the corner staring at you without blinking.
 
@@ -377,11 +399,11 @@ It is time to work as the nurse's student assistant.
 :: Knock
     You knock on the door.
 
-    The lock clicks open and the door opens to reveal an attractive young nurse.
+    The lock clicks and the door opens to reveal an attractive young nurse.
 
-    She sizes you up before inviting you into her office. You are intimadted by her presence.
+    She sizes you up before inviting you into her office. You are intimidated by her presence.
 
-    You sit down uncomfortably across from her. She examines you for a while before talking.
+    You uncomfortably sit down across from her. She examines you for a while before talking.
 
     She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
 
@@ -402,7 +424,7 @@ It is time to work as the nurse's student assistant.
 :: Decline
         You decline the nurse's offer.
 
-        She frowns seemingly disappointed. She directs you out the door.
+        She frowns, seemingly disappointed. She directs you out the door.
 
         [[Explore Campus|Demo]]
         [[Eat dinner]]
@@ -438,9 +460,9 @@ It is time to work as the nurse's student assistant.
 :: Barn
 You enter the barn.
 
-You open up the large doors and swing them on their hinges. As the doors swing open, they reveal the animals to you. 
+You open a couple large barn doors.  
 
-You notice horses in their stables, cows in the barn, and chickens in their coup. There are no people to be seen. 
+You see horses in their stables, cows in the barn, and chickens in their coup. There are no people to be seen. 
 
 [[Look for a person]] 
 [[Approach the animals]]
@@ -457,17 +479,17 @@ You notice horses in their stables, cows in the barn, and chickens in their coup
 
     Which animal are you interested in?
 
-    [[Horse]]
+    [[Horses]]
     [[Cow]]
-    [[Chicken]]
+    [[Chickens]]
 
-:: Horse
+:: Horses
         You enter the stables and find a few horses. Some of them don't appear too friendly based on their body language.
 
 :: Cow
         You enter the barn and notice a dairy cow that seems to be in need of milking.
 
-:: Chicken
+:: Chickens
         You enter the coup and find a few chickens running around. 
         
 :: Forge
