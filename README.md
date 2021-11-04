@@ -1,11 +1,10 @@
 # The-Archmage-Demo
 
 Installation instructions:
-1) Click green Code button
-2) Download ZIP
-3) Right-Click .zip folder
-4) Extract
-5) Open .html file in web browser
+1) Download ZIP 
+2) Right-Click .zip folder
+3) Extract
+4) Open .html file in web browser
 6) Play
 
 This is a demo for the currently in-development interactive fiction project "The Archmage", a project intended to be a narrative-driven interactive fiction fantasy which provides the player with _significant_ agency.
