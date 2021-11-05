@@ -2,11 +2,11 @@
 
 This is a demo for the currently in-development interactive fiction project "The Archmage", a project intended to be a narrative-driven interactive fiction fantasy which provides the player with _significant_ agency.
 
-This demo provides players with a teaser for the main project without spoiling major story elements. It is intended to display gameplay mechanics without widening the scope (and timeline) to unwieldy levels inevitably required for developing the main project. 
+This demo provides players with a teaser for the main project without spoiling story elements. It is merely intended to display gameplay mechanics. 
 
-The final version of the demo will contain: Multiple Endings, Replayability, Environmental Interactions, and Basic Agency. 
+The final version of the demo will contain: Multiple Endings, Replayability, Environmental Interactions, and Basic Player Agency. 
 
-The main project will contain adult (NSFW) content in order to make player agency actually achievable. However, this demo will not contain any of that content.
+The main project will contain adult (NSFW) content in order to make player agency achievable. However, this demo will not contain any of that content.
 
 Any players that wish to report bugs or ask questions may contact me @thearchmagedev@gmail.com.
 
