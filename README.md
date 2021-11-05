@@ -6,7 +6,7 @@ This demo provides players with a teaser for the main project without spoiling m
 
 The final version of the demo will contain: Multiple Endings, Replayability, Environmental Interactions, and Basic Agency. 
 
-The main project will contain _extreme_ adult (NSFW) content in order to make player agency actually achievable. However, this demo will not contain any of that content.
+The main project will contain adult (NSFW) content in order to make player agency actually achievable. However, this demo will not contain any of that content.
 
 Any players that wish to report bugs or ask questions may contact me @thearchmagedev@gmail.com.
 
