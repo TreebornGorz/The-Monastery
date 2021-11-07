@@ -22,7 +22,9 @@ Archmage Demo
 <<set $Holy to 0>>
 <<set $NurseWork to false>>
 <<set $Dream = ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> /* 16 elements */
-
+<<set $Poison to false>>
+<<set $Brew to false>>
+<<set $Potion to false>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -213,7 +215,7 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
     You spend the remainder of your day in deep introspection despite still feeling like a relatively similar person afterwards.
     
     [[Eat dinner]]
-    [[Go to sleep|Sleep]]
+    [[Sleep]]
 
 :: Pray to the statue
     You kneel before the statue and begin praying to the imposing figure before you.<<if $Holy is 1>>
@@ -227,7 +229,7 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
     <<if $Holy isnot 4>>You spend the remainder of your day paying homage to the figure before you.<</if>>
     
     [[Eat dinner]]
-    [[Go to sleep|Sleep]]
+    [[Sleep]]
 
 :: Search the temple
     You search the temple and find nothing of interest.
@@ -249,7 +251,7 @@ There is a large tree in the center of the field surrounded by a large patch of 
     Maybe you could plant some seeds here.
 
     [[Eat dinner]]
-    [[Go to sleep|Sleep]]
+    [[Sleep]]
 
 :: Daydream
     You laze about the cloister, daydreaming all the wile. 
@@ -257,7 +259,7 @@ There is a large tree in the center of the field surrounded by a large patch of 
     You realize you accomplished very little, but you also don't care about that at all.
 
     [[Eat dinner]]
-    [[Go to sleep|Sleep]]
+    [[Sleep]]
 
 :: Refectory
 You enter the refectory.
@@ -270,7 +272,32 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 [[Leave|Demo]]
 
 :: Help prepare dinner
-    You enter the kitchen.
+    You enter the kitchen. 
+
+    The cooks are preparing food in anticipation of the upcoming meal.
+
+    You fall into line begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
+
+    [[Send out the food]]<<if $Poison is true>>
+    
+    [[Poison the food]]
+    
+    [[Poison the drinking water]]<</if>>
+
+:: Poison the food
+        You slip the poison out of your pocket.
+
+        Whose meal will you poison?
+
+:: Poison the drinking water
+        You sneak over to the water keg and posion the water.
+
+:: Send out the food
+        You do enough work to finish preparing the food and send out the meals.
+
+        By the time you get a chance to eat, only the cooks remain in the refectory. You eat your meal alongside them.
+
+        [[Sleep]]
 
 :: Eat dinner
     After a hard day's work, you enter the refectory for a meal.
@@ -287,7 +314,7 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
         
         You finish your meal and turn in your dishes. 
         
-        [[Go to sleep|Sleep]]
+        [[Sleep]]
 
 :: Eat in peace
         You decide to eat in peace.
@@ -296,7 +323,7 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 
         You enjoy your meal and feel satisfied.
 
-        [[Go to sleep|Sleep]]
+        [[Sleep]]
 
 :: Library
 You enter the library.
@@ -361,7 +388,7 @@ Students use this area to wash up before meals and collect water for bathing in 
     He looks uncomfortable as he makes eye contact with you before leaving.
 
     [[Eat dinner]]
-    [[Go to sleep|Sleep]]
+    [[Sleep]]
 
 :: Infirmary
 You enter the infirmary.<<if $NurseWork is false>>
@@ -419,7 +446,7 @@ It is time to work as the nurse's student assistant.
         Once finished, she sees you out and requests your presence tomorrow.
 
         [[Eat dinner]]
-        [[Go to sleep|Sleep]]
+        [[Sleep]]
 
 :: Decline
         You decline the nurse's offer.
@@ -428,7 +455,7 @@ It is time to work as the nurse's student assistant.
 
         [[Explore Campus|Demo]]
         [[Eat dinner]]
-        [[Go to sleep|Sleep]]
+        [[Sleep]]
 
 :: Insult her
         Clearly this lady is being disrespectful.
@@ -521,11 +548,54 @@ Whoever used them last must not be too organized.
 
 :: Brewery
 You enter the brewery.
-
+<<if $Brew is false>>
 This is where the real magic happens. Students love the reprieve of refreshing ale after a hard day's work. 
 
 You notice kettles, kegs, a boiler, tanks, and ingredients such as mash. 
 
+The brewmaster is asleep in a corner.
+
+[[Wake up the brewmaster|Wake Brewmaster]]
+<<else>>
+[[Work on a brew|Brew]]
+[[Maybe Later|Demo]]
+<</if>>
+
+:: Wake Brewmaster
+    You shake the brewmaster until he comes to.
+
+    He knocks over a few empty bottles as he slowly stands up. 
+
+    He happily welcomes you to the brewery and invites you to work with him.
+
+    [[Agree|Yes Brew]]
+    [[Decline|No Brew]]
+
+:: Yes Brew
+        The brewmaster doesn't seem too bad and you decide to take up his craft.
+
+        He takes you under his wing and teaches you about all the equipment and how to brew a traditional batch of beer.
+
+        When you return to the brewery, you will be able to brew batches on your own. 
+
+        [[Eat dinner]]
+        [[Sleep]]
+
+:: No Brew
+        The brewmaster's behavior seems relatively unbecoming and you decide to take your talents elsewhere.
+
+        He seems dissapointed. [[You leave him alone and wish him sweet dreams.|Demo]] 
+
+:: Brew
+    You decide to bew another batch of beer.
+
+    <<if $Poison is true>>
+    <<elseif $Potion is true>>
+    <<else>>You prepare a keg. You can use this keg to throw a party!
+
+    [[Eat dinner]]
+    [[Sleep]]
+    <</if>>
 
 :: Class
 You sit down in an empty chair in the classroom and wait for class to start. There are no students or teachers in sight.
