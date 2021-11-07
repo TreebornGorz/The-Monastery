@@ -183,7 +183,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
         You find nothing of interest.
 
         [[Leave|Demo]]
-        [[Stick around]]
+        [[Sleep]]
         
 :: Sleep
         <<set $Day += 1>>
