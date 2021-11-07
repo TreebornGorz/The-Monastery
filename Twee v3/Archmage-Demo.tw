@@ -25,6 +25,7 @@ Archmage Demo
 <<set $Poison to false>>
 <<set $Brew to false>>
 <<set $Potion to false>>
+<<set $Keg to false>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -573,7 +574,7 @@ The brewmaster is asleep in a corner.
 
 :: Yes Brew
         The brewmaster doesn't seem too bad and you decide to take up his craft.
-
+        <<set $Brew to true>>
         He takes you under his wing and teaches you about all the equipment and how to brew a traditional batch of beer.
 
         When you return to the brewery, you will be able to brew batches on your own. 
@@ -588,7 +589,7 @@ The brewmaster is asleep in a corner.
 
 :: Brew
     You decide to bew another batch of beer.
-
+    <<set $Keg to true>>
     <<if $Poison is true>>
     <<elseif $Potion is true>>
     <<else>>You prepare a keg. You can use this keg to throw a party!
