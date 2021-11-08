@@ -29,6 +29,7 @@ Archmage Demo
 <<set $Lab to false>>
 <<set $Ostra to false>>
 <<set $Drugs to []>>
+<<set $Forge to 0>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -337,13 +338,13 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
         "Bad End - Sneaky Bugger" <<else>>
             You decide that your life is boring enough that you require information about the lives of others.
             <<set $Temp to random(7)>>
-            While eating your meal, you inconsipicuously listen into the conversations of the other students and glean some juicy gossip.
+            While eating your meal, you inconsipicuously listen into the conversations of the other students in an attempt to glean some juicy gossip.
             <<if $Temp is 0>>
             The students noticing you are listening to their conversation and huddle together uncomfortably.
             <<set $Ostra to true>>
             You are not able to hear anything and you have become socially ostracized. You will be unable to make friends with other students.
             <<elseif $Temp is 7>>
-            You listen in to their conversation at the perfect time.
+            You manage to overhear to their conversation at the perfect time.
 
             /* Random Puzzle Solution */
             <<else>>
@@ -609,12 +610,20 @@ You see horses in their stables, cows in the barn, and chickens in their coup. T
         
 :: Forge
 You enter the forge.
-
+<<if $Forge is 0>>
 You see an anvil and a hulking furnace. Various tools such as tongs and hammers are strewn across the floor and workbench. 
 
 Whoever used them last must not be too organized.
 
 [[Mess around with the tools randomly|Mess around]]
+<<elseif $forge is 1>>
+[[Create weapon]]
+[[Leave|Demo]]
+<<else>>
+You are no longer welcome here.
+
+The smith [[turns you away|Demo]].
+<</if>>
 
 :: Mess around
     You sling tools around like a dufus.
@@ -628,10 +637,11 @@ Whoever used them last must not be too organized.
 
 :: Blacksmith
         The smith asks if you would like to work with him as a student apprentice. /* Update description quality */
+        <<set $Forge to 1>>
 
 :: Be dumb
     You keep smacking metal things together like an idiot.
-
+    <<set $Forge to 2>>
     The smith doesn't seem to appreciate your behavior and makes his opinion known by putting his boot up your ass. 
 
     Your ass is injured and you must [[go to the infirmary|Injured butt]]
