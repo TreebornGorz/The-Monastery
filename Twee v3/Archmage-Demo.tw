@@ -11,6 +11,10 @@ Archmage Demo
 :: UserScript[script]
 
 :: UserStylesheet[stylesheet]
+#input-error {
+	color: red;
+	margin-left: 2em;
+}
 
 :: StoryInit
 /* Initializes starting variables before game loads */
@@ -21,7 +25,7 @@ Archmage Demo
 <<set $CeilingKey to false>>
 <<set $Holy to 0>>
 <<set $NurseWork to false>>
-<<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> /* 16 elements */
+<<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
 <<set $Poison to false>>
 <<set $Brew to false>>
 <<set $Potion to false>>
@@ -30,6 +34,11 @@ Archmage Demo
 <<set $Ostra to false>>
 <<set $Drugs to []>>
 <<set $Forge to 0>>
+<<set $DrugKey to false>>
+<<set $Faucets to [1,2,3,4,5]>>
+<<set $Faucets to $Faucets.shuffle()>>
+<<set $UserFaucets to [0,0,0,0,0]>>
+<<set $BathHouse to false>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -201,7 +210,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
         <<set $Day += 1>>
         You go to sleep.
 
-        You dream of an odd future that awaits you, but you can't quite tell what happens.
+        You dream of an odd future that awaits you, but you can't quite make out the ending.
 
         Maybe it involves <<print $Dream.random()>>...?
 
@@ -235,17 +244,22 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
     
     For a second you lose focus and your eyes open, revealing the statue before you. The figure's eyes are glowing a deep blue color.
     
-    In surprise, you blink a couple times and reinspect the statue's face. The glow is gone.<<elseif $Holy is 4>>Your homage progresses entirely normally. However, when you finish your prayer and stand up to face the statue, something strange happens.
+    In surprise, you blink a couple times and reinspect the statue's face. The glow is gone.<<elseif $Holy is 3>>Your homage progresses entirely normally. However, when you finish your prayer and stand up to face the statue, something strange happens.
     
     You stare into the face of the statue and your own face stares back. Suddenly the eyes in the statue turn blue again and glow intensely until fizzling out and leaving behind the normal face of the statue. You feel tingling in your limbs. You have been imbued with a holy power.<</if>>
     
-    <<if $Holy isnot 4>>You spend the remainder of your day paying homage to the figure before you.<</if>>
+    <<if $Holy isnot 3>>You spend the remainder of your day paying homage to the figure before you.<</if>>
     
     [[Eat dinner]]
     [[Sleep]]
 
 :: Search the temple
     You search the temple and find nothing of interest.
+
+    [[Pray at a pew]] 
+    [[Pray to the statue][$Holy += 1]]
+    [[Eat dinner]]
+    [[Sleep]]
 
 :: Cloister
 You enter the cloister.
@@ -371,16 +385,17 @@ You notice many bookshelves and various students spread out across the room, dil
 [[Study]]
 [[Interrupt another student]]
 [[Find a librarian]]
-:: Study
+
+/* :: Study 
     You decide to brush up on your reading. 
 
-    Choose a book.
+    Choose a book. */
 
-:: Interrupt another student
-    Interrupt another student
+/* :: Interrupt another student
+    Interrupt another student */
 
-:: Find a librarian
-    Find a librarian
+/* :: Find a librarian
+    Find a librarian */
 
 :: Laboratory
 You enter the laboratory.
@@ -438,8 +453,8 @@ A strange lady sits in the corner staring at you without blinking.
     [[Eat dinner]]
     [[Sleep]]
 
-:: Inspect the chamber
-    You approach the metal chamber.
+/* :: Inspect the chamber
+    You approach the metal chamber. */
 
 :: Balneary
 You enter the balneary.
@@ -450,14 +465,92 @@ There are numbered faucets on both the fountain and the sink, although none of t
 
 Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
 
-[[Turn on the faucets]]
+[[Turn on the faucets]] /* Player has no way of finding the correct order currently */
 [[Wait for another student]]
 
-:: Turn on the faucets
-    The faucets are numbered 1 through 8.
+:: Turn on the faucets 
+    /* Need to display previous selections and check that no previous selections match the user input -- Can't turn on faucet when it is on */ \
+    The faucets are numbered 1 through 5.
+    <<print $Faucets>>
+    <label>Which faucet will you turn first? <<numberbox '$UserFaucets[0]' 0>></label>
+ 
+    [[Second faucet]]
 
-    Which order will you turn on the faucets?
-    /* Prompt user input for eight consecutive numbers beggining with 1 --- Triggers event if entered in the correct order */
+:: Second faucet
+    <<if ($UserFaucets[0] lte 0) or ($UserFaucets[0] gte 6)>> \ /* for comparing var types: if typeof $var is "string" */
+    There is no faucet with that number. 
+
+    [[Try again|Turn on the faucets]] \
+    <<else>> \
+    You turn the faucet and Water runs from the tap. 
+    
+    <label>Which faucet will you turn second? <<numberbox '$UserFaucets[1]' 0>></label>
+    
+    [[Third faucet]]
+    <</if>>
+
+:: Third faucet
+    <<if ($UserFaucets[1] lte 0) or ($UserFaucets[1] gte 6)>> \ 
+    There is no faucet with that number. 
+
+    [[Try again|Second faucet]] \
+    <<else>> \
+    You turn the faucet and Water runs from the tap. 
+    
+    <label>Which faucet will you turn third? <<numberbox '$UserFaucets[2]' 0>></label>
+    
+    [[Fourth faucet]]
+    <</if>>
+
+:: Fourth faucet
+    <<if ($UserFaucets[2] lte 0) or ($UserFaucets[2] gte 6)>> \ 
+    There is no faucet with that number. 
+
+    [[Try again|Third faucet]] \
+    <<else>> \
+    You turn the faucet and Water runs from the tap. 
+    
+    <label>Which faucet will you turn fourth? <<numberbox '$UserFaucets[3]' 0>></label>
+    
+    [[Fifth faucet]]
+    <</if>>
+
+:: Fifth faucet
+    <<if ($UserFaucets[3] lte 0) or ($UserFaucets[3] gte 6)>> \ 
+    There is no faucet with that number. 
+
+    [[Try again|Fourth faucet]] \
+    <<else>> \
+    You turn the faucet and Water runs from the tap. 
+    
+    <label>Which faucet will you turn fifth? <<numberbox '$UserFaucets[4]' 0>></label>
+    
+    [[Step back|Bath House]]
+    <</if>>
+
+:: Bath House
+        /* Need to validate user input here somehow */ \
+         You turn the last faucet. Water runs from the tap. 
+
+        <<for _i to 0;  _i lt $Faucets.length; _i++>> \
+            <<if $Faucets[_i] isnot $UserFaucets[_i]>> \
+                Nothing happens.
+
+                [[Leave|Demo]]<<break>>
+            <<elseif _i == 4>> \
+                <<set $BathHouse to true>> \
+            <</if>> \
+            <</for>> \
+            <<if $BathHouse is true>> \
+                You wait for a few seconds and then the floor begins to vibrate.
+
+                A passageway splits open in the wall and water runs through the opening down steps.
+
+                [[Enter the secret passage|Secret bath]]
+            <</if>>
+
+:: Secret bath
+/* Write Secret bath stuff */
 
 :: Wait for another student
     You patiently and creepily wait for another student to enter the balneary. 
@@ -470,32 +563,36 @@ Students use this area to wash up before meals and collect water for bathing in 
     [[Sleep]]
 
 :: Infirmary
-You enter the infirmary.<<if $NurseWork is false>>
-
+You enter the infirmary.
+<<if $NurseWork is false>>
 There are a few beds with hanging privacy sheets and an office behind a closed door.
 
 You notice a tray with various medical tools strewn across, such as a scalpel, thermometer, and needles. 
 
 There is a locked cabinet containing various prescription drugs. 
+<<else>>
+You are ready to get to work. 
 
+[[Work as infirmary assistant]]<</if>>
 [[Inspect the beds]]
 [[Enter the office]]
-[[Raid the cabinet]]<<else>>
-
-It is time to work as the nurse's student assistant. 
-
-/* Give player opportunity to steal the drugs and poison the pateints */<</if>>
+[[Raid the cabinet]]
 
 :: Inspect the beds
-    You inspect the beds. They are empty.
+    <<if $NurseWork is false>>You inspect the beds. They are empty.
 
     Some of the sheets have stains of various colors. They have probably been washed.
 
     There is nothing under the bed.
+    <<else>>
+    You notice some patients in the beds.
 
+    [[Treat the patients]]<</if>>
     [[Enter the office]]
     [[Raid the cabinet]]
 
+/* :: Treat the patients */
+        
 :: Enter the office
     You twist the doorknob. The door is locked.
 
@@ -532,7 +629,7 @@ It is time to work as the nurse's student assistant.
 
         She frowns, seemingly disappointed. She directs you out the door.
 
-        [[Explore Campus|Demo]]
+        [[Leave|Demo]]
         [[Eat dinner]]
         [[Sleep]]
 
@@ -552,7 +649,26 @@ It is time to work as the nurse's student assistant.
             You make an attempt to <<if $Temp is 0>>apologize<<else>>leave<</if>>, but this lady is not having any of that. 
 
             She has something else in mind... 
-/* Write Bad End - Slavery */
+
+            With great swiftness, she pulls a needle out of her coat pocket and jabs you with it before you even notice what has happened.
+
+            You look down at the injection sight in surpise and [[you suddenly feel drowsy...|Slavery]]
+
+:: Slavery  
+                When you finally come to, you find yourself in a dark room.
+
+                You can hear running water. The air is cold and you get the feeling that you are underground.
+
+                You try to move but notice that you are chained to a stone wall. You can't break free no matter how you struggle.
+
+                The nurse appears from the shadows and strokes your hair while smiling.
+
+                She welcomes you to her underground lair and informs you that you will spend the rest of your days as her slave.
+
+                Maybe you shouldn't have been so rude to her...
+
+                "Bad End - Slavery"
+
 :: Raid the cabinet
     You attempt to raid the cabinet in the hopes of acquiring drugs.
 
