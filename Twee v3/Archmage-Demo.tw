@@ -26,6 +26,7 @@ Archmage Demo
 <<set $Brew to false>>
 <<set $Potion to false>>
 <<set $Keg to false>>
+<<set $Lab to false>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -347,18 +348,54 @@ You notice many bookshelves and various students spread out across the room, dil
 
 :: Laboratory
 You enter the laboratory.
-
+<<if $Lab is false>>
 There are beakers, test tubes, and other unrecognizable instruments neatly and fastidiously arranged around the room.
 
 You notice a metal chamber that has been locked shut. An experiment is in progress.
 
 A strange lady sits in the corner staring at you without blinking.
-
+<<else>>
+[[Brew potion]]
+[[Brew poison]]
+[[Perform experiment]]
+<</if>>
 [[Talk to her]]
 [[Inspect the chamber]]
 
+:: Brew potion
+    You approach the potion station.
+
+    You don't have any ingredients for potion brewing.
+
+    [[Leave]]
+
+:: Brew poison
+    You approach the poison station.
+
+    You don't have any ingredients for poison brewing.
+
+    [[Leave]]
+
+:: Perform experiment
+    You ask the professor for an experiment.
+
+    She offers no experiments at the moment.
+    /* Incorporate codnitionals for current experiment vs new experiments */
+    [[Brew potion]]
+    [[Brew poison]]
+    [[Leave]]
+
 :: Talk to her
     You approach the strange unblinking lady.
+
+    She explains that she is the eprofessor in charge of the laboratory.
+
+    You can work with her to perform experiments and brew potions or  poisons.
+    <<set $Lab to true>>
+    She spends the day showing you around the laboratory equipment.
+
+    [[Eat dinner]]
+    [[Sleep]]
 
 :: Inspect the chamber
     You approach the metal chamber.
