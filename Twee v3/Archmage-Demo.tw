@@ -27,6 +27,8 @@ Archmage Demo
 <<set $Potion to false>>
 <<set $Keg to false>>
 <<set $Lab to false>>
+<<set $Ostra to false>>
+<<set $Drugs to "None">>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -87,7 +89,7 @@ On the bright side, at least accomplishing nothing means you didn't really screw
 
 It's the small things in life that count, right...?
 
-<b>Bad End - Boring Player</b><</if>>
+"Bad End - Boring Player" <</if>>
 
 :: Dormitory
 You enter the dormitory.
@@ -151,12 +153,20 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
 
 
 :: Eavesdrop
+            <<if $Ostra is true>> 
+            The students notice you eavesdropping and report you to the administration in a panic.
+
+            You have been hauled off to [[jail]].
+            <<else>>
             You eavesdrop on the student's conversation.
 
             You hear nothing of interest.
             
             [[Leave]]
             [[Stick around]]
+
+:: jail
+                You have been thrown into a prison cell for the crime of being sneaky.
 
 :: Pull latch
     You pull the latch. 
@@ -278,13 +288,17 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 
     The cooks are preparing food in anticipation of the upcoming meal.
 
-    You fall into line begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
+    You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
 
     [[Send out the food]]<<if $Poison is true>>
     
     [[Poison the food]]
     
-    [[Poison the drinking water]]<</if>>
+    [[Poison the drinking water]]<</if>><<if $Potion is true>>
+    
+    [[Use potion on food]]
+    
+    [[Use potion on drinking water]]<</if>>
 
 :: Poison the food
         You slip the poison out of your pocket.
@@ -310,13 +324,34 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
     [[Eat in peace]]
 
 :: Listen to gossip
-        You decide that your life is boring enough that you require information about the lives of others.
+        <<if $Ostra is true>>You decide to eavesdrop despite already being socially ostracized.
         
-        While eating your meal, you inconsipicuously listen into the conversations of the other stduents and glean some juicy gossip.
+        Despite your best attempts, you can't make out any useful information. The other students seem to have caught onto your game.
         
-        You finish your meal and turn in your dishes. 
+        You finish your meal and make your way back to your dorm. On the way there you begin feeling ill.
         
-        [[Sleep]]
+        Another student poisoned your food! You cough up your guts and collapse dead in the hallway.
+        
+        Maybe they have secrets worth protecting...
+        
+        "Bad End - Sneaky Bugger" <<else>>
+            You decide that your life is boring enough that you require information about the lives of others.
+            <<set $Temp to random(7)>>
+            While eating your meal, you inconsipicuously listen into the conversations of the other students and glean some juicy gossip.
+            <<if $Temp is 0>>
+            The students noticing you are listening to their conversation and huddle together uncomfortably.
+            <<set $Ostra to true>>
+            You are not able to hear anything and you have become socially ostracized. You will be unable to make friends with other students.
+            <<elseif $Temp is 7>>
+            You listen in to their conversation at the perfect time.
+
+            /* Random Puzzle Solution */
+            <<else>>
+            You manage to make out a snippet of their conversation.
+            /* Random Puzzle Clue */
+            You finish your meal and turn in your dishes. 
+            <</if>>
+        <</if>>[[Sleep]]
 
 :: Eat in peace
         You decide to eat in peace.
@@ -354,41 +389,46 @@ There are beakers, test tubes, and other unrecognizable instruments neatly and f
 You notice a metal chamber that has been locked shut. An experiment is in progress.
 
 A strange lady sits in the corner staring at you without blinking.
+
+[[Talk to her]]
+[[Inspect the chamber]]
 <<else>>
 [[Brew potion]]
 [[Brew poison]]
 [[Perform experiment]]
 <</if>>
-[[Talk to her]]
-[[Inspect the chamber]]
 
 :: Brew potion
     You approach the potion station.
 
     You don't have any ingredients for potion brewing.
 
-    [[Leave]]
+    [[Brew poison]]
+    [[Perform experiment]]
+    [[Leave|Demo]]
 
 :: Brew poison
     You approach the poison station.
 
     You don't have any ingredients for poison brewing.
 
-    [[Leave]]
+    [[Brew potion]]
+    [[Perform experiment]]
+    [[Leave|Demo]]
 
 :: Perform experiment
     You ask the professor for an experiment.
 
     She offers no experiments at the moment.
-    /* Incorporate codnitionals for current experiment vs new experiments */
+    /* Incorporate conditionals for current experiment vs new experiments */
     [[Brew potion]]
     [[Brew poison]]
-    [[Leave]]
+    [[Leave|Demo]]
 
 :: Talk to her
     You approach the strange unblinking lady.
 
-    She explains that she is the eprofessor in charge of the laboratory.
+    She explains that she is the professor in charge of the laboratory.
 
     You can work with her to perform experiments and brew potions or  poisons.
     <<set $Lab to true>>
@@ -522,6 +562,13 @@ It is time to work as the nurse's student assistant.
     [[Inspect the beds]]
     [[Enter the office]]
 
+:: Injured butt
+The nurse begins treating your injured rear end. 
+
+You are somewhat embarrased, but you have enough pride to realize that she is actually lukcy to see such a sight.
+
+She seems annoyed with you, but prescribes some pain pills to you for the injury and sees you off.
+<<>>
 :: Barn
 You enter the barn.
 
@@ -582,7 +629,9 @@ Whoever used them last must not be too organized.
 :: Be dumb
     You keep smacking metal things together like an idiot.
 
-    The smith doesn't seem to appreciate your behavior and makes his opinion known by putting his boot up your ass. /* This goes somewhere */
+    The smith doesn't seem to appreciate your behavior and makes his opinion known by putting his boot up your ass. 
+
+    Your ass is injured and you must [[go to the infirmary|Injured butt]]
 
 :: Brewery
 You enter the brewery.
@@ -612,7 +661,7 @@ The brewmaster is asleep in a corner.
 :: Yes Brew
         The brewmaster doesn't seem too bad and you decide to take up his craft.
         <<set $Brew to true>>
-        He takes you under his wing and teaches you about all the equipment and how to brew a traditional batch of beer.
+        He takes you under his wing and teaches you about all the equipment and how to brew a traditional batch of ale.
 
         When you return to the brewery, you will be able to brew batches on your own. 
 
