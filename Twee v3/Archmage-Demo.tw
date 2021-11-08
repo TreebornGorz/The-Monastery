@@ -21,14 +21,14 @@ Archmage Demo
 <<set $CeilingKey to false>>
 <<set $Holy to 0>>
 <<set $NurseWork to false>>
-<<set $Dream = ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> /* 16 elements */
+<<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> /* 16 elements */
 <<set $Poison to false>>
 <<set $Brew to false>>
 <<set $Potion to false>>
 <<set $Keg to false>>
 <<set $Lab to false>>
 <<set $Ostra to false>>
-<<set $Drugs to "None">>
+<<set $Drugs to []>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -565,10 +565,13 @@ It is time to work as the nurse's student assistant.
 :: Injured butt
 The nurse begins treating your injured rear end. 
 
-You are somewhat embarrased, but you have enough pride to realize that she is actually lukcy to see such a sight.
+You are somewhat embarrased, but you have enough pride to realize that she is actually lucky to see such a sight.
 
 She seems annoyed with you, but prescribes some pain pills to you for the injury and sees you off.
-<<>>
+<<run $Drugs.push("Pain Pills")>>
+[[Eat dinner]]
+[[Sleep]]
+
 :: Barn
 You enter the barn.
 
