@@ -11,10 +11,6 @@ Archmage Demo
 :: UserScript[script]
 
 :: UserStylesheet[stylesheet]
-#input-error {
-	color: red;
-	margin-left: 2em;
-}
 
 :: StoryInit
 /* Initializes starting variables before game loads */
