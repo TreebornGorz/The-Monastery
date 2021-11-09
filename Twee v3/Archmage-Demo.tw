@@ -42,15 +42,14 @@ Archmage Demo
 <<if $Day == 0>><<else>>Day: $Day<</if>> /* Game Time */
 
 :: Start
-/* Blank Space for formatting purposes */
+<br><br>
+This is a demo for the currently in-development interactive fiction project "The Archmage", a project intended to be a narrative-driven interactive fiction fantasy game which provides the player with //significant// agency and //significant// replayability.
 
-This is a demo for the currently in-development interactive fiction project "The Archmage", a project intended to be a narrative-driven interactive fiction fantasy which provides the player with //significant// agency.
+This demo provides players with a teaser for the main project. It is intended to display gameplay without widening the scope to unwieldy levels inevitably required for developing the main project. 
 
-This demo provides players with a teaser for the main project without spoiling major story elements. It is intended to display gameplay mechanics without widening the scope (and timeline) to unwieldy levels inevitably required for developing the main project. 
+The final version of the demo will contain: Multiple Endings, //Basic// Replayability, Environmental Interactions, and //Basic// Player Agency. 
 
-The final version of the demo will contain: Multiple Endings, Replayability, Environmental Interactions, and Basic Agency. 
-
-I expect the main project to contain extreme adult (NSFW) content in order to make player agency achievable. However, this demo may have a toggle option to censor adult content in the future.
+The main project to contain adult (NSFW) content in order to make player agency //realistic//. 
 
 Any players that wish to contribute to development can contact me @thearchmagedev@gmail.com
 
@@ -58,7 +57,7 @@ Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
 
 -Black Dahlia Studios
 
-Note: This project is greatly inspired by Zork. Interactive Fiction engines give players a great deal of agency, but generally lack a developed narrative. Visual novels contain developed narratives but often rob players of their agency. My dream is to combine these elements in a single project. 
+Note: This project is inspired by Zork. Interactive Fiction engines give players a great deal of agency, but generally lack a developed narrative. Visual novels contain developed narratives but often //rob players of their agency//. My dream is to combine these elements in a single project. 
 
 [[Begin Demo|Character]]
 
@@ -69,7 +68,7 @@ Are you Male or Female?
 [[Female|Demo][$Male to false, $Day to 1]]
 
 :: Demo
-<<if$Day lt 6>>You are on campus. There are several areas to explore.
+<<if $Day lt 6>>You are on campus. There are several areas to explore.
 
 Where do you want to go? 
 
@@ -86,8 +85,9 @@ Where do you want to go?
 [[Work in the Brewery|Brewery]]
 
 [[Wait until classes start|Class]]
-
-<<set $Show to true>><<else>>It would seem that you decided to spend your time on campus doing a whole lot of nothing. Maybe you could have taken some more risks.
+<<set $Show to true>>
+<<else>> \
+It would seem that you decided to spend your time on campus doing a whole lot of nothing. Maybe you could have taken some more risks.
 
 Despite the fact that you had high hopes for your life beyond school, you turned out entirely ordinarily and accomplished nothing of note for the rest of your life.
 
@@ -356,7 +356,8 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
             <<elseif $Temp is 7>>
             You manage to overhear to their conversation at the perfect time.
 
-            /* Random Puzzle Solution */
+            You overhear the numbers: <<print $Faucets>>
+            /* Random Puzzle Solution - Incorporate other solutions and randomize*/
             <<else>>
             You manage to make out a snippet of their conversation.
             /* Random Puzzle Clue */
@@ -449,8 +450,16 @@ A strange lady sits in the corner staring at you without blinking.
     [[Eat dinner]]
     [[Sleep]]
 
-/* :: Inspect the chamber
-    You approach the metal chamber. */
+:: Inspect the chamber
+    You approach the metal chamber. 
+
+    You hear a dim humming emanating from the capsule and feel a gentle vibration when you lay your hand on it.
+
+    You tap with your finger and an agonizing scream is released from within the capsule.
+
+    The horrendous sound is forever etched into your mind and you shake uncontrollably.
+
+    [[Talk to the lady in the corner|Talk to her]]
 
 :: Balneary
 You enter the balneary.
@@ -461,7 +470,7 @@ There are numbered faucets on both the fountain and the sink, although none of t
 
 Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
 
-[[Turn on the faucets]] /* Player has no way of finding the correct order currently */
+[[Turn on the faucets]] /* Player has no guaranteed method finding the correct order currently */
 [[Wait for another student]]
 
 :: Turn on the faucets 
