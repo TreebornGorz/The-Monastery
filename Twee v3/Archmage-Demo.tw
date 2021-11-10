@@ -555,7 +555,22 @@ Students use this area to wash up before meals and collect water for bathing in 
             <</if>>
 
 :: Secret bath
-/* Write Secret bath stuff */
+            You descend the secret passageway and find yourself in an underground bath house.
+
+            You explore for a while until your hear footsteps coming from the shadows. You see glowing eyes approaching you.
+
+            [[Attempt an escape|Escape Nurse]]
+            [[Stand your ground|Wait Nurse]]
+            [[Embrace the figure|Embrace Nurse]]
+
+:: Escape Nurse
+/* Populate these passages */
+/* Escape fails, given choice to submit (slavery or accomplice) or perish */
+:: Wait Nurse
+/* Intrigued, she approaches you with curiousity and admiration, possibility for cooperation/leadership */
+
+:: Embrace Nurse
+/* you fawn over her, leading to your submission (slavery or accomplice) */
 
 :: Wait for another student
     You patiently and creepily wait for another student to enter the balneary. 
@@ -757,7 +772,12 @@ The smith [[turns you away|Demo]].
     [[Be dumb]]
 
 :: Blacksmith
-        The smith asks if you would like to work with him as a student apprentice. /* Update description quality */
+        After correcting your behavior, the smith asks if you would like to work with him as a student apprentice. 
+        
+        You gladly agree. After showing you around the equipment, he hands you a hammer of your own.
+
+        [[Eat dinner]]
+        [[Sleep]]
         <<set $Forge to 1>>
 
 :: Be dumb
