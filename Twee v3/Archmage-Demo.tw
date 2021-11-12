@@ -1,3 +1,18 @@
+/* 
+Unfinished Tasks: 
+Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
+Establish various Potions & Ingredients [Mix and match chart??]
+Incorporate Potion effects
+Establish Poison & Ingredients - Milk and Hemlock
+Create function for randomzied rewards
+Establish relationships
+Figure solution for teacher dorm passphrase
+Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
+Establish seed locations
+Establish laboratory experiments [required to unlock certain potion ingredients? Initial requirements must be met to perform experiments? Ability to unlock time machine?!?!?! Time machine stops working at some point for some reason to simplify the mechanics of the thing? (Super complicated to program that probably... Would need to retroactively remove historical variable changes, still possible if I keep a log of player choices in a separate array)]
+
+*/
+
 :: StoryTitle
 Archmage Demo
 
@@ -291,7 +306,7 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
     You immerse yourself in prayer, increasing your reverence and probably making you a more likeable person.
     
     You spend the remainder of your day in deep introspection despite still feeling like a relatively similar person afterwards.
-    /* Find an item/clue under the pew one day (rand) */
+    <<set $NightTime to true>> /* Find an item/clue under the pew one day (rand) */
     [[Eat dinner]]
     [[Sleep]]
 
@@ -305,7 +320,7 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
     You stare into the face of the statue and your own face stares back. Suddenly the eyes in the statue turn blue again and glow intensely until fizzling out and leaving behind the normal face of the statue. You feel tingling in your limbs. You have been imbued with a holy power.<</if>>
     
     <<if $Holy isnot 3>>You spend the remainder of your day paying homage to the figure before you.<</if>>
-    
+    <<set $NightTime to true>>
     [[Eat dinner]]
     [[Sleep]]
 
@@ -353,7 +368,7 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
     You laze about the cloister, daydreaming all the while. 
 
     You realize that you accomplished very little, but you also don't care about that at all.
-    /* Small random chance of something COOL happening (1/20?), generate random daydreams to make this option more entertaining for the player */
+    <<set $NightTime to true>> /* Small random chance of something COOL happening (1/20?), generate random daydreams to make this option more entertaining for the player */
     [[Eat dinner]]
     [[Sleep]]
 
@@ -677,7 +692,7 @@ There is a locked cabinet containing various prescription drugs.
 <<else>>
 You are ready to work. 
 
-[[Work as infirmary assistant]]
+[[Work as infirmary assistant|Treat a patient]]
 <</if>> \
 [[Inspect the beds]]
 [[Enter the office]]
@@ -692,12 +707,12 @@ You are ready to work.
     <<else>>
     You notice some patients in the beds.
 
-    [[Treat the patients]]<</if>>
+    [[Treat a patient]]<</if>>
     [[Enter the office]]
     [[Raid the cabinet]]
 
-:: Treat the patients
-        You approach one of the patients.
+:: Treat a patient
+        You approach a patient.
 
         You ask the patient some basic questions and fill out some forms in their medical file.
 
@@ -727,7 +742,7 @@ You are ready to work.
     <<if $NurseWork is false>> 
     The lock clicks and the door opens to reveal an attractive young nurse.
 
-    She sizes you up before inviting you into her office. You are intimidated by her presence.
+    She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
 
     You uncomfortably sit down across from her. She examines you for a while before talking.
 
@@ -736,7 +751,7 @@ You are ready to work.
     [[Accept][$NurseWork to true]]
     [[Decline]]
     <<else>> 
-    The lock clicks and the door opens to reveal the nurse looking very annoted with you.
+    The lock clicks and the door opens to reveal the nurse looking very annoyed with you.
 
     She asks why you are bothering her and you can't think of a good answer.
 
@@ -773,7 +788,43 @@ You are ready to work.
         [[Sleep]]
 
 :: Hug Nurse
+        You panic and hug the nurse for some reason. 
 
+        The annoyance vanishes and her face slowly contorts into a menacing and ominous smile. 
+
+        Her eyes sharpen as her brow furrows. You think you noticed sharp teeth. 
+
+        [[Hold onto her]]
+        [[Let go and step back]]
+
+:: Hold onto her
+            You continue to hold onto her.
+
+            You look upwards to face her directly. 
+
+            Suddenly she kisses you and liquid pours from her mouth directly into yours. 
+
+            You swallow, unable to break away from her grasp. Eventually, she lets go after you have swallowed a sizeable amount of the liquid and begin to feel a bit fuzzy.
+
+            You notice that she doesn't appear human anymore but you can't think clearly. 
+
+            You have become [[completely obdeient]] to her.
+
+:: completely obedient
+                /* This path will be complicated because it will still present the player with a narrative based on their previous decisions, but they will be unable to make any more decisions moving forward */
+
+:: Let go and step back
+            You let go of her and step backwards.
+
+            She becomes defensive and takes a fighting stance despite the smile remaining on her face. She stares at you like prey. 
+            /* Option to defend self with weapon */
+            You notice long talons extending from her fingertips and in a flash and flurry, you notice your gut has ben sliced open.
+
+            She watches in anticipation as your entrails slowly leave your body due to gravity and fall upon the floor of the infirmary.
+
+            Your lose your balance and fall to the floor as your vision fades. You can hear the nurse begin to feast.
+
+            "Bad End - Siren Prey"
 
 :: Insult Nurse
         Clearly this lady is being disrespectful.
