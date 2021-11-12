@@ -68,30 +68,31 @@ Are you Male or Female?
 [[Female|Demo][$Male to false, $Day to 1]]
 
 :: Demo
-<<if $Day lt 6>>You are on campus. There are several areas to explore.
+<<if $Day lt 6>> \
+You are on campus. There are several areas to explore.
 
 Where do you want to go? 
 
-[[Explore the Dormitories|Dormitory]]
-[[Pray in the Temple|Temple]]
-[[Take a stroll in the Cloister|Cloister]]
-[[Explore the Refectory|Refectory]]
-[[Explore the Library|Library]]
-[[Explore the Laboratory|Laboratory]]
-[[Explore the Balneary|Balneary]]
-[[Work in the Infirmary|Infirmary]]
-[[Work in the Barn|Barn]]
-[[Work in the Forge|Forge]]
-[[Work in the Brewery|Brewery]]
+[[Classroom]]
+[[Dormitory]]
+[[Temple]]
+[[Cloister]]
+[[Refectory]]
+[[Library]]
+[[Laboratory]]
+[[Balneary]]
+[[Infirmary]]
+[[Barn]]
+[[Forge]]
+[[Brewery]]
 
-[[Wait until classes start|Class]]
 <<set $Show to true>>
 <<else>> \
-It would seem that you decided to spend your time on campus doing a whole lot of nothing. Maybe you could have taken some more risks.
+You spent your time on campus doing a whole lot of nothing. Maybe you could have been more interesting or taken more risks.
 
-Despite the fact that you had high hopes for your life beyond school, you turned out entirely ordinarily and accomplished nothing of note for the rest of your life.
+Despite the fact that you had high hopes for your life after school, you turned out entirely ordinarily and accomplished nothing noteworthy for the rest of your life.
 
-On the bright side, at least accomplishing nothing means you didn't really screw anything up either. That's an accomplishment.
+On the bright side, at least you didn't really screw anything up either. That's an accomplishment of sorts.
 
 It's the small things in life that count, right...?
 
@@ -100,7 +101,9 @@ It's the small things in life that count, right...?
 :: Dormitory
 You enter the dormitory.
 
-The hallway forks. One direction leads to the male dorm, the other leads to the female dorm. You also notice a latch on the ceiling.
+The hallway forks. One direction leads to the male dorm, the other leads to the female dorm. 
+
+You notice a suspicious latch on the ceiling.
 
 [[Male dorm]]
 [[Female dorm]]
@@ -111,7 +114,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
 
     You are worried that you are not supposed to be here and that someboy might catch you snooping around.
 
-    [[Leave]]
+    [[Leave dorm]]
     [[Stick around]]
     <<else>>.
 
@@ -125,7 +128,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
 
     You are worried that you are not supposed to be here and that someboy might catch you snooping around.
 
-    [[Leave]]
+    [[Leave dorm]]
     [[Stick around]]
     <<else>>.
 
@@ -135,11 +138,11 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
     [[Sleep]]<</if>>
 
 
-:: Leave
-        You leave the dorm and make your way back to where you started.
+:: Leave dorm
+        You leave the dorm and make your way back.
 
         [[Choose another dormitory|Dormitory]]
-        [[Choose a different area of the campus|Demo]]
+        [[Go elsewhere|Demo]]
 
 :: Stick around
         Even though you probably shouldn't be in this dorm, you decide to stay anyway.
@@ -154,7 +157,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
 
             You find nothing of interest.
 
-            [[Leave]]
+            [[Leave dorm]]
             [[Stick around]]
 
 
@@ -162,17 +165,42 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
             <<if $Ostra is true>> 
             The students notice you eavesdropping and report you to the administration in a panic.
 
-            You have been hauled off to [[jail]].
+            You have been hauled off to [[jail][$Day += 15]].
             <<else>>
             You eavesdrop on the student's conversation.
 
             You hear nothing of interest.
             
-            [[Leave]]
+            [[Leave dorm]]
             [[Stick around]]
 
 :: jail
-                You have been thrown into a prison cell for the crime of being sneaky.
+                You have been thrown into a jail cell for the crime of being sneaky.
+
+                You will not receive a trial and you have not been notified of the duration of your stay in jail.
+
+                Many days have passed...
+
+                [[Wait patiently][$Day += 739]]
+                [[Attempt escape]]
+
+:: Wait patiently
+                    You waited patiently to be released from your jail cell.
+
+                    You have no clue how much time has passed since you entered this cell.
+
+                    You are skinny and haven't had a proper meal in a long time.
+
+                    This cell is all you know. It is your new life...
+
+                    "Bad End - Miscreant"
+
+:: Attempt escape
+                    You take your future into your own hands and attempt escape from your cell.
+
+                    /* IF player previously hid items in cell they can be used to escape */
+                    /* IF player used a potion on themself previously, the effect may be helpful */
+                    /* IF player established a relationship with the guard previously, that may be helpful */
 
 :: Pull latch
     You pull the latch. 
@@ -838,7 +866,7 @@ The brewmaster is asleep in a corner.
     [[Sleep]]
     <</if>>
 
-:: Class
+:: Classroom
 You sit down in an empty chair in the classroom and wait for class to start. There are no students or teachers in sight.
 
 After waiting for a few minutes, you become impatient. 
