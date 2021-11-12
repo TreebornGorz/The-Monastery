@@ -18,6 +18,7 @@ Archmage Demo
 <<set $Temp to 0>>
 <<set $Male to true>>
 <<set $Day to 0>>
+<<set $NightTime to false>>
 <<set $CeilingKey to false>>
 <<set $Holy to 0>>
 <<set $NurseWork to false>>
@@ -39,7 +40,8 @@ Archmage Demo
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
 <<if $Show is true>>Sex: <<if $Male is true>>Male<<else>>Female<</if>><</if>> /* Player Sex */
-<<if $Day == 0>><<else>>Day: $Day<</if>> /* Game Time */
+<<if $Day isnot 0>>Day: $Day<</if>> /* Game Days Passed */
+<<if $Day isnot 0>>Time: <<if $NightTime is false>>Day<<else>>Night<</if>><</if>> /* Time of Day */
 
 :: Start
 <br><br>
@@ -87,6 +89,7 @@ Where do you want to go?
 [[Brewery]]
 
 <<set $Show to true>>
+<<set $NightTime to false>>
 <<else>> \
 You spent your time on campus doing a whole lot of nothing. Maybe you could have been more interesting or taken more risks.
 
@@ -249,7 +252,7 @@ You notice a suspicious latch on the ceiling.
                     /* Set variables and alter item found for each one, each search takes time and risks getting caught, multiple searches of the same belongings may yield another item (randomize these) */
 
 :: Hide teach
-
+                /* Wait for a staff member(s) to show up, maybe on or maybe multiple (random), gets caught or escapes with info (binary, random) */
 
 :: Explore
         You explore the dormitory.
@@ -288,7 +291,7 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
     You immerse yourself in prayer, increasing your reverence and probably making you a more likeable person.
     
     You spend the remainder of your day in deep introspection despite still feeling like a relatively similar person afterwards.
-    
+    /* Find an item/clue under the pew one day (rand) */
     [[Eat dinner]]
     [[Sleep]]
 
@@ -317,34 +320,49 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
 :: Cloister
 You enter the cloister.
 
-There is a large tree in the center of the field surrounded by a large patch of open grass. Four walls surround the area in a square shape. Various bushes and flowers line the walls. 
+There is a large tree in the center of the field surrounded by open grass. 
+
+Four walls surround the area in a square shape. Various bushes and flowers line the walls. 
 
 [[Leave|Demo]]
 [[Inspect the plants]]
+<<if $Planting is true>> \
+[[Plant seeds]]
+<</if>> \
 [[Daydream]]
 
 :: Inspect the plants
     You inspect the plants and notice a decent variety of plant life.
 
-    There is also open soil that seems fertile enough for growing plants.
-
+    There is open soil that seems fertile enough for growing plants.
+    <<if $Planting is false>> 
     Maybe you could plant some seeds here.
-
+    <<set $Planting to true>> 
+    <<else>> \
+    /* Give status of plants, if grown give option to pick plants (takes time to grow) */
+    <</if>> \ 
     [[Eat dinner]]
     [[Sleep]]
 
+:: Plant seeds
+        Which seed will you plant?
+
+        /* Check for which seeds the player has obtained */
+
 :: Daydream
-    You laze about the cloister, daydreaming all the wile. 
+    You laze about the cloister, daydreaming all the while. 
 
-    You realize you accomplished very little, but you also don't care about that at all.
-
+    You realize that you accomplished very little, but you also don't care about that at all.
+    /* Small random chance of something COOL happening (1/20?), generate random daydreams to make this option more entertaining for the player */
     [[Eat dinner]]
     [[Sleep]]
 
 :: Refectory
 You enter the refectory.
 
-The vacuous hall has two long wooden dining tables that extend the length of the room. Atop the tables lie lace tablecloths with chalices and dishes placed intermittently in front of chairs. Candles burn in the center of the tables. 
+The vacuous hall has two long wooden dining tables that extend the length of the room. 
+
+Atop the tables lie lace tablecloths with chalices and dishes placed intermittently in front of chairs. Candles burn in the center of the tables. 
 
 The stone floor is immaculate and the ceiling meets at a point with wooden rafters clearly visible. The walls are bare, giving the room an orderly and prestigious air.
 
@@ -358,29 +376,37 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 
     You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
 
-    [[Send out the food]]<<if $Poison is true>>
-    
+    [[Send out the food]]
+    <<if $Poison is true>>
     [[Poison the food]]
     
-    [[Poison the drinking water]]<</if>><<if $Potion is true>>
-    
+    [[Poison the drinking water]]
+    <</if>>
+    <<if $Potion is true>> \
     [[Use potion on food]]
     
-    [[Use potion on drinking water]]<</if>>
+    [[Use potion on drinking water]]
+    <</if>>
 
 :: Poison the food
         You slip the poison out of your pocket.
 
         Whose meal will you poison?
 
+        /* List targets once a relationship is developed, variables for tracking relationships */
+
 :: Poison the drinking water
-        You sneak over to the water keg and posion the water.
+        You sneak over to the water keg and poison the water.
+
+        /* Majority of campus dies, write ending */
 
 :: Send out the food
         You do enough work to finish preparing the food and send out the meals.
 
-        By the time you get a chance to eat, only the cooks remain in the refectory. You eat your meal alongside them.
+        By the time you get a chance to eat, only the cooks remain in the refectory. 
 
+        You eat your meal alongside them.
+        /* Find clue? */
         [[Sleep]]
 
 :: Eat dinner
@@ -400,7 +426,7 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
         
         Another student poisoned your food! You cough up your guts and collapse dead in the hallway.
         
-        Maybe they have secrets worth protecting...
+        Maybe some secrets are worth protecting...
         
         "Bad End - Sneaky Bugger" <<else>>
             You decide that your life is boring enough that you require information about the lives of others.
@@ -414,19 +440,20 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
             You manage to overhear to their conversation at the perfect time.
 
             You overhear the numbers: <<print $Faucets>>
-            /* Random Puzzle Solution - Incorporate other solutions and randomize*/
+            /* Random Puzzle Solution - Incorporate other solutions and randomize - Make this a function() */
             <<else>>
             You manage to make out a snippet of their conversation.
-            /* Random Puzzle Clue */
+            /* Random Puzzle Clue - make this a function() */
             You finish your meal and turn in your dishes. 
             <</if>>
-        <</if>>[[Sleep]]
+        <</if>> \
+        [[Sleep]]
 
 :: Eat in peace
         You decide to eat in peace.
 
         You grab your meal and move to a location at a different table that isn't quite so noisy.
-
+        /* If relationship, can be approached intiating an event */
         You enjoy your meal and feel satisfied.
 
         [[Sleep]]
@@ -438,7 +465,7 @@ You notice many bookshelves and various students spread out across the room, dil
 
 [[Study]]
 [[Interrupt another student]]
-[[Find a librarian]]
+[[Find the librarian]]
 
 /* :: Study 
     You decide to brush up on your reading. 
@@ -448,7 +475,7 @@ You notice many bookshelves and various students spread out across the room, dil
 /* :: Interrupt another student
     Interrupt another student */
 
-/* :: Find a librarian
+/* :: Find the librarian
     Find a librarian */
 
 :: Laboratory
@@ -498,11 +525,11 @@ A strange lady sits in the corner staring at you without blinking.
 :: Talk to her
     You approach the strange unblinking lady.
 
-    She explains that she is the professor in charge of the laboratory.
+    She explains that she is the scientist in charge of the laboratory.
 
-    You can work with her to perform experiments and brew potions or  poisons.
+    You can work with her to perform experiments and brew potions or poisons.
     <<set $Lab to true>>
-    She spends the day showing you around the laboratory equipment.
+    She spends the day familiarizing you with the laboratory equipment.
 
     [[Eat dinner]]
     [[Sleep]]
@@ -515,7 +542,7 @@ A strange lady sits in the corner staring at you without blinking.
     You tap with your finger and an agonizing scream is released from within the capsule.
 
     The horrendous sound is forever etched into your mind and you shake uncontrollably.
-
+    /* Open chamber by stealing her key */
     [[Talk to the lady in the corner|Talk to her]]
 
 :: Balneary
@@ -648,9 +675,10 @@ You notice a tray with various medical tools strewn across, such as a scalpel, t
 
 There is a locked cabinet containing various prescription drugs. 
 <<else>>
-You are ready to get to work. 
+You are ready to work. 
 
-[[Work as infirmary assistant]]<</if>>
+[[Work as infirmary assistant]]
+<</if>> \
 [[Inspect the beds]]
 [[Enter the office]]
 [[Raid the cabinet]]
@@ -658,9 +686,9 @@ You are ready to get to work.
 :: Inspect the beds
     <<if $NurseWork is false>>You inspect the beds. They are empty.
 
-    Some of the sheets have stains of various colors. They have probably been washed.
+    Some of the sheets have stains of various colors. They have probably been washed...
 
-    There is nothing under the bed.
+    There is nothing under the bed. /* Randomly or conditionally put something important under bed? */
     <<else>>
     You notice some patients in the beds.
 
@@ -668,7 +696,25 @@ You are ready to get to work.
     [[Enter the office]]
     [[Raid the cabinet]]
 
-/* :: Treat the patients */
+:: Treat the patients
+        You approach one of the patients.
+
+        You ask the patient some basic questions and fill out some forms in their medical file.
+
+        You take measurements of their vitals and after examining their symptoms, perform some standard tests.
+
+        You slide the medical file through a compartment into the nurse's office. Eventually, she leaves her office, opens her medicine cabinet and prescribes medicine to the patient, leaving the patient back in your care.
+
+        Your work in the infirmary is finished for the day.
+
+        [[Steal the patient's medicine|Steal meds]]
+        <<if $Poison is true>> \
+        [[Poison the patient]]
+        <</if>> \
+        [[Raid the cabinet]]
+        [[Enter the office]]
+        [[Eat dinner]]
+        [[Sleep]]
         
 :: Enter the office
     You twist the doorknob. The door is locked.
@@ -678,7 +724,7 @@ You are ready to get to work.
 
 :: Knock
     You knock on the door.
-
+    <<if $NurseWork is false>> 
     The lock clicks and the door opens to reveal an attractive young nurse.
 
     She sizes you up before inviting you into her office. You are intimidated by her presence.
@@ -689,7 +735,15 @@ You are ready to get to work.
 
     [[Accept][$NurseWork to true]]
     [[Decline]]
-    [[Insult her]]
+    <<else>> 
+    The lock clicks and the door opens to reveal the nurse looking very annoted with you.
+
+    She asks why you are bothering her and you can't think of a good answer.
+
+    [[Apologize to her|Nurse Apology]]
+    [[Hug her|Hug Nurse]]
+    <</if>> \
+    [[Insult her|Insult Nurse]]
 
 :: Accept
         You accept the nurse's work offer.
@@ -710,7 +764,18 @@ You are ready to get to work.
         [[Eat dinner]]
         [[Sleep]]
 
-:: Insult her
+:: Nurse Apology
+        You apologize for disturbing her and she rolls her eyes at you before slamming her door shut.
+        <<set $NurseApology to true>>
+        You fear that she might no be so patient with you the next time you disturb her.
+
+        [[Eat dinner]]
+        [[Sleep]]
+
+:: Hug Nurse
+
+
+:: Insult Nurse
         Clearly this lady is being disrespectful.
 
         You decide that this nurse is arrogant and that it is your duty to bring her down a peg.
