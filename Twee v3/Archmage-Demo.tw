@@ -256,7 +256,7 @@ You notice a suspicious latch on the ceiling.
 
 :: Explore
         You explore the dormitory.
-
+        /* If you get caught then ostracized, chance to find a clue or item such as a potion or seeds */
         You find nothing of interest.
 
         [[Leave|Demo]]
@@ -706,7 +706,7 @@ You are ready to work.
         You slide the medical file through a compartment into the nurse's office. Eventually, she leaves her office, opens her medicine cabinet and prescribes medicine to the patient, leaving the patient back in your care.
 
         Your work in the infirmary is finished for the day.
-
+        /* Treating enough patients gives access to medicine cabinet */
         [[Steal the patient's medicine|Steal meds]]
         <<if $Poison is true>> \
         [[Poison the patient]]
