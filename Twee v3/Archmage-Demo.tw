@@ -68,7 +68,7 @@ Are you Male or Female?
 [[Female|Demo][$Male to false, $Day to 1]]
 
 :: Demo
-<<if $Day lt 6>> \
+<<if $Day lt 11>> \
 You are on campus. There are several areas to explore.
 
 Where do you want to go? 
@@ -112,7 +112,7 @@ You notice a suspicious latch on the ceiling.
 :: Male dorm
     You enter the male dorm<<if $Male is false>> even though you are female. 
 
-    You are worried that you are not supposed to be here and that someboy might catch you snooping around.
+    You are worried that you are not supposed to be here and that somebody might notice you snooping around.
 
     [[Leave dorm]]
     [[Stick around]]
@@ -126,7 +126,7 @@ You notice a suspicious latch on the ceiling.
 :: Female dorm
     You enter the female dorm<<if $Male is true>>  even though you are male. 
 
-    You are worried that you are not supposed to be here and that someboy might catch you snooping around.
+    You are worried that you are not supposed to be here and that somebody might notice you snooping around.
 
     [[Leave dorm]]
     [[Stick around]]
@@ -149,17 +149,16 @@ You notice a suspicious latch on the ceiling.
         
         Fortunately, there aren't many students around and you manage to avoid detection as you sneak your way through the dorm rooms.
         
-        [[Search student's personal effects]]
+        [[Search student's belongings]]
         [[Eavesdrop]]
                 
-:: Search student's personal effects
+:: Search student's belongings
             You search the student's personal effects.
-
+            /* RNG to find various items or clues OR get caught */
             You find nothing of interest.
 
             [[Leave dorm]]
             [[Stick around]]
-
 
 :: Eavesdrop
             <<if $Ostra is true>> 
@@ -168,7 +167,7 @@ You notice a suspicious latch on the ceiling.
             You have been hauled off to [[jail][$Day += 15]].
             <<else>>
             You eavesdrop on the student's conversation.
-
+            /* Incorporate RNG similiar to gossip */
             You hear nothing of interest.
             
             [[Leave dorm]]
@@ -209,8 +208,10 @@ You notice a suspicious latch on the ceiling.
     
     Maybe <<if $CeilingKey is false>>there is some other way of opening<<else>>the passphrase you learned will open<</if>> this door?
     
-    [[Choose a dormitory|Dormitory]]<<if $ceilingKey is true>>
-    [[Utter the passphrase|Passphrase]]<</if>>
+    [[Choose a dormitory|Dormitory]]
+    <<if $ceilingKey is true>> \
+    [[Utter the passphrase|Passphrase]]
+    <</if>>
         
 :: Passphrase
         You utter the passphrase.
@@ -221,7 +222,35 @@ You notice a suspicious latch on the ceiling.
 
 :: Enter the darkness
             You swing a door down and climb into the ceiling.
-/* Develop Teacher's Dorm */
+            
+            The teacher's dorm appears quite similar to the student dorms, however there are fewer beds.
+
+            You notice teacher's belongings strewn about.
+
+            There are currently no teachers around, but you may not want to press your luck.
+
+            [[Search teacher's belongings]]
+            [[Hide and wait for a teacher to show up|Hide teach]]
+            [[Leave dorm]]
+
+:: Search teacher's belongings
+                You take a look around the dorm and notice a few different areas you can search.
+
+                [[Nurse's belongings]|Belonging]
+                [[Librarian's belongings]|Belonging]
+                [[Smith's belongings]|Belonging]
+                [[Cook's belongings]|Belonging]
+                [[Scientist's belongings]|Belonging]
+                [[Priest's bleongings]|Belonging]
+                [[Gardener's belongings]|Belonging]
+                [[Brewmaster's belongings]|Belonging]
+
+:: Belonging
+                    /* Set variables and alter item found for each one, each search takes time and risks getting caught, multiple searches of the same belongings may yield another item (randomize these) */
+
+:: Hide teach
+
+
 :: Explore
         You explore the dormitory.
 
@@ -376,7 +405,7 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
         "Bad End - Sneaky Bugger" <<else>>
             You decide that your life is boring enough that you require information about the lives of others.
             <<set $Temp to random(7)>>
-            While eating your meal, you inconsipicuously listen into the conversations of the other students in an attempt to glean some juicy gossip.
+            While eating your meal, you inconspicuously listen into the conversations of the other students in an attempt to glean some juicy gossip.
             <<if $Temp is 0>>
             The students noticing you are listening to their conversation and huddle together uncomfortably.
             <<set $Ostra to true>>
@@ -856,7 +885,7 @@ The brewmaster is asleep in a corner.
         He seems dissapointed. [[You leave him alone and wish him sweet dreams.|Demo]] 
 
 :: Brew
-    You decide to bew another batch of beer.
+    You decide to brew another batch of ale.
     <<set $Keg to true>>
     <<if $Poison is true>>
     <<elseif $Potion is true>>
