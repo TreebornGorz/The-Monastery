@@ -59,7 +59,6 @@ Archmage Demo
 <<if $Day isnot 0>>Time: <<if $NightTime is false>>Day<<else>>Night<</if>><</if>> /* Time of Day */
 
 :: Start
-<br><br>
 This is a demo for the currently in-development interactive fiction project "The Archmage", a project intended to be a narrative-driven interactive fiction fantasy game which provides the player with //significant// agency and //significant// replayability.
 
 This demo provides players with a teaser for the main project. It is intended to display gameplay without widening the scope to unwieldy levels inevitably required for developing the main project. 
@@ -91,7 +90,6 @@ You are on campus. There are several areas to explore.
 Where do you want to go? 
 
 [[Classroom]]
-[[Dormitory]]
 [[Temple]]
 [[Cloister]]
 [[Refectory]]
@@ -102,6 +100,7 @@ Where do you want to go?
 [[Barn]]
 [[Forge]]
 [[Brewery]]
+[[Dormitory]]
 
 <<set $Show to true>>
 <<set $NightTime to false>>
@@ -139,7 +138,9 @@ You notice a suspicious latch on the ceiling.
     This is where you belong. 
 
     [[Explore]]
-    [[Sleep]]<</if>>
+    [[Sleep]]
+    [[Leave|Demo]]
+    <</if>>
 
 :: Female dorm
     You enter the female dorm<<if $Male is true>>  even though you are male. 
@@ -153,14 +154,23 @@ You notice a suspicious latch on the ceiling.
     This is where you belong.
 
     [[Explore]]
-    [[Sleep]]<</if>>
+    [[Sleep]]
+    [[Leave|Demo]]
+    <</if>>
 
+:: Explore
+        You explore the dormitory.
+        /* If you get caught then ostracized, chance to find a clue or item such as a potion or seeds */
+        You find nothing of interest.
 
+        [[Sleep]]
+        [[Leave|Demo]]
+        
 :: Leave dorm
         You leave the dorm and make your way back.
 
-        [[Choose another dormitory|Dormitory]]
-        [[Go elsewhere|Demo]]
+        [[Enter another dormitory|Dormitory]]
+        [[Leave|Demo]]
 
 :: Stick around
         Even though you probably shouldn't be in this dorm, you decide to stay anyway.
@@ -187,9 +197,9 @@ You notice a suspicious latch on the ceiling.
             You eavesdrop on the student's conversation.
             /* Incorporate RNG similiar to gossip */
             You hear nothing of interest.
-            
-            [[Leave dorm]]
             [[Stick around]]
+            [[Leave dorm]]
+            <</if>>
 
 :: jail
                 You have been thrown into a jail cell for the crime of being sneaky.
@@ -229,7 +239,8 @@ You notice a suspicious latch on the ceiling.
     [[Choose a dormitory|Dormitory]]
     <<if $ceilingKey is true>> \
     [[Utter the passphrase|Passphrase]]
-    <</if>>
+    <</if>> \
+    [[Leave|Demo]]
         
 :: Passphrase
         You utter the passphrase.
@@ -269,13 +280,6 @@ You notice a suspicious latch on the ceiling.
 :: Hide teach
                 /* Wait for a staff member(s) to show up, maybe on or maybe multiple (random), gets caught or escapes with info (binary, random) */
 
-:: Explore
-        You explore the dormitory.
-        /* If you get caught then ostracized, chance to find a clue or item such as a potion or seeds */
-        You find nothing of interest.
-
-        [[Leave|Demo]]
-        [[Sleep]]
         
 :: Sleep
         <<set $Day += 1>>
@@ -299,6 +303,7 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
 [[Pray at a pew]] 
 [[Pray to the statue][$Holy += 1]]
 [[Search the temple]]
+[[Leave|Demo]]
 
 :: Pray at a pew
     You locate a pew that seems comfortable enough.
@@ -329,8 +334,7 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
 
     [[Pray at a pew]] 
     [[Pray to the statue][$Holy += 1]]
-    [[Eat dinner]]
-    [[Sleep]]
+    [[Leave|Demo]]
 
 :: Cloister
 You enter the cloister.
@@ -448,7 +452,7 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
             <<set $Temp to random(7)>>
             While eating your meal, you inconspicuously listen into the conversations of the other students in an attempt to glean some juicy gossip.
             <<if $Temp is 0>>
-            The students noticing you are listening to their conversation and huddle together uncomfortably.
+            The students notice you are listening to their conversation and huddle together uncomfortably.
             <<set $Ostra to true>>
             You are not able to hear anything and you have become socially ostracized. You will be unable to make friends with other students.
             <<elseif $Temp is 7>>
