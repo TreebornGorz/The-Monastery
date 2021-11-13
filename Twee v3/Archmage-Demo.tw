@@ -282,7 +282,8 @@ You notice a suspicious latch on the ceiling.
 
         
 :: Sleep
-        <<set $Day += 1>>
+        <<set $Day += 1>> \
+        <<set $NightTime to true>> \
         You go to sleep.
 
         You dream of an odd future that awaits you, but you can't quite make out the ending.
@@ -316,15 +317,21 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
     [[Sleep]]
 
 :: Pray to the statue
-    You kneel before the statue and begin praying to the imposing figure before you.<<if $Holy is 1>>
-    
+    You kneel before the statue and begin praying to the imposing figure before you.
+    <<if $Holy is 1>>    
     For a second you lose focus and your eyes open, revealing the statue before you. The figure's eyes are glowing a deep blue color.
     
-    In surprise, you blink a couple times and reinspect the statue's face. The glow is gone.<<elseif $Holy is 3>>Your homage progresses entirely normally. However, when you finish your prayer and stand up to face the statue, something strange happens.
+    In surprise, you blink a couple times and reinspect the statue's face. The glow is gone.
+    <<elseif $Holy is 3>>
+    Your homage progresses entirely normally. However, when you finish your prayer and stand up to face the statue, something strange happens.
     
-    You stare into the face of the statue and your own face stares back. Suddenly the eyes in the statue turn blue again and glow intensely until fizzling out and leaving behind the normal face of the statue. You feel tingling in your limbs. You have been imbued with a holy power.<</if>>
+    You stare into the face of the statue and your own face stares back. Suddenly the eyes in the statue turn blue again and glow intensely until fizzling out and leaving behind the normal face of the statue. You feel tingling in your limbs. 
     
-    <<if $Holy isnot 3>>You spend the remainder of your day paying homage to the figure before you.<</if>>
+    You have been imbued with a holy power.
+    <</if>> \
+    <<if $Holy isnot 3>>
+    You spend the remainder of your day paying homage to the figure before you.
+    <</if>> \
     <<set $NightTime to true>>
     [[Eat dinner]]
     [[Sleep]]
@@ -343,12 +350,12 @@ There is a large tree in the center of the field surrounded by open grass.
 
 Four walls surround the area in a square shape. Various bushes and flowers line the walls. 
 
-[[Leave|Demo]]
 [[Inspect the plants]]
 <<if $Planting is true>> \
 [[Plant seeds]]
 <</if>> \
 [[Daydream]]
+[[Leave|Demo]]
 
 :: Inspect the plants
     You inspect the plants and notice a decent variety of plant life.
@@ -360,8 +367,8 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
     <<else>> \
     /* Give status of plants, if grown give option to pick plants (takes time to grow) */
     <</if>> \ 
-    [[Eat dinner]]
-    [[Sleep]]
+    [[Daydream]]
+    [[Leave|Demo]]
 
 :: Plant seeds
         Which seed will you plant?
@@ -459,12 +466,12 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
             You manage to overhear to their conversation at the perfect time.
 
             You overhear the numbers: <<print $Faucets>>
-            /* Random Puzzle Solution - Incorporate other solutions and randomize - Make this a function() */
+            /* Random Puzzle Solution - Incorporate other solutions and randomize - Make this a function() */ \
             <<else>>
             You manage to make out a snippet of their conversation.
             /* Random Puzzle Clue - make this a function() */
             You finish your meal and turn in your dishes. 
-            <</if>>
+            <</if>> \
         <</if>> \
         [[Sleep]]
 
@@ -508,11 +515,12 @@ A strange lady sits in the corner staring at you without blinking.
 
 [[Talk to her]]
 [[Inspect the chamber]]
-<<else>>
+<<else>> \
 [[Brew potion]]
 [[Brew poison]]
 [[Perform experiment]]
-<</if>>
+<</if>> \
+[[Leave|Demo]]
 
 :: Brew potion
     You approach the potion station.
@@ -549,7 +557,7 @@ A strange lady sits in the corner staring at you without blinking.
     You can work with her to perform experiments and brew potions or poisons.
     <<set $Lab to true>>
     She spends the day familiarizing you with the laboratory equipment.
-
+    <<set $NightTime to true>>
     [[Eat dinner]]
     [[Sleep]]
 
@@ -563,6 +571,7 @@ A strange lady sits in the corner staring at you without blinking.
     The horrendous sound is forever etched into your mind and you shake uncontrollably.
     /* Open chamber by stealing her key */
     [[Talk to the lady in the corner|Talk to her]]
+    [[Leave|Demo]]
 
 :: Balneary
 You enter the balneary.
@@ -575,11 +584,12 @@ Students use this area to wash up before meals and collect water for bathing in 
 
 [[Turn on the faucets]] /* Player has no guaranteed method finding the correct order currently */
 [[Wait for another student]]
+[[Leave|Demo]]
 
 :: Turn on the faucets 
     /* Need to display previous selections and check that no previous selections match the user input -- Can't turn on faucet when it is on */ \
     The faucets are numbered 1 through 5.
-    <<print $Faucets>>
+    
     <label>Which faucet will you turn first? <<numberbox '$UserFaucets[0]' 0>></label>
  
     [[Second faucet]]
@@ -590,7 +600,7 @@ Students use this area to wash up before meals and collect water for bathing in 
 
     [[Try again|Turn on the faucets]] \
     <<else>> \
-    You turn the faucet and Water runs from the tap. 
+    You turn the faucet and water runs from the tap. 
     
     <label>Which faucet will you turn second? <<numberbox '$UserFaucets[1]' 0>></label>
     
@@ -603,7 +613,7 @@ Students use this area to wash up before meals and collect water for bathing in 
 
     [[Try again|Second faucet]] \
     <<else>> \
-    You turn the faucet and Water runs from the tap. 
+    You turn the faucet and water runs from the tap. 
     
     <label>Which faucet will you turn third? <<numberbox '$UserFaucets[2]' 0>></label>
     
@@ -616,7 +626,7 @@ Students use this area to wash up before meals and collect water for bathing in 
 
     [[Try again|Third faucet]] \
     <<else>> \
-    You turn the faucet and Water runs from the tap. 
+    You turn the faucet and water runs from the tap. 
     
     <label>Which faucet will you turn fourth? <<numberbox '$UserFaucets[3]' 0>></label>
     
@@ -629,7 +639,7 @@ Students use this area to wash up before meals and collect water for bathing in 
 
     [[Try again|Fourth faucet]] \
     <<else>> \
-    You turn the faucet and Water runs from the tap. 
+    You turn the faucet and water runs from the tap. 
     
     <label>Which faucet will you turn fifth? <<numberbox '$UserFaucets[4]' 0>></label>
     
@@ -652,7 +662,7 @@ Students use this area to wash up before meals and collect water for bathing in 
             <<if $BathHouse is true>> \
                 You wait for a few seconds and then the floor begins to vibrate.
 
-                A passageway splits open in the wall and water runs through the opening down steps.
+                A passageway splits open in the wall. Water runs through the opening and down the steps.
 
                 [[Enter the secret passage|Secret bath]]
             <</if>>
@@ -660,7 +670,11 @@ Students use this area to wash up before meals and collect water for bathing in 
 :: Secret bath
             You descend the secret passageway and find yourself in an underground bath house.
 
-            You explore for a while until your hear footsteps coming from the shadows. You see glowing eyes approaching you.
+            You explore for a while until your hear footsteps coming from the shadows. 
+            
+            You start to feel a bit fuzzy the longer you stay in the water.
+            
+            SUddenly, you notice glowing eyes approaching you.
 
             [[Attempt an escape|Escape Nurse]]
             [[Stand your ground|Wait Nurse]]
@@ -681,7 +695,7 @@ Students use this area to wash up before meals and collect water for bathing in 
     Eventually, a student enters with a bucket and fills it with water at one of the faucets.
 
     He looks uncomfortable as he makes eye contact with you before leaving.
-
+    <<set $NightTime to true>>
     [[Eat dinner]]
     [[Sleep]]
 
