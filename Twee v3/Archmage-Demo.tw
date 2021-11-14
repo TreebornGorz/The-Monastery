@@ -41,7 +41,7 @@ Archmage Demo
 <<set $Poison to false>>
 <<set $Brew to false>>
 <<set $Potion to false>>
-<<set $Keg to false>>
+<<set $Keg to 0>>
 <<set $Lab to false>>
 <<set $Ostra to false>>
 <<set $Drugs to []>>
@@ -51,6 +51,9 @@ Archmage Demo
 <<set $Faucets to $Faucets.shuffle()>>
 <<set $UserFaucets to [0,0,0,0,0]>>
 <<set $BathHouse to false>>
+<<set $BarnWork to false>>
+<<set $AnimalShip to 0>>
+<<set $Eggs to 0>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -922,13 +925,16 @@ She seems annoyed with you, but prescribes some pain pills to you for the injury
 
 :: Barn
 You enter the barn.
-
+<<if $BarnWork is false>>
 You open a couple large barn doors.  
 
 You see horses in their stables, a cow in the barn, and chickens in their coup. There are no people to be seen. 
 
 [[Look for a person]] 
 [[Approach the animals]]
+[[Leave|Demo]]
+<<else>>
+[[Take care of the animals]]
 
 :: Look for a person
     You decide to look for a person instead of blindly messing around with the animals.
@@ -941,10 +947,19 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
     [[Decline|Decline farmer]]
     
 :: Help her out
-    
+        You decide to help out the farmer with her work.
+        <<set $BarnWork to true>>
+        She shows you around the barn, explaining how to take care of each animal and showing you where she keeps the animal food and tools.
+        <<set $NightTime to true>>
+        [[Eat dinner]]
+        [[Sleep]]
 
 :: Decline farmer
+        You decline to help the farmer.
 
+        She seems deeply disappointed.
+
+        [[Leave|Demo]]
 
 :: Approach the animals
     You decide to approach the animals. 
@@ -963,9 +978,46 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 :: Cow
         You enter the barn and notice a dairy cow that seems to be in need of milking.
 
+        You're not sure if you should milk the cow without permission.
+
+        [[Milk the cow anyway]]
+        [[Look for a person]]
+
 :: Chickens
         You enter the coup and find a few chickens running around. 
         
+:: Take care of the animals
+    You take care of each group of animals, feeding them and tending to their individual needs.
+
+    You notice they are more familiar with you and your relationship increases.
+    <<set $AnimalShip += 1>>
+    [[Approach animals individually]] 
+    [[Eat dinner]]
+    [[Sleep]]
+
+:: Approach the animals individually
+        Approach which animal?        
+        <<if $AnimalShip gt 0>>
+        [[Approach chicken]]
+        <</if>> \
+        <<if $AnimalShip gt 1>>
+        [[Approach cow]]
+        <</if>> \
+        <<if $animalShip gt 2>>
+        [[Approach horse]]
+        <</if>> \
+
+:: Approach chicken
+            You approach the chicken.
+
+            The chicken is not very interested and basically ignores you.
+            <<set $Eggs += 1>>
+            However, you do get some eggs.
+
+:: Approach cow
+
+:: Approach horse
+
 :: Forge
 You enter the forge.
 <<if $Forge is 0>>
@@ -1055,7 +1107,7 @@ The brewmaster is asleep in a corner.
 
 :: Brew
     You decide to brew a batch of ale.
-    <<set $Keg to true>>
+    <<set $Keg += 1>>
     <<if $Poison is true>>
     <<elseif $Potion is true>>
     <<else>>You prepare a keg. You can use this keg to throw a party!
