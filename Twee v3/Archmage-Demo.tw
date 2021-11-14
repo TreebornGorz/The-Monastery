@@ -10,7 +10,7 @@ Figure solution for teacher dorm passphrase
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
 Establish seed locations
 Establish laboratory experiments [required to unlock certain potion ingredients? Initial requirements must be met to perform experiments? Ability to unlock time machine?!?!?! Time machine stops working at some point for some reason to simplify the mechanics of the thing? (Super complicated to program that probably... Would need to retroactively remove historical variable changes, still possible if I keep a log of player choices in a separate array)]
-
+Research how to use JS to disable back button, exists as comment, check main .tw file
 */
 
 :: StoryTitle
@@ -26,6 +26,7 @@ Archmage Demo
 :: UserScript[script]
 
 :: UserStylesheet[stylesheet]
+/* config.disableHistoryControls = true */
 
 :: StoryInit
 /* Initializes starting variables before game loads */
@@ -975,6 +976,78 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
         
         Some of them don't appear too friendly based on their body language.
 
+        They might be dangerous if not handled properly.
+
+        [[Take one for a ride]]
+        [[Look for a person]]
+
+:: Take one for a ride
+            You approach one of the unfriendly horses.
+
+            You saddle it and attempt to mount the horse when it gets spooked.
+
+            It panics and bucks you off, kicking around the stable furiously.
+
+            [[Calm the horse]]
+            [[Escape the stable]]
+
+:: Calm the horse
+                You try to calm the horse from its panicked state.
+                <<set $Temp to random(1)>>
+                You rub its mane and make soothing sounds in a desperate attempt to calm down the excited equine.
+                <<if $Temp is 1>>
+                You successfully manage to calm down the large creature.
+
+                As he collects himself, he recognizes you as a friend.
+
+                He will now allow you to ride him.
+
+                [[Take him for a ride]]
+                [[Wait for nightfall]]
+                <<else>>
+                You aure unsuccessful in calming the large creature.
+
+                A furious hoof makes direct contact with your temple killing you instantly.
+
+                The horse continues kicking around hay and unintentionally covers your body, concealing it.
+
+                You are not found until you begin smelling bad. And nobody noticed you were missing either.
+
+                "Bad End - Bojack Horsethief"
+                <</if>>
+
+:: Take him for a ride
+                    You saddle the horse and ride him out of the barn despite the consipicuous sunlight.
+
+
+
+
+:: Wait for nightfall
+                    You figure it might not be a great idea to take the horse for a ride when its owner has no idea where he went and might notice he is missing.
+                    <<set $NightTime to true>>
+                    You hide out and wait.
+
+                    Once night breaks and you're sure nobody will notice, you saddle him and [[spur him out of the barn|Ride]].
+
+:: Ride
+                        You are riding a horse outside the barn.
+
+                        You can explore the outskirts of the campus as well as the surrounding forest.
+                        /* Main passage for locating seeds */
+
+:: Escape the stable
+                You run towards the stable exit.
+
+                You slip and fall to the ground.
+
+                As you stand up, a furious hoof makes direct contact with your temple killing you instantly.
+
+                The horse continues kicking around hay and unintentionally covers your body, concealing it.
+
+                You are not found until you begin smelling bad. And nobody noticed you were missing either.
+
+                "Bad End - Bojack Horsethief"
+
 :: Cow
         You enter the barn and notice a dairy cow that seems to be in need of milking.
 
@@ -983,8 +1056,22 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
         [[Milk the cow anyway]]
         [[Look for a person]]
 
+:: Milk the cow anyway
+            You take some initiative and figure the cow needs to be milked.
+            <<set $Temp to random(1)>>
+            Having permmission is a minor detail.
+            <<if $Temp is 1>>
+
+            <<else>
+            <</if>>>
+
 :: Chickens
         You enter the coup and find a few chickens running around. 
+
+        The chickens don't recognize you and begin furiously pecking at your ankles.
+
+        [[Calm them down]]
+        [[Look for a person]]
         
 :: Take care of the animals
     You take care of each group of animals, feeding them and tending to their individual needs.
