@@ -19,6 +19,7 @@ One hint for each of the seven deadly sins
 Inspecting the stained glass foreshadows certain endings; begin with randomization; consider filtering based on available endings
 Figured what to do if already ostracized and player should be ostracized again in all cases
 Figure out plants
+Implement conditionals for $Weapon is true
 */
 
 :: StoryTitle
@@ -61,6 +62,7 @@ Archmage Demo
 <<set $Faucets to [1,2,3,4,5]>>
 <<set $Faucets to $Faucets.shuffle()>>
 <<set $UserFaucets to [0,0,0,0,0]>>
+<<set $SingleFaucet to 0>>
 <<set $BathHouse to false>>
 <<set $BarnWork to false>>
 <<set $AnimalShip to 0>>
@@ -72,6 +74,7 @@ Archmage Demo
 <<set $Weapon to false>>
 <<set $Plant to ["Sunflower","Marijuana","Poppy","Tulip"]>>
 <<set $ForestPlant to ["Mushroom","Hemlock"]>>
+<<set $Seeds to []>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -604,15 +607,55 @@ You enter the balneary.
 
 There is a large fountain in the middle of the room and a sink that spans across the entire back wall.
 
+There is a long mirror that spans across the sink. 
+
 There are numbered faucets on both the fountain and the sink, although none of them are running at the moment.
 
 Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
 
-[[Turn on the faucets]] /* Player has no guaranteed method finding the correct order currently */
+[[Turn on individual faucets]] 
+[[Turn on all the faucets]]
 [[Wait for another student]]
 [[Leave|Demo]]
 
-:: Turn on the faucets 
+:: Turn on individual faucets
+    /* Output which faucets are running */ \
+    \
+    Faucets 1 through 3 are located in the sink.
+
+    Faucets 4 and 5 are located on the fountain.
+
+    <label>Which faucet? <<numberbox '$SingleFacuet' 0>></label>
+
+    [[Turn handle]]
+    [[Leave|Demo]]
+
+/* :: Turn handle 
+        Comment: (Track ON/OFF status with variables and recognize this when giving user output in this passage, boolean array?) 
+        <<if ($UserFaucets[0] lte 0) or ($UserFaucets[0] gte 6)>> \ 
+        There is no faucet with that number. 
+
+        [[Try again|Turn on individual faucets]] \
+        <<else>> \
+        You turn the handle of Faucet $SingleFaucet.
+        <<if ($SingleFaucet is 4) or ($SingleFaucet is 5)>>
+        It is located on the fountain.
+
+        Steam rises and beads of water drip from a gargoyle's snout.
+        <<else>>
+        It is located in the sink.
+
+        Steam rises and fogs the mirror above.
+
+        A message appears in the mirror.
+
+        The mirror reads: Comment: (The position of the faucet number in the solution array +1)
+
+        <</if>>
+        [[Turn another faucet|Turn on individual faucets]]
+        [[Leave|Demo]] */
+
+:: Turn on all the faucets 
     /* Need to display previous selections and check that no previous selections match the user input -- Can't turn on faucet when it is on */ \
     The faucets are numbered 1 through 5.
     
@@ -1075,7 +1118,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             You notice many interesting plants.
                             
                             [[Inspect a plant]]
-                            <</if>>
+                            <</if>> \
                             [[Return to campus]]
 
 /* :: Dark plants */
@@ -1150,10 +1193,10 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 :: Milk the cow anyway
             You take some initiative and figure the cow needs to be milked.
             <<set $Temp to random(1)>>
-            Having permmission is a minor detail.
+            Having permission is a minor detail.
             <<if $Temp is 1>>
             You successfully milk the cow without incident.
-            <<set $Milk =+ 1>>
+            <<set $Milk += 1>>
             You have acquired a bottle of milk.
             <<else>>
             You make a proper mess of milking the cow.
@@ -1164,7 +1207,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
             She thinks you are some kind of udder pervert and word eventually spreads.
 
-            You have definitely been socially ostracized if you weren't already.
+            You have //definitely// been socially ostracized if you weren't already.
             <<set $Ostra to true>>
             [[Leave|Demo]]
             <</if>>
@@ -1191,12 +1234,13 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
         <<if $AnimalShip gt 0>>
         [[Approach chicken]]
         <</if>> \
-        <<if $AnimalShip gt 1>>
+        <<if $AnimalShip gt 1>> \
         [[Approach cow]]
         <</if>> \
-        <<if $AnimalShip gt 2>>
+        <<if $AnimalShip gt 2>> \
         [[Approach horse]]
         <</if>> \
+        [[Leave|Demo]]
 
 :: Approach chicken
             You approach the chicken.
@@ -1214,7 +1258,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
             She seems like she needs to be milked.
 
             You milk her and gain a bottle of milk.
-            <<set $Milk to =+ 1>>
+            <<set $Milk += 1>>
             She moos happily.
 
             [[Eat dinner]]
@@ -1236,13 +1280,31 @@ Whoever used them last must not be too organized.
 
 [[Mess around with the tools randomly|Mess around]]
 <<elseif $Forge is 1>>
+<<if $Weapon is true>> \
+You already have a weapon.
+
+[[Learn to smith comething else|Forge learn]]
+[[Leave|Demo]]
+<<else>> \
 [[Create weapon]]
 [[Leave|Demo]]
+<</if>>
 <<else>>
 You are no longer welcome here.
 
 The smith [[turns you away|Demo]].
 <</if>>
+
+:: Create weapon
+    You smelt standard metals and create a basic weapon.
+    <<set $Weapon to true>>
+    You will now be able to defend yourself.
+    <<set $NightTime to true>>
+    [[Eat dinner]]
+    [[Sleep]]
+
+/* :: Forge learn */
+/* What else can be forged? */
 
 :: Mess around
     You sling tools around like a dufus.
@@ -1348,7 +1410,8 @@ After waiting for a few minutes without any activity, you become impatient.
     Much to your surprise, she walks directly towards you and taps on your shoulder, letting out nothing but a grunt.
 
     A bead of sweat runs down your brow. 
-    <<if $Ostra is false>>
+
+    <<if $Ostra is false>> \
     [[Ask how you can help her]]
     <</if>> \
     [[Ignore her]]
