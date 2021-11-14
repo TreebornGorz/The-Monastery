@@ -11,6 +11,14 @@ Incorporate Statue power into all relationships - Multiple endings for each rela
 Establish seed locations
 Establish laboratory experiments [required to unlock certain potion ingredients? Initial requirements must be met to perform experiments? Ability to unlock time machine?!?!?! Time machine stops working at some point for some reason to simplify the mechanics of the thing? (Super complicated to program that probably... Would need to retroactively remove historical variable changes, still possible if I keep a log of player choices in a separate array)]
 Research how to use JS to disable back button, exists as comment, check main .tw file
+Incorporate events that occur if player doesn't take an action in a certain amount of time
+Steam from faucets creates messages in mirrors
+Evaluate usefulness of butcher and tanner for dead animals
+One hint for each of the seven deadly sins
+411 combination on faucets provides a personalize hint
+Inspecting the stained glass foreshadows certain endings; begin with randomization; consider filtering based on available endings
+Figured what to do if already ostracized and player should be ostracized again in all cases
+Figure out plants
 */
 
 :: StoryTitle
@@ -32,6 +40,7 @@ Archmage Demo
 /* Initializes starting variables before game loads */
 <<set $Show to false>>
 <<set $Temp to 0>>
+<<set $TempString to "">>
 <<set $Male to true>>
 <<set $Day to 0>>
 <<set $NightTime to false>>
@@ -39,6 +48,7 @@ Archmage Demo
 <<set $Holy to 0>>
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
+<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","I noticed that when I get lost, sometimes it's helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants in the forest!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Sometimes, persistence is key. Trying things over and over again leads to better results.","I hear there's a mutant fish that lives in the pipes underneath the Balneary.","What's the 411? Give me the lowdown.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random."]>>
 <<set $Poison to false>>
 <<set $Brew to false>>
 <<set $Potion to false>>
@@ -54,10 +64,14 @@ Archmage Demo
 <<set $BathHouse to false>>
 <<set $BarnWork to false>>
 <<set $AnimalShip to 0>>
-<<set $Eggs to 0>><
+<<set $Eggs to 0>>
+<<set $Milk to 0>>
 <<set $BigFriend to false>>
 <<set $BigEnemy to false>>
 <<set $ClassSearch to false>>
+<<set $Weapon to false>>
+<<set $Plant to ["Sunflower","Marijuana","Poppy","Tulip"]>>
+<<set $ForestPlant to ["Mushroom","Hemlock"]>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -91,7 +105,7 @@ Are you Male or Female?
 [[Female|Demo][$Male to false, $Day to 1]]
 
 :: Demo
-<<if $Day lt 11>> \
+<<if $Day lt 41>> \
 You are on campus. There are several areas to explore.
 
 Where do you want to go? 
@@ -272,19 +286,19 @@ You notice a suspicious latch on the ceiling.
 :: Search teacher's belongings
                 You take a look around the dorm and notice a few different areas you can search.
 
-                [[Nurse's belongings]|Belonging]
-                [[Librarian's belongings]|Belonging]
-                [[Smith's belongings]|Belonging]
-                [[Cook's belongings]|Belonging]
-                [[Scientist's belongings]|Belonging]
-                [[Priest's bleongings]|Belonging]
-                [[Gardener's belongings]|Belonging]
-                [[Brewmaster's belongings]|Belonging]
+                [[Nurse's belongings|Belonging]]
+                [[Librarian's belongings|Belonging]]
+                [[Smith's belongings|Belonging]]
+                [[Cook's belongings|Belonging]]
+                [[Scientist's belongings|Belonging]]
+                [[Priest's bleongings|Belonging]]
+                [[Gardener's belongings|Belonging]]
+                [[Brewmaster's belongings|Belonging]]
 
-:: Belonging
+/* :: Belonging */
                     /* Set variables and alter item found for each one, each search takes time and risks getting caught, multiple searches of the same belongings may yield another item (randomize these) */
 
-:: Hide teach
+/* :: Hide teach */
                 /* Wait for a staff member(s) to show up, maybe on or maybe multiple (random), gets caught or escapes with info (binary, random) */
 
         
@@ -444,7 +458,7 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 
 :: Eat dinner
     After a hard day's work, you enter the refectory for a meal.
-    
+    <<set $NightTime to true>>    
     You take a seat at a table and eat your meal surrounded by the other students.
     
     [[Listen to gossip]]
@@ -479,9 +493,11 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
             /* Random Puzzle Solution - Incorporate other solutions and randomize - Make this a function() */ \
             <<else>>
             You manage to make out a snippet of their conversation.
-            /* Random Puzzle Clue - make this a function() */
+
+            //<<print $Hint.random()>>//
+            
             You finish your meal and turn in your dishes. 
-            <</if>> \
+            <</if>> 
         [[Sleep]]
         <</if>> \
         
@@ -525,7 +541,7 @@ A strange lady sits in the corner staring at you without blinking.
 
 [[Talk to her]]
 [[Inspect the chamber]]
-<<else>> \
+<<else>> 
 [[Brew potion]]
 [[Brew poison]]
 [[Perform experiment]]
@@ -554,7 +570,7 @@ A strange lady sits in the corner staring at you without blinking.
     You ask the professor for an experiment.
 
     She offers no experiments at the moment.
-    /* Incorporate conditionals for current experiment vs new experiments */
+    /* Incorporate conditionals for current experiment vs new experiments, give a reason why an experiment is unavailable */
     [[Brew potion]]
     [[Brew poison]]
     [[Leave|Demo]]
@@ -929,6 +945,8 @@ She seems annoyed with you, but prescribes some pain pills to you for the injury
 
 :: Barn
 You enter the barn.
+
+You are excited to develop relationships with the animals.
 <<if $BarnWork is false>>
 You open a couple large barn doors.  
 
@@ -936,9 +954,10 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
 [[Look for a person]] 
 [[Approach the animals]]
-[[Leave|Demo]]
 <<else>>
 [[Take care of the animals]]
+<</if>> \
+[[Leave|Demo]]
 
 :: Look for a person
     You decide to look for a person instead of blindly messing around with the animals.
@@ -1034,9 +1053,78 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
 :: Ride
                         You are riding a horse outside the barn.
-
+                        <<if $NightTime is true>>
+                        It is very dark outside the campus.
+                        <</if>>
                         You can explore the outskirts of the campus as well as the surrounding forest.
-                        /* Main passage for locating seeds */
+
+                        [[Explore the campus outskirts]]
+                        [[Enter the forest]]
+
+:: Explore the campus outskirts
+                            You ride along the campus outskirts.
+
+                            The air rushes through your hair as you speed around.
+                            
+                            Wildlife skitters around you. 
+                            <<if $NightTime is true>>
+                            It is difficult to see in the darkness.
+
+                            [[Dismount and search for plants in the dark|Dark plants]]
+                            <<else>>
+                            You notice many interesting plants.
+                            
+                            [[Inspect a plant]]
+                            <</if>>
+                            [[Return to campus]]
+
+/* :: Dark plants */
+
+:: Inspect a plant
+                                You dismount and inspect an interesting plant.
+                                <<set $TempString to $Plant.random()>>
+                                It is a $TempString plant.
+
+                                [[Collect seeds]]
+                                [[Collect leaves]]
+                                [[Eat the plant]]
+
+:: Collect seeds
+                                    You collect $TempString seeds.
+                                    <<run $Seeds.push($TempString)>>
+                                    [[Return to campus]]
+
+/* :: Eat the plant */
+/* Incorporate various effects depending on the plant */
+
+:: Enter the forest
+                            The forest is dark and spooky.
+                            <<if $Weapon is true>>
+                            You are comforted by your weapon. 
+                            <<else>>
+                            You wish you had a weapon right about now...
+                            <</if>>
+                            [[Forge onwards]]
+                            [[Leave the forest]]
+
+/* :: Forge onwards */
+/* Interactions with enemies, access to cooler seeds */
+
+:: Leave the forest     
+                                You get spooked by the forest and turn around.
+
+                                [[Explore the campus outskirts]]
+                                [[Return to campus]]
+
+:: Return to campus
+                                    You are back in the barn.
+                                    <<set $NightTime to true>>                                    
+                                    You enter the stable and unsaddle your horse.
+
+                                    After feeding him and getting him comfortable, you leave the barn.
+
+                                    [[Eat dinner]]
+                                    [[Sleep]]
 
 :: Escape the stable
                 You run towards the stable exit.
@@ -1064,9 +1152,22 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
             <<set $Temp to random(1)>>
             Having permmission is a minor detail.
             <<if $Temp is 1>>
+            You successfully milk the cow without incident.
+            <<set $Milk =+ 1>>
+            You have acquired a bottle of milk.
+            <<else>>
+            You make a proper mess of milking the cow.
+            
+            She squirms all over the place. Milk squirts in random directions.
 
-            <<else>
-            <</if>>>
+            She makes so much noise that it draws the attention of the farmer.
+
+            She thinks you are some kind of udder pervert and word eventually spreads.
+
+            You have definitely been socially ostracized if you weren't already.
+            <<set $Ostra to true>>
+            [[Leave|Demo]]
+            <</if>>
 
 :: Chickens
         You enter the coup and find a few chickens running around. 
@@ -1078,10 +1179,10 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
         
 :: Take care of the animals
     You take care of each group of animals, feeding them and tending to their individual needs.
-
+    
     You notice they are more familiar with you and your relationship increases.
     <<set $AnimalShip += 1>>
-    [[Approach animals individually]] 
+    [[Approach the animals individually]] 
     [[Eat dinner]]
     [[Sleep]]
 
@@ -1104,9 +1205,27 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
             <<set $Eggs += 1>>
             However, you do get some eggs.
 
+            [[Eat dinner]]
+            [[Sleep]]
+
 :: Approach cow
+            You approach the cow.
+
+            She seems like she needs to be milked.
+
+            You milk her and gain a bottle of milk.
+            <<set $Milk to =+ 1>>
+            She moos happily.
+
+            [[Eat dinner]]
+            [[Sleep]]
 
 :: Approach horse
+            You approach the horse.
+
+            He is excited to see you and anticipates going for a stroll.
+
+            You saddle him and [[leave the barn|Ride]].
 
 :: Forge
 You enter the forge.
@@ -1212,9 +1331,9 @@ You sit down in an empty chair in the classroom and wait for class to start. The
 After waiting for a few minutes without any activity, you become impatient. 
 
 [[Wait Patiently]]
-<<if $ClassSearch is false>>
+<<if $ClassSearch is false>> \
 [[Search the Classroom]]
-<<if>> \
+<</if>> \
 [[Leave|Demo]]
 
 :: Wait Patiently
@@ -1298,9 +1417,13 @@ After waiting for a few minutes without any activity, you become impatient.
 :: Take the document
             <<set $Temp to random(1)>> \
             You take the document. 
-            <<if Temp is 1>>
+            <<if $Temp is 1>>
             <<set $CeilingKey to true>> \
-            You read through the document. It is an onboarding document for new professors. You memorize the passphrase and [[return to your seat|Return to your seat]].
+            You read through the document. It is an onboarding document for new professors. 
+            
+            It describes the accomodations in the staff dormitory and provides a passphrase for access.
+            
+            You memorize the passphrase and [[return to your seat|Return to your seat]].
             <<else>>
             Just as you do, the professor and multiple students walk through the door.
             <<set $Ostra to true>>
