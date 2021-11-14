@@ -6,7 +6,6 @@ Incorporate Potion effects
 Establish Poison & Ingredients - Milk and Hemlock
 Create function for randomzied rewards
 Establish relationships
-Figure solution for teacher dorm passphrase
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
 Establish seed locations
 Establish laboratory experiments [required to unlock certain potion ingredients? Initial requirements must be met to perform experiments? Ability to unlock time machine?!?!?! Time machine stops working at some point for some reason to simplify the mechanics of the thing? (Super complicated to program that probably... Would need to retroactively remove historical variable changes, still possible if I keep a log of player choices in a separate array)]
@@ -19,6 +18,7 @@ Inspecting the stained glass foreshadows certain endings; begin with randomizati
 Figured what to do if already ostracized and player should be ostracized again in all cases
 Figure out plants
 Implement conditionals for $Weapon is true
+FIgure out $SirenPet mechanics, filters all future options if true based on the siren's preferences, provides options that wouldn't  normally exist to lead to unique endings based on other pre-existing boolean variable values
 */
 
 :: StoryTitle
@@ -50,7 +50,7 @@ Archmage Demo
 <<set $Holy to 0>>
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
-<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","I noticed that when I get lost, sometimes it's helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants in the forest!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Sometimes, persistence is key. Trying things over and over again leads to better results.","I hear there's a mutant fish that lives in the pipes underneath the Balneary.","What's the 411? Give me the lowdown.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random."]>>
+<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","I noticed that when I get lost, sometimes it's helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants in the forest!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Sometimes, persistence is key. Trying things over and over again leads to better results.","I hear there's a mutant fish that lives in the pipes underneath the Balneary.","What's the 411? Give me the lowdown.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","Never trust a snake. Their scales may be dry, but they are truly slimy."]>>
 <<set $Poison to false>>
 <<set $Brew to false>>
 <<set $Potion to false>>
@@ -76,7 +76,9 @@ Archmage Demo
 <<set $Plant to ["Sunflower","Marijuana","Poppy","Tulip"]>>
 <<set $ForestPlant to ["Mushroom","Hemlock"]>>
 <<set $Seeds to []>>
-
+<<set $SirenPartner to false>>
+<<set $SirenEnemy to false>>
+<<set $SirenPet to false>>
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
 <<if $Show is true>>Sex: <<if $Male is true>>Male<<else>>Female<</if>><</if>> /* Player Sex */
@@ -914,20 +916,110 @@ You are ready to work.
             You have become [[completely obdeient]] to her.
 
 :: completely obedient
+                You feel an overwhelming desire to follow all of her commands.
+                <<set $SirenPet to true>>
+                She hisses and gently runs her hand over your head like a lap dog.
+                <<set $NightTime to true>>
+                You are entirely under her control.
+
+                While she lulls you into a state of relaxation, she speaks in a tongue that you cannot understand. 
+
+                Her speech further soothes you and puts you into a deeper trance. You have been reprogrammed.
+
+                You will now only be able to make choices based on your programming.
+
+                You feel sleepy.
+
+                [[Sleep]]
                 /* This path will be complicated because it will still present the player with a narrative based on their previous decisions, but they will be unable to make any more decisions moving forward */
 
 :: Let go and step back
             You let go of her and step backwards.
 
             She becomes defensive and takes a fighting stance despite the smile remaining on her face. She stares at you like prey. 
-            /* Option to defend self with weapon */
-            You notice long talons extending from her fingertips and in a flash and flurry, your gut has ben sliced open.
+            
+            You notice long talons extending from her fingertips and in a flash and flurry, \
+            <<if $Weapon is false>>\
+            your gut has ben sliced open.
 
             She watches in anticipation as your entrails slowly slide out of your body as gravity pulls them onto floor of the infirmary.
 
-            Your lose your balance and your vision fades as your body slams to the floor. You hear the nurse begin feasting upon your entrails.
+            Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
 
             "Bad End - Siren Prey"
+            <<else>>\
+            she strikes at you.
+
+            However, you manage to defend yourself, blocking her swipe with your weapon.
+
+            Her talons clang against the metal.
+
+            She recoils in surprise, examining you from afar. She absorbs details as she looks you up and down.
+
+            [[Strike her]]
+            [[Wait for her to strike]]
+            <</if>>
+
+:: Strike her
+                You take the initiative and lunge forward to strike at her.
+
+                She swiftly dodges and slithers around you.
+
+                Her talons slice your gut open.
+
+                She watches in anticipation as your entrails slowly slide out of your body as gravity pulls them onto floor of the infirmary.
+
+                Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
+
+                "Bad End - Siren Prey"
+
+:: Wait for her to strike
+                You center yourself and prepare for her next attack.
+
+                To your surprise, it never comes. She simply watches you in anticipation, waiting for you to act.
+
+                She deems you a worthy opponent.
+
+                Once you are satisified that she doesn't intend to strike, you put your weapon away.
+
+                Her talons recede and she walks towards you.
+
+                She explains that she is a siren who uses men to her advantage in accomplishing her goals.
+                <<if $Male is true>>
+                She is impressed that you resisted her temptations.
+                <</if>>
+                She offers that you work together with her to take control over the campus.
+
+                [[Accept|Siren Partner]]
+                [[Reject|Siren Enemy]]
+
+:: Siren Partner
+                    You accept the siren's offer to work together.
+
+                    She is now your accomplice. Or maybe your partner.
+                    <<set $SirenPartner to true>>
+                    Either way, you get the impression that she will probably boss you around.
+
+                    Still, you reason that it's better than making her your enemy.
+
+                    She licks your cheek with a split tongue and happily slithers away.
+
+                    [[Eat dinner]]
+                    [[Sleep]]
+
+:: Siren Enemy
+                    You reject the siren's offer.
+
+                    She is now your enemy. Or maybe you are her target.
+                    <<set $SirenEnemy to true>>
+                    Either way, she seems displeased with your answer and furiously slithers away..
+
+                    You may want to be more careful around her in the future.
+                    <<set $NightTime to true>>                  
+                    You let out a tired sigh of relief and thank your lucky stars for surviving the encounter.
+
+                    [[Eat dinner]]
+                    [[Sleep]]
 
 :: Insult Nurse
         Clearly this lady is being disrespectful.
