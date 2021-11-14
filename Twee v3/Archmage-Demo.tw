@@ -54,7 +54,10 @@ Archmage Demo
 <<set $BathHouse to false>>
 <<set $BarnWork to false>>
 <<set $AnimalShip to 0>>
-<<set $Eggs to 0>>
+<<set $Eggs to 0>><
+<<set $BigFriend to false>>
+<<set $BigEnemy to false>>
+<<set $ClassSearch to false>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -241,7 +244,7 @@ You notice a suspicious latch on the ceiling.
     Maybe <<if $CeilingKey is false>>there is some other way of opening<<else>>the passphrase you learned will open<</if>> this door?
     
     [[Choose a dormitory|Dormitory]]
-    <<if $ceilingKey is true>> \
+    <<if $CeilingKey is true>> \
     [[Utter the passphrase|Passphrase]]
     <</if>> \
     [[Leave|Demo]]
@@ -1090,7 +1093,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
         <<if $AnimalShip gt 1>>
         [[Approach cow]]
         <</if>> \
-        <<if $animalShip gt 2>>
+        <<if $AnimalShip gt 2>>
         [[Approach horse]]
         <</if>> \
 
@@ -1204,51 +1207,121 @@ The brewmaster is asleep in a corner.
     <</if>>
 
 :: Classroom
-You sit down in an empty chair in the classroom and wait for class to start. There are no students or teachers in sight.
-
-After waiting for a few minutes, you become impatient. 
-
-//Is anybody else coming...?//
+You sit down in an empty chair in the classroom and wait for class to start. There are no students or professors in sight.
+/* If Ostra, then get picked on during class */
+After waiting for a few minutes without any activity, you become impatient. 
 
 [[Wait Patiently]]
+<<if $ClassSearch is false>>
 [[Search the Classroom]]
+<<if>> \
+[[Leave|Demo]]
 
 :: Wait Patiently
-    You figure that scouring through random items in the classroom might not be a good idea, so you decide to wait for class to start...
+    You figure that scouring through random items in the classroom might not be a good idea, so you simply wait for class to start...
 
     Eventually, students begin filtering into the classroom, and settling into their respective seats. 
 
-    A large, muscular brute of a man walks through the door. His school uniform doesn't seem to fit him quite right as certain muscles on his body bulge out, stretching the fabric in odd places. You chuckle quietly at the sight of him, but do your best to contain the noise since you imagine he could easily smash your skull should he ever decide to...
+    A large, muscular brute of a woman walks through the door. Her school uniform doesn't seem to fit her quite right as certain muscles on her body bulge out, stretching the fabric in odd places. 
+    
+    You chuckle quietly at the sight, but do your best to contain the noise since you imagine she could easily smash your skull should the desire ever arise.
 
-    Much to your surprise, he walks directly towards you and taps on your shoulder, letting out nothing but a grunt.
+    Much to your surprise, she walks directly towards you and taps on your shoulder, letting out nothing but a grunt.
 
     A bead of sweat runs down your brow. 
-
-    //Did he hear my laughter?//
-
-    [[Ask how you can help him]]
-    [[Ignore him]]
+    <<if $Ostra is false>>
+    [[Ask how you can help her]]
+    <</if>> \
+    [[Ignore her]]
     [[Lash out in self defense]]
 
-:: Ignore him
-        Ignore him
+:: Ignore her
+        You pretend not to notice her.
+
+        Somehow, she decides not to press the matter and peacefully sits in another seat holding her head low.
+
+        The professor enters and [[class begins|Class]]. 
         
 :: Lash out in self defense
-        Lash out in self defense
+        You can't imagine that this lady has a good reason for bothering you.
+
+        You lash out at her, insulting her size and ugliness in front of the rest of the class.
+
+        You get a couple chuckles from the crowd and she sinks back into a different seat while holding back tears.
+        <<set $BigEnemy to true>>
+        You have made a very large enemy. May God have mercy on your soul.
+
+        The professor enters and [[class begins|Class]]. 
         
-:: Ask how you can help him
-        Ask how you can help him
+:: Ask how you can help her
+        You polite ask her how you can help her.
+
+        She looks a bit embarrassed and motions towards the inside of the desk.
+
+        You are confused. She clears her throat and more obviously motions towards the inside of the desk.
+
+        You look inside and notice some XL tampons she must have left behind last time she sat in this seat.
+
+        You discreetly hand them over to her.
+        <<set $BigFriend to true>>
+        She happily takes them from you. She takes a seat with a smile on her face.
+
+        You have made a friend.
         
 :: Search the Classroom
     You can't handle waiting for class to start and your curiosity gets the better of you.
-
+    <<set $ClassSearch to true>>
     You survey the classroom and notice a few objects of interest.
 
-    [[Search the bookshelf]]
+    [[Steal from the bookshelf]]
     [[Open the desk drawers]]
 
-:: Search the bookshelf
-        Search the bookshelf
+:: Steal from the bookshelf
+        You dig around the bookshelf searcxhing for something valuable to steal.
+        /* Incorporate something valuable that can be stolen from here */
+        Just as you do, the professor and multiple students walk through the door.
+
+        You are able to convince them that you had forgotten your textbook and needed to borrow a replacement.
+
+        You take a seat and [[class begins|Class]].
 
 :: Open the desk drawers
-        Open the desk drawers
+        You open the drawers of the teacher's desk.
+
+        You see various office supplies and a bunch of boring paperwork.
+
+        One paper catches your eye. It appears to be some kind of official document personally signed by the headmaster. 
+
+        [[Take the document]]
+        [[Return to your seat]]
+
+:: Take the document
+            <<set $Temp to random(1)>> \
+            You take the document. 
+            <<if Temp is 1>>
+            <<set $CeilingKey to true>> \
+            You read through the document. It is an onboarding document for new professors. You memorize the passphrase and [[return to your seat|Return to your seat]].
+            <<else>>
+            Just as you do, the professor and multiple students walk through the door.
+            <<set $Ostra to true>>
+            You are caught red handed as you nervously stuff the paper back into the desk.
+
+            The students take notice of your behavior. You have become socially ostracized. You will now have trouble making friends.
+
+            The professor shows you mercy and merely demands that you [[return to your seat|Return to your seat]].
+            <</if>>
+
+:: Return to your seat
+            You sit down in an open seat. 
+
+            The remaining seats fill up and the [[class begins|Class]].
+
+:: Class
+Your professor takes her podium and begins teaching.
+<<set $NightTime to true>>
+Today's lesson is on <<print $Dream.random()>>.
+
+You feel your brain growing with great knowledge.
+
+[[Eat dinner]]
+[[Sleep]]
