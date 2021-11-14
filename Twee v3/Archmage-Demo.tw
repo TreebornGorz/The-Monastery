@@ -1,6 +1,6 @@
 /* 
 Unfinished Tasks: 
-Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
+Verify/Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
 Establish various Potions & Ingredients [Mix and match chart??]
 Incorporate Potion effects
 Establish Poison & Ingredients - Milk and Hemlock
@@ -18,7 +18,9 @@ Inspecting the stained glass foreshadows certain endings; begin with randomizati
 Figured what to do if already ostracized and player should be ostracized again in all cases
 Figure out plants
 Implement conditionals for $Weapon is true
-FIgure out $SirenPet mechanics, filters all future options if true based on the siren's preferences, provides options that wouldn't  normally exist to lead to unique endings based on other pre-existing boolean variable values
+Figure out $SirenPet mechanics, filters all future options if true based on the siren's preferences, provides options that wouldn't  normally exist to lead to unique endings based on other pre-existing boolean variable values
+Create separate passage for exploring campus at night? Requires a portable light?
+Verify/Configure Inventory and Status
 */
 
 :: StoryTitle
@@ -33,7 +35,7 @@ Archmage Demo
 
 :: UserScript[script]
 {
-    config.history.controls = false;
+    /* config.history.controls = false; */
 }
 
 :: UserStylesheet[stylesheet]
@@ -48,6 +50,7 @@ Archmage Demo
 <<set $NightTime to false>>
 <<set $CeilingKey to false>>
 <<set $Holy to 0>>
+<<set $HolyPower to false>>
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
 <<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","I noticed that when I get lost, sometimes it's helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants in the forest!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Sometimes, persistence is key. Trying things over and over again leads to better results.","I hear there's a mutant fish that lives in the pipes underneath the Balneary.","What's the 411? Give me the lowdown.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","Never trust a snake. Their scales may be dry, but they are truly slimy."]>>
@@ -73,17 +76,67 @@ Archmage Demo
 <<set $BigEnemy to false>>
 <<set $ClassSearch to false>>
 <<set $Weapon to false>>
-<<set $Plant to ["Sunflower","Marijuana","Poppy","Tulip"]>>
+<<set $Plants to ["Sunflower","Marijuana","Poppy","Tulip"]>>
+<<set $UserPlants to []>>
 <<set $ForestPlant to ["Mushroom","Hemlock"]>>
 <<set $Seeds to []>>
 <<set $SirenPartner to false>>
 <<set $SirenEnemy to false>>
 <<set $SirenPet to false>>
+<<set $HorseFriend to false>>
+
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
 <<if $Show is true>>Sex: <<if $Male is true>>Male<<else>>Female<</if>><</if>> /* Player Sex */
-<<if $Day isnot 0>>Day: $Day<</if>> /* Game Days Passed */
-<<if $Day isnot 0>>Time: <<if $NightTime is false>>Day<<else>>Night<</if>><</if>> /* Time of Day */
+<<if $Show is true>>Day: $Day<</if>> /* Game Days Passed */
+<<if $Show is true>>Time: <<if $NightTime is false>>Day<<else>>Night<</if>><</if>> /* Time of Day */
+
+<<if $Show is true>>[[Inventory][$Show to false]]<</if>>
+<<if $Show is true>>[[Status][$Show to false]]<</if>>
+
+:: Inventory
+You have:
+
+<<if $Weapon is true>> \
+A Weapon
+<</if>> \
+<<if $Keg gt 0>> \
+$Keg Kegs of Ale
+<</if>> \
+<<if $Milk gt 0>> \
+$Milk Bottles of Milk
+<</if>> \
+<<if $Eggs gt 0>> \
+$Eggs Eggs
+<</if>> \
+<<if $Seeds.length gt 0>> \
+Seeds: <<print $Seeds>>
+<</if>> \
+<<if $UserPlants.length gt 0>> \
+Plants: <<print $UserPlants>>
+<</if>> \
+<<if $Drugs.length gt 0>> \
+Drugs: <<print $Drugs>>
+<</if>> \
+
+[[Return|previous()][$Show to true]]
+
+:: Status 
+
+<<if $Ostra is true>> \
+You are socially ostracized. Making friends will be difficult.
+
+<</if>> \
+<<if $SirrenPet is true>> \
+You are the Siren's pet. You will be ultimately obedient to her desires.
+
+<</if>> \
+<<if $HolyPower is true>> \
+You have been imbued with a holy power.
+
+<</if>> \
+
+[[Return|previous()][$Show to true]]
 
 :: Start
 This is a demo for the currently in-development interactive fiction project "The Archmage", a project intended to be a narrative-driven interactive fiction fantasy game which provides the player with //significant// agency and //significant// replayability.
@@ -111,8 +164,10 @@ Are you Male or Female?
 [[Female|Demo][$Male to false, $Day to 1]]
 
 :: Demo
-<<if $Day lt 41>> \
-You are on campus. There are several areas to explore.
+<<if $Day lt 16>> \
+You are on campus. 
+
+There are several areas to explore.
 
 Where do you want to go? 
 
@@ -140,7 +195,8 @@ On the bright side, at least you didn't really screw anything up either. That's 
 
 It's the small things in life that count, right...?
 
-"Bad End - Boring Player" <</if>>
+"Bad End - Boring Player" 
+<</if>>
 
 :: Dormitory
 You enter the dormitory.
@@ -353,7 +409,7 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
     Your homage progresses entirely normally. However, when you finish your prayer and stand up to face the statue, something strange happens.
     
     You stare into the face of the statue and your own face stares back. Suddenly the eyes in the statue turn blue again and glow intensely until fizzling out and leaving behind the normal face of the statue. You feel tingling in your limbs. 
-    
+    <<set $HolyPower to true>>
     You have been imbued with a holy power.
     <</if>> \
     <<if $Holy isnot 3>>
@@ -379,7 +435,7 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
 
 [[Inspect the plants]]
 <<if $Planting is true>> \
-[[Plant seeds]]
+[[Plants seeds]]
 <</if>> \
 [[Daydream]]
 [[Leave|Demo]]
@@ -397,7 +453,7 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
     [[Daydream]]
     [[Leave|Demo]]
 
-:: Plant seeds
+:: Plants seeds
         Which seed will you plant?
 
         /* Check for which seeds the player has obtained */
@@ -1135,8 +1191,12 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
         Some of them don't appear too friendly based on their body language.
 
         They might be dangerous if not handled properly.
-
+        <<if $HorseFriend is false>>
         [[Take one for a ride]]
+        <<else>>
+        [[Ride your friend immediately|Take him for a ride]]
+        [[Wait for night to ride your friend|Wait for nightfall]]
+        <</if>>
         [[Look for a person]]
 
 :: Take one for a ride
@@ -1157,7 +1217,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                 You successfully manage to calm down the large creature.
 
                 As he collects himself, he recognizes you as a friend.
-
+                <<set $HorseFriend to true>>
                 He will now allow you to ride him.
 
                 [[Take him for a ride]]
@@ -1177,7 +1237,13 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 :: Take him for a ride
                     You saddle the horse and ride him out of the barn despite the consipicuous sunlight.
 
+                    You are immediately noticed by a student a reported for your misbehavior.
 
+                    You recieve disciplinary actions for your misbehavior.
+
+                    You are now definitely socially ostracized if you weren't already.
+                    <<set $Ostra to true>>
+                    [[Leave|Demo]]
 
 
 :: Wait for nightfall
@@ -1218,7 +1284,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
 :: Inspect a plant
                                 You dismount and inspect an interesting plant.
-                                <<set $TempString to $Plant.random()>>
+                                <<set $TempString to $Plants.random()>>
                                 It is a $TempString plant.
 
                                 [[Collect seeds]]
@@ -1301,9 +1367,9 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
             She thinks you are some kind of udder pervert and word eventually spreads.
 
             You have //definitely// been socially ostracized if you weren't already.
-            <<set $Ostra to true>>
+            <<set $Ostra to true>> \           
+            <</if>> 
             [[Leave|Demo]]
-            <</if>>
 
 :: Chickens
         You enter the coup and find a few chickens running around. 
