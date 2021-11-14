@@ -444,7 +444,8 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
     [[Eat in peace]]
 
 :: Listen to gossip
-        <<if $Ostra is true>>You decide to eavesdrop despite already being socially ostracized.
+        <<if $Ostra is true>> \
+        You decide to eavesdrop despite already being socially ostracized.
         
         Despite your best attempts, you can't make out any useful information. The other students seem to have caught onto your game.
         
@@ -454,7 +455,8 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
         
         Maybe some secrets are worth protecting...
         
-        "Bad End - Sneaky Bugger" <<else>>
+        "Bad End - Sneaky Bugger" 
+        <<else>>
             You decide that your life is boring enough that you require information about the lives of others.
             <<set $Temp to random(7)>>
             While eating your meal, you inconspicuously listen into the conversations of the other students in an attempt to glean some juicy gossip.
@@ -462,6 +464,7 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
             The students notice you are listening to their conversation and huddle together uncomfortably.
             <<set $Ostra to true>>
             You are not able to hear anything and you have become socially ostracized. You will be unable to make friends with other students.
+
             <<elseif $Temp is 7>>
             You manage to overhear to their conversation at the perfect time.
 
@@ -472,9 +475,9 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
             /* Random Puzzle Clue - make this a function() */
             You finish your meal and turn in your dishes. 
             <</if>> \
-        <</if>> \
         [[Sleep]]
-
+        <</if>> \
+        
 :: Eat in peace
         You decide to eat in peace.
 
@@ -708,10 +711,10 @@ You notice a tray with various medical tools strewn across, such as a scalpel, t
 
 There is a cabinet containing various prescription drugs. 
 
-<<else>> \
+<<else>> 
 You are ready to work. 
 
-[[Work as infirmary assistant|Treat a patient]]
+[[Treat a patient]]
 <</if>> \
 [[Inspect the beds]]
 [[Enter the office]]
@@ -730,10 +733,11 @@ You are ready to work.
     [[Treat a patient]]<</if>>
     [[Enter the office]]
     [[Raid the cabinet]]
+    [[Lave|Demo]]
 
 :: Treat a patient
         You approach a patient.
-
+        <<set $NightTime to true>>
         You ask the patient some basic questions and fill out some forms in their medical file.
 
         You take measurements of their vitals and after examining their symptoms, perform some standard tests.
@@ -746,8 +750,6 @@ You are ready to work.
         <<if $Poison is true>> \
         [[Poison the patient]]
         <</if>> \
-        [[Raid the cabinet]]
-        [[Enter the office]]
         [[Eat dinner]]
         [[Sleep]]
         
@@ -786,26 +788,40 @@ You are ready to work.
         With a pleased smile, she spends the day explaining your duties as her student assistant.
 
         Once finished, she sees you out and requests your presence tomorrow.
-
+        <<set $NightTime to true>>
         [[Eat dinner]]
         [[Sleep]]
 
 :: Decline
         You decline the nurse's offer.
 
-        She frowns, seemingly disappointed. She directs you out the door.
+        She frowns, seemingly disappointed and directs you out the door.
 
         [[Leave|Demo]]
-        [[Eat dinner]]
-        [[Sleep]]
 
 :: Nurse Apology
+        <<if $NurseApology is false>> \
         You apologize for disturbing her and she rolls her eyes at you before slamming her door shut.
         <<set $NurseApology to true>>
         You fear that she might no be so patient with you the next time you disturb her.
+        <<set $NightTime to true>>
+        [[Treat a patient]]
+        [[Leave|Demo]]
+        <<else>>
+        You nervously stutter out yet another apology.
 
-        [[Eat dinner]]
-        [[Sleep]]
+        She shuts her eyes for a moment and takes a deep breath.
+
+        You let your gaurd down as she seems relatively calm.
+
+        You notice long talons extending from her fingertips and in a flash and flurry, your gut has ben sliced open.
+
+        She watches in anticipation as your entrails slowly slide out of your body as gravity pulls them onto floor of the infirmary.
+
+        Your lose your balance and your vision fades as your body slams to the floor. You hear the nurse begin feasting upon your entrails.
+
+        "Bad End - Siren Prey"
+        <</if>>
 
 :: Hug Nurse
         You panic and hug the nurse for some reason. 
@@ -826,7 +842,7 @@ You are ready to work.
 
             You swallow, unable to break away from her grasp. Eventually, she lets go after you have swallowed a sizeable amount of the liquid and begin to feel a bit fuzzy.
 
-            You notice that she doesn't appear human anymore but you can't think clearly. 
+            She doesn't appear human anymore and you can't think clearly. 
 
             You have become [[completely obdeient]] to her.
 
@@ -838,7 +854,7 @@ You are ready to work.
 
             She becomes defensive and takes a fighting stance despite the smile remaining on her face. She stares at you like prey. 
             /* Option to defend self with weapon */
-            You notice long talons extending from her fingertips and in a flash and flurry, you notice your gut has ben sliced open.
+            You notice long talons extending from her fingertips and in a flash and flurry, your gut has ben sliced open.
 
             She watches in anticipation as your entrails slowly slide out of your body as gravity pulls them onto floor of the infirmary.
 
@@ -863,7 +879,7 @@ You are ready to work.
 
             She has something else in mind... 
 
-            With great swiftness, she pulls a needle out of her coat pocket and jabs you with it before you even notice what has happened.
+            With great swiftness, she pulls a needle out of her coat pocket and jabs you with it before you even notice what happened.
 
             You look down at the injection sight in surpise and [[you suddenly feel drowsy...|Slavery]]
 
@@ -888,9 +904,10 @@ You are ready to work.
     Unfortunately, the cabinet is locked.
 
     No drugs for you.
-
+    /* Conditional for cabinet access */
     [[Inspect the beds]]
     [[Enter the office]]
+    [[Leave|Demo]]
 
 :: Injured butt
 The nurse begins treating your injured rear end. 
@@ -898,7 +915,8 @@ The nurse begins treating your injured rear end.
 You are somewhat embarrased, but you have enough pride to realize that she is actually lucky to see such a sight.
 
 She seems annoyed with you, but prescribes some pain pills to you for the injury and sees you off.
-<<run $Drugs.push("Pain Pills")>>
+<<run $Drugs.push("Pain Pills")>> \ /* Incorporate uses for pain pills, overdose, sell them, etc. */
+<<set $NightTime to true>>
 [[Eat dinner]]
 [[Sleep]]
 
@@ -907,18 +925,27 @@ You enter the barn.
 
 You open a couple large barn doors.  
 
-You see horses in their stables, cows in the barn, and chickens in their coup. There are no people to be seen. 
+You see horses in their stables, a cow in the barn, and chickens in their coup. There are no people to be seen. 
 
 [[Look for a person]] 
 [[Approach the animals]]
 
 :: Look for a person
-    You decide to look for a person instead of blindly messing around with their animals.
+    You decide to look for a person instead of blindly messing around with the animals.
     
     After a bit of searching, you eventually make contact with the campus farmer. She works as a professor and tends to the animals in her down time with the help of some of the students.
     
     In return for assisting her with her work, you will get access to the animals when she is not around.
+
+    [[Help her out]]
+    [[Decline|Decline farmer]]
     
+:: Help her out
+    
+
+:: Decline farmer
+
+
 :: Approach the animals
     You decide to approach the animals. 
 
@@ -929,7 +956,9 @@ You see horses in their stables, cows in the barn, and chickens in their coup. T
     [[Chickens]]
 
 :: Horses
-        You enter the stables and find a few horses. Some of them don't appear too friendly based on their body language.
+        You enter the stables and find a few horses. 
+        
+        Some of them don't appear too friendly based on their body language.
 
 :: Cow
         You enter the barn and notice a dairy cow that seems to be in need of milking.
@@ -945,7 +974,7 @@ You see an anvil and a hulking furnace. Various tools such as tongs and hammers 
 Whoever used them last must not be too organized.
 
 [[Mess around with the tools randomly|Mess around]]
-<<elseif $forge is 1>>
+<<elseif $Forge is 1>>
 [[Create weapon]]
 [[Leave|Demo]]
 <<else>>
@@ -969,6 +998,10 @@ The smith [[turns you away|Demo]].
         
         You gladly agree. After showing you around the equipment, he hands you a hammer of your own.
 
+        You manage to forge a very crude, basic weapon that certainly would do no good in combat.
+
+        You hold it in the air, admiring your handiwork wirth a goofy smile on your face.
+        <<set $NightTime to true>>
         [[Eat dinner]]
         [[Sleep]]
         <<set $Forge to 1>>
@@ -1011,7 +1044,7 @@ The brewmaster is asleep in a corner.
         He takes you under his wing and teaches you about all the equipment and how to brew a traditional batch of ale.
 
         When you return to the brewery, you will be able to brew batches on your own. 
-
+        <<set $NightTime to true>>
         [[Eat dinner]]
         [[Sleep]]
 
@@ -1021,12 +1054,12 @@ The brewmaster is asleep in a corner.
         He seems dissapointed. [[You leave him alone and wish him sweet dreams.|Demo]] 
 
 :: Brew
-    You decide to brew another batch of ale.
+    You decide to brew a batch of ale.
     <<set $Keg to true>>
     <<if $Poison is true>>
     <<elseif $Potion is true>>
     <<else>>You prepare a keg. You can use this keg to throw a party!
-
+    <<set $NightTime to true>>
     [[Eat dinner]]
     [[Sleep]]
     <</if>>
