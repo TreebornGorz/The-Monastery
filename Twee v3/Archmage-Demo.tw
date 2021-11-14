@@ -127,7 +127,7 @@ Drugs: <<print $Drugs>>
 You are socially ostracized. Making friends will be difficult.
 
 <</if>> \
-<<if $SirrenPet is true>> \
+<<if $SirenPet is true>> \
 You are the Siren's pet. You will be ultimately obedient to her desires.
 
 <</if>> \
