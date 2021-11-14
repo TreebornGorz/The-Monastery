@@ -1,6 +1,5 @@
 /* 
 Unfinished Tasks: 
-Research how to use JS to disable back button, exists as comment, check main .tw file
 Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
 Establish various Potions & Ingredients [Mix and match chart??]
 Incorporate Potion effects
@@ -33,9 +32,11 @@ Archmage Demo
 }
 
 :: UserScript[script]
+{
+    config.history.controls = false;
+}
 
 :: UserStylesheet[stylesheet]
-/* config.disableHistoryControls = true */
 
 :: StoryInit
 /* Initializes starting variables before game loads */
