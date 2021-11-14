@@ -706,8 +706,9 @@ There are a few beds with hanging privacy sheets and an office behind a closed d
 
 You notice a tray with various medical tools strewn across, such as a scalpel, thermometer, and needles. 
 
-There is a locked cabinet containing various prescription drugs. 
-<<else>>
+There is a cabinet containing various prescription drugs. 
+
+<<else>> \
 You are ready to work. 
 
 [[Work as infirmary assistant|Treat a patient]]
@@ -715,11 +716,12 @@ You are ready to work.
 [[Inspect the beds]]
 [[Enter the office]]
 [[Raid the cabinet]]
+[[Leave|Demo]]
 
 :: Inspect the beds
     <<if $NurseWork is false>>You inspect the beds. They are empty.
 
-    Some of the sheets have stains of various colors. They have probably been washed...
+    Some of the sheets have stains of various colors. 
 
     There is nothing under the bed. /* Randomly or conditionally put something important under bed? */
     <<else>>
