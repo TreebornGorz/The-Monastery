@@ -1,5 +1,6 @@
 /* 
 Unfinished Tasks: 
+Research how to use JS to disable back button, exists as comment, check main .tw file
 Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
 Establish various Potions & Ingredients [Mix and match chart??]
 Incorporate Potion effects
@@ -10,7 +11,6 @@ Figure solution for teacher dorm passphrase
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
 Establish seed locations
 Establish laboratory experiments [required to unlock certain potion ingredients? Initial requirements must be met to perform experiments? Ability to unlock time machine?!?!?! Time machine stops working at some point for some reason to simplify the mechanics of the thing? (Super complicated to program that probably... Would need to retroactively remove historical variable changes, still possible if I keep a log of player choices in a separate array)]
-Research how to use JS to disable back button, exists as comment, check main .tw file
 Incorporate events that occur if player doesn't take an action in a certain amount of time
 Steam from faucets creates messages in mirrors
 Evaluate usefulness of butcher and tanner for dead animals
@@ -91,7 +91,7 @@ The final version of the demo will contain: Multiple Endings, //Basic// Replayab
 
 The main project contains adult (NSFW) content in order to make player agency //realistic//. 
 
-Any players that wish to contribute to development can contact me @thearchmagedev@gmail.com
+Any players that wish to contribute to development of the main project can contact me @thearchmagedev@gmail.com
 
 Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
 
