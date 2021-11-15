@@ -27,7 +27,7 @@ Verify/Configure Inventory and Status
 Archmage Demo
 
 :: StorySubtitle
-Version: 0.1
+Version: Alpha 0.1
 
 :: StoryData
 {
@@ -99,6 +99,11 @@ Version: 0.1
 <<if $Show is true>>[[Inventory][$Show to false]]<</if>>
 <<if $Show is true>>[[Status][$Show to false]]<</if>>
 
+Warning:
+Do not click red links. 
+You will get stuck.
+
+
 :: Inventory
 You have:
 
@@ -155,6 +160,8 @@ The main project contains adult (NSFW) content in order to make player agency //
 Players may contact me @thearchmagedev@gmail.com
 
 Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
+
+
 
 -Black Dahlia Studios
 
@@ -465,8 +472,11 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
 :: Plants seeds
         Which seed will you plant?
 
+        You currently have no seeds.
         /* Check for which seeds the player has obtained */
-
+        [[Daydream]]
+        [[Leave|Demo]]
+        
 :: Daydream
     You laze about the cloister, daydreaming all the while. 
 
@@ -589,6 +599,7 @@ You notice many bookshelves and various students spread out across the room, dil
 [[Study]]
 [[Interrupt another student]]
 [[Find the librarian]]
+[[Leave|Demo]]
 
 /* :: Study 
     You decide to brush up on your reading. 
@@ -1617,6 +1628,8 @@ After waiting for a few minutes without any activity, you become impatient.
         She happily takes them from you. She takes a seat with a smile on her face.
 
         You have made a friend.
+
+        [[Class begins|Class]]
         
 :: Search the Classroom
     You can't handle waiting for class to start and your curiosity gets the better of you.
