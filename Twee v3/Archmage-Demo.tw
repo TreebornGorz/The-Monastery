@@ -26,6 +26,9 @@ Verify/Configure Inventory and Status
 :: StoryTitle
 Archmage Demo
 
+:: StorySubtitle
+Version: 0.1
+
 :: StoryData
 {
     "ifid": "954D2221-3680-494F-A851-E66CC67FA3BC",
