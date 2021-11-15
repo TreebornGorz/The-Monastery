@@ -150,7 +150,11 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 &lt;&lt;if $Show is true&gt;&gt;Time: &lt;&lt;if $NightTime is false&gt;&gt;Day&lt;&lt;else&gt;&gt;Night&lt;&lt;/if&gt;&gt;&lt;&lt;/if&gt;&gt; /* Time of Day */
 
 &lt;&lt;if $Show is true&gt;&gt;[[Inventory][$Show to false]]&lt;&lt;/if&gt;&gt;
-&lt;&lt;if $Show is true&gt;&gt;[[Status][$Show to false]]&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="4" name="Inventory" tags="" position="475,100" size="100,100">You have:
+&lt;&lt;if $Show is true&gt;&gt;[[Status][$Show to false]]&lt;&lt;/if&gt;&gt;
+
+Warning:
+Do not click red links. 
+You will get stuck.</tw-passagedata><tw-passagedata pid="4" name="Inventory" tags="" position="475,100" size="100,100">You have:
 
 &lt;&lt;if $Weapon is true&gt;&gt; \
 A Weapon
@@ -198,6 +202,8 @@ The main project contains adult (NSFW) content in order to make player agency //
 Players may contact me @thearchmagedev@gmail.com
 
 Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
+
+
 
 -Black Dahlia Studios
 
@@ -432,7 +438,10 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
     [[Daydream]]
     [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="31" name="Plants seeds" tags="" position="100,475" size="100,100">Which seed will you plant?
 
-        /* Check for which seeds the player has obtained */</tw-passagedata><tw-passagedata pid="32" name="Daydream" tags="" position="225,475" size="100,100">You laze about the cloister, daydreaming all the while. 
+        You currently have no seeds.
+        /* Check for which seeds the player has obtained */
+        [[Daydream]]
+        [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="32" name="Daydream" tags="" position="225,475" size="100,100">You laze about the cloister, daydreaming all the while. 
 
     You realize that you accomplished very little, but you also don&#39;t care about that at all.
     &lt;&lt;set $NightTime to true&gt;&gt; /* Small random chance of something COOL happening (1/20?), generate random daydreams to make this option more entertaining for the player */
@@ -526,6 +535,7 @@ You notice many bookshelves and various students spread out across the room, dil
 [[Study]]
 [[Interrupt another student]]
 [[Find the librarian]]
+[[Leave|Demo]]
 
 /* :: Study 
     You decide to brush up on your reading. 
@@ -1313,7 +1323,9 @@ After waiting for a few minutes without any activity, you become impatient.
         &lt;&lt;set $BigFriend to true&gt;&gt;
         She happily takes them from you. She takes a seat with a smile on her face.
 
-        You have made a friend.</tw-passagedata><tw-passagedata pid="122" name="Search the Classroom" tags="" position="225,1600" size="100,100">You can&#39;t handle waiting for class to start and your curiosity gets the better of you.
+        You have made a friend.
+
+        [[Class begins|Class]]</tw-passagedata><tw-passagedata pid="122" name="Search the Classroom" tags="" position="225,1600" size="100,100">You can&#39;t handle waiting for class to start and your curiosity gets the better of you.
     &lt;&lt;set $ClassSearch to true&gt;&gt;
     You survey the classroom and notice a few objects of interest.
 
