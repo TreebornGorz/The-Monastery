@@ -23,6 +23,7 @@ Implement conditionals for $Weapon is true
 Figure out $SirenPet mechanics, filters all future options if true based on the siren's preferences, provides options that wouldn't  normally exist to lead to unique endings based on other pre-existing boolean variable values
 Create separate passage for exploring campus at night? Requires a portable light?
 Verify/Configure Inventory and Status
+Create mechanic for collecting/ingesting secret bath water
 */
 
 :: StoryTitle
@@ -98,6 +99,7 @@ predisplay["Menu Return"] = function (taskName) {
 <<set $SirenPet to false>>
 <<set $HorseFriend to false>>
 <<set $ClassFriend to false>>
+<<set $SirenWork to false>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -143,6 +145,10 @@ You are socially ostracized. Making friends will be difficult.
 <</if>> \
 <<if $SirenPet is true>> \
 You are the Siren's pet. You will be ultimately obedient to her desires.
+
+<</if>> \
+<<if $SirenPartner is true>> \
+You are the Siren's accomplice. She expects you to complete certain tasks.
 
 <</if>> \
 <<if $HolyPower is true>> \
@@ -332,6 +338,8 @@ You notice a suspicious latch on the ceiling.
 
 :: Attempt escape
                     You take your future into your own hands and attempt escape from your cell.
+
+                    {Path under construction}
 
                     /* IF player previously hid items in cell they can be used to escape */
                     /* IF player used a potion on themself previously, the effect may be helpful */
@@ -530,10 +538,14 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 
         Whose meal will you poison?
 
+        {Path under construction}
+
         /* List targets once a relationship is developed, variables for tracking relationships */
 
 :: Poison the drinking water
         You sneak over to the water keg and poison the water.
+
+        {Path under construction}
 
         /* Majority of campus dies, write ending */
 
@@ -839,12 +851,58 @@ Students use this area to wash up before meals and collect water for bathing in 
 
 :: Escape Nurse
 /* Populate these passages */
-/* Escape fails, given choice to submit (slavery or accomplice) or perish */
+                You attempt to escape... unsuccessfuly.
+
+                The creature catches you and stares its prey in the eyes.
+
+                She lifts you into the air. You feel talons on your skin.
+
+                In a monstruously sweet voice, she hisses at you.
+
+                She gives you a choice to submit to her.
+
+                [[Submit|Slavery]]
+                [[Reject offer|Execution]]
+
+:: Execution
+                    You reject her offer. 
+
+                    She hisses in anger.
+
+                    You feel her talons slide across your skin and in a swift motion, she slices open your abdomen.
+
+                    Your guts slide out of your body and plop down onto the floor.
+
+                    As you bleed out and lose consciousness, a serpentine tongue flicks across your body...
+
+                    "Bad End - Siren Prey" 
+
 :: Wait Nurse
 /* Intrigued, she approaches you with curiousity and admiration, possibility for cooperation/leadership */
+                You stay still and wait for the creature to approach you.
+
+                She emerges from the shadows. The nurse stands before you gazing upon you with curiousity. 
+
+                You notice she has some animalistic features. She surveys you like a predator would prey. A serpentine tongue flicks out of her mouth.
+
+                With some reservation, she petitions your help.
+
+                [[Escape Nurse]]
+                [[Completely submit to her|Slavery]]
+                [[Offer to help|Siren Partner]]
 
 :: Embrace Nurse
 /* you fawn over her, leading to your submission (slavery or accomplice) */
+                You run towards the glowing eyes and extend your arms out to embrace the shadowy figure.
+
+                You tighten your grip and feel breasts and long hair.
+                
+                You loosen your grip and step backwards into the light. You see the nurse standing before you with certain animalistic features.
+
+                With gentle eyes, she petitions your help.
+
+                [[Completely submit to her|Slavery]]
+                [[Offer to help|Siren Partner]]
 
 :: Wait for another student
     You patiently and creepily wait for another student to enter the balneary. 
@@ -998,7 +1056,7 @@ You are ready to work.
 
             She doesn't appear human anymore and you can't think clearly. 
 
-            You have become [[completely obdeient]] to her.
+            You have become [[completely obedient]] to her.
 
 :: completely obedient
                 You feel an overwhelming desire to follow all of her commands.
@@ -1128,7 +1186,7 @@ You are ready to work.
             You look down at the injection sight in surpise and [[you suddenly feel drowsy...|Slavery]]
 
 :: Slavery  
-                When you finally come to, you find yourself in a dark room.
+                Eventually, you find yourself in a dark room.
 
                 You can hear running water. The air is cold and you get the feeling that you are underground.
 
