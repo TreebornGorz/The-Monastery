@@ -151,7 +151,8 @@ predisplay["Menu Return"] = function (taskName) {
 &lt;&lt;set $SirenEnemy to false&gt;&gt;
 &lt;&lt;set $SirenPet to false&gt;&gt;
 &lt;&lt;set $HorseFriend to false&gt;&gt;
-&lt;&lt;set $ClassFriend to false&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="StoryCaption" tags="" position="350,100" size="100,100">/* Displays game information to the player on the left side of the screen */
+&lt;&lt;set $ClassFriend to false&gt;&gt;
+&lt;&lt;set $SirenWork to false&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="StoryCaption" tags="" position="350,100" size="100,100">/* Displays game information to the player on the left side of the screen */
 &lt;&lt;if $Show is true&gt;&gt;Sex: &lt;&lt;if $Male is true&gt;&gt;Male&lt;&lt;else&gt;&gt;Female&lt;&lt;/if&gt;&gt;&lt;&lt;/if&gt;&gt; /* Player Sex */
 &lt;&lt;if $Show is true&gt;&gt;Day: $Day&lt;&lt;/if&gt;&gt; /* Game Days Passed */
 &lt;&lt;if $Show is true&gt;&gt;Time: &lt;&lt;if $NightTime is false&gt;&gt;Day&lt;&lt;else&gt;&gt;Night&lt;&lt;/if&gt;&gt;&lt;&lt;/if&gt;&gt; /* Time of Day */
@@ -187,6 +188,10 @@ You are socially ostracized. Making friends will be difficult.
 &lt;&lt;/if&gt;&gt; \
 &lt;&lt;if $SirenPet is true&gt;&gt; \
 You are the Siren&#39;s pet. You will be ultimately obedient to her desires.
+
+&lt;&lt;/if&gt;&gt; \
+&lt;&lt;if $SirenPartner is true&gt;&gt; \
+You are the Siren&#39;s accomplice. She expects you to complete certain tasks.
 
 &lt;&lt;/if&gt;&gt; \
 &lt;&lt;if $HolyPower is true&gt;&gt; \
@@ -330,6 +335,8 @@ You notice a suspicious latch on the ceiling.
                     This cell is all you know. It is your new life...
 
                     &quot;Bad End - Miscreant&quot;</tw-passagedata><tw-passagedata pid="20" name="Attempt escape" tags="" position="1225,225" size="100,100">You take your future into your own hands and attempt escape from your cell.
+
+                    {Path under construction}
 
                     /* IF player previously hid items in cell they can be used to escape */
                     /* IF player used a potion on themself previously, the effect may be helpful */
@@ -479,7 +486,11 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 
         Whose meal will you poison?
 
+        {Path under construction}
+
         /* List targets once a relationship is developed, variables for tracking relationships */</tw-passagedata><tw-passagedata pid="37" name="Poison the drinking water" tags="" position="850,475" size="100,100">You sneak over to the water keg and poison the water.
+
+        {Path under construction}
 
         /* Majority of campus dies, write ending */</tw-passagedata><tw-passagedata pid="38" name="Send out the food" tags="" position="975,475" size="100,100">You do enough work to finish preparing the food and send out the meals.
 
@@ -725,14 +736,56 @@ Students use this area to wash up before meals and collect water for bathing in 
             [[Attempt an escape|Escape Nurse]]
             [[Stand your ground|Wait Nurse]]
             [[Embrace the figure|Embrace Nurse]]</tw-passagedata><tw-passagedata pid="57" name="Escape Nurse" tags="" position="850,725" size="100,100">/* Populate these passages */
-/* Escape fails, given choice to submit (slavery or accomplice) or perish */</tw-passagedata><tw-passagedata pid="58" name="Wait Nurse" tags="" position="975,725" size="100,100">/* Intrigued, she approaches you with curiousity and admiration, possibility for cooperation/leadership */</tw-passagedata><tw-passagedata pid="59" name="Embrace Nurse" tags="" position="1100,725" size="100,100">/* you fawn over her, leading to your submission (slavery or accomplice) */</tw-passagedata><tw-passagedata pid="60" name="Wait for another student" tags="" position="1225,725" size="100,100">You patiently and creepily wait for another student to enter the balneary. 
+                You attempt to escape... unsuccessfuly.
+
+                The creature catches you and stares its prey in the eyes.
+
+                She lifts you into the air. You feel talons on your skin.
+
+                In a monstruously sweet voice, she hisses at you.
+
+                She gives you a choice to submit to her.
+
+                [[Submit|Slavery]]
+                [[Reject offer|Execution]]</tw-passagedata><tw-passagedata pid="58" name="Execution" tags="" position="975,725" size="100,100">You reject her offer. 
+
+                    She hisses in anger.
+
+                    You feel her talons slide across your skin and in a swift motion, she slices open your abdomen.
+
+                    Your guts slide out of your body and plop down onto the floor.
+
+                    As you bleed out and lose consciousness, a serpentine tongue flicks across your body...
+
+                    &quot;Bad End - Siren Prey&quot;</tw-passagedata><tw-passagedata pid="59" name="Wait Nurse" tags="" position="1100,725" size="100,100">/* Intrigued, she approaches you with curiousity and admiration, possibility for cooperation/leadership */
+                You stay still and wait for the creature to approach you.
+
+                She emerges from the shadows. The nurse stands before you gazing upon you with curiousity. 
+
+                You notice she has some animalistic features. She surveys you like a predator would prey. A serpentine tongue flicks out of her mouth.
+
+                With some reservation, she petitions your help.
+
+                [[Escape Nurse]]
+                [[Completely submit to her|Slavery]]
+                [[Offer to help|Siren Partner]]</tw-passagedata><tw-passagedata pid="60" name="Embrace Nurse" tags="" position="1225,725" size="100,100">/* you fawn over her, leading to your submission (slavery or accomplice) */
+                You run towards the glowing eyes and extend your arms out to embrace the shadowy figure.
+
+                You tighten your grip and feel breasts and long hair.
+                
+                You loosen your grip and step backwards into the light. You see the nurse standing before you with certain animalistic features.
+
+                With gentle eyes, she petitions your help.
+
+                [[Completely submit to her|Slavery]]
+                [[Offer to help|Siren Partner]]</tw-passagedata><tw-passagedata pid="61" name="Wait for another student" tags="" position="100,850" size="100,100">You patiently and creepily wait for another student to enter the balneary. 
 
     Eventually, a student enters with a bucket and fills it with water at one of the faucets.
 
     He looks uncomfortable as he makes eye contact with you before leaving.
     &lt;&lt;set $NightTime to true&gt;&gt;
     [[Eat dinner]]
-    [[Sleep]]</tw-passagedata><tw-passagedata pid="61" name="Infirmary" tags="" position="100,850" size="100,100">You enter the infirmary.
+    [[Sleep]]</tw-passagedata><tw-passagedata pid="62" name="Infirmary" tags="" position="225,850" size="100,100">You enter the infirmary.
 &lt;&lt;if $NurseWork is false&gt;&gt;
 There are a few beds with hanging privacy sheets and an office behind a closed door.
 
@@ -748,7 +801,7 @@ You are ready to work.
 [[Inspect the beds]]
 [[Enter the office]]
 [[Raid the cabinet]]
-[[Leave|Demo]]</tw-passagedata><tw-passagedata pid="62" name="Inspect the beds" tags="" position="225,850" size="100,100">&lt;&lt;if $NurseWork is false&gt;&gt;You inspect the beds. They are empty.
+[[Leave|Demo]]</tw-passagedata><tw-passagedata pid="63" name="Inspect the beds" tags="" position="350,850" size="100,100">&lt;&lt;if $NurseWork is false&gt;&gt;You inspect the beds. They are empty.
 
     Some of the sheets have stains of various colors. 
 
@@ -759,7 +812,7 @@ You are ready to work.
     [[Treat a patient]]&lt;&lt;/if&gt;&gt;
     [[Enter the office]]
     [[Raid the cabinet]]
-    [[Lave|Demo]]</tw-passagedata><tw-passagedata pid="63" name="Treat a patient" tags="" position="350,850" size="100,100">You approach a patient.
+    [[Lave|Demo]]</tw-passagedata><tw-passagedata pid="64" name="Treat a patient" tags="" position="475,850" size="100,100">You approach a patient.
         &lt;&lt;set $NightTime to true&gt;&gt;
         You ask the patient some basic questions and fill out some forms in their medical file.
 
@@ -774,10 +827,10 @@ You are ready to work.
         [[Poison the patient]]
         &lt;&lt;/if&gt;&gt; \
         [[Eat dinner]]
-        [[Sleep]]</tw-passagedata><tw-passagedata pid="64" name="Enter the office" tags="" position="475,850" size="100,100">You twist the doorknob. The door is locked.
+        [[Sleep]]</tw-passagedata><tw-passagedata pid="65" name="Enter the office" tags="" position="600,850" size="100,100">You twist the doorknob. The door is locked.
 
     [[Knock]]
-    [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="65" name="Knock" tags="" position="600,850" size="100,100">You knock on the door.
+    [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="66" name="Knock" tags="" position="725,850" size="100,100">You knock on the door.
     &lt;&lt;if $NurseWork is false&gt;&gt; 
     The lock clicks and the door opens to reveal an attractive young nurse.
 
@@ -797,18 +850,18 @@ You are ready to work.
     [[Apologize to her|Nurse Apology]]
     [[Hug her|Hug Nurse]]
     &lt;&lt;/if&gt;&gt; \
-    [[Insult her|Insult Nurse]]</tw-passagedata><tw-passagedata pid="66" name="Accept" tags="" position="725,850" size="100,100">You accept the nurse&#39;s work offer.
+    [[Insult her|Insult Nurse]]</tw-passagedata><tw-passagedata pid="67" name="Accept" tags="" position="850,850" size="100,100">You accept the nurse&#39;s work offer.
 
         With a pleased smile, she spends the day explaining your duties as her student assistant.
 
         Once finished, she sees you out and requests your presence tomorrow.
         &lt;&lt;set $NightTime to true&gt;&gt;
         [[Eat dinner]]
-        [[Sleep]]</tw-passagedata><tw-passagedata pid="67" name="Decline" tags="" position="850,850" size="100,100">You decline the nurse&#39;s offer.
+        [[Sleep]]</tw-passagedata><tw-passagedata pid="68" name="Decline" tags="" position="975,850" size="100,100">You decline the nurse&#39;s offer.
 
         She frowns, seemingly disappointed and directs you out the door.
 
-        [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="68" name="Nurse Apology" tags="" position="975,850" size="100,100">&lt;&lt;if $NurseApology is false&gt;&gt; \
+        [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="69" name="Nurse Apology" tags="" position="1100,850" size="100,100">&lt;&lt;if $NurseApology is false&gt;&gt; \
         You apologize for disturbing her and she rolls her eyes at you before slamming her door shut.
         &lt;&lt;set $NurseApology to true&gt;&gt;
         You fear that she might no be so patient with you the next time you disturb her.
@@ -829,14 +882,14 @@ You are ready to work.
         Your lose your balance and your vision fades as your body slams to the floor. You hear the nurse begin feasting upon your entrails.
 
         &quot;Bad End - Siren Prey&quot;
-        &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="69" name="Hug Nurse" tags="" position="1100,850" size="100,100">You panic and hug the nurse for some reason. 
+        &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="70" name="Hug Nurse" tags="" position="1225,850" size="100,100">You panic and hug the nurse for some reason. 
 
         The annoyance vanishes and her face slowly contorts into a menacing and ominous smile. 
 
         Her eyes sharpen as her brow furrows. You think you noticed sharp teeth. 
 
         [[Hold onto her]]
-        [[Let go and step back]]</tw-passagedata><tw-passagedata pid="70" name="Hold onto her" tags="" position="1225,850" size="100,100">You continue to hold onto her.
+        [[Let go and step back]]</tw-passagedata><tw-passagedata pid="71" name="Hold onto her" tags="" position="100,975" size="100,100">You continue to hold onto her.
 
             You look upwards to face her directly. 
 
@@ -846,7 +899,7 @@ You are ready to work.
 
             She doesn&#39;t appear human anymore and you can&#39;t think clearly. 
 
-            You have become [[completely obdeient]] to her.</tw-passagedata><tw-passagedata pid="71" name="completely obedient" tags="" position="100,975" size="100,100">You feel an overwhelming desire to follow all of her commands.
+            You have become [[completely obedient]] to her.</tw-passagedata><tw-passagedata pid="72" name="completely obedient" tags="" position="225,975" size="100,100">You feel an overwhelming desire to follow all of her commands.
                 &lt;&lt;set $SirenPet to true&gt;&gt;
                 She hisses and gently runs her hand over your head like a lap dog.
                 &lt;&lt;set $NightTime to true&gt;&gt;
@@ -861,7 +914,7 @@ You are ready to work.
                 You feel sleepy.
 
                 [[Sleep]]
-                /* This path will be complicated because it will still present the player with a narrative based on their previous decisions, but they will be unable to make any more decisions moving forward */</tw-passagedata><tw-passagedata pid="72" name="Let go and step back" tags="" position="225,975" size="100,100">You let go of her and step backwards.
+                /* This path will be complicated because it will still present the player with a narrative based on their previous decisions, but they will be unable to make any more decisions moving forward */</tw-passagedata><tw-passagedata pid="73" name="Let go and step back" tags="" position="350,975" size="100,100">You let go of her and step backwards.
 
             She becomes defensive and takes a fighting stance despite the smile remaining on her face. She stares at you like prey. 
             
@@ -885,7 +938,7 @@ You are ready to work.
 
             [[Strike her]]
             [[Wait for her to strike]]
-            &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="73" name="Strike her" tags="" position="350,975" size="100,100">You take the initiative and lunge forward to strike at her.
+            &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="74" name="Strike her" tags="" position="475,975" size="100,100">You take the initiative and lunge forward to strike at her.
 
                 She swiftly dodges and slithers around you.
 
@@ -895,7 +948,7 @@ You are ready to work.
 
                 Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
 
-                &quot;Bad End - Siren Prey&quot;</tw-passagedata><tw-passagedata pid="74" name="Wait for her to strike" tags="" position="475,975" size="100,100">You center yourself and prepare for her next attack.
+                &quot;Bad End - Siren Prey&quot;</tw-passagedata><tw-passagedata pid="75" name="Wait for her to strike" tags="" position="600,975" size="100,100">You center yourself and prepare for her next attack.
 
                 To your surprise, it never comes. She simply watches you in anticipation, waiting for you to act.
 
@@ -912,7 +965,7 @@ You are ready to work.
                 She offers that you work together with her to take control over the campus.
 
                 [[Accept|Siren Partner]]
-                [[Reject|Siren Enemy]]</tw-passagedata><tw-passagedata pid="75" name="Siren Partner" tags="" position="600,975" size="100,100">You accept the siren&#39;s offer to work together.
+                [[Reject|Siren Enemy]]</tw-passagedata><tw-passagedata pid="76" name="Siren Partner" tags="" position="725,975" size="100,100">You accept the siren&#39;s offer to work together.
 
                     She is now your accomplice. Or maybe your partner.
                     &lt;&lt;set $SirenPartner to true&gt;&gt;
@@ -923,7 +976,7 @@ You are ready to work.
                     She licks your cheek with a split tongue and happily slithers away.
 
                     [[Eat dinner]]
-                    [[Sleep]]</tw-passagedata><tw-passagedata pid="76" name="Siren Enemy" tags="" position="725,975" size="100,100">You reject the siren&#39;s offer.
+                    [[Sleep]]</tw-passagedata><tw-passagedata pid="77" name="Siren Enemy" tags="" position="850,975" size="100,100">You reject the siren&#39;s offer.
 
                     She is now your enemy. Or maybe you are her target.
                     &lt;&lt;set $SirenEnemy to true&gt;&gt;
@@ -934,7 +987,7 @@ You are ready to work.
                     You let out a tired sigh of relief and thank your lucky stars for surviving the encounter.
 
                     [[Eat dinner]]
-                    [[Sleep]]</tw-passagedata><tw-passagedata pid="77" name="Insult Nurse" tags="" position="850,975" size="100,100">Clearly this lady is being disrespectful.
+                    [[Sleep]]</tw-passagedata><tw-passagedata pid="78" name="Insult Nurse" tags="" position="975,975" size="100,100">Clearly this lady is being disrespectful.
 
         You decide that this nurse is arrogant and that it is your duty to bring her down a peg.
 
@@ -943,13 +996,13 @@ You are ready to work.
         She doesn&#39;t react at all. She simply stares at you with what seems to be curiousity and appetite as if she were hunting you with her eyes. 
 
         [[Apologize|Bad End Slavery][$Temp to 0]]
-        [[Leave the office|Bad End Slavery][$Temp to 1]]</tw-passagedata><tw-passagedata pid="78" name="Bad End Slavery" tags="" position="975,975" size="100,100">You make an attempt to &lt;&lt;if $Temp is 0&gt;&gt;apologize&lt;&lt;else&gt;&gt;leave&lt;&lt;/if&gt;&gt;, but this lady is not having any of that. 
+        [[Leave the office|Bad End Slavery][$Temp to 1]]</tw-passagedata><tw-passagedata pid="79" name="Bad End Slavery" tags="" position="1100,975" size="100,100">You make an attempt to &lt;&lt;if $Temp is 0&gt;&gt;apologize&lt;&lt;else&gt;&gt;leave&lt;&lt;/if&gt;&gt;, but this lady is not having any of that. 
 
             She has something else in mind... 
 
             With great swiftness, she pulls a needle out of her coat pocket and jabs you with it before you even notice what happened.
 
-            You look down at the injection sight in surpise and [[you suddenly feel drowsy...|Slavery]]</tw-passagedata><tw-passagedata pid="79" name="Slavery" tags="" position="1100,975" size="100,100">When you finally come to, you find yourself in a dark room.
+            You look down at the injection sight in surpise and [[you suddenly feel drowsy...|Slavery]]</tw-passagedata><tw-passagedata pid="80" name="Slavery" tags="" position="1225,975" size="100,100">Eventually, you find yourself in a dark room.
 
                 You can hear running water. The air is cold and you get the feeling that you are underground.
 
@@ -961,7 +1014,7 @@ You are ready to work.
 
                 Maybe you shouldn&#39;t have been so rude to her...
 
-                &quot;Bad End - Slavery&quot;</tw-passagedata><tw-passagedata pid="80" name="Raid the cabinet" tags="" position="1225,975" size="100,100">You attempt to raid the cabinet in the hopes of acquiring drugs.
+                &quot;Bad End - Slavery&quot;</tw-passagedata><tw-passagedata pid="81" name="Raid the cabinet" tags="" position="100,1100" size="100,100">You attempt to raid the cabinet in the hopes of acquiring drugs.
 
     Unfortunately, the cabinet is locked.
 
@@ -969,7 +1022,7 @@ You are ready to work.
     /* Conditional for cabinet access */
     [[Inspect the beds]]
     [[Enter the office]]
-    [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="81" name="Injured butt" tags="" position="100,1100" size="100,100">The nurse begins treating your injured rear end. 
+    [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="82" name="Injured butt" tags="" position="225,1100" size="100,100">The nurse begins treating your injured rear end. 
 
 You are somewhat embarrased, but you have enough pride to realize that she is actually lucky to see such a sight.
 
@@ -977,7 +1030,7 @@ She seems annoyed with you, but prescribes some pain pills to you for the injury
 &lt;&lt;run $Drugs.push(&quot;Pain Pills&quot;)&gt;&gt; \ /* Incorporate uses for pain pills, overdose, sell them, etc. */
 &lt;&lt;set $NightTime to true&gt;&gt;
 [[Eat dinner]]
-[[Sleep]]</tw-passagedata><tw-passagedata pid="82" name="Barn" tags="" position="225,1100" size="100,100">You enter the barn.
+[[Sleep]]</tw-passagedata><tw-passagedata pid="83" name="Barn" tags="" position="350,1100" size="100,100">You enter the barn.
 
 You are excited to develop relationships with the animals.
 &lt;&lt;if $BarnWork is false&gt;&gt;
@@ -990,29 +1043,29 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 &lt;&lt;else&gt;&gt;
 [[Take care of the animals]]
 &lt;&lt;/if&gt;&gt; \
-[[Leave|Demo]]</tw-passagedata><tw-passagedata pid="83" name="Look for a person" tags="" position="350,1100" size="100,100">You decide to look for a person instead of blindly messing around with the animals.
+[[Leave|Demo]]</tw-passagedata><tw-passagedata pid="84" name="Look for a person" tags="" position="475,1100" size="100,100">You decide to look for a person instead of blindly messing around with the animals.
     
     After a bit of searching, you eventually make contact with the campus farmer. She works as a professor and tends to the animals in her down time with the help of some of the students.
     
     In return for assisting her with her work, you will get access to the animals when she is not around.
 
     [[Help her out]]
-    [[Decline|Decline farmer]]</tw-passagedata><tw-passagedata pid="84" name="Help her out" tags="" position="475,1100" size="100,100">You decide to help out the farmer with her work.
+    [[Decline|Decline farmer]]</tw-passagedata><tw-passagedata pid="85" name="Help her out" tags="" position="600,1100" size="100,100">You decide to help out the farmer with her work.
         &lt;&lt;set $BarnWork to true&gt;&gt;
         She shows you around the barn, explaining how to take care of each animal and showing you where she keeps the animal food and tools.
         &lt;&lt;set $NightTime to true&gt;&gt;
         [[Eat dinner]]
-        [[Sleep]]</tw-passagedata><tw-passagedata pid="85" name="Decline farmer" tags="" position="600,1100" size="100,100">You decline to help the farmer.
+        [[Sleep]]</tw-passagedata><tw-passagedata pid="86" name="Decline farmer" tags="" position="725,1100" size="100,100">You decline to help the farmer.
 
         She seems deeply disappointed.
 
-        [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="86" name="Approach the animals" tags="" position="725,1100" size="100,100">You decide to approach the animals. 
+        [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="87" name="Approach the animals" tags="" position="850,1100" size="100,100">You decide to approach the animals. 
 
     Which animal are you interested in?
 
     [[Horses]]
     [[Cow]]
-    [[Chickens]]</tw-passagedata><tw-passagedata pid="87" name="Horses" tags="" position="850,1100" size="100,100">You enter the stables and find a few horses. 
+    [[Chickens]]</tw-passagedata><tw-passagedata pid="88" name="Horses" tags="" position="975,1100" size="100,100">You enter the stables and find a few horses. 
         
         Some of them don&#39;t appear too friendly based on their body language.
 
@@ -1023,14 +1076,14 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
         [[Ride your friend immediately|Take him for a ride]]
         [[Wait for night to ride your friend|Wait for nightfall]]
         &lt;&lt;/if&gt;&gt; \
-        [[Look for a person]]</tw-passagedata><tw-passagedata pid="88" name="Take one for a ride" tags="" position="975,1100" size="100,100">You approach one of the unfriendly horses.
+        [[Look for a person]]</tw-passagedata><tw-passagedata pid="89" name="Take one for a ride" tags="" position="1100,1100" size="100,100">You approach one of the unfriendly horses.
 
             You saddle it and attempt to mount the horse when it gets spooked.
 
             It panics and bucks you off, kicking around the stable furiously.
 
             [[Calm the horse]]
-            [[Escape the stable]]</tw-passagedata><tw-passagedata pid="89" name="Calm the horse" tags="" position="1100,1100" size="100,100">You try to calm the horse from its panicked state.
+            [[Escape the stable]]</tw-passagedata><tw-passagedata pid="90" name="Calm the horse" tags="" position="1225,1100" size="100,100">You try to calm the horse from its panicked state.
                 &lt;&lt;set $Temp to random(1)&gt;&gt;
                 You rub its mane and make soothing sounds in a desperate attempt to calm down the excited equine.
                 &lt;&lt;if $Temp is 1&gt;&gt;
@@ -1052,7 +1105,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                 You are not found until you begin smelling bad. And nobody noticed you were missing either.
 
                 &quot;Bad End - Bojack Horsethief&quot;
-                &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="90" name="Take him for a ride" tags="" position="1225,1100" size="100,100">You saddle the horse and ride him out of the barn despite the consipicuous sunlight.
+                &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="91" name="Take him for a ride" tags="" position="100,1225" size="100,100">You saddle the horse and ride him out of the barn despite the consipicuous sunlight.
 
                     You are immediately noticed by a student a reported for your misbehavior.
 
@@ -1060,18 +1113,18 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
                     You are now definitely socially ostracized if you weren&#39;t already.
                     &lt;&lt;set $Ostra to true&gt;&gt;
-                    [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="91" name="Wait for nightfall" tags="" position="100,1225" size="100,100">You figure it might not be a great idea to take the horse for a ride when its owner has no idea where he went and might notice he is missing.
+                    [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="92" name="Wait for nightfall" tags="" position="225,1225" size="100,100">You figure it might not be a great idea to take the horse for a ride when its owner has no idea where he went and might notice he is missing.
                     &lt;&lt;set $NightTime to true&gt;&gt;
                     You hide out and wait.
 
-                    Once night breaks and you&#39;re sure nobody will notice, you saddle him and [[spur him out of the barn|Ride]].</tw-passagedata><tw-passagedata pid="92" name="Ride" tags="" position="225,1225" size="100,100">You are riding a horse outside the barn.
+                    Once night breaks and you&#39;re sure nobody will notice, you saddle him and [[spur him out of the barn|Ride]].</tw-passagedata><tw-passagedata pid="93" name="Ride" tags="" position="350,1225" size="100,100">You are riding a horse outside the barn.
                         &lt;&lt;if $NightTime is true&gt;&gt;
                         It is very dark outside the campus.
                         &lt;&lt;/if&gt;&gt;
                         You can explore the outskirts of the campus as well as the surrounding forest.
 
                         [[Explore the campus outskirts]]
-                        [[Enter the forest]]</tw-passagedata><tw-passagedata pid="93" name="Explore the campus outskirts" tags="" position="350,1225" size="100,100">You ride along the campus outskirts.
+                        [[Enter the forest]]</tw-passagedata><tw-passagedata pid="94" name="Explore the campus outskirts" tags="" position="475,1225" size="100,100">You ride along the campus outskirts.
 
                             The air rushes through your hair as you speed around.
                             
@@ -1087,18 +1140,18 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             &lt;&lt;/if&gt;&gt; \
                             [[Return to campus]]
 
-/* :: Dark plants */</tw-passagedata><tw-passagedata pid="94" name="Inspect a plant" tags="" position="475,1225" size="100,100">You dismount and inspect an interesting plant.
+/* :: Dark plants */</tw-passagedata><tw-passagedata pid="95" name="Inspect a plant" tags="" position="600,1225" size="100,100">You dismount and inspect an interesting plant.
                                 &lt;&lt;set $TempString to $Plants.random()&gt;&gt;
                                 It is a $TempString plant.
 
                                 [[Collect seeds]]
                                 [[Collect leaves|WIP]]
-                                [[Eat the plant|WIP]]</tw-passagedata><tw-passagedata pid="95" name="Collect seeds" tags="" position="600,1225" size="100,100">You collect $TempString seeds.
+                                [[Eat the plant|WIP]]</tw-passagedata><tw-passagedata pid="96" name="Collect seeds" tags="" position="725,1225" size="100,100">You collect $TempString seeds.
                                     &lt;&lt;run $Seeds.push($TempString)&gt;&gt;
                                     [[Return to campus]]
 
 /* :: Eat the plant */
-/* Incorporate various effects depending on the plant */</tw-passagedata><tw-passagedata pid="96" name="Enter the forest" tags="" position="725,1225" size="100,100">The forest is dark and spooky.
+/* Incorporate various effects depending on the plant */</tw-passagedata><tw-passagedata pid="97" name="Enter the forest" tags="" position="850,1225" size="100,100">The forest is dark and spooky.
                             &lt;&lt;if $Weapon is true&gt;&gt;
                             You are comforted by your weapon. 
                             &lt;&lt;else&gt;&gt;
@@ -1108,17 +1161,17 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             [[Leave the forest]]
 
 /* :: Forge onwards */
-/* Interactions with enemies, access to cooler seeds */</tw-passagedata><tw-passagedata pid="97" name="Leave the forest" tags="" position="850,1225" size="100,100">You get spooked by the forest and turn around.
+/* Interactions with enemies, access to cooler seeds */</tw-passagedata><tw-passagedata pid="98" name="Leave the forest" tags="" position="975,1225" size="100,100">You get spooked by the forest and turn around.
 
                                 [[Explore the campus outskirts]]
-                                [[Return to campus]]</tw-passagedata><tw-passagedata pid="98" name="Return to campus" tags="" position="975,1225" size="100,100">You are back in the barn.
+                                [[Return to campus]]</tw-passagedata><tw-passagedata pid="99" name="Return to campus" tags="" position="1100,1225" size="100,100">You are back in the barn.
                                     &lt;&lt;set $NightTime to true&gt;&gt;                                    
                                     You enter the stable and unsaddle your horse.
 
                                     After feeding him and getting him comfortable, you leave the barn.
 
                                     [[Eat dinner]]
-                                    [[Sleep]]</tw-passagedata><tw-passagedata pid="99" name="Escape the stable" tags="" position="1100,1225" size="100,100">You run towards the stable exit.
+                                    [[Sleep]]</tw-passagedata><tw-passagedata pid="100" name="Escape the stable" tags="" position="1225,1225" size="100,100">You run towards the stable exit.
 
                 You slip and fall to the ground.
 
@@ -1128,12 +1181,12 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
                 You are not found until you begin smelling bad. And nobody noticed you were missing either.
 
-                &quot;Bad End - Bojack Horsethief&quot;</tw-passagedata><tw-passagedata pid="100" name="Cow" tags="" position="1225,1225" size="100,100">You enter the barn and notice a dairy cow that seems to be in need of milking.
+                &quot;Bad End - Bojack Horsethief&quot;</tw-passagedata><tw-passagedata pid="101" name="Cow" tags="" position="100,1350" size="100,100">You enter the barn and notice a dairy cow that seems to be in need of milking.
 
         You&#39;re not sure if you should milk the cow without permission.
 
         [[Milk the cow anyway]]
-        [[Look for a person]]</tw-passagedata><tw-passagedata pid="101" name="Milk the cow anyway" tags="" position="100,1350" size="100,100">You take some initiative and figure the cow needs to be milked.
+        [[Look for a person]]</tw-passagedata><tw-passagedata pid="102" name="Milk the cow anyway" tags="" position="225,1350" size="100,100">You take some initiative and figure the cow needs to be milked.
             &lt;&lt;set $Temp to random(1)&gt;&gt;
             Having permission is a minor detail.
             &lt;&lt;if $Temp is 1&gt;&gt;
@@ -1152,18 +1205,18 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
             You have //definitely// been socially ostracized if you weren&#39;t already.
             &lt;&lt;set $Ostra to true&gt;&gt; \           
             &lt;&lt;/if&gt;&gt; 
-            [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="102" name="Chickens" tags="" position="225,1350" size="100,100">You enter the coup and find a few chickens running around. 
+            [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="103" name="Chickens" tags="" position="350,1350" size="100,100">You enter the coup and find a few chickens running around. 
 
         The chickens don&#39;t recognize you and begin furiously pecking at your ankles.
 
         [[Calm them down]]
-        [[Look for a person]]</tw-passagedata><tw-passagedata pid="103" name="Take care of the animals" tags="" position="350,1350" size="100,100">You take care of each group of animals, feeding them and tending to their individual needs.
+        [[Look for a person]]</tw-passagedata><tw-passagedata pid="104" name="Take care of the animals" tags="" position="475,1350" size="100,100">You take care of each group of animals, feeding them and tending to their individual needs.
     
     You notice they are more familiar with you and your relationship increases.
     &lt;&lt;set $AnimalShip += 1&gt;&gt;
     [[Approach the animals individually]] 
     [[Eat dinner]]
-    [[Sleep]]</tw-passagedata><tw-passagedata pid="104" name="Approach the animals individually" tags="" position="475,1350" size="100,100">Approach which animal?        
+    [[Sleep]]</tw-passagedata><tw-passagedata pid="105" name="Approach the animals individually" tags="" position="600,1350" size="100,100">Approach which animal?        
         &lt;&lt;if $AnimalShip gt 0&gt;&gt;
         [[Approach chicken]]
         &lt;&lt;/if&gt;&gt; \
@@ -1173,14 +1226,14 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
         &lt;&lt;if $AnimalShip gt 2&gt;&gt; \
         [[Approach horse]]
         &lt;&lt;/if&gt;&gt; \
-        [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="105" name="Approach chicken" tags="" position="600,1350" size="100,100">You approach the chicken.
+        [[Leave|Demo]]</tw-passagedata><tw-passagedata pid="106" name="Approach chicken" tags="" position="725,1350" size="100,100">You approach the chicken.
 
             The chicken is not very interested and basically ignores you.
             &lt;&lt;set $Eggs += 1&gt;&gt;
             However, you do get some eggs.
 
             [[Eat dinner]]
-            [[Sleep]]</tw-passagedata><tw-passagedata pid="106" name="Approach cow" tags="" position="725,1350" size="100,100">You approach the cow.
+            [[Sleep]]</tw-passagedata><tw-passagedata pid="107" name="Approach cow" tags="" position="850,1350" size="100,100">You approach the cow.
 
             She seems like she needs to be milked.
 
@@ -1189,11 +1242,11 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
             She moos happily.
 
             [[Eat dinner]]
-            [[Sleep]]</tw-passagedata><tw-passagedata pid="107" name="Approach horse" tags="" position="850,1350" size="100,100">You approach the horse.
+            [[Sleep]]</tw-passagedata><tw-passagedata pid="108" name="Approach horse" tags="" position="975,1350" size="100,100">You approach the horse.
 
             He is excited to see you and anticipates going for a stroll.
 
-            You saddle him and [[leave the barn|Ride]].</tw-passagedata><tw-passagedata pid="108" name="Forge" tags="" position="975,1350" size="100,100">You enter the forge.
+            You saddle him and [[leave the barn|Ride]].</tw-passagedata><tw-passagedata pid="109" name="Forge" tags="" position="1100,1350" size="100,100">You enter the forge.
 &lt;&lt;if $Forge is 0&gt;&gt;
 You see an anvil and a hulking furnace. Various tools such as tongs and hammers are strewn across the floor and workbench. 
 
@@ -1214,7 +1267,7 @@ You already have a weapon.
 You are no longer welcome here.
 
 The smith [[turns you away|Demo]].
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="109" name="Create weapon" tags="" position="1100,1350" size="100,100">You smelt standard metals and create a basic weapon.
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="110" name="Create weapon" tags="" position="1225,1350" size="100,100">You smelt standard metals and create a basic weapon.
     &lt;&lt;set $Weapon to true&gt;&gt;
     You will now be able to defend yourself.
     &lt;&lt;set $NightTime to true&gt;&gt;
@@ -1222,14 +1275,14 @@ The smith [[turns you away|Demo]].
     [[Sleep]]
 
 /* :: Forge learn */
-/* What else can be forged? */</tw-passagedata><tw-passagedata pid="110" name="Mess around" tags="" position="1225,1350" size="100,100">You sling tools around like a dufus.
+/* What else can be forged? */</tw-passagedata><tw-passagedata pid="111" name="Mess around" tags="" position="100,1475" size="100,100">You sling tools around like a dufus.
 
     You manage to make contact with lots of metal things and generate much noise in the process.
 
     It seems to have woken up the blacksmith, who makes his way into the forge rubbing the sleep from his eyes.
 
     [[Stop smashing random metal things together and talk to him|Blacksmith]]
-    [[Be dumb]]</tw-passagedata><tw-passagedata pid="111" name="Blacksmith" tags="" position="100,1475" size="100,100">After correcting your behavior, the smith asks if you would like to work with him as a student apprentice. 
+    [[Be dumb]]</tw-passagedata><tw-passagedata pid="112" name="Blacksmith" tags="" position="225,1475" size="100,100">After correcting your behavior, the smith asks if you would like to work with him as a student apprentice. 
         
         You gladly agree. After showing you around the equipment, he hands you a hammer of your own.
 
@@ -1239,11 +1292,11 @@ The smith [[turns you away|Demo]].
         &lt;&lt;set $NightTime to true&gt;&gt;
         [[Eat dinner]]
         [[Sleep]]
-        &lt;&lt;set $Forge to 1&gt;&gt;</tw-passagedata><tw-passagedata pid="112" name="Be dumb" tags="" position="225,1475" size="100,100">You keep smacking metal things together like an idiot.
+        &lt;&lt;set $Forge to 1&gt;&gt;</tw-passagedata><tw-passagedata pid="113" name="Be dumb" tags="" position="350,1475" size="100,100">You keep smacking metal things together like an idiot.
     &lt;&lt;set $Forge to 2&gt;&gt;
     The smith doesn&#39;t seem to appreciate your behavior and makes his opinion known by putting his boot up your ass. 
 
-    Your ass is injured and you must [[go to the infirmary|Injured butt]]</tw-passagedata><tw-passagedata pid="113" name="Brewery" tags="" position="350,1475" size="100,100">You enter the brewery.
+    Your ass is injured and you must [[go to the infirmary|Injured butt]]</tw-passagedata><tw-passagedata pid="114" name="Brewery" tags="" position="475,1475" size="100,100">You enter the brewery.
 &lt;&lt;if $Brew is false&gt;&gt;
 This is where the real magic happens. Students love the reprieve of refreshing ale after a hard day&#39;s work. 
 
@@ -1255,23 +1308,23 @@ The brewmaster is asleep in a corner.
 &lt;&lt;else&gt;&gt;
 [[Work on a brew|Brew]]
 [[Maybe Later|Demo]]
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="114" name="Wake Brewmaster" tags="" position="475,1475" size="100,100">You shake the brewmaster until he comes to.
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="115" name="Wake Brewmaster" tags="" position="600,1475" size="100,100">You shake the brewmaster until he comes to.
 
     He knocks over a few empty bottles as he slowly stands up. 
 
     He happily welcomes you to the brewery and invites you to work with him.
 
     [[Agree|Yes Brew]]
-    [[Decline|No Brew]]</tw-passagedata><tw-passagedata pid="115" name="Yes Brew" tags="" position="600,1475" size="100,100">The brewmaster doesn&#39;t seem too bad and you decide to take up his craft.
+    [[Decline|No Brew]]</tw-passagedata><tw-passagedata pid="116" name="Yes Brew" tags="" position="725,1475" size="100,100">The brewmaster doesn&#39;t seem too bad and you decide to take up his craft.
         &lt;&lt;set $Brew to true&gt;&gt;
         He takes you under his wing and teaches you about all the equipment and how to brew a traditional batch of ale.
 
         When you return to the brewery, you will be able to brew batches on your own. 
         &lt;&lt;set $NightTime to true&gt;&gt;
         [[Eat dinner]]
-        [[Sleep]]</tw-passagedata><tw-passagedata pid="116" name="No Brew" tags="" position="725,1475" size="100,100">The brewmaster&#39;s behavior seems relatively unbecoming and you decide to take your talents elsewhere.
+        [[Sleep]]</tw-passagedata><tw-passagedata pid="117" name="No Brew" tags="" position="850,1475" size="100,100">The brewmaster&#39;s behavior seems relatively unbecoming and you decide to take your talents elsewhere.
 
-        He seems dissapointed. [[You leave him alone and wish him sweet dreams.|Demo]]</tw-passagedata><tw-passagedata pid="117" name="Brew" tags="" position="850,1475" size="100,100">You decide to brew a batch of ale.
+        He seems dissapointed. [[You leave him alone and wish him sweet dreams.|Demo]]</tw-passagedata><tw-passagedata pid="118" name="Brew" tags="" position="975,1475" size="100,100">You decide to brew a batch of ale.
     &lt;&lt;set $Keg += 1&gt;&gt;
     &lt;&lt;if $Poison is true&gt;&gt;
     &lt;&lt;elseif $Potion is true&gt;&gt;
@@ -1279,7 +1332,7 @@ The brewmaster is asleep in a corner.
     &lt;&lt;set $NightTime to true&gt;&gt;
     [[Eat dinner]]
     [[Sleep]]
-    &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="118" name="Classroom" tags="" position="975,1475" size="100,100">You sit down in an empty chair in the classroom and wait for class to start. There are no students or professors in sight.
+    &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="119" name="Classroom" tags="" position="1100,1475" size="100,100">You sit down in an empty chair in the classroom and wait for class to start. There are no students or professors in sight.
 /* If Ostra, then get picked on during class */
 After waiting for a few minutes without any activity, you become impatient. 
 
@@ -1287,7 +1340,7 @@ After waiting for a few minutes without any activity, you become impatient.
 &lt;&lt;if $ClassSearch is false&gt;&gt; \
 [[Search the Classroom]]
 &lt;&lt;/if&gt;&gt; \
-[[Leave|Demo]]</tw-passagedata><tw-passagedata pid="119" name="Wait Patiently" tags="" position="1100,1475" size="100,100">You figure that scouring through random items in the classroom might not be a good idea, so you simply wait for class to start...
+[[Leave|Demo]]</tw-passagedata><tw-passagedata pid="120" name="Wait Patiently" tags="" position="1225,1475" size="100,100">You figure that scouring through random items in the classroom might not be a good idea, so you simply wait for class to start...
 
     Eventually, students begin filtering into the classroom, and settling into their respective seats. 
     &lt;&lt;if $ClassFriend is false&gt;&gt;
@@ -1306,11 +1359,11 @@ After waiting for a few minutes without any activity, you become impatient.
         [[Lash out in self defense]]
     &lt;&lt;else&gt;&gt;
     The professor enters and [[class begins|Class]]. 
-    &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="120" name="Ignore her" tags="" position="1225,1475" size="100,100">You pretend not to notice her.
+    &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="121" name="Ignore her" tags="" position="100,1600" size="100,100">You pretend not to notice her.
 
         Somehow, she decides not to press the matter and peacefully sits in another seat holding her head low.
 
-        The professor enters and [[class begins|Class]].</tw-passagedata><tw-passagedata pid="121" name="Lash out in self defense" tags="" position="100,1600" size="100,100">You can&#39;t imagine that this lady has a good reason for bothering you.
+        The professor enters and [[class begins|Class]].</tw-passagedata><tw-passagedata pid="122" name="Lash out in self defense" tags="" position="225,1600" size="100,100">You can&#39;t imagine that this lady has a good reason for bothering you.
 
         You lash out at her, insulting her size and ugliness in front of the rest of the class.
 
@@ -1318,7 +1371,7 @@ After waiting for a few minutes without any activity, you become impatient.
         &lt;&lt;set $BigEnemy to true&gt;&gt;
         You have made a very large enemy. May God have mercy on your soul.
 
-        The professor enters and [[class begins|Class]].</tw-passagedata><tw-passagedata pid="122" name="Ask how you can help her" tags="" position="225,1600" size="100,100">You polite ask her how you can help her.
+        The professor enters and [[class begins|Class]].</tw-passagedata><tw-passagedata pid="123" name="Ask how you can help her" tags="" position="350,1600" size="100,100">You polite ask her how you can help her.
 
         She looks a bit embarrassed and motions towards the inside of the desk.
 
@@ -1332,25 +1385,25 @@ After waiting for a few minutes without any activity, you become impatient.
 
         You have made a friend.
 
-        [[Class begins|Class]]</tw-passagedata><tw-passagedata pid="123" name="Search the Classroom" tags="" position="350,1600" size="100,100">You can&#39;t handle waiting for class to start and your curiosity gets the better of you.
+        [[Class begins|Class]]</tw-passagedata><tw-passagedata pid="124" name="Search the Classroom" tags="" position="475,1600" size="100,100">You can&#39;t handle waiting for class to start and your curiosity gets the better of you.
     &lt;&lt;set $ClassSearch to true&gt;&gt;
     You survey the classroom and notice a few objects of interest.
 
     [[Steal from the bookshelf]]
-    [[Open the desk drawers]]</tw-passagedata><tw-passagedata pid="124" name="Steal from the bookshelf" tags="" position="475,1600" size="100,100">You dig around the bookshelf searcxhing for something valuable to steal.
+    [[Open the desk drawers]]</tw-passagedata><tw-passagedata pid="125" name="Steal from the bookshelf" tags="" position="600,1600" size="100,100">You dig around the bookshelf searcxhing for something valuable to steal.
         /* Incorporate something valuable that can be stolen from here */
         Just as you do, the professor and multiple students walk through the door.
 
         You are able to convince them that you had forgotten your textbook and needed to borrow a replacement.
 
-        You take a seat and [[class begins|Class]].</tw-passagedata><tw-passagedata pid="125" name="Open the desk drawers" tags="" position="600,1600" size="100,100">You open the drawers of the teacher&#39;s desk.
+        You take a seat and [[class begins|Class]].</tw-passagedata><tw-passagedata pid="126" name="Open the desk drawers" tags="" position="725,1600" size="100,100">You open the drawers of the teacher&#39;s desk.
 
         You see various office supplies and a bunch of boring paperwork.
 
         One paper catches your eye. It appears to be some kind of official document personally signed by the headmaster. 
 
         [[Take the document]]
-        [[Return to your seat]]</tw-passagedata><tw-passagedata pid="126" name="Take the document" tags="" position="725,1600" size="100,100">&lt;&lt;set $Temp to random(1)&gt;&gt; \
+        [[Return to your seat]]</tw-passagedata><tw-passagedata pid="127" name="Take the document" tags="" position="850,1600" size="100,100">&lt;&lt;set $Temp to random(1)&gt;&gt; \
             You take the document. 
             &lt;&lt;if $Temp is 1&gt;&gt;
             &lt;&lt;set $CeilingKey to true&gt;&gt; \
@@ -1367,9 +1420,9 @@ After waiting for a few minutes without any activity, you become impatient.
             The students take notice of your behavior. You have become socially ostracized. You will now have trouble making friends.
 
             The professor shows you mercy and merely demands that you [[return to your seat|Return to your seat]].
-            &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="127" name="Return to your seat" tags="" position="850,1600" size="100,100">You sit down in an open seat. 
+            &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="128" name="Return to your seat" tags="" position="975,1600" size="100,100">You sit down in an open seat. 
 
-            The remaining seats fill up and the [[class begins|Class]].</tw-passagedata><tw-passagedata pid="128" name="Class" tags="" position="975,1600" size="100,100">Your professor takes her podium and begins teaching.
+            The remaining seats fill up and the [[class begins|Class]].</tw-passagedata><tw-passagedata pid="129" name="Class" tags="" position="1100,1600" size="100,100">Your professor takes her podium and begins teaching.
 &lt;&lt;set $NightTime to true&gt;&gt;
 Today&#39;s lesson is on &lt;&lt;print $Dream.random()&gt;&gt;.
 
