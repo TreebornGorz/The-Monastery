@@ -18,6 +18,7 @@ One hint for each of the seven deadly sins
 Inspecting the stained glass foreshadows certain endings; begin with randomization; consider filtering based on available endings
 Figured what to do if already ostracized and player should be ostracized again in all cases
 Figure out plant variables
+Seed array appends identical string, create conditional to evaluate if you already have the seeds, entering a menu and returning triggering append again
 Implement conditionals for $Weapon is true
 Figure out $SirenPet mechanics, filters all future options if true based on the siren's preferences, provides options that wouldn't  normally exist to lead to unique endings based on other pre-existing boolean variable values
 Create separate passage for exploring campus at night? Requires a portable light?
@@ -107,11 +108,6 @@ predisplay["Menu Return"] = function (taskName) {
 <<if $Show is true>>[[Inventory][$Show to false]]<</if>>
 <<if $Show is true>>[[Status][$Show to false]]<</if>>
 
-Warning:
-Do not click red links. 
-You will get stuck.
-
-
 :: Inventory [noreturn]
 You have:
 
@@ -175,15 +171,14 @@ Players may contact me @thearchmagedev@gmail.com
 
 Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
 
-
-
 -Black Dahlia Studios
 
 Notes: This project is inspired by Zork. Interactive Fiction engines give players a great deal of agency, but generally lack a developed narrative. Visual novels contain developed narratives but often //rob players of their agency//. My dream is to combine these elements in a single project. 
 
-Version: Alpha v0.1
+Version: Alpha v0.1.1
 Description: This version is pre-Alpha. It contains a few endings, //limited// replayability, //basic// environmental interactions, and //limited// player agency. Some paths are incomplete. Alpha testers are encouraged to use the save feature often.
-Upcoming: Alpha v1.0 will be the finished Alpha product. All paths will be complete. 
+
+Upcoming: Alpha v0.2.0 will contain a good end.  
 
 [[Begin Demo|Character]]
 
@@ -706,7 +701,7 @@ There are numbered faucets on both the fountain and the sink, although none of t
 
 Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
 
-[[Turn on individual faucets]]
+[[Turn on individual faucets|WIP]]
 [[Turn on all the faucets]]
 [[Wait for another student]]
 [[Leave|Demo]]
@@ -905,7 +900,7 @@ You are ready to work.
 
         Your work in the infirmary is finished for the day.
         /* Treating enough patients gives access to medicine cabinet */
-        [[Steal the patient's medicine|Steal meds]]
+        [[Steal the patient's medicine|WIP]]
         <<if $Poison is true>> \
         [[Poison the patient]]
         <</if>> \
@@ -1227,10 +1222,10 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
         They might be dangerous if not handled properly.
         <<if $HorseFriend is false>>
         [[Take one for a ride]]
-        <<else>>
+        <<else>> 
         [[Ride your friend immediately|Take him for a ride]]
         [[Wait for night to ride your friend|Wait for nightfall]]
-        <</if>>
+        <</if>> \
         [[Look for a person]]
 
 :: Take one for a ride
@@ -1306,7 +1301,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             <<if $NightTime is true>>
                             It is difficult to see in the darkness.
 
-                            [[Dismount and search for plants in the dark|Dark plants]]
+                            [[Dismount and search for plants in the dark|WIP]]
                             <<else>>
                             You notice many interesting plants.
                             
@@ -1322,8 +1317,8 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                                 It is a $TempString plant.
 
                                 [[Collect seeds]]
-                                [[Collect leaves]]
-                                [[Eat the plant]]
+                                [[Collect leaves|WIP]]
+                                [[Eat the plant|WIP]]
 
 :: Collect seeds
                                     You collect $TempString seeds.
@@ -1340,7 +1335,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             <<else>>
                             You wish you had a weapon right about now...
                             <</if>>
-                            [[Forge onwards]]
+                            [[Forge onwards|WIP]]
                             [[Leave the forest]]
 
 /* :: Forge onwards */
