@@ -1,5 +1,6 @@
 /* 
 Unfinished Tasks: 
+Fix stuck paths
 Verify/Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
 Establish various Potions & Ingredients [Mix and match chart??]
 Incorporate Potion effects
@@ -16,7 +17,7 @@ One hint for each of the seven deadly sins
 411 combination on faucets provides a personalize hint
 Inspecting the stained glass foreshadows certain endings; begin with randomization; consider filtering based on available endings
 Figured what to do if already ostracized and player should be ostracized again in all cases
-Figure out plants
+Figure out plant variables
 Implement conditionals for $Weapon is true
 Figure out $SirenPet mechanics, filters all future options if true based on the siren's preferences, provides options that wouldn't  normally exist to lead to unique endings based on other pre-existing boolean variable values
 Create separate passage for exploring campus at night? Requires a portable light?
@@ -27,7 +28,7 @@ Verify/Configure Inventory and Status
 Archmage Demo
 
 :: StorySubtitle
-Version: Alpha 0.1
+Version: Alpha 0.1.1
 
 :: StoryData
 {
@@ -40,6 +41,12 @@ Version: Alpha 0.1
 {
     config.history.controls = false; 
 }
+
+predisplay["Menu Return"] = function (taskName) {
+	if (! tags().contains("noreturn")) {
+		State.variables.return = passage();
+	}
+};
 
 :: UserStylesheet[stylesheet]
 
@@ -89,6 +96,7 @@ Version: Alpha 0.1
 <<set $SirenEnemy to false>>
 <<set $SirenPet to false>>
 <<set $HorseFriend to false>>
+<<set $ClassFriend to false>>
 
 :: StoryCaption
 /* Displays game information to the player on the left side of the screen */
@@ -104,7 +112,7 @@ Do not click red links.
 You will get stuck.
 
 
-:: Inventory
+:: Inventory [noreturn]
 You have:
 
 <<if $Weapon is true>> \
@@ -131,7 +139,7 @@ Drugs: <<print $Drugs>>
 
 [[Return|previous()][$Show to true]]
 
-:: Status 
+:: Status [noreturn]
 
 <<if $Ostra is true>> \
 You are socially ostracized. Making friends will be difficult.
@@ -147,6 +155,12 @@ You have been imbued with a holy power.
 <</if>> \
 
 [[Return|previous()][$Show to true]]
+
+:: WIP [noreturn]
+
+This passsage is under construction. 
+
+[[Return|previous()]]
 
 :: Start
 This is a demo for the currently in-development interactive fiction project "The Archmage", a project intended to be a narrative-driven interactive fiction fantasy game which provides the player with //significant// agency and //significant// replayability.
@@ -596,9 +610,9 @@ You enter the library.
 
 You notice many bookshelves and various students spread out across the room, diligently studying in silence. 
 
-[[Study]]
-[[Interrupt another student]]
-[[Find the librarian]]
+[[Study|WIP]]
+[[Interrupt another student|WIP]]
+[[Find the librarian|WIP]]
 [[Leave|Demo]]
 
 /* :: Study 
@@ -1581,20 +1595,23 @@ After waiting for a few minutes without any activity, you become impatient.
     You figure that scouring through random items in the classroom might not be a good idea, so you simply wait for class to start...
 
     Eventually, students begin filtering into the classroom, and settling into their respective seats. 
+    <<if $ClassFriend is false>>
+        A large, muscular brute of a woman walks through the door. Her school uniform doesn't seem to fit her quite right as certain muscles on her body bulge out, stretching the fabric in odd places. 
+        <<set $ClassFriend to true>>  
+        You chuckle quietly at the sight, but do your best to contain the noise since you imagine she could easily smash your skull should the desire ever arise.
 
-    A large, muscular brute of a woman walks through the door. Her school uniform doesn't seem to fit her quite right as certain muscles on her body bulge out, stretching the fabric in odd places. 
-    
-    You chuckle quietly at the sight, but do your best to contain the noise since you imagine she could easily smash your skull should the desire ever arise.
+        Much to your surprise, she walks directly towards you and taps on your shoulder, letting out nothing but a grunt.
 
-    Much to your surprise, she walks directly towards you and taps on your shoulder, letting out nothing but a grunt.
-
-    A bead of sweat runs down your brow. 
-
-    <<if $Ostra is false>> \
-    [[Ask how you can help her]]
-    <</if>> \
-    [[Ignore her]]
-    [[Lash out in self defense]]
+        A bead of sweat runs down your brow. 
+        
+        <<if $Ostra is false>> \
+        [[Ask how you can help her]]
+        <</if>> \
+        [[Ignore her]]
+        [[Lash out in self defense]]
+    <<else>>
+    The professor enters and [[class begins|Class]]. 
+    <</if>>
 
 :: Ignore her
         You pretend not to notice her.
