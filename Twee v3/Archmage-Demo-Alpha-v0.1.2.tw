@@ -1,6 +1,5 @@
 /* 
 Unfinished Tasks: 
-Fix stuck paths
 Verify/Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
 Establish various Potions & Ingredients [Mix and match chart??]
 Incorporate Potion effects
@@ -24,6 +23,9 @@ Figure out $SirenPet mechanics, filters all future options if true based on the 
 Create separate passage for exploring campus at night? Requires a portable light?
 Verify/Configure Inventory and Status
 Create mechanic for collecting/ingesting secret bath water
+
+Changelog v0.1.2
+-
 */
 
 :: StoryTitle
