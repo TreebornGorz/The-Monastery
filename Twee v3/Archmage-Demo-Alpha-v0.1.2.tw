@@ -1,38 +1,43 @@
 /* 
 Unfinished Tasks: 
-Verify/Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
-Establish various Potions & Ingredients [Mix and match chart??]
-Incorporate Potion effects
+
+Establish seed locations
+Seed array appends identical string, create conditional to evaluate if you already have the seeds, entering a menu and returning triggering append again
+Figure out plant variables
+Establish plant growing system [Increment Integer using a grow function each day?]
+Establish laboratory experiments [required to unlock certain potion ingredients? Initial requirements must be met to perform experiments? Ability to unlock time machine?!?!?! Time machine stops working at some point for some reason to simplify the mechanics of the thing? (Super complicated to program that probably... Would need to retroactively remove historical variable changes, still possible if I keep a log of player choices in a separate array)]
 Establish Poison & Ingredients - Milk and Hemlock
+Establish various Potions & Ingredients [Mix and match chart -> function]
+
+Verify/Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
+Incorporate Potion effects
 Create function for randomized rewards
 Establish relationships
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
-Establish seed locations
-Establish laboratory experiments [required to unlock certain potion ingredients? Initial requirements must be met to perform experiments? Ability to unlock time machine?!?!?! Time machine stops working at some point for some reason to simplify the mechanics of the thing? (Super complicated to program that probably... Would need to retroactively remove historical variable changes, still possible if I keep a log of player choices in a separate array)]
 Incorporate events that occur if player doesn't take an action in a certain amount of time
 Steam from faucets creates messages in mirrors
 Evaluate usefulness of butcher and tanner for dead animals
 One hint for each of the seven deadly sins
 411 combination on faucets provides a personalize hint
 Inspecting the stained glass foreshadows certain endings; begin with randomization; consider filtering based on available endings
-Figured what to do if already ostracized and player should be ostracized again in all cases
-Figure out plant variables
-Seed array appends identical string, create conditional to evaluate if you already have the seeds, entering a menu and returning triggering append again
+Figured what to do if already ostracized and player should be ostracized again in all cases 
 Implement conditionals for $Weapon is true
 Figure out $SirenPet mechanics, filters all future options if true based on the siren's preferences, provides options that wouldn't  normally exist to lead to unique endings based on other pre-existing boolean variable values
 Create separate passage for exploring campus at night? Requires a portable light?
 Verify/Configure Inventory and Status
 Create mechanic for collecting/ingesting secret bath water
+Expand library options
 
 Changelog v0.1.2
--
+-Developed library actions (Incomplete)
+-Seed collection now works 
 */
 
 :: StoryTitle
 Archmage Demo
 
 :: StorySubtitle
-Version: Alpha 0.1.1
+Version: Alpha 0.1.2
 
 :: StoryData
 {
@@ -46,6 +51,11 @@ Version: Alpha 0.1.1
     config.history.controls = false; 
 }
 
+/* Prevents passages from re-executing functions when enterting a menu and coming back using [menu] tag */
+window.Fresh = function () {
+	return !tags(previous()).includes('menu');
+};
+
 predisplay["Menu Return"] = function (taskName) {
 	if (! tags().contains("noreturn")) {
 		State.variables.return = passage();
@@ -53,6 +63,11 @@ predisplay["Menu Return"] = function (taskName) {
 };
 
 :: UserStylesheet[stylesheet]
+/* 
+body.no-save #menu-item-saves {
+    display: none;
+}
+*/ /* Removes the ability to save in a passage when passage is tagged with [no-save] */
 
 :: StoryInit
 /* Initializes starting variables before game loads */
@@ -67,7 +82,7 @@ predisplay["Menu Return"] = function (taskName) {
 <<set $HolyPower to false>>
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
-<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","I noticed that when I get lost, sometimes it's helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants in the forest!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Sometimes, persistence is key. Trying things over and over again leads to better results.","I hear there's a mutant fish that lives in the pipes underneath the Balneary.","What's the 411? Give me the lowdown.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","Never trust a snake. Their scales may be dry, but they are truly slimy."]>>
+<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","I noticed that when I get lost, sometimes it's helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants in the forest!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Sometimes, persistence is key. Trying things over and over again leads to better results.","I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","Never trust a snake. Their scales may be dry, but they are truly slimy."]>> /* "What's the 411? Give me the lowdown." , add after single faucet function */
 <<set $Poison to false>>
 <<set $Brew to false>>
 <<set $Potion to false>>
@@ -103,7 +118,7 @@ predisplay["Menu Return"] = function (taskName) {
 <<set $ClassFriend to false>>
 <<set $SirenWork to false>>
 
-:: StoryCaption
+:: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
 <<if $Show is true>>Sex: <<if $Male is true>>Male<<else>>Female<</if>><</if>> /* Player Sex */
 <<if $Show is true>>Day: $Day<</if>> /* Game Days Passed */
@@ -112,7 +127,7 @@ predisplay["Menu Return"] = function (taskName) {
 <<if $Show is true>>[[Inventory][$Show to false]]<</if>>
 <<if $Show is true>>[[Status][$Show to false]]<</if>>
 
-:: Inventory [noreturn]
+:: Inventory [noreturn menu]
 You have:
 
 <<if $Weapon is true>> \
@@ -139,7 +154,7 @@ Drugs: <<print $Drugs>>
 
 [[Return|previous()][$Show to true]]
 
-:: Status [noreturn]
+:: Status [noreturn menu]
 
 <<if $Ostra is true>> \
 You are socially ostracized. Making friends will be difficult.
@@ -160,7 +175,7 @@ You have been imbued with a holy power.
 
 [[Return|previous()][$Show to true]]
 
-:: WIP [noreturn]
+:: WIP [noreturn menu]
 
 This passsage is under construction. 
 
@@ -619,21 +634,60 @@ You enter the library.
 
 You notice many bookshelves and various students spread out across the room, diligently studying in silence. 
 
-[[Study|WIP]]
-[[Interrupt another student|WIP]]
-[[Find the librarian|WIP]]
+[[Study]]
+[[Interrupt another student]]
+[[Find the librarian]]
 [[Leave|Demo]]
 
-/* :: Study 
+:: Study 
     You decide to brush up on your reading. 
 
-    Choose a book. */
+    You pick out a book and read up on <<print $Dream.random()>>.
+    
+    [[Eat dinner]]
+    [[Sleep]] 
 
-/* :: Interrupt another student
-    Interrupt another student */
+:: Interrupt another student
+    You find another student studying and pull them away from their work.
+    
+    The student is obviously annoyed with you. You are undeterred. 
+    
+    You probe them seeking the secrets of The Monastery.
+    <<if $Ostra is true>>
+    They tell you to get lost.
 
-/* :: Find the librarian
-    Find a librarian */
+    You are escorted out of the library. 
+
+    [[Eat dinner]]
+    [[Sleep]]
+    <<else>>
+    They consider for a second, but seem uncomfortable.
+    /* random conditional? */
+    Ultimately, they were not convinced and you leave empty handed.
+    
+    [[Eat dinner]]
+    [[Sleep]]
+    <</if>>    
+/* Expand passage */
+
+:: Find the librarian
+    You search the library, unable to locate a librarian.
+
+    You notice a door to a back room.
+
+    [[Open door|LibraryDoor]]
+    [[Study]]
+    [[Interrupt another student]]
+    [[Leave|Demo]]
+
+:: LibraryDoor
+        You turn the knob.
+        /* Where is the key? */
+        The door is locked.
+
+        [[Study]]
+        [[Interrupt another student]]
+        [[Leave|Demo]]
 
 :: Laboratory
 You enter the laboratory.
@@ -1364,25 +1418,33 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             [[Dismount and search for plants in the dark|WIP]]
                             <<else>>
                             You notice many interesting plants.
-                            
-                            [[Inspect a plant]]
+                            /* Consider State.prng.init([seed [, useEntropy]]) for users that hack history control */                            
+                            [[Inspect a plant][$TempString to $Plants.random()]]
                             <</if>> \
                             [[Return to campus]]
 
 /* :: Dark plants */
 
-:: Inspect a plant
+:: Inspect a plant 
                                 You dismount and inspect an interesting plant.
-                                <<set $TempString to $Plants.random()>>
-                                It is a $TempString plant.
-
-                                [[Collect seeds]]
+                                
+                                It is a $TempString plant.                                
+                                
+                                [[Collect seeds]]                             
                                 [[Collect leaves|WIP]]
                                 [[Eat the plant|WIP]]
 
-:: Collect seeds
+:: Collect seeds 
+                                    <<if Fresh()>>\
+                                        <<if $Seeds.includes($TempString)>>\
+                                        You already have these seeds.
+                                        <<else>>\
+                                        You collect $TempString seeds.
+                                        <<run $Seeds.push($TempString)>>
+                                        <</if>>\
+                                    <<else>>\
                                     You collect $TempString seeds.
-                                    <<run $Seeds.push($TempString)>>
+                                    <</if>>
                                     [[Return to campus]]
 
 /* :: Eat the plant */
