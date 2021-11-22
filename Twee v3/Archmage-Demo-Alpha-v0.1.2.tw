@@ -402,14 +402,14 @@ You notice a suspicious latch on the ceiling.
 :: Search teacher's belongings
                 You take a look around the dorm and notice a few different areas you can search.
 
-                [[Nurse's belongings|Belonging]]
-                [[Librarian's belongings|Belonging]]
-                [[Smith's belongings|Belonging]]
-                [[Cook's belongings|Belonging]]
-                [[Scientist's belongings|Belonging]]
-                [[Priest's bleongings|Belonging]]
-                [[Gardener's belongings|Belonging]]
-                [[Brewmaster's belongings|Belonging]]
+                [[Nurse's belongings|WIP]]
+                [[Librarian's belongings|WIP]]
+                [[Smith's belongings|WIP]]
+                [[Cook's belongings|WIP]]
+                [[Scientist's belongings|WIP]]
+                [[Priest's bleongings|WIP]]
+                [[Gardener's belongings|WIP]]
+                [[Brewmaster's belongings|WIP]]
 
 /* :: Belonging */
                     /* Set variables and alter item found for each one, each search takes time and risks getting caught, multiple searches of the same belongings may yield another item (randomize these) */
