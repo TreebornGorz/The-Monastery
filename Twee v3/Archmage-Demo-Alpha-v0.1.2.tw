@@ -1,7 +1,9 @@
 /* 
 Unfinished Tasks: 
 
-Establish seed locations
+Incorporates ingredient drops for winning in forest combat.
+
+Add slime to potion ingredients
 Seed array appends identical string, create conditional to evaluate if you already have the seeds, entering a menu and returning triggering append again
 Figure out plant variables
 Establish plant growing system [Increment Integer using a grow function each day?]
@@ -53,13 +55,13 @@ Version: Alpha 0.1.2
 
 /* Prevents passages from re-executing functions when enterting a menu and coming back using [menu] tag */
 window.Fresh = function () {
-	return !tags(previous()).includes('menu');
+    return !tags(previous()).includes('menu');
 };
 
 predisplay["Menu Return"] = function (taskName) {
-	if (! tags().contains("noreturn")) {
-		State.variables.return = passage();
-	}
+    if (! tags().contains("noreturn")) {
+        State.variables.return = passage();
+    }
 };
 
 :: UserStylesheet[stylesheet]
@@ -108,6 +110,7 @@ body.no-save #menu-item-saves {
 <<set $Plants to ["Marijuana","Poppy","Tulip"]>>
 <<set $UserPlants to []>>
 <<set $ForestPlant to ["Mushroom","Hemlock"]>>
+<<set $ForestAnimals to ["Bat","Newt","Slime"]>>
 <<set $Ingredients to ["Eye of Newt","Bat Wing"]>>
 <<set $UserIngredients to []>>
 <<set $Seeds to []>>
@@ -1457,11 +1460,50 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             <<else>>
                             You wish you had a weapon right about now...
                             <</if>>
-                            [[Forge onwards|WIP]]
+                            [[Forge onwards][$TempString to $ForestAnimals.random()]]
                             [[Leave the forest]]
 
-/* :: Forge onwards */
-/* Interactions with enemies, access to cooler seeds */
+:: Forge onwards 
+                                You forge onwards, deep into the forest. 
+
+                                You are confronted by a $TempString.
+
+                                [[Fight]]
+                                [[Run]]
+
+:: Fight
+                                    You fight the $TempString.
+                                    <<if $Weapon is true>>
+                                    You defeat the $TempString using your weapon.
+
+                                    You obtain an item.
+
+                                    [[Leave forest]]
+                                    <<else>>
+                                    You punch at the $TempString.
+                                        <<if $TempString is "Bat">>
+                                        The bat simply evades your punch and bites you.
+
+                                        You get rabies and die from fear of water.
+                                        <<elseif $TempString is "Slime">>
+                                        You punch the slime and your fist sinks into it.
+
+                                        It sucks you in and swallows you up.
+                                        <<elseif $TempString is "Newt">>
+                                        You punch the newt and its poison contacts your skin.
+
+                                        The poison paralyzes you and you die of stavration, lying in the forest.
+                                        <</if>>
+                                        "Bad End - Courageous Idiot"
+                                    <</if>>
+
+:: Run
+                                    You flee like a coward.
+
+                                    You exit the forest and head [[back to campus|Return to campus]].
+
+:: Leave forest
+                                        You exit the forest and head [[back to campus|Return to campus]]. 
 
 :: Leave the forest     
                                 You get spooked by the forest and turn around.
