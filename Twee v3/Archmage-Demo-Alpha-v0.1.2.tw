@@ -2,6 +2,8 @@
 Unfinished Tasks: 
 
 Incorporates ingredient drops for winning in forest combat.
+Incorporate Mushroom and hemlock seeds, found only in forest, chance of finding an enemy or plant when entering
+Create plant growing system
 
 Add slime to potion ingredients
 Seed array appends identical string, create conditional to evaluate if you already have the seeds, entering a menu and returning triggering append again
@@ -13,6 +15,7 @@ Establish various Potions & Ingredients [Mix and match chart -> function]
 
 Verify/Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
 Incorporate Potion effects
+Horse should be ridable if befriended after accepting work without grinding Barn work
 Create function for randomized rewards
 Establish relationships
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
@@ -33,7 +36,10 @@ Expand library options
 Changelog v0.1.2
 -Developed library actions (Incomplete)
 -Seed collection now works
--Forest combat created
+-Forest combat created with rewards
+-Leaf collection now works
+-Seeds can be planted (Incomplete)
+
 */
 
 :: StoryTitle
@@ -121,6 +127,9 @@ body.no-save #menu-item-saves {
 <<set $HorseFriend to false>>
 <<set $ClassFriend to false>>
 <<set $SirenWork to false>>
+<<set $Reward to "">>
+<<set $Grow to "">>
+<<set $Planting to false>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -154,6 +163,9 @@ Plants: <<print $UserPlants>>
 <</if>> \
 <<if $Drugs.length gt 0>> \
 Drugs: <<print $Drugs>>
+<</if>> \
+<<if $UserIngredients.length gt 0>> \
+Ingredients: <<print $UserIngredients>>
 <</if>> \
 
 [[Return|previous()][$Show to true]]
@@ -489,7 +501,7 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
 
 [[Inspect the plants]]
 <<if $Planting is true>> \
-[[Plants seeds]]
+[[Plant seeds]]
 <</if>> \
 [[Daydream]]
 [[Leave|Demo]]
@@ -500,21 +512,54 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
     There is open soil that seems fertile enough for growing plants.
     <<if $Planting is false>> 
     Maybe you could plant some seeds here.
-    <<set $Planting to true>> 
+    <<set $Planting to true>>
+    [[Plant seeds]] 
     <<else>> \
     /* Give status of plants, if grown give option to pick plants (takes time to grow) */
     <</if>> \ 
     [[Daydream]]
     [[Leave|Demo]]
 
-:: Plants seeds
+:: Plant seeds
+        <<set $Grow to "">> \
         Which seed will you plant?
-
+        <<if $Seeds.length lt 1>>
         You currently have no seeds.
-        /* Check for which seeds the player has obtained */
+        <<else>>
+        You currently have: $Seeds seeds. 
+
+        Select a seed to plant.
+        
+            <<if $Seeds.length gt 0>>\
+            <<set $TempString to $Seeds[0]>>\
+            <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[0]>><</button>>\
+            <</if>>
+            <<if $Seeds.length gt 1>>\
+            <<set $TempString to $Seeds[1]>>\
+            <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[1]>><</button>>\
+            <</if>>
+            <<if $Seeds.length gt 2>>\
+            <<set $TempString to $Seeds[2]>>\
+            <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[2]>><</button>>\
+            <</if>>
+         <</if>>\
         [[Daydream]]
         [[Leave|Demo]]
         
+:: Plant seed
+            <<if $Grow is "">>\
+            Select a seed to plant using one of the buttons.
+
+            [[Try again|Plant seeds]]
+            <<else>>\
+            You plant the $Grow seed.
+
+            Check back later to see if your plant is grown.
+
+            [[Eat dinner]]
+            [[Sleep]]
+            <</if>>
+
 :: Daydream
     You laze about the cloister, daydreaming all the while. 
 
@@ -1425,6 +1470,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             /* Consider State.prng.init([seed [, useEntropy]]) for users that hack history control */                            
                             [[Inspect a plant][$TempString to $Plants.random()]]
                             <</if>> \
+                            [[Enter the forest]]
                             [[Return to campus]]
 
 /* :: Dark plants */
@@ -1435,7 +1481,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                                 It is a $TempString plant.                                
                                 
                                 [[Collect seeds]]                             
-                                [[Collect leaves|WIP]]
+                                [[Collect leaves]]
                                 [[Eat the plant|WIP]]
 
 :: Collect seeds 
@@ -1444,10 +1490,23 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                                         You already have these seeds.
                                         <<else>>\
                                         You collect $TempString seeds.
-                                        <<run $Seeds.push($TempString)>>
+                                        <<run $Seeds.push($TempString)>>\
                                         <</if>>\
                                     <<else>>\
                                     You collect $TempString seeds.
+                                    <</if>>
+                                    [[Return to campus]]
+
+:: Collect leaves
+                                    <<if Fresh()>>\
+                                        <<if $UserIngredients.includes($TempString)>>\
+                                        You already have these leaves.
+                                        <<else>>\
+                                        You collect $TempString leaves.
+                                        <<run $UserIngredients.push($TempString)>>\
+                                        <</if>>\
+                                    <<else>>\
+                                    You collect $TempString leaves.
                                     <</if>>
                                     [[Return to campus]]
 
@@ -1466,7 +1525,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
 :: Forge onwards 
                                 You forge onwards, deep into the forest. 
-
+                                
                                 You are confronted by a $TempString.
 
                                 [[Fight]]
@@ -1476,8 +1535,17 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                                     You fight the $TempString.
                                     <<if $Weapon is true>>
                                     You defeat the $TempString using your weapon.
-
-                                    You obtain an item.
+                                        <<if $TempString is "Bat">> \
+                                        <<set $Reward to "Bat Wing">> \
+                                        <<elseif $TempString is "Slime">> \
+                                        <<set $Reward to "Slime">> \
+                                        <<elseif $TempString is "Newt">> \
+                                        <<set $Reward to "Eye of Newt">> \
+                                        <</if>> \
+                                    <<if Fresh()>>\
+                                    <<run $UserIngredients.push($Reward)>> \
+                                    <</if>>
+                                    You obtain $Reward.
 
                                     [[Leave forest]]
                                     <<else>>
