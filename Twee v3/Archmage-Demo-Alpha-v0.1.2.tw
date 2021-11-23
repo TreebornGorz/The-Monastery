@@ -3,6 +3,8 @@ Unfinished Tasks:
 
 Test: 
 :: Forge onward| variable setting for plants
+:: Harvest| button creation with for loop
+:: Brew potion| $MasterIngredient conditional
 
 Incorporates ingredient drops for winning in forest combat.
 Incorporate Mushroom and hemlock seeds, found only in forest, chance of finding an enemy or plant when entering
