@@ -3,20 +3,20 @@ Unfinished Tasks:
 
 Incorporates ingredient drops for winning in forest combat.
 Incorporate Mushroom and hemlock seeds, found only in forest, chance of finding an enemy or plant when entering
-Create plant growing system
+Create plant growing system [Increment Integer using a grow function each day?]
 
 Add slime to potion ingredients
-Seed array appends identical string, create conditional to evaluate if you already have the seeds, entering a menu and returning triggering append again
-Figure out plant variables
-Establish plant growing system [Increment Integer using a grow function each day?]
+
 Establish laboratory experiments [required to unlock certain potion ingredients? Initial requirements must be met to perform experiments? Ability to unlock time machine?!?!?! Time machine stops working at some point for some reason to simplify the mechanics of the thing? (Super complicated to program that probably... Would need to retroactively remove historical variable changes, still possible if I keep a log of player choices in a separate array)]
 Establish Poison & Ingredients - Milk and Hemlock
 Establish various Potions & Ingredients [Mix and match chart -> function]
 
 Verify/Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
+Use buttons for faucets
 Incorporate Potion effects
 Horse should be ridable if befriended after accepting work without grinding Barn work
 Create function for randomized rewards
+Secondary use for seeds?
 Establish relationships
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
 Incorporate events that occur if player doesn't take an action in a certain amount of time
@@ -38,7 +38,10 @@ Changelog v0.1.2
 -Seed collection now works
 -Forest combat created with rewards
 -Leaf collection now works
--Seeds can be planted (Incomplete)
+-Seeds can be planted 
+
+Bug Log v0.1.2
+-Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
 
 */
 
@@ -158,14 +161,14 @@ $Eggs Eggs
 <<if $Seeds.length gt 0>> \
 Seeds: <<print $Seeds>>
 <</if>> \
-<<if $UserPlants.length gt 0>> \
-Plants: <<print $UserPlants>>
-<</if>> \
 <<if $Drugs.length gt 0>> \
 Drugs: <<print $Drugs>>
 <</if>> \
 <<if $UserIngredients.length gt 0>> \
 Ingredients: <<print $UserIngredients>>
+<</if>> 
+<<if $UserPlants.length gt 0>> \
+Planted: <<print $UserPlants>>
 <</if>> \
 
 [[Return|previous()][$Show to true]]
@@ -513,10 +516,13 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
     <<if $Planting is false>> 
     Maybe you could plant some seeds here.
     <<set $Planting to true>>
-    [[Plant seeds]] 
-    <<else>> \
-    /* Give status of plants, if grown give option to pick plants (takes time to grow) */
+    <</if>>
+    <<elseif $UserPlants.length gt 0>> \
+    You have planted: $UserPlants.
+
+    [[Check on your plants|WIP]]    
     <</if>> \ 
+    [[Plant seeds]] 
     [[Daydream]]
     [[Leave|Demo]]
 
@@ -525,48 +531,88 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
         Which seed will you plant?
         <<if $Seeds.length lt 1>>
         You currently have no seeds.
+
         <<else>>
         You currently have: $Seeds seeds. 
 
         Select a seed to plant.
         
-            <<if $Seeds.length gt 0>>\
+            <<if $Seeds.length gt 0>>
             <<set $TempString to $Seeds[0]>>\
             <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[0]>><</button>>\
-            <</if>>
-            <<if $Seeds.length gt 1>>\
+            <</if>>\
+            <<if $Seeds.length gt 1>>
             <<set $TempString to $Seeds[1]>>\
             <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[1]>><</button>>\
-            <</if>>
-            <<if $Seeds.length gt 2>>\
+            <</if>>\
+            <<if $Seeds.length gt 2>>
             <<set $TempString to $Seeds[2]>>\
             <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[2]>><</button>>\
-            <</if>>
-            <<if $Seeds.length gt 3>>\
+            <</if>>\
+            <<if $Seeds.length gt 3>>
             <<set $TempString to $Seeds[3]>>\
             <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[3]>><</button>>\
-            <</if>>
-            <<if $Seeds.length gt 4>>\
+            <</if>>\
+            <<if $Seeds.length gt 4>>
             <<set $TempString to $Seeds[4]>>\
             <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[4]>><</button>>\
-            <</if>>
+            <</if>>\
          <</if>>\
         [[Daydream]]
         [[Leave|Demo]]
         
 :: Plant seed
-            <<if $Grow is "">>\
-            Select a seed to plant using one of the buttons.
+            <<if Fresh()>>\
+                <<if $Grow is "">>\
+                Select a seed to plant using one of the buttons.
 
-            [[Try again|Plant seeds]]
+                [[Try again|Plant seeds]]
+                <<elseif $UserPlants.includes($Grow)>>
+                You have already planted this seed.
+
+                You can only plant one of each seed type.
+
+                Maybe you can find another use for this seed.
+                
+                [[Try again|Plant seeds]]
+                [[Eat dinner]]
+                [[Sleep]]
+                <<else>>\
+                <<run $Seeds.delete($Grow)>>\
+                You plant the $Grow seed.
+                <<run $UserPlants.push($Grow)>>
+                Check back later to see if your plant is grown.
+
+                [[Eat dinner]]
+                [[Sleep]]
+                <</if>>
             <<else>>\
-            You plant the $Grow seed.
+                <<if $Grow is "">>\
+                Select a seed to plant using one of the buttons.
 
-            Check back later to see if your plant is grown.
+                [[Try again|Plant seeds]]
+                <<elseif $UserPlants.includes($Grow)>>
+                You have already planted this seed.
 
-            [[Eat dinner]]
-            [[Sleep]]
+                You can only plant one of each seed type.
+
+                Maybe you can find another use for this seed.
+                
+                [[Try again|Plant seeds]]
+                [[Eat dinner]]
+                [[Sleep]]
+                <<else>>\
+                You plant the $Grow seed.
+                
+                Check back later to see if your plant is grown.
+
+                [[Eat dinner]]
+                [[Sleep]]
+                <</if>>
             <</if>>
+
+:: Check on your plants
+/* Track growth status, Harvest leaves and seeds when grown */
 
 :: Daydream
     You laze about the cloister, daydreaming all the while. 
