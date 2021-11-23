@@ -1,14 +1,17 @@
 /* 
 Unfinished Tasks: 
 
+Test: 
+:: Forge onward| variable setting for plants
+
 Incorporates ingredient drops for winning in forest combat.
 Incorporate Mushroom and hemlock seeds, found only in forest, chance of finding an enemy or plant when entering
 Create plant growing system [Increment Integer using a grow function each day?]
+Determine which plants can be harvested and which can produce seeds (maybe random?).
 
 Add slime to potion ingredients
 
 Establish laboratory experiments [required to unlock certain potion ingredients? Initial requirements must be met to perform experiments? Ability to unlock time machine?!?!?! Time machine stops working at some point for some reason to simplify the mechanics of the thing? (Super complicated to program that probably... Would need to retroactively remove historical variable changes, still possible if I keep a log of player choices in a separate array)]
-Establish Poison & Ingredients - Milk and Hemlock
 Establish various Potions & Ingredients [Mix and match chart -> function]
 
 Verify/Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
@@ -34,11 +37,13 @@ Create mechanic for collecting/ingesting secret bath water
 Expand library options
 
 Changelog v0.1.2
--Developed library actions (Incomplete)
+-Developed initial library passages 
 -Seed collection now works
 -Forest combat created with rewards
+-Plants can now be found in the forest
 -Leaf collection now works
 -Seeds can be planted 
+-Player plants can be harvested
 
 Bug Log v0.1.2
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -94,7 +99,8 @@ body.no-save #menu-item-saves {
 <<set $HolyPower to false>>
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
-<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","I noticed that when I get lost, sometimes it's helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants in the forest!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Sometimes, persistence is key. Trying things over and over again leads to better results.","I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","Never trust a snake. Their scales may be dry, but they are truly slimy."]>> /* "What's the 411? Give me the lowdown." , add after single faucet function */
+<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants in the forest!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random."]>> /* "What's the 411? Give me the lowdown." , add after single faucet function */
+<<set $Notes to["I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Never trust a snake. Their scales may be dry, but they are truly slimy.","Sometimes, persistence is key. Trying things over and over again might lead to better results."]
 <<set $Poison to false>>
 <<set $Brew to false>>
 <<set $Potion to false>>
@@ -133,6 +139,13 @@ body.no-save #menu-item-saves {
 <<set $Reward to "">>
 <<set $Grow to "">>
 <<set $Planting to false>>
+<<set $TempString1 to "">>
+<<set $UserMarijuana to false>>
+<<set $UserPoppy to false>>
+<<set $UserTulip to false>>
+<<set $UserMushroom to false>>
+<<set $UserHemlock to false>>
+<<set $MasterIngredients to 0>> 
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -526,6 +539,38 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
     [[Daydream]]
     [[Leave|Demo]]
 
+:: Check on your plants
+        These plants are fully grown: $UserPlants.
+
+        [[Harvest]]
+        [[Collect seeds|User seeds]]
+
+:: Harvest
+            Which plant would you like to harvest?
+
+            <<for _i to 0;  _i lt $UserPlants.length; _i++>>\
+            <<button [[$UserPlants[_i]|Harvest]]>><<run $UserIngredients.push($UserPlants[_i])>><</button>>
+            <</for>>\
+
+            [[Collect seeds|User seeds]]
+            [[Eat dinner]]
+            [[Sleep]]
+
+            /* Verify buttons; Modify UserPlants on button push to indicate that harvesting requires a refresh period; create grow process requiring a grow time before harvest */
+
+:: User seeds
+            Which seeds would you like to collect?
+
+            <<for _i to 0;  _i lt $UserPlants.length; _i++>>\
+            <<button [[$UserPlants[_i]|User seeds]]>><<run $Seeds.push($UserPlants[_i])>><</button>>
+            <</for>>\
+
+            [[Collect seeds|User seeds]]
+            [[Eat dinner]]
+            [[Sleep]]
+
+            /* Verify buttons; Modify UserPlants on button push to indicate that harvesting requires a refresh period; create grow process requiring a grow time before harvest */
+
 :: Plant seeds
         <<set $Grow to "">> \
         Which seed will you plant?
@@ -744,9 +789,15 @@ You notice many bookshelves and various students spread out across the room, dil
 
 :: Study 
     You decide to brush up on your reading. 
-
+    <<set $Temp to random(9)>>
     You pick out a book and read up on <<print $Dream.random()>>.
-    
+
+    You find a note left in the book that reads: \
+    <<if $Temp is 9>>\
+    $Faucets\
+    <<else>>\
+    <<print $Notes.random()>>.
+    <</if>>
     [[Eat dinner]]
     [[Sleep]] 
 
@@ -765,7 +816,7 @@ You notice many bookshelves and various students spread out across the room, dil
     [[Sleep]]
     <<else>>
     They consider for a second, but seem uncomfortable.
-    /* random conditional? */
+    /* conditional based on big friend or enemy */
     Ultimately, they were not convinced and you leave empty handed.
     
     [[Eat dinner]]
@@ -785,7 +836,7 @@ You notice many bookshelves and various students spread out across the room, dil
 
 :: LibraryDoor
         You turn the knob.
-        /* Where is the key? */
+        /* Where is the key? In the teacher's dorm */
         The door is locked.
 
         [[Study]]
@@ -805,26 +856,23 @@ A strange lady sits in the corner staring at you without blinking.
 [[Inspect the chamber]]
 <<else>> 
 [[Brew potion]]
-[[Brew poison]]
 [[Perform experiment]]
 <</if>> \
 [[Leave|Demo]]
 
-:: Brew potion
+:: Brew potion 
     You approach the potion station.
-
+    /* sum $UserIngredients.length() + 1 for each if $Eggs, $Milk, $Keg gt 0 for each */
+    <<set $MasterIngredients to $UserIngredients.length() <<if $Eggs gt 0>>+ 1 <<if $Milk gt 0>>+ 1 <<if $Keg gt 0>>+ 1>> 
+    <<if $MasterIngredients gt 1>>
+    Select two ingredients to combine:
+    /* for loop? */
+    /* create buttons that change color to indicate selection [ON/OFF] and then lock in decision with passage link */
+    [[Create potion]]
+    <<else>> 
     You don't have any ingredients for potion brewing.
-
-    [[Brew poison]]
-    [[Perform experiment]]
-    [[Leave|Demo]]
-
-:: Brew poison
-    You approach the poison station.
-
-    You don't have any ingredients for poison brewing.
-
-    [[Brew potion]]
+    <</if>>
+    <<set $MasterIngredients to 0>>
     [[Perform experiment]]
     [[Leave|Demo]]
 
@@ -834,7 +882,6 @@ A strange lady sits in the corner staring at you without blinking.
     She offers no experiments at the moment.
     /* Incorporate conditionals for current experiment vs new experiments, give a reason why an experiment is unavailable */
     [[Brew potion]]
-    [[Brew poison]]
     [[Leave|Demo]]
 
 :: Talk to her
@@ -1574,16 +1621,33 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             <<else>>
                             You wish you had a weapon right about now...
                             <</if>>
-                            [[Forge onwards][$TempString to $ForestAnimals.random()]]
+                            [[Forge onwards][$TempString to $ForestAnimals.random()][$TempString1 to $ForestPlant.random()]]
                             [[Leave the forest]]
 
 :: Forge onwards 
                                 You forge onwards, deep into the forest. 
-                                
+                                <<set $Temp to random(1)>>
+                                <<if $Temp is 1>>
+                                You happen upon a $TempString1.
+
+                                [[Collect]]
+                                [[Take seeds]]
+                                <<else>>                                
                                 You are confronted by a $TempString.
 
                                 [[Fight]]
                                 [[Run]]
+                                <</if>>
+
+:: Collect
+                                    You take the $TempString1.
+                                    <<run $UserIngredients.push($TempString1)>> 
+                                    [[Leave forest]]
+
+:: Take seeds
+                                    You take the $TempString1 seeds.
+                                    <<run $Seeds.push($TempString1)>> 
+                                    [[Leave forest]]
 
 :: Fight
                                     You fight the $TempString.
