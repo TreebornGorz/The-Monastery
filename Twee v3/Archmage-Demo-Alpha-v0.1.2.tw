@@ -542,6 +542,14 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
             <<set $TempString to $Seeds[2]>>\
             <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[2]>><</button>>\
             <</if>>
+            <<if $Seeds.length gt 3>>\
+            <<set $TempString to $Seeds[3]>>\
+            <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[3]>><</button>>\
+            <</if>>
+            <<if $Seeds.length gt 4>>\
+            <<set $TempString to $Seeds[4]>>\
+            <<button [[$TempString|Plant seed]]>><<set $Grow to $Seeds[4]>><</button>>\
+            <</if>>
          <</if>>\
         [[Daydream]]
         [[Leave|Demo]]
