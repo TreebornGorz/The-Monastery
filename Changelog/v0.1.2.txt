@@ -1,0 +1,8 @@
+Changelog v0.1.2
+-Introduced basic library passages 
+-Seed collection now works
+-Forest combat created with rewards
+-Plants can now be found in the forest
+-Harvesting/Leaf collection now works
+-Seeds can be planted 
+-Player plants can be harvested

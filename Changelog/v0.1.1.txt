@@ -1,5 +1,0 @@
--Patched red links causing player to get suck. Players will now be able to return to the previous passsage.
--Siren Partner path has new content and now links to the Monastery 
--Note: Certain paths remain unfinished and players may not be able to continue.
--Upcoming: Plant, Potion, and Poison system
-
