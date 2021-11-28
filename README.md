@@ -15,5 +15,5 @@ Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
 Notes: This project is inspired by Zork. Interactive Fiction engines give players a great deal of agency, but generally lack a developed narrative. Visual novels contain developed narratives but often //rob players of their agency//. My dream is to combine these elements in a single project. 
 
 Version: Alpha v0.1.2
-Description: This version is pre-Alpha. It contains a few endings, //limited// replayability, //basic// environmental interactions, and //limited// player agency. Some paths are incomplete. Alpha testers are encouraged to use the save feature often.
+Description: This version is pre-Alpha. It contains a few endings, //limited// replayability, //basic// environmental interactions, and //limited// player agency. Some paths are incomplete.
 
