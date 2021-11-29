@@ -2,6 +2,8 @@
 
 Test: 
 
+PLant and Growing systems
+
 Unfinished Tasks: 
 
 Incorporates ingredient drops for winning in forest combat.
@@ -39,14 +41,12 @@ Verify/Configure Inventory and Status
 Create mechanic for collecting/ingesting secret bath water
 Expand library options
 
-Changelog v0.1.2
--Introduced basic library passages 
--Seed collection now works
--Forest combat created with rewards
--Plants can now be found in the forest
--Harvesting/Leaf collection now works
--Seeds can be planted 
--Player plants can be harvested
+Changelog v0.1.3
+-Implemented individual plant traits
+-Plants now grow
+-Fixed faucet buttons
+-Developed potion interface
+-Potion table in progress
 
 Bug Log v0.1.2
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -127,6 +127,10 @@ body.no-save #menu-item-saves {
 <<set $ClassSearch to false>>
 <<set $Weapon to false>>
 <<set $Plants to ["Marijuana","Poppy","Tulip"]>>
+<<set $PlantAge to [0,0,0,0,0]>> 
+<<set $SproutAge to [4,4,4,4,4]>>
+<<set $HarvestAge to [6,6,6,6,6]>>
+<<set $MasterPlants to ["Marijuana","Poppy","Tulip","Mushroom","Hemlock"]>>
 <<set $UserPlants to []>>
 <<set $ForestPlant to ["Mushroom","Hemlock"]>>
 <<set $ForestAnimals to ["Bat","Newt","Slime"]>>
@@ -247,7 +251,7 @@ Are you Male or Female?
 [[Female|Demo][$Male to false, $Day to 1]]
 
 :: Demo
-<<if $Day lt 16>> \
+<<if $Day lt 26>> \
 You are on campus. 
 
 There are several areas to explore.
@@ -266,6 +270,12 @@ Where do you want to go?
 [[Forge]]
 [[Brewery]]
 [[Dormitory]]
+
+<<for _i to 0; _i lt $PlantAge.length; _i++>>
+    <<if $PlantAge[_i] gt 0>>
+        <<set $PlantAge[_i] += 1>>
+    <</if>>
+<</for>>
 
 <<set $Show to true>>
 <<set $NightTime to false>>
@@ -542,10 +552,33 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
     [[Leave|Demo]]
 
 :: Check on your plants
-        These plants are fully grown: $UserPlants.
-
+        /* Marijuana, Poppy, Tulip, Mushroom, Hemlock */
+        <<for _i; _i lt $PlantAge.length(); _i++>>
+            <<set $Temp to $PlantAge[_i] - 1>>\
+            <<if $PlantAge[_i] gt 0 and $PlantAge[_i] lt $SproutAge[_i]>>   
+                You planted $MasterPlants[_i] seeds. The plant has not yet sprouted. It was planted $Temp days ago. 
+            <<elseif $PlantAge[_i] gt $SproutAge[_i] - 1 and $PlantAge[_i] lt $HarvestAge[_i]>>
+                A $MasterPlants[_i] plant has sprouted. It was planted $Temp days ago.
+            <<elseif $PlantAge[_i] gt $HarvestAge[_i] - 1>> 
+                <<set $Harvest to true>>\
+                <<if $UserPlants.includes($MasterPlants[_i])>>\
+                <<else>><<run $UserPlants.push($MasterPlants[_i])>>\
+                <</if>>\
+                Your $MasterPlants[_i] plant is fully grown and can be harvested.
+            <</if>>
+        <</for>>
+        
+        <<if $Harvest is true>> \
         [[Harvest]]
+        <</if>>\
+        [[Daydream]]
+        [[Leave|Demo]]
+        
+        /* Does seed collection belong in the game? */
+
+        /*
         [[Collect seeds|User seeds]]
+        */
 
 :: Harvest
             Which plant would you like to harvest?
@@ -591,7 +624,7 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
         
             <<for _i to 0; _i lt $Seeds.length; _i++>>\
             <<capture _i>>\
-            <<button [[$Seeds[_i]|Plant seed]]>><<set $Grow to $Seeds[_i]>><</button>>  \
+            <<button [[$Seeds[_i]|Plant seed]]>><<set $Grow to $Seeds[_i]>><<run $Seeds.delete($Grow)>><</button>>  \
             <</capture>>\
             <</for>>
 
@@ -601,13 +634,9 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
         
 :: Plant seed
             <<if Fresh()>>\
-                <<if $Grow is "">>\
-                Select a seed to plant using one of the buttons.
-
-                [[Try again|Plant seeds]]
-                <<elseif $UserPlants.includes($Grow)>>
+                <<if $UserPlants.includes($Grow)>>\
                 You have already planted this seed.
-
+                <<run $Seeds.push($Grow)>>
                 You can only plant one of each seed type.
 
                 Maybe you can find another use for this seed.
@@ -616,20 +645,30 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
                 [[Eat dinner]]
                 [[Sleep]]
                 <<else>>\
-                <<run $Seeds.delete($Grow)>>\
                 You plant the $Grow seed.
-                <<run $UserPlants.push($Grow)>>
+                
                 Check back later to see if your plant is grown.
 
                 [[Eat dinner]]
                 [[Sleep]]
+
+                /* Better method using $MasterPlants? */ \
+                <<switch $Grow>>
+                    <<case "Marijuana">>
+                        <<set $PlantAge [0] to 1>>
+                    <<case "Poppy">>
+                        <<set $PlantAge [1] to 1>>
+                    <<case "Tulip">>
+                        <<set $PlantAge [2] to 1>>
+                    <<case "Mushroom">>
+                        <<set $PlantAge [3] to 1>>
+                    <<case "Hemlock">>
+                        <<set $PlantAge [4] to 1>>
+                <</switch>>
+                
                 <</if>>
             <<else>>\
-                <<if $Grow is "">>\
-                Select a seed to plant using one of the buttons.
-
-                [[Try again|Plant seeds]]
-                <<elseif $UserPlants.includes($Grow)>>
+                <<if $UserPlants.includes($Grow)>>
                 You have already planted this seed.
 
                 You can only plant one of each seed type.
