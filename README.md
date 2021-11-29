@@ -8,8 +8,6 @@ The main project contains adult (NSFW) content in order to make player agency //
 
 Players may contact me @thearchmagedev@gmail.com
 
-Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
-
 -Black Dahlia Studios
 
 Notes: This project is inspired by Zork. Interactive Fiction engines give players a great deal of agency, but generally lack a developed narrative. Visual novels contain developed narratives but often //rob players of their agency//. My dream is to combine these elements in a single project. 
