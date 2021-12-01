@@ -4,8 +4,6 @@ This demo provides players with a teaser for the main project. It is intended to
 
 The final version of the demo will contain: multiple endings, //moderate// replayability, environmental interactions, and //significant// player agency. 
 
-The main project contains adult (NSFW) content in order to make player agency //realistic//. 
-
 Players may contact me @thearchmagedev@gmail.com
 
 -Black Dahlia Studios
