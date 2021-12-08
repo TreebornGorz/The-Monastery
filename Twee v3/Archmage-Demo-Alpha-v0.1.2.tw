@@ -142,6 +142,8 @@ body.no-save #menu-item-saves {
 <<set $ForestAnimals to ["Bat","Newt","Slime"]>>
 <<set $Ingredients to ["Eye of Newt","Bat Wing"]>>
 <<set $UserIngredients to []>>
+<<set $PotionIngredients to []>>
+<<set $IngredientList to []>>
 <<set $Seeds to []>>
 <<set $SirenPartner to false>>
 <<set $SirenEnemy to false>>
@@ -559,7 +561,7 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
 
 :: Check on your plants
         /* Marijuana, Poppy, Tulip, Mushroom, Hemlock */
-        <<for _i; _i lt $PlantAge.length(); _i++>>
+        <<for _i to 0; _i lt $PlantAge.length(); _i++>>
             <<set $Temp to $PlantAge[_i] - 1>>\
             <<if $PlantAge[_i] gt 0 and $PlantAge[_i] lt $SproutAge[_i]>>   
                 You planted $MasterPlants[_i] seeds. The plant has not yet sprouted. It was planted $Temp days ago. 
@@ -874,27 +876,76 @@ A strange lady sits in the corner staring at you without blinking.
 <</if>> \
 [[Leave|Demo]]
 
-:: Brew potion 
+:: Brew potion [Test]
     You approach the potion station.
     /* Check if quantity of potion ingredients gte 2 */
-    <<set $MasterIngredients to 0>>\
-    <<if $Eggs gt 0>><<set $MasterIngredients += 1>><</if>>\
-    <<if $Milk gt 0>><<set $MasterIngredients += 1>><</if>>\
-    <<if $Keg gt 0>><<set $MasterIngredients += 1>><</if>>\
-    <<set $MasterIngredients += $UserIngredients.length>>\
-    <<if $MasterIngredients gt 1>>\
-    Select two ingredients to combine:
-
-    /* radiobutton for loop? */ {Buttons will be here in future versions for selecting potion ingredients}
-    /* create radiobuttons [ON/OFF] and then lock in decision with passage link checking to verify that two are selected */
-    [[Create potion|WIP]]
-    <<else>> \
-    You don't have enough ingredients for potion brewing.
-
+    <<set $IngredientList to []>>\
+    <<if $Eggs gt 0>><<run $IngredientList.push('Egg')>><</if>>\
+    <<if $Milk gt 0>><<run $IngredientList.push('Milk')>><</if>>\
+    <<if $Keg gt 0>><<run $IngredientList.push('Ale')>><</if>>\
+    <<for _i to 0; _i lt $UserIngredients.length; _i++>>\
+        <<run $IngredientList.push('$UserIngredients[_i]')\
+    <</for>>\
+    <<if $IngredientList.length() gt 1>>\
+        Select two ingredients to combine:
+        <<set $PotionIngredients to []>>
+        <<for _i to 0; _i lt $UserIngredients.length; _i++>>
+            <<run $PotionIngredients.push(0)>>\
+            <<capture _i>>\
+                <label><<radiobutton "$PotionIngredients[_i]" "1" autocheck>> $IngredientList[_i]</label>
+            <</capture>>\
+        <</for>>
+        [[Create potion|WIP]]
+    <<else>>\
+        You don't have enough ingredients for potion brewing.
     <</if>>\
-    <<set $MasterIngredients to 0>>\
-    [[Perform experiment]]
+    <<set $IngredientList to []>>\
     [[Leave|Demo]]
+
+    /* Alternative Approach */
+
+    /*
+
+    Select first ingredient:
+
+    <<cycle "$FirstIngredient" autoselect>>
+        <<optionsfrom $IngredientList>>
+    <</cycle>>
+
+    Select second ingredient:
+
+    <<cycle "$SecondIngredient" autoselect>>
+        <<optionsfrom $IngredientList>>
+    <</cycle>>
+
+    */
+
+:: Create potion [noreturn, Test]
+<<set $Temp to 0>>\
+<<for _i to 0; _i lt $PotionIngredients.length(); _i++>>
+    <<set $Temp += $Temp>>
+<</for>>
+<< if $Temp isnot 2>>
+    You did not select two ingredients.
+
+    [[Go back|previous()]]
+<<else>>
+
+<</if>>
+
+/* Alternative Approach */
+
+/* 
+<<if $FirstIngredient is $SecondIngredient>>
+    You selected the same ingredient twice.
+
+    This will have no effect.
+
+    [[Go back|previous()]]
+<<else>>
+
+<<if>>
+*/
 
 :: Talk to her
     You approach the strange unblinking lady.
