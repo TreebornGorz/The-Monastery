@@ -2,21 +2,20 @@
 
 Test: 
 
-PLant and Growing systems
+Plant and Growing systems
 
 Unfinished Tasks: 
 
-Incorporates ingredient drops for winning in forest combat.
-Incorporate Mushroom and hemlock seeds, found only in forest, chance of finding an enemy or plant when entering
-Create plant growing system [Increment Integer using a grow function each day?]
+Isolate Fresh conditionals
+Implement .pushUnique() vice .push()
+
 Determine which plants can be harvested and which can produce seeds (maybe random?).
 Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen and prevent them from harvesting again. 
 
-Fix button looping
+Design the number of relationships
 
 Add slime to potion ingredient table
 
-Establish laboratory experiments [required to unlock certain potion ingredients? Initial requirements must be met to perform experiments? Ability to unlock time machine?!?!?! Time machine stops working at some point for some reason to simplify the mechanics of the thing? (Super complicated to program that probably... Would need to retroactively remove historical variable changes, still possible if I keep a log of player choices in a separate array)]
 Establish various Potions & Ingredients [Mix and match chart -> function]
 
 Verify/Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
@@ -40,6 +39,13 @@ Create separate passage for exploring campus at night? Requires a portable light
 Verify/Configure Inventory and Status
 Create mechanic for collecting/ingesting secret bath water
 Expand library options
+
+Plant Traits:
+Marijuana: Seeds, Harvestable 
+Poppy: Seeds, Harvestable 
+Tulip: Seeds, Harvestable
+Mushrooms: No seeds
+Hemlock: Seeds, Harvestable
 
 Changelog v0.1.3
 -Implemented individual plant traits
@@ -632,11 +638,10 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
         [[Daydream]]
         [[Leave|Demo]]
         
-:: Plant seed
-            <<if Fresh()>>\
+:: Plant seed [Test]
                 <<if $UserPlants.includes($Grow)>>\
                 You have already planted this seed.
-                <<run $Seeds.push($Grow)>>
+                <<if Fresh()>><<run $Seeds.push($Grow)>><</if>>
                 You can only plant one of each seed type.
 
                 Maybe you can find another use for this seed.
@@ -653,41 +658,22 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
                 [[Sleep]]
 
                 /* Better method using $MasterPlants? */ \
-                <<switch $Grow>>
-                    <<case "Marijuana">>
-                        <<set $PlantAge [0] to 1>>
-                    <<case "Poppy">>
-                        <<set $PlantAge [1] to 1>>
-                    <<case "Tulip">>
-                        <<set $PlantAge [2] to 1>>
-                    <<case "Mushroom">>
-                        <<set $PlantAge [3] to 1>>
-                    <<case "Hemlock">>
-                        <<set $PlantAge [4] to 1>>
-                <</switch>>
-                
+                    <<if Fresh()>>
+                        <<switch $Grow>>
+                            <<case "Marijuana">>
+                                <<set $PlantAge [0] to 1>>
+                            <<case "Poppy">>
+                                <<set $PlantAge [1] to 1>>
+                            <<case "Tulip">>
+                                <<set $PlantAge [2] to 1>>
+                            <<case "Mushroom">>
+                                <<set $PlantAge [3] to 1>>
+                            <<case "Hemlock">>
+                                <<set $PlantAge [4] to 1>>
+                        <</switch>>
+                    <</if>>
                 <</if>>
-            <<else>>\
-                <<if $UserPlants.includes($Grow)>>
-                You have already planted this seed.
-
-                You can only plant one of each seed type.
-
-                Maybe you can find another use for this seed.
-                
-                [[Try again|Plant seeds]]
-                [[Eat dinner]]
-                [[Sleep]]
-                <<else>>\
-                You plant the $Grow seed.
-                
-                Check back later to see if your plant is grown.
-
-                [[Eat dinner]]
-                [[Sleep]]
-                <</if>>
-            <</if>>
-
+         
 :: Daydream
     You laze about the cloister, daydreaming all the while. 
 
@@ -885,7 +871,6 @@ A strange lady sits in the corner staring at you without blinking.
 [[Inspect the chamber]]
 <<else>> 
 [[Brew potion]]
-[[Perform experiment]]
 <</if>> \
 [[Leave|Demo]]
 
@@ -901,7 +886,7 @@ A strange lady sits in the corner staring at you without blinking.
     Select two ingredients to combine:
 
     /* radiobutton for loop? */ {Buttons will be here in future versions for selecting potion ingredients}
-    /* create radiobuttons [ON/OFF] and then lock in decision with passage link checkingh to verify that two are selected */
+    /* create radiobuttons [ON/OFF] and then lock in decision with passage link checking to verify that two are selected */
     [[Create potion|WIP]]
     <<else>> \
     You don't have enough ingredients for potion brewing.
@@ -909,14 +894,6 @@ A strange lady sits in the corner staring at you without blinking.
     <</if>>\
     <<set $MasterIngredients to 0>>\
     [[Perform experiment]]
-    [[Leave|Demo]]
-
-:: Perform experiment
-    You ask the professor for an experiment.
-
-    She offers no experiments at the moment.
-    /* Incorporate conditionals for current experiment vs new experiments, give a reason why an experiment is unavailable */
-    [[Brew potion]]
     [[Leave|Demo]]
 
 :: Talk to her
@@ -1603,20 +1580,18 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             [[Dismount and search for plants in the dark|WIP]]
                             <<else>>
                             You notice many interesting plants.
-                            /* Consider State.prng.init([seed [, useEntropy]]) for users that hack history control */                            
+                                                        
                             [[Inspect a plant][$TempString to $Plants.random()]]
                             <</if>> \
                             [[Enter the forest]]
                             [[Return to campus]]
 
-/* :: Dark plants */
-
 :: Inspect a plant 
                                 You dismount and inspect an interesting plant.
                                 
-                                It is a $TempString plant.                                
-                                
-                                [[Collect seeds]]                             
+                                It is a $TempString plant.
+                                                      
+                                [[Collect seeds]]
                                 [[Collect leaves]]
                                 [[Eat the plant|WIP]]
 
@@ -1663,20 +1638,22 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                                 You forge onwards, deep into the forest. 
                                 <<set $Temp to random(1)>>\
                                 <<if $Temp is 1>>
-                                You happen upon a $TempString1.
+                                    You happen upon a $TempString1.
 
-                                [[Collect]]
-                                [[Take seeds]]
+                                    [[Collect]]
+                                    <<if $TempString1 is not 'Mushroom'>>
+                                        [[Take seeds]]
+                                    <</if>>\
                                 <<else>>                                
-                                You are confronted by a $TempString.
+                                    You are confronted by a $TempString.
 
-                                [[Fight]]
-                                [[Run]]
+                                    [[Fight]]
+                                    [[Run]]
                                 <</if>>
 
 :: Collect
                                     <<if Fresh()>>\
-                                    <<run $UserIngredients.push($TempString1)>>\
+                                    <<run $UserIngredients.pushUnique($TempString1)>>\
                                     <</if>>\                                    
                                     You collect the $TempString1.
                                     
@@ -1684,7 +1661,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
 :: Take seeds
                                     <<if Fresh()>>\
-                                    <<run $Seeds.push($TempString1)>>\
+                                    <<run $Seeds.pushUnique($TempString1)>>\
                                     <</if>>\
                                     You take the $TempString1 seeds.
 
