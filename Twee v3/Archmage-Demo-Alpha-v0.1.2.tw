@@ -2,12 +2,14 @@
 
 Test: 
 
-Plant and Growing systems
+Plant and Growing systems - 
 
 Unfinished Tasks: 
 
 Isolate Fresh conditionals
 Implement .pushUnique() vice .push()
+
+Establish grow time
 
 Determine which plants can be harvested and which can produce seeds (maybe random?).
 Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen and prevent them from harvesting again. 
@@ -48,10 +50,10 @@ Mushrooms: No seeds
 Hemlock: Seeds, Harvestable
 
 Changelog v0.1.3
--Implemented individual plant traits
--Plants now grow
--Fixed faucet buttons
 -Developed potion interface
+-Implemented individual plant traits (Incomplete)
+-Plants now grow
+-Fixed faucet buttons (Incomplete)
 -Potion table in progress
 
 Bug Log v0.1.2
@@ -63,7 +65,7 @@ Bug Log v0.1.2
 Archmage Demo
 
 :: StorySubtitle
-Version: Alpha 0.1.2
+Version: Alpha 0.1.3
 
 :: StoryData
 {
@@ -87,6 +89,99 @@ predisplay["Menu Return"] = function (taskName) {
         State.variables.return = passage();
     }
 };
+
+/*  Keyboard links - Start */
+var KBIntervalID = 0;
+$(document).on(":passagerender", function (ev) {
+    clearInterval(KBIntervalID);
+    UpdateLinks(ev.content);
+    // Search passages for links every 300ms, just in case they get updated, and marks them for key clicks
+    KBIntervalID = setInterval(UpdateLinks, 300);
+});
+// Adds key shortcut indicators to links in passage if there are less than 11 links in the passsage.
+function UpdateLinks(Container) {
+    // Enables keyboard shortcuts on passages that do not have the "DisableKeyLinks" tag
+    if (!tags().includes("DisableKeyLinks")) {
+        var Links, i;
+        if (typeof Container === "undefined") {
+            Container = document;
+            Links = $("#passages a").toArray();
+        } else {
+            Links = $(Container).find("a").toArray();
+        }
+        if (Links.length > 0) {
+            for (i = 0; i < Links.length; i++) {
+                if ((Links[i].getAttribute("data-nokey") === "true") || (Links[i].parentElement.getAttribute("data-nokey") === "true")) {
+                    Links.deleteAt(i);
+                    i--;
+                }
+            }
+        }
+        var n = 1;
+        for (i = 0; i < Links.length; i++) {
+            if (!Links[i].id.includes("Link")) {
+                while ($(Container).find("#Link" + n).length) {
+                    ++n;
+                    if (n > 10) {
+                        break;
+                    }
+                }
+                if (n < 10) {
+                    $("<sup>" + n + "</sup>").appendTo(Links[i]);
+                    Links[i].id = "Link" + n;
+                } else if (n === 10) {
+                    $("<sup>[0]</sup>").appendTo(Links[i]);
+                    Links[i].id = "Link0";
+                    break;
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+};
+$(document).on("keyup", function (e) {
+    // Enables keyboard shortcuts on passages that do not have the "DisableKeyLinks" tag
+    if (!tags().includes("DisableKeyLinks")) {
+        // Trigger next link click on right arrow key or "1" (normal and numpad)
+        if (((e.key === "ArrowRight") || (e.keyCode === 49) || (e.keyCode === 97)) && $("#NextLink")) {
+            if ((!tags().includes("IgnoreArrowKeys")) || ((e.key != "ArrowRight"))) {
+                e.preventDefault();
+                $("#NextLink").click();
+            }
+        }
+        // Trigger link click on keys "0" through "9"
+        if ((e.keyCode > 47) && (e.keyCode < 58)) {
+            if ($("#Link" + (e.keyCode - 48))) {
+                e.preventDefault();
+                $("#Link" + (e.keyCode - 48)).click();
+            }
+        }
+        // Trigger link click on numpad keys "0" through "9"
+        if ((e.keyCode > 95) && (e.keyCode < 106)) {
+            if ($("#Link" + (e.keyCode - 96))) {
+                e.preventDefault();
+                $("#Link" + (e.keyCode - 96)).click();
+            }
+        }
+        // Trigger random click on "." key
+        if (e.key === ".") {
+            e.preventDefault();
+            var Links = $("#passages a");
+            if (Links.length > 0) {
+                Links[Math.floor(Math.random() * Links.length)].click();
+            }
+        }
+        // Trigger back click on left arrow key or backquote
+        if ((e.key === "ArrowLeft") || (e.keyCode === 192)) {
+            if ((!tags().includes("IgnoreArrowKeys")) || ((e.key != "ArrowLeft"))) {
+                e.preventDefault();
+                Engine.backward();
+            }
+        }
+    }
+}); 
+/* Keyboard links - End */
 
 :: UserStylesheet[stylesheet]
 /* 
@@ -138,12 +233,12 @@ body.no-save #menu-item-saves {
 <<set $HarvestAge to [6,6,6,6,6]>>
 <<set $MasterPlants to ["Marijuana","Poppy","Tulip","Mushroom","Hemlock"]>>
 <<set $UserPlants to []>>
+<<set $Planted to []>>
 <<set $ForestPlant to ["Mushroom","Hemlock"]>>
 <<set $ForestAnimals to ["Bat","Newt","Slime"]>>
 <<set $Ingredients to ["Eye of Newt","Bat Wing"]>>
 <<set $UserIngredients to []>>
 <<set $PotionIngredients to []>>
-<<set $IngredientList to []>>
 <<set $Seeds to []>>
 <<set $SirenPartner to false>>
 <<set $SirenEnemy to false>>
@@ -237,18 +332,9 @@ The final version of the demo will contain: multiple endings, //moderate// repla
 
 The main project contains adult (NSFW) content in order to make player agency //realistic//. Publishing will begin when the demo is complete.
 
-Players may contact me @thearchmagedev@gmail.com
-
 Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
 
--Black Dahlia Studios
-
-Notes: This project is inspired by Zork. Interactive Fiction engines give players a great deal of agency, but generally lack a developed narrative. Visual novels contain developed narratives but often //rob players of their agency//. My dream is to combine these elements in a single project. 
-
-Version: Alpha v0.1.1
-Description: This version is pre-Alpha. It contains a few endings, //limited// replayability, //basic// environmental interactions, and //limited// player agency. Some paths are incomplete. Alpha testers are encouraged to use the save feature often.
-
-Upcoming: Alpha v0.2.0 will contain a good end.  
+-Black Dahlia 
 
 [[Begin Demo|Character]]
 
@@ -547,11 +633,12 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
     You inspect the plants and notice a decent variety of plant life.
 
     There is open soil that seems fertile enough for growing plants.
-    <<if $Planting is false>> 
+
+    <<if $Planting is false>>\
     Maybe you could plant some seeds here.
     <<set $Planting to true>>
-    <<elseif $UserPlants.length gt 0>> 
-    You have planted: $UserPlants.
+    <<elseif $Planted.length gt 0>>\
+    You have planted: $Planted.
 
     [[Check on your plants]]    
     <</if>> \ 
@@ -560,21 +647,20 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
     [[Leave|Demo]]
 
 :: Check on your plants
-        /* Marijuana, Poppy, Tulip, Mushroom, Hemlock */
-        <<for _i to 0; _i lt $PlantAge.length(); _i++>>
+        <<for _i to 0; _i lt $PlantAge.length; _i++>>\
             <<set $Temp to $PlantAge[_i] - 1>>\
-            <<if $PlantAge[_i] gt 0 and $PlantAge[_i] lt $SproutAge[_i]>>   
+            <<if $PlantAge[_i] gt 0 and $PlantAge[_i] lt $SproutAge[_i]>>\   
                 You planted $MasterPlants[_i] seeds. The plant has not yet sprouted. It was planted $Temp days ago. 
-            <<elseif $PlantAge[_i] gt $SproutAge[_i] - 1 and $PlantAge[_i] lt $HarvestAge[_i]>>
+            <<elseif $PlantAge[_i] gt $SproutAge[_i] - 1 and $PlantAge[_i] lt $HarvestAge[_i]>>\
                 A $MasterPlants[_i] plant has sprouted. It was planted $Temp days ago.
-            <<elseif $PlantAge[_i] gt $HarvestAge[_i] - 1>> 
+            <<elseif $PlantAge[_i] gt $HarvestAge[_i] - 1>>\ 
                 <<set $Harvest to true>>\
                 <<if $UserPlants.includes($MasterPlants[_i])>>\
                 <<else>><<run $UserPlants.push($MasterPlants[_i])>>\
                 <</if>>\
                 Your $MasterPlants[_i] plant is fully grown and can be harvested.
-            <</if>>
-        <</for>>
+            <</if>>\
+        <</for>>\
         
         <<if $Harvest is true>> \
         [[Harvest]]
@@ -582,44 +668,24 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
         [[Daydream]]
         [[Leave|Demo]]
         
-        /* Does seed collection belong in the game? */
-
-        /*
-        [[Collect seeds|User seeds]]
-        */
-
 :: Harvest
             Which plant would you like to harvest?
                         
-            <<if Fresh()>>\
             <<for _i to 0; _i lt $UserPlants.length; _i++>>\
-            <<capture _i>>\
-            <<button [[$UserPlants[_i]|Harvest]]>><<run $UserIngredients.push($UserPlants[_i])>><</button>>     \
-            <</capture>>\
+                <<capture _i>>\
+                    <<if $UserIngredients.includes($UserPlants[_i]) is false>>\
+                        <<button [[$UserPlants[_i]|Harvested]]>><<run $UserIngredients.pushUnique($UserPlants[_i])>><<set $Temp to $UserPlants[_i]>><</button>>\
+                    <</if>>\
+                <</capture>>\
             <</for>>
-            <</if>>\
             
-            [[Collect seeds|User seeds]]
-            [[Eat dinner]]
-            [[Sleep]]
+            [[Leave|Demo]]
 
-            /* Verify buttons; Modify UserPlants on button push to indicate that harvesting requires a refresh period; create grow process requiring a grow time before harvest */
+:: Harvested
+                You harvested from your $Temp plant.
 
-:: User seeds
-            Which seeds would you like to collect?
-
-            <<if Fresh()>>\
-            <<for _i to 0; _i lt $UserPlants.length; _i++>>\
-            <<capture _i>>\
-            <<button [[$UserPlants[_i]|User seeds]]>><<run $Seeds.push($UserPlants[_i])>><</button>>  \
-            <</capture>>\
-            <</for>>
-            <</if>>\
-
-            [[Eat dinner]]
-            [[Sleep]]
-
-            /* Verify buttons; Modify UserPlants on button push to indicate that harvesting requires a refresh period; create grow process requiring a grow time before harvest */
+                [[Harvest another plant|Harvest]]
+                [[Leave|Demo]]
 
 :: Plant seeds
         <<set $Grow to "">> \
@@ -631,9 +697,9 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
         Select a seed to plant.
         
             <<for _i to 0; _i lt $Seeds.length; _i++>>\
-            <<capture _i>>\
-            <<button [[$Seeds[_i]|Plant seed]]>><<set $Grow to $Seeds[_i]>><<run $Seeds.delete($Grow)>><</button>>  \
-            <</capture>>\
+                <<capture _i>>\
+                    <<button [[$Seeds[_i]|Plant seed]]>><<set $Grow to $Seeds[_i]>><<run $Seeds.delete($Grow); $Planted.push($Grow)>><</button>>  \
+                <</capture>>\
             <</for>>
 
          <</if>>\
@@ -653,7 +719,7 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
                 [[Sleep]]
                 <<else>>\
                 You plant the $Grow seed.
-                
+                <<run $UserPlants.pushUnique($Grow)>>                
                 Check back later to see if your plant is grown.
 
                 [[Eat dinner]]
@@ -876,76 +942,48 @@ A strange lady sits in the corner staring at you without blinking.
 <</if>> \
 [[Leave|Demo]]
 
-:: Brew potion [Test]
+:: Brew potion 
     You approach the potion station.
-    /* Check if quantity of potion ingredients gte 2 */
-    <<set $IngredientList to []>>\
-    <<if $Eggs gt 0>><<run $IngredientList.push('Egg')>><</if>>\
-    <<if $Milk gt 0>><<run $IngredientList.push('Milk')>><</if>>\
-    <<if $Keg gt 0>><<run $IngredientList.push('Ale')>><</if>>\
+    <<set _IngredientList to []>>
+    <<if $Eggs gt 0>><<run _IngredientList.push("Egg")>><</if>>\
+    <<if $Milk gt 0>><<run _IngredientList.push('Milk')>><</if>>\
+    <<if $Keg gt 0>><<run _IngredientList.push('Ale')>><</if>>\
     <<for _i to 0; _i lt $UserIngredients.length; _i++>>\
-        <<run $IngredientList.push('$UserIngredients[_i]')\
+        <<run _IngredientList.pushUnique($UserIngredients[_i])>>\
     <</for>>\
-    <<if $IngredientList.length() gt 1>>\
-        Select two ingredients to combine:
-        <<set $PotionIngredients to []>>
-        <<for _i to 0; _i lt $UserIngredients.length; _i++>>
-            <<run $PotionIngredients.push(0)>>\
-            <<capture _i>>\
-                <label><<radiobutton "$PotionIngredients[_i]" "1" autocheck>> $IngredientList[_i]</label>
-            <</capture>>\
-        <</for>>
-        [[Create potion|WIP]]
+    <<if _IngredientList.length gt 1>>\
+        Select first ingredient:
+        <<set $FirstIngredient to ""; $SecondIngredient to "">>
+        <<listbox "$FirstIngredient" autoselect>>
+            <<optionsfrom _IngredientList>>
+        <</listbox>>
+
+        Select second ingredient:
+
+        <<listbox "$SecondIngredient" autoselect>>
+            <<optionsfrom _IngredientList>>
+        <</listbox>>
+        
+        [[Create potion]]
     <<else>>\
-        You don't have enough ingredients for potion brewing.
+        You don't have enough ingredients for potion brewing.<br>
     <</if>>\
-    <<set $IngredientList to []>>\
     [[Leave|Demo]]
 
-    /* Alternative Approach */
+    <<set _IngredientList to []>>\
 
-    /*
-
-    Select first ingredient:
-
-    <<cycle "$FirstIngredient" autoselect>>
-        <<optionsfrom $IngredientList>>
-    <</cycle>>
-
-    Select second ingredient:
-
-    <<cycle "$SecondIngredient" autoselect>>
-        <<optionsfrom $IngredientList>>
-    <</cycle>>
-
-    */
-
-:: Create potion [noreturn, Test]
-<<set $Temp to 0>>\
-<<for _i to 0; _i lt $PotionIngredients.length(); _i++>>
-    <<set $Temp += $Temp>>
-<</for>>
-<< if $Temp isnot 2>>
-    You did not select two ingredients.
-
-    [[Go back|previous()]]
-<<else>>
-
-<</if>>
-
-/* Alternative Approach */
-
-/* 
-<<if $FirstIngredient is $SecondIngredient>>
+:: Create potion [noreturn]
+<<if $FirstIngredient is $SecondIngredient>>\
     You selected the same ingredient twice.
 
     This will have no effect.
 
     [[Go back|previous()]]
-<<else>>
-
-<<if>>
-*/
+<<else>>\
+    You brew a $PotionTable potion!
+    /* Delete potion ingredients */
+    [[Leave|Demo]]
+<</if>>
 
 :: Talk to her
     You approach the strange unblinking lady.
@@ -1692,7 +1730,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                                     You happen upon a $TempString1.
 
                                     [[Collect]]
-                                    <<if $TempString1 is not 'Mushroom'>>
+                                    <<if $TempString1 is not 'Mushroom'>>\
                                         [[Take seeds]]
                                     <</if>>\
                                 <<else>>                                
