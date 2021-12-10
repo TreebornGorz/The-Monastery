@@ -243,6 +243,7 @@ body.no-save #menu-item-saves {
 <<set $UserIngredients to []>>
 <<set $PotionIngredients to []>>
 <<set $Seeds to []>>
+<<set $UserPotions to []>>
 <<set $SirenPartner to false>>
 <<set $SirenEnemy to false>>
 <<set $SirenPet to false>>
@@ -276,13 +277,13 @@ You have:
 A Weapon
 <</if>> \
 <<if $Keg gt 0>> \
-$Keg Kegs of Ale
+$Keg Keg(s) of Ale
 <</if>> \
 <<if $Milk gt 0>> \
-$Milk Bottles of Milk
+$Milk Bottle(s) of Milk
 <</if>> \
 <<if $Eggs gt 0>> \
-$Eggs Eggs
+$Eggs Egg(s)
 <</if>> \
 <<if $Seeds.length gt 0>> \
 Seeds: <<print $Seeds>>
@@ -295,8 +296,10 @@ Ingredients: <<print $UserIngredients>>
 <</if>> 
 <<if $UserPlants.length gt 0>> \
 Planted: <<print $UserPlants>>
-<</if>> \
-
+<</if>> 
+<<if $UserPotions.length gt 0>> \
+Potions: <<print $UserPotions>>
+<</if>>
 [[Return|previous()][$Show to true]]
 
 :: Status [noreturn menu]
@@ -653,7 +656,7 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
         <<for _i to 0; _i lt $PlantAge.length; _i++>>\
             <<set $Temp to $PlantAge[_i] - 1>>\
             <<if $PlantAge[_i] gt 0 and $PlantAge[_i] lt $SproutAge[_i]>>\   
-                You planted $MasterPlants[_i] seeds. The plant has not yet sprouted. It was planted $Temp days ago. 
+                You planted $MasterPlants[_i] seeds. The plant has not yet sprouted. It was planted $Temp day(s) ago. 
             <<elseif $PlantAge[_i] gt $SproutAge[_i] - 1 and $PlantAge[_i] lt $HarvestAge[_i]>>\
                 A $MasterPlants[_i] plant has sprouted. It was planted $Temp days ago.
             <<elseif $PlantAge[_i] gt $HarvestAge[_i] - 1>>\ 
@@ -983,11 +986,11 @@ A strange lady sits in the corner staring at you without blinking.
 
     [[Go back|previous()]]
 <<else>>\
-    /* Find potion in potion table */\
-    <<set _Ingredients to []>>\
-    <<run _Ingredients.push ($FirstIngredient); _Ingredients.push ($SecondIngredient)>>\<nobr>
+    /* Find potion in potion table */
+    <<set _Ingredients to []; _Bool to true>>\
+    <<run _Ingredients.push ($FirstIngredient); _Ingredients.push ($SecondIngredient)>>\<<nobr>>
 
-    <<if _Ingredients.includesAll('Eye of Newt','Bat Wing')>>\
+    <</nobr>><<if _Ingredients.includesAll('Eye of Newt','Bat Wing')>>\
         <<set $PotionTable to "Gorgon Potion">>\
     <<elseif _Ingredients.includesAll('Eye of Newt','Nightshade')>>\
         <<set $PotionTable to "Invisibility Potion">>\
@@ -1061,43 +1064,40 @@ A strange lady sits in the corner staring at you without blinking.
         <<set $PotionTable to "Pre-Workout">>\
     <<else>>\
     These ingredients are incompatible.
-
+    <<set _Bool to false>>
     [[Go back|previous()]]
-    <</if>>
+    <</if>>\<<nobr>>
     
-        <<if Fresh()>>\
-        /* Add potion to inventory */\
-        <<run $UserPotions.pushUnique($PotionTable)>>\<nobr> 
-        
-            /* Remove potion ingredients from inventory */\
-            <<if $FirstIngredient isnot 'Egg'>>\
-                <<set $Eggs -= 1>>\
-            <<ifelse $FirstIngredient isnot 'Milk'>>\
-                <<set $Milk -= 1>>\
-            <<ifelse $FirstIngredient isnot 'Ale'>>\
-                <<set $Keg -= 1>>\
-            <<else>>\
-                <<run $UserIngredients.delete($FirstIngredient)>>\
-            <</if>>\
-            <<if $SecondIngredient isnot 'Egg'>>\
-                <<set $Eggs -= 1>>\
-            <<ifelse $SecondIngredient isnot 'Milk'>>\
-                <<set $Milk -= 1>>\
-            <<ifelse $SecondIngredient isnot 'Ale'>>\
-                <<set $Keg -= 1>>\
-            <<else>>\
-                <<run $UserIngredients.delete($SecondIngredient)>>\
-            <</if>>\
+    <</nobr>><<if Fresh() and _Bool is true>>\
+    /* Add potion to inventory */
+    <<run $UserPotions.pushUnique($PotionTable)>>\<<nobr>>
+    
+        /* Remove potion ingredients from inventory */
+        <</nobr>><<if $FirstIngredient is 'Egg'>>\
+            <<set $Eggs -= 1>>\
+        <<elseif $FirstIngredient is 'Milk'>>\
+            <<set $Milk -= 1>>\
+        <<elseif $FirstIngredient is 'Ale'>>\
+            <<set $Keg -= 1>>\
+        <<else>>\
+            <<run $UserIngredients.delete($FirstIngredient)>>\
         <</if>>\
-
-    
-    
+        <<if $SecondIngredient is 'Egg'>>\
+            <<set $Eggs -= 1>>\
+        <<elseif $SecondIngredient is 'Milk'>>\
+            <<set $Milk -= 1>>\
+        <<elseif $SecondIngredient is 'Ale'>>\
+            <<set $Keg -= 1>>\
+        <<else>>\
+            <<run $UserIngredients.delete($SecondIngredient)>>\
+        <</if>>\
+    <</if>>/
+    <<if _Bool is true>>\  
     You brew a $PotionTable!
 
     [[Brew another|Brew potion]]
     [[Leave|Demo]]
-    
-
+    <</if>>\
 <</if>>
 
 :: Talk to her
