@@ -1,4 +1,11 @@
-Changelog v0.1.2
+v0.1.3
+-Plants now grow
+-Implemented individual plant traits
+-Developed potion brewing interface
+-Potion table implemented
+-New forest plant
+
+v0.1.2
 -Introduced basic library passages 
 -Seed collection now works
 -Forest combat created with rewards
