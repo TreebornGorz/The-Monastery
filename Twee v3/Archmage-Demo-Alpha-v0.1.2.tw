@@ -988,7 +988,7 @@ A strange lady sits in the corner staring at you without blinking.
 <<else>>\
     /* Find potion in potion table */
     <<set _Ingredients to []; _Bool to true>>\
-    <<run _Ingredients.push ($FirstIngredient); _Ingredients.push ($SecondIngredient)>>\<<nobr>>
+    <<run _Ingredients.push ($FirstIngredient); _Ingredients.push ($SecondIngredient)>><<nobr>>
 
     <</nobr>><<if _Ingredients.includesAll('Eye of Newt','Bat Wing')>>\
         <<set $PotionTable to "Gorgon Potion">>\
@@ -1066,11 +1066,11 @@ A strange lady sits in the corner staring at you without blinking.
     These ingredients are incompatible.
     <<set _Bool to false>>
     [[Go back|previous()]]
-    <</if>>\<<nobr>>
+    <</if>><<nobr>>
     
     <</nobr>><<if Fresh() and _Bool is true>>\
     /* Add potion to inventory */
-    <<run $UserPotions.pushUnique($PotionTable)>>\<<nobr>>
+    <<run $UserPotions.pushUnique($PotionTable)>><<nobr>>
     
         /* Remove potion ingredients from inventory */
         <</nobr>><<if $FirstIngredient is 'Egg'>>\
@@ -1091,9 +1091,9 @@ A strange lady sits in the corner staring at you without blinking.
         <<else>>\
             <<run $UserIngredients.delete($SecondIngredient)>>\
         <</if>>\
-    <</if>>/
+    <</if>>\
     <<if _Bool is true>>\  
-    You brew a $PotionTable!
+    You brew: $PotionTable!
 
     [[Brew another|Brew potion]]
     [[Leave|Demo]]
