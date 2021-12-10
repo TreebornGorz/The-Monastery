@@ -8,15 +8,13 @@ Plant and Growing systems -
 
 Unfinished Tasks: 
 
+make horse more accessible
 Isolate Fresh conditionals
-Implement .pushUnique() vice .push()
+Fix Faucet buttons
 
-Establish grow time
-
-Determine which plants can be harvested and which can produce seeds (maybe random?).
 Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen and prevent them from harvesting again. 
 
-Design the number of relationships
+Determine the number of relationships
 
 Add slime to potion ingredient table
 
@@ -44,19 +42,15 @@ Verify/Configure Inventory and Status
 Create mechanic for collecting/ingesting secret bath water
 Expand library options
 
-Plant Traits:
-Marijuana: Seeds, Harvestable 
-Poppy: Seeds, Harvestable 
-Tulip: Seeds, Harvestable
-Mushrooms: No seeds
-Hemlock: Seeds, Harvestable
-
 Changelog v0.1.3
--Developed potion interface
--Implemented individual plant traits (Incomplete)
 -Plants now grow
--Fixed faucet buttons (Incomplete)
--Potion table in progress
+-Implemented individual plant traits
+-Developed potion brewing interface
+-Potion table implemented
+-New forest plant
+-
+
+
 
 Bug Log v0.1.2
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -175,13 +169,6 @@ $(document).on("keyup", function (e) {
                 Links[Math.floor(Math.random() * Links.length)].click();
             }
         }
-        // Trigger back click on left arrow key or backquote
-        if ((e.key === "ArrowLeft") || (e.keyCode === 192)) {
-            if ((!tags().includes("IgnoreArrowKeys")) || ((e.key != "ArrowLeft"))) {
-                e.preventDefault();
-                Engine.backward();
-            }
-        }
     }
 }); 
 /* Keyboard links - End */
@@ -232,8 +219,8 @@ body.no-save #menu-item-saves {
 <<set $Weapon to false>>
 <<set $Plants to ["Marijuana","Poppy","Tulip"]>>
 <<set $PlantAge to [0,0,0,0,0]>> 
-<<set $SproutAge to [4,4,4,4,4]>>
-<<set $HarvestAge to [6,6,6,6,6]>>
+<<set $SproutAge to [2,3,2,4,3]>>
+<<set $HarvestAge to [4,6,4,7,5]>>
 <<set $MasterPlants to ["Marijuana","Poppy","Tulip","Nightshade","Hemlock"]>>
 <<set $UserPlants to []>>
 <<set $Planted to []>>
@@ -1062,6 +1049,18 @@ A strange lady sits in the corner staring at you without blinking.
         <<set $PotionTable to "Green Dragon">>\
     <<elseif _Ingredients.includesAll('Egg','Ale')>>\
         <<set $PotionTable to "Pre-Workout">>\
+    <<elseif _Ingredients.includesAll('Slime','Eye of Newt')>>\
+        <<set $PotionTable to "Intangibility Potion">>\
+    <<elseif _Ingredients.includesAll('Slime','Bat Wing')>>\
+        <<set $PotionTable to "Gargoyle Potion">>\
+    <<elseif _Ingredients.includesAll('Slime','Nightshade')>>\
+        <<set $PotionTable to "Octopus Potion">>\
+    <<elseif _Ingredients.includesAll('Slime','Hemlock')>>\
+        <<set $PotionTable to "Disintegration Potion">>\
+    <<elseif _Ingredients.includesAll('Slime','Milk')>>\
+        <<set $PotionTable to "Sour Milk">>\
+    <<elseif _Ingredients.includesAll('Slime','Mushroom') or _Ingredients.includesAll('Slime','Poppy')>>\
+        <<set $PotionTable to "Slime Potion">>\
     <<else>>\
     These ingredients are incompatible.
     <<set _Bool to false>>
