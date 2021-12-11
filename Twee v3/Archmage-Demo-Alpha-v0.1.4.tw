@@ -42,9 +42,11 @@ Verify/Configure Inventory and Status
 Create mechanic for collecting/ingesting secret bath water
 Expand library options
 
+Too many bad ends in bath house
+
 Changelog v0.1.4
 -Improved Faucet interface
--Added a third strike to the Ostracization mechanic, making it more gentle and obvious
+-Added a third strike to the Ostracization mechanic, making it more gentle and transparent
 -Enabled history control including left arrow key (enabled until out of beta)
 
 Bug Log v0.1.2
@@ -196,7 +198,7 @@ body.no-save #menu-item-saves {
 <<set $HolyPower to false>>
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
-<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants in the forest!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random."]>> /* "What's the 411? Give me the lowdown." , add after single faucet function */
+<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random."]>> /* "What's the 411? Give me the lowdown." , add after single faucet function */
 <<set $Notes to["I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Never trust a snake. Their scales may be dry, but they are truly slimy.","Sometimes, persistence is key. Trying things over and over again might lead to better results."]>>
 <<set $Poison to false>>
 <<set $Brew to false>>
@@ -250,6 +252,7 @@ body.no-save #menu-item-saves {
 <<set $UserMushroom to false>>
 <<set $UserHemlock to false>>
 <<set $MasterIngredients to 0>> 
+<<set $Sneaky to false>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -295,7 +298,7 @@ Potions: <<print $UserPotions>>
 :: Status [noreturn menu]
 
 <<if $Ostra is true>> \
-You are socially ostracized. Making friends will be difficult.
+You are socially ostracized. You must be very careful.
 
 <</if>> \
 <<if $SirenPet is true>> \
@@ -808,11 +811,11 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 
 :: Listen to gossip
         <<if $Ostra is true>> \
-        You decide to eavesdrop despite already being socially ostracized.
+        You decide to eavesdrop again while <b>socially ostracized</b>.
         
         Despite your best attempts, you can't make out any useful information. <<if $Sneaky is false>>The other students seem to have caught onto your game.
 
-        They warn you that if you try to eavesdrop again, they will ensure that you never have the chance again.
+        They warn you that if you try to eavesdrop once more, they will ensure that you never again have the chance.
         
         They seem completely serious about the threat.<</if>> 
         
@@ -824,23 +827,29 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
             <<if $Temp is 0>>
             The students notice you are listening to their conversation and huddle together uncomfortably.
             <<set $Ostra to true>>
-            You are not able to hear anything and you have become socially ostracized. You will be unable to make friends with other students.
+            You are not able to hear anything and <b>you have become socially ostracized</b>. You will be unable to make friends with other students.
 
-            <<elseif $Temp is 8 or $Temp is 9>>
-            You manage to overhear to their conversation at the perfect time.
+            You must be careful with future social interactions.
+
+            You finish your meal and turn in your dishes. 
+            
+            [[Sleep]]
+            <<elseif $Temp is 9>>
+            <b>You manage to overhear to their conversation at the perfect time.</b>
 
             You overhear the numbers: <<print $Faucets>>
             /* Random Puzzle Solution - Incorporate other solutions and randomize - Make this a function() */ \
             <<else>>
             You manage to make out a snippet of their conversation.
 
-            //<<print $Hint.random()>>//
-            
-            You finish your meal and turn in your dishes. 
-            
-            [[Sleep]]
+            //<<print $Hint.random()>>// 
             <</if>> 
         <</if>> \
+        <<if $Ostra isnot true>>\
+        You finish your meal and turn in your dishes. 
+            
+        [[Sleep]]
+        <</if>>
 
 :: make your way back to your dorm
 <<if $Sneaky is true>>
@@ -851,11 +860,12 @@ Another student poisoned your food! You cough up your guts and collapse dead in 
 Maybe some secrets are worth protecting...
 
 "Bad End - Sneaky Bugger"
-<</if>>\
+<<else>>
 <<set $Sneaky to true>>\
 You make your way back to the dorm in peace.
 
 [[Sleep]]
+<</if>>\
 
 :: Eat in peace
         You decide to eat in peace.
@@ -1274,7 +1284,7 @@ Students use this area to wash up before meals and collect water for bathing in 
 
 :: Escape Nurse
 /* Populate these passages */
-                You attempt to escape... unsuccessfuly.
+                You attempt to escape... unsuccessfully.
 
                 The creature catches you and stares its prey in the eyes.
 
@@ -1609,7 +1619,7 @@ You are ready to work.
             You look down at the injection sight in surpise and [[you suddenly feel drowsy...|Slavery]]
 
 :: Slavery  
-                Eventually, you find yourself in a dark room.
+                You find yourself in a dark room.
 
                 You can hear running water. The air is cold and you get the feeling that you are underground.
 
