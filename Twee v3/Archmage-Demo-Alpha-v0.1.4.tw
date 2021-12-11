@@ -2,9 +2,7 @@
 
 Test: 
 
-Can I acquire and grow nightshade?
-
-Plant and Growing systems - 
+Plant and Growing systems -
 
 Unfinished Tasks: 
 
@@ -47,11 +45,14 @@ Too many bad ends in bath house
 Changelog v0.1.4
 -Improved Faucet interface
 -Added a third strike to the Ostracization mechanic, making it more gentle and transparent
+-Some plants can be eaten
+-Player can ride horse from campus menu once befriended
 -Enabled history control including left arrow key (enabled until out of beta)
+-Linked some dead ends
 
 Bug Log v0.1.2
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
--Plants can age by leaving the cloister
+-Plants can age by leaving the cloister; move var increment to sleep
 
 */
 
@@ -359,6 +360,9 @@ Where do you want to go?
 [[Forge]]
 [[Brewery]]
 [[Dormitory]]
+<<if $HorseFriend is true>>
+[[Ride Horse]]
+<</if>>
 
 <<for _i to 0; _i lt $PlantAge.length; _i++>>
     <<if $PlantAge[_i] gt 0>>
@@ -377,7 +381,9 @@ On the bright side, at least you didn't really screw anything up either. That's 
 
 It's the small things in life that count, right...?
 
-"Bad End - Boring Player" 
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU EVENTUALLY DIED</b></span></span>
+</div> 
 <</if>>
 
 :: Dormitory
@@ -483,9 +489,9 @@ You notice a suspicious latch on the ceiling.
 
                     You are skinny and haven't had a proper meal in a long time.
 
-                    This cell is all you know. It is your new life...
-
-                    "Bad End - Miscreant"
+                    <div align='center' style='font-size: 300%;'>\
+                    <span class='fadeIn'><span style="color:red"><b>YOU DIED OF STARVATION</b></span></span>
+                    </div> 
 
 :: Attempt escape
                     You take your future into your own hands and attempt escape from your cell.
@@ -859,7 +865,9 @@ Another student poisoned your food! You cough up your guts and collapse dead in 
 
 Maybe some secrets are worth protecting...
 
-"Bad End - Sneaky Bugger"
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+</div> 
 <<else>>
 <<set $Sneaky to true>>\
 You make your way back to the dorm in peace.
@@ -1308,7 +1316,9 @@ Students use this area to wash up before meals and collect water for bathing in 
 
                     As you bleed out and lose consciousness, a serpentine tongue flicks across your body...
 
-                    "Bad End - Siren Prey" 
+                    <div align='center' style='font-size: 300%;'>\
+                    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+                    </div> 
 
 :: Wait Nurse
 /* Intrigued, she approaches you with curiousity and admiration, possibility for cooperation/leadership */
@@ -1465,7 +1475,9 @@ You are ready to work.
 
         Your lose your balance and your vision fades as your body slams to the floor. You hear the nurse begin feasting upon your entrails.
 
-        "Bad End - Siren Prey"
+        <div align='center' style='font-size: 300%;'>\
+        <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+        </div> 
         <</if>>
 
 :: Hug Nurse
@@ -1522,7 +1534,9 @@ You are ready to work.
 
             Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
 
-            "Bad End - Siren Prey"
+            <div align='center' style='font-size: 300%;'>\
+            <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+            </div> 
             <<else>>\
             she strikes at you.
 
@@ -1547,7 +1561,9 @@ You are ready to work.
 
                 Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
 
-                "Bad End - Siren Prey"
+                <div align='center' style='font-size: 300%;'>\
+                <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+                </div> 
 
 :: Wait for her to strike
                 You center yourself and prepare for her next attack.
@@ -1631,7 +1647,9 @@ You are ready to work.
 
                 Maybe you shouldn't have been so rude to her...
 
-                "Bad End - Slavery"
+                <div align='center' style='font-size: 300%;'>\
+                <span class='fadeIn'><span style="color:red"><b>YOU ARE NO LONGER YOUR OWN</b></span></span>
+                </div> 
 
 :: Raid the cabinet
     You attempt to raid the cabinet in the hopes of acquiring drugs.
@@ -1751,8 +1769,21 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
                 You are not found until you begin smelling bad. And nobody noticed you were missing either.
 
-                "Bad End - Bojack Horsethief"
+                <div align='center' style='font-size: 300%;'>\
+                <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+                </div> 
                 <</if>>
+
+:: Ride Horse
+You approach the horse.
+<<if $AnimalShip lt 3>>
+[[Take him for a ride]]
+[[Wait for nightfall]]
+<<else>>
+He is excited to see you and anticipates going for a stroll.
+
+You saddle him and [[leave the barn|Ride]].
+<</if>>
 
 :: Take him for a ride
                     You saddle the horse and ride him out of the barn despite the consipicuous sunlight.
@@ -1792,7 +1823,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             <<if $NightTime is true>>
                             It is difficult to see in the darkness.
 
-                            [[Dismount and search for plants in the dark|WIP]]
+                            [[Dismount and search for plants in the dark][$TempString to $Plants.random()]]
                             <<else>>
                             You notice many interesting plants.
                                                         
@@ -1801,6 +1832,15 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                             [[Enter the forest]]
                             [[Return to campus]]
 
+:: Dismount and search for plants in the dark
+                                You dismount and fumble around in teh dark searching for a plant.
+                                
+                                You eventually find one, but it is too dark to determine which plant.
+                                                      
+                                [[Collect seeds]]
+                                [[Collect leaves]]
+                                [[Eat the plant]]
+
 :: Inspect a plant 
                                 You dismount and inspect an interesting plant.
                                 
@@ -1808,7 +1848,35 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                                                       
                                 [[Collect seeds]]
                                 [[Collect leaves]]
-                                [[Eat the plant|WIP]]
+                                [[Eat the plant]]
+
+:: Eat the plant
+                                You eat the plant.
+                                <<switch $TempString>>
+                                <<case "Marijuana">>
+                                It smells gross, but tastes like you imagine any other leafy plant would taste.
+
+                                You begin to feel sleepy and hungry. 
+                                <<case "Poppy">>
+                                It tastes strange.
+
+                                You seen begin to feel hazy and droopy.
+
+                                You slump to the ground and your vision fades. Your body melts into the ground.
+
+                                Your horse gets spooked for some reason and starts running. He tramples your chest crushing your heart.
+
+                                <div align='center' style='font-size: 300%;'>\
+                                <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+                                </div> 
+                                <<case "Tulip">>
+                                It tastes aromatic and gross.
+
+                                You stomach is upset.  
+                                <</switch>>
+                                <<if $TempString isnot "Poppy">>\
+                                [[Return to campus]]
+                                <</if>>
 
 :: Collect seeds 
                                     <<if Fresh()>>\
@@ -1835,9 +1903,6 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
                                     You collect $TempString leaves.
                                     <</if>>
                                     [[Return to campus]]
-
-/* :: Eat the plant */
-/* Incorporate various effects depending on the plant */
 
 :: Enter the forest
                             The forest is dark and spooky.
@@ -1914,7 +1979,9 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
                                         The poison paralyzes you and you die of stavration, lying in the forest.
                                         <</if>>
-                                        "Bad End - Courageous Idiot"
+                                        <div align='center' style='font-size: 300%;'>\
+                                        <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+                                        </div> 
                                     <</if>>
 
 :: Run
@@ -1952,7 +2019,9 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
                 You are not found until you begin smelling bad. And nobody noticed you were missing either.
 
-                "Bad End - Bojack Horsethief"
+                <div align='center' style='font-size: 300%;'>\
+                <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+                </div> 
 
 :: Cow
         You enter the barn and notice a dairy cow that seems to be in need of milking.
@@ -1992,6 +2061,28 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
         [[Calm them down]]
         [[Look for a person]]
         
+:: Calm them down
+            ou take some initiative and figure the eggs are yours for the taking.
+            <<set $Temp to random(1)>>
+            Having permission is a minor detail.
+            <<if $Temp is 1>>
+            You successfully retreive an egg amid the frenzied chickens without incident.
+            <<set $Eggs += 1>>
+            You have acquired an egg.
+            <<else>>
+            You make a proper mess of navigating the chickens.
+            
+            They run all over the place. You accidentally step on a few of them.
+
+            They make so much noise that it draws the attention of the farmer.
+
+            She thinks you are some kind of chicken killer and word eventually spreads.
+
+            You have //definitely// been socially ostracized if you weren't already.
+            <<set $Ostra to true>> \           
+            <</if>> 
+            [[Leave|Demo]]
+
 :: Take care of the animals
     You take care of each group of animals, feeding them and tending to their individual needs.
     
@@ -2038,7 +2129,7 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 
 :: Approach horse
             You approach the horse.
-
+            <<set $HorseFriend to true>>
             He is excited to see you and anticipates going for a stroll.
 
             You saddle him and [[leave the barn|Ride]].
