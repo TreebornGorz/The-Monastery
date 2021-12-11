@@ -1212,7 +1212,7 @@ Students use this area to wash up before meals and collect water for bathing in 
         <<else>>
             <<set $Faucet1 to 'Off'>>
         <</if>>
-    <</button>>
+    <</button>><br>
     <<button [["Faucet #2 - " + $Faucet2|Turn on all the faucets]]>>
         <<set $Temp += 1>>
         <<if $Faucet2 is 'Off'>>
@@ -1221,7 +1221,7 @@ Students use this area to wash up before meals and collect water for bathing in 
         <<else>>
             <<set $Faucet2 to 'Off'>>
         <</if>>
-    <</button>>
+    <</button>><br>
     <<button [["Faucet #3 - " + $Faucet3|Turn on all the faucets]]>>
         <<set $Temp += 1>>
         <<if $Faucet3 is 'Off'>>
@@ -1230,7 +1230,7 @@ Students use this area to wash up before meals and collect water for bathing in 
         <<else>>
             <<set $Faucet3 to 'Off'>>
         <</if>>
-    <</button>>
+    <</button>><br>
     <<button [["Faucet #4 - " + $Faucet4|Turn on all the faucets]]>>
         <<set $Temp += 1>>
         <<if $Faucet4 is 'Off'>>
@@ -1239,7 +1239,7 @@ Students use this area to wash up before meals and collect water for bathing in 
         <<else>>
             <<set $Faucet4 to 'Off'>>
         <</if>>
-    <</button>>
+    <</button>><br>
     <<button [["Faucet #5 - " + $Faucet5|Turn on all the faucets]]>>
         <<set $Temp += 1>>
         <<if $Faucet5 is 'Off'>>
