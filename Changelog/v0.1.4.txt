@@ -1,3 +1,11 @@
+v0.1.4
+-Improved Faucet interface
+-Added a third strike to the Ostracization mechanic, making it more gentle and transparent
+-Some plants can be eaten
+-Player can ride horse from campus menu once befriended
+-Enabled history control including left arrow key (enabled until out of beta)
+-Linked some dead ends
+
 v0.1.3
 -Plants now grow
 -Implemented individual plant traits
