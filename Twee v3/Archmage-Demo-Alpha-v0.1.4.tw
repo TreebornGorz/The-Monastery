@@ -42,18 +42,14 @@ Verify/Configure Inventory and Status
 Create mechanic for collecting/ingesting secret bath water
 Expand library options
 
-Changelog v0.1.3
--Plants now grow
--Implemented individual plant traits
--Developed potion brewing interface
--Potion table implemented
--New forest plant
--
-
-
+Changelog v0.1.4
+-Improved Faucet interface
+-Added a third strike to the Ostracization mechanic, making it more gentle and obvious
+-Enabled history control including left arrow key (enabled until out of beta)
 
 Bug Log v0.1.2
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
+-Plants can age by leaving the cloister
 
 */
 
@@ -61,7 +57,7 @@ Bug Log v0.1.2
 Archmage Demo
 
 :: StorySubtitle
-Version: Alpha 0.1.3
+Version: Alpha 0.1.4
 
 :: StoryData
 {
@@ -72,7 +68,7 @@ Version: Alpha 0.1.3
 
 :: UserScript[script]
 {
-    config.history.controls = false; 
+    config.history.controls = true; 
 }
 
 /* Prevents passages from re-executing functions when enterting a menu and coming back using [menu] tag */
@@ -169,6 +165,13 @@ $(document).on("keyup", function (e) {
                 Links[Math.floor(Math.random() * Links.length)].click();
             }
         }
+        // Trigger back click on left arrow key or backquote
+        if ((e.key === "ArrowLeft") || (e.keyCode === 192)) {
+            if ((!tags().includes("IgnoreArrowKeys")) || ((e.key != "ArrowLeft"))) {
+                e.preventDefault();
+                Engine.backward();
+            }
+        }
     }
 }); 
 /* Keyboard links - End */
@@ -206,7 +209,7 @@ body.no-save #menu-item-saves {
 <<set $DrugKey to false>>
 <<set $Faucets to [1,2,3,4,5]>>
 <<set $Faucets to $Faucets.shuffle()>>
-<<set $UserFaucets to [0,0,0,0,0]>>
+<<set $UserFaucets to []>>
 <<set $SingleFaucet to 0>>
 <<set $BathHouse to false>>
 <<set $BarnWork to false>>
@@ -317,13 +320,9 @@ This passsage is under construction.
 [[Return|previous()]]
 
 :: Start
-This is a demo for the currently in-development interactive fiction project "The Archmage", a project intended to be a narrative-driven interactive fiction fantasy game which provides the player with //significant// agency and //significant// replayability.
+This is a demo for the currently in-development interactive fiction project "The Archmage", an adventure fantasy text game.
 
 This demo provides players with a teaser for the main project. It is intended to display gameplay without widening the scope to unwieldy levels inevitably required for developing the main project. 
-
-The final version of the demo will contain: multiple endings, //moderate// replayability, environmental interactions, and //significant// player agency. 
-
-The main project contains adult (NSFW) content in order to make player agency //realistic//. Publishing will begin when the demo is complete.
 
 Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
 
@@ -811,25 +810,23 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
         <<if $Ostra is true>> \
         You decide to eavesdrop despite already being socially ostracized.
         
-        Despite your best attempts, you can't make out any useful information. The other students seem to have caught onto your game.
+        Despite your best attempts, you can't make out any useful information. <<if $Sneaky is false>>The other students seem to have caught onto your game.
+
+        They warn you that if you try to eavesdrop again, they will ensure that you never have the chance again.
         
-        You finish your meal and make your way back to your dorm. On the way there you begin feeling ill.
+        They seem completely serious about the threat.<</if>> 
         
-        Another student poisoned your food! You cough up your guts and collapse dead in the hallway.
-        
-        Maybe some secrets are worth protecting...
-        
-        "Bad End - Sneaky Bugger" 
+        You finish your meal and [[make your way back to your dorm]]. 
         <<else>>
-            You decide that your life is boring enough that you require information about the lives of others.
-            <<set $Temp to random(7)>>
+            You figure that you require information about the lives of others.
+            <<set $Temp to random(9)>>
             While eating your meal, you inconspicuously listen into the conversations of the other students in an attempt to glean some juicy gossip.
             <<if $Temp is 0>>
             The students notice you are listening to their conversation and huddle together uncomfortably.
             <<set $Ostra to true>>
             You are not able to hear anything and you have become socially ostracized. You will be unable to make friends with other students.
 
-            <<elseif $Temp is 7>>
+            <<elseif $Temp is 8 or $Temp is 9>>
             You manage to overhear to their conversation at the perfect time.
 
             You overhear the numbers: <<print $Faucets>>
@@ -840,10 +837,26 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
             //<<print $Hint.random()>>//
             
             You finish your meal and turn in your dishes. 
+            
+            [[Sleep]]
             <</if>> 
-        [[Sleep]]
         <</if>> \
+
+:: make your way back to your dorm
+<<if $Sneaky is true>>
+On the way to the dorm, you begin feeling ill.
         
+Another student poisoned your food! You cough up your guts and collapse dead in the hallway.
+
+Maybe some secrets are worth protecting...
+
+"Bad End - Sneaky Bugger"
+<</if>>\
+<<set $Sneaky to true>>\
+You make your way back to the dorm in peace.
+
+[[Sleep]]
+
 :: Eat in peace
         You decide to eat in peace.
 
@@ -1135,7 +1148,7 @@ There are numbered faucets on both the fountain and the sink, although none of t
 Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
 
 [[Turn on individual faucets|WIP]]
-[[Turn on all the faucets]]
+[[Turn on all the faucets][$Temp to 0]]
 [[Wait for another student]]
 [[Leave|Demo]]
 
@@ -1177,85 +1190,74 @@ Students use this area to wash up before meals and collect water for bathing in 
         [[Leave|Demo]] */
 
 :: Turn on all the faucets 
-    /* Need to display previous selections and check that no previous selections match the user input -- Can't turn on faucet when it is on */ \
-    The faucets are numbered 1 through 5.
-    
-    <label>Which faucet will you turn first? <<numberbox '$UserFaucets[0]' 0>></label>
- 
-    [[Second faucet]]
-
-:: Second faucet
-    <<if ($UserFaucets[0] lte 0) or ($UserFaucets[0] gte 6)>> \ /* for comparing var types: if typeof $var is "string" */
-    There is no faucet with that number. 
-
-    [[Try again|Turn on the faucets]] \
-    <<else>> \
-    You turn the faucet and water runs from the tap. 
-    
-    <label>Which faucet will you turn second? <<numberbox '$UserFaucets[1]' 0>></label>
-    
-    [[Third faucet]]
+<<if $Temp isnot 5>>Choose which faucets to turn.
+    <<if $Temp is 0>>\
+        <<set $Faucet1 to 'Off'; $Faucet2 to 'Off'; $Faucet3 to 'Off'; $Faucet4 to 'Off'; $Faucet5 to 'Off'>>\
     <</if>>
+    Faucet #1 <<button [[$Faucet1|Turn on all the faucets]]>>
+        <<set $Temp += 1>>
+        <<if $Faucet1 is 'Off'>>
+            <<set $Faucet1 to 'On'>>
+            <<run $UserFaucets.push(1)>>
+        <<else>>
+            <<set $Faucet1 to 'Off'>>
+        <</if>>
+    <</button>>
+    Faucet #2 <<button [[$Faucet2|Turn on all the faucets]]>>
+        <<set $Temp += 1>>
+        <<if $Faucet2 is 'Off'>>
+            <<set $Faucet2 to 'On'>>
+            <<run $UserFaucets.push(2)>>
+        <<else>>
+            <<set $Faucet2 to 'Off'>>
+        <</if>>
+    <</button>>
+    Faucet #3 <<button [[$Faucet3|Turn on all the faucets]]>>
+        <<set $Temp += 1>>
+        <<if $Faucet3 is 'Off'>>
+            <<set $Faucet3 to 'On'>>
+            <<run $UserFaucets.push(3)>>
+        <<else>>
+            <<set $Faucet3 to 'Off'>>
+        <</if>>
+    <</button>>
+    Faucet #4 <<button [[$Faucet4|Turn on all the faucets]]>>
+        <<set $Temp += 1>>
+        <<if $Faucet4 is 'Off'>>
+            <<set $Faucet4 to 'On'>>
+            <<run $UserFaucets.push(4)>>
+        <<else>>
+            <<set $Faucet4 to 'Off'>>
+        <</if>>
+    <</button>>
+    Faucet #5 <<button [[$Faucet5|Turn on all the faucets]]>>
+        <<set $Temp += 1>>
+        <<if $Faucet5 is 'Off'>>
+            <<set $Faucet5 to 'On'>>
+            <<run $UserFaucets.push(5)>>
+        <<else>>
+            <<set $Faucet5 to 'Off'>>
+        <</if>>
+    <</button>>  
+<<else>>
+    <<for _i to 0;  _i lt $Faucets.length; _i++>> \
+        <<if $Faucets[_i] isnot $UserFaucets[_i]>> \
+            Nothing happens.
+            <<set $UserFaucets to []>>
+            [[Leave|Demo]]<<break>>
+        <<elseif _i == 4>> \
+            <<set $BathHouse to true>> \
+            <<set $UserFaucets to []>>\
+        <</if>> \
+    <</for>> \
+    <<if $BathHouse is true>> \
+        You wait for a few seconds and then the floor begins to vibrate.
 
-:: Third faucet
-    <<if ($UserFaucets[1] lte 0) or ($UserFaucets[1] gte 6)>> \ 
-    There is no faucet with that number. 
+        A passageway splits open in the wall. Water runs through the opening and down the steps.
 
-    [[Try again|Second faucet]] \
-    <<else>> \
-    You turn the faucet and water runs from the tap. 
-    
-    <label>Which faucet will you turn third? <<numberbox '$UserFaucets[2]' 0>></label>
-    
-    [[Fourth faucet]]
+        [[Enter the secret passage|Secret bath]]
     <</if>>
-
-:: Fourth faucet
-    <<if ($UserFaucets[2] lte 0) or ($UserFaucets[2] gte 6)>> \ 
-    There is no faucet with that number. 
-
-    [[Try again|Third faucet]] \
-    <<else>> \
-    You turn the faucet and water runs from the tap. 
-    
-    <label>Which faucet will you turn fourth? <<numberbox '$UserFaucets[3]' 0>></label>
-    
-    [[Fifth faucet]]
-    <</if>>
-
-:: Fifth faucet
-    <<if ($UserFaucets[3] lte 0) or ($UserFaucets[3] gte 6)>> \ 
-    There is no faucet with that number. 
-
-    [[Try again|Fourth faucet]] \
-    <<else>> \
-    You turn the faucet and water runs from the tap. 
-    
-    <label>Which faucet will you turn fifth? <<numberbox '$UserFaucets[4]' 0>></label>
-    
-    [[Step back|Bath House]]
-    <</if>>
-
-:: Bath House
-        /* Need to validate user input here somehow */ \
-         You turn the last faucet. Water runs from the tap. 
-
-        <<for _i to 0;  _i lt $Faucets.length; _i++>> \
-            <<if $Faucets[_i] isnot $UserFaucets[_i]>> \
-                Nothing happens.
-
-                [[Leave|Demo]]<<break>>
-            <<elseif _i == 4>> \
-                <<set $BathHouse to true>> \
-            <</if>> \
-            <</for>> \
-            <<if $BathHouse is true>> \
-                You wait for a few seconds and then the floor begins to vibrate.
-
-                A passageway splits open in the wall. Water runs through the opening and down the steps.
-
-                [[Enter the secret passage|Secret bath]]
-            <</if>>
+<</if>>
 
 :: Secret bath
             You descend the secret passageway and find yourself in an underground bath house.
@@ -1264,7 +1266,7 @@ Students use this area to wash up before meals and collect water for bathing in 
             
             You start to feel a bit fuzzy the longer you stay in the water.
             
-            SUddenly, you notice glowing eyes approaching you.
+            Suddenly, you notice glowing eyes approaching you.
 
             [[Attempt an escape|Escape Nurse]]
             [[Stand your ground|Wait Nurse]]
