@@ -42,13 +42,16 @@ Expand library options
 
 Too many bad ends in bath house
 
+Need mechanic to confront player with enemies/plants they haven't encountered yet.
+Make forest encounters unseeable at night.
+Check fresh for history control.
+
+If player agrees to help with barn, than horse riding shouldn't be problematic and should be able to approach horse individually
+
 Changelog v0.1.4
--Improved Faucet interface
--Added a third strike to the Ostracization mechanic, making it more gentle and transparent
--Some plants can be eaten
--Player can ride horse from campus menu once befriended
--Enabled history control including left arrow key (enabled until out of beta)
--Linked some dead ends
+-Player cannot identify plants and enemies at night
+-Confrontations are still randomized, but now prioritize unique confrontations (Incomplete - campus plants)
+-Fixed a bug where opening the inventory menu affected forest confrontations
 
 Bug Log v0.1.2
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -60,7 +63,7 @@ Bug Log v0.1.2
 Archmage Demo
 
 :: StorySubtitle
-Version: Alpha 0.1.4
+Version: Alpha 0.1.5
 
 :: StoryData
 {
@@ -199,7 +202,7 @@ body.no-save #menu-item-saves {
 <<set $HolyPower to false>>
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
-<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed test! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random."]>> /* "What's the 411? Give me the lowdown." , add after single faucet function */
+<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed tests! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random."]>> /* "What's the 411? Give me the lowdown." , add after single faucet function */
 <<set $Notes to["I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Never trust a snake. Their scales may be dry, but they are truly slimy.","Sometimes, persistence is key. Trying things over and over again might lead to better results."]>>
 <<set $Poison to false>>
 <<set $Brew to false>>
@@ -468,6 +471,7 @@ You notice a suspicious latch on the ceiling.
             You eavesdrop on the student's conversation.
             /* Incorporate RNG similiar to gossip */
             You hear nothing of interest.
+
             [[Stick around]]
             [[Leave dorm]]
             <</if>>
@@ -532,7 +536,7 @@ You notice a suspicious latch on the ceiling.
             There are currently no teachers around, but you may not want to press your luck.
 
             [[Search teacher's belongings]]
-            [[Hide and wait for a teacher to show up|Hide teach]]
+            [[Hide and wait for a teacher to show up|WIP]]
             [[Leave dorm]]
 
 :: Search teacher's belongings
@@ -1668,7 +1672,7 @@ The nurse begins treating your injured rear end.
 You are somewhat embarrased, but you have enough pride to realize that she is actually lucky to see such a sight.
 
 She seems annoyed with you, but prescribes some pain pills to you for the injury and sees you off.
-<<run $Drugs.pushUnique("Pain Pills")>> \ /* Incorporate uses for pain pills, overdose, sell them, etc. */
+<<run $Drugs.pushUnique("Pain Pills")>> \ 
 <<set $NightTime to true>>
 [[Eat dinner]]
 [[Sleep]]
@@ -1911,21 +1915,68 @@ You saddle him and [[leave the barn|Ride]].
                             <<else>>
                             You wish you had a weapon right about now...
                             <</if>>
-                            <<link [[Forge onwards]]>><<set $TempString to $ForestAnimals.random()>><<set $TempString1 to $ForestPlant.random()>><</link>> 
+                            <<link [[Forge onwards]]>>
+                                <<set _Plants to []>>
+                                /* Checks if player has each forest plant somewhere in the inventory */
+                                <<for _i to 0; _i lt $Seeds.length; _i++>>
+                                    <<if $Seeds[_i] is 'Nightshade' or $Seeds[_i] is 'Hemlock'>>
+                                        <<run _Plants.pushUnique($Seeds[_i])>>
+                                    <</if>>
+                                <</for>>
+                                <<for _i to 0; _i lt $UserPlants.length; _i++>>
+                                    <<if $UserPlants[_i] is 'Nightshade' or $UserPlants[_i] is 'Hemlock'>>
+                                        <<run _Plants.pushUnique($UserPlants[_i])>>
+                                    <</if>>
+                                <</for>>
+                                <<for _i to 0; _i lt $UserIngredients.length; _i++>>
+                                    <<if $UserIngredients[_i] is 'Mushroom' or $UserIngredients[_i] is 'Nightshade' or $UserIngredients[_i] is 'Hemlock'>>
+                                        <<run _Plants.pushUnique($UserIngredients[_i])>>
+                                    <</if>>
+                                <</for>>
+                                /* If player has all plants, confront animal */
+                                <<if _Plants.length gt 2>>
+                                    <<set $Temp to 0>>
+                                <<else>>
+                                    <<set $Temp to random(1)>>
+                                    /* Confront unique plants first */
+                                    <<set _ForestPlants to $ForestPlant>>
+                                    <<for _i to 0; _i lt _Plants.length; _i++>>
+                                        <<if _ForestPlants.includes(_Plants[_i])>>
+                                            <<run _ForestPlants.delete(_Plants[_i])>>
+                                        <</if>>
+                                    <</for>> 
+                                    <<set $TempString1 to _ForestPlants.random()>>
+                                <</if>>
+                                /* Confront an animal with a unique reward first */
+                                <<set _ForestAnimals to $ForestAnimals>>
+                                <<for _i to 0; _i lt $ForestAnimals.length; _i++>>
+                                    <<if $UserIngredients[_i] is 'Bat Wing' or $UserIngredients[_i] is 'Slime' or $UserIngredients[_i] is 'Eye of Newt'>>
+                                        <<run _ForestAnimals.delete('Bat')>>
+                                    <<elseif $UserIngredients[_i] is 'Eye of Newt'>>
+                                        <<run _ForestAnimals.delete('Newt')>>
+                                    <<elseif $UserIngredients[_i] is 'Slime'>>
+                                        <<run _ForestAnimals.delete('Slime')>>
+                                    <</if>>
+                                <</for>>
+                                <<if _ForestAnimals.length gt 0>>
+                                    <<set $TempString to _ForestAnimals.random()>>
+                                <<else>>
+                                    <<set $TempString to $ForestAnimals.random()>>
+                                <</if>>                                
+                            <</link>> 
                             [[Leave the forest]]
 
 :: Forge onwards 
                                 You forge onwards, deep into the forest. 
-                                <<set $Temp to random(1)>>\
                                 <<if $Temp is 1>>
-                                    You happen upon a $TempString1.
+                                    You happen upon a <<if $NightTime is true>>plant, but you can't see identify it in the dark<<else>>$TempString1<</if>>.
 
                                     [[Collect]]
                                     <<if $TempString1 is not 'Mushroom'>>\
                                         [[Take seeds]]
                                     <</if>>\
                                 <<else>>                                
-                                    You are confronted by a $TempString.
+                                    You are confronted by a <<if $NightTime is true>>monster, but you can't see it in the dark<<else>>$TempString<</if>>.
 
                                     [[Fight]]
                                     [[Run]]
@@ -1933,7 +1984,7 @@ You saddle him and [[leave the barn|Ride]].
 
 :: Collect
                                     <<if Fresh()>>\
-                                    <<run $UserIngredients.pushUnique($TempString1)>>\
+                                    <<run $UserIngredients.push($TempString1)>>\
                                     <</if>>\                                    
                                     You collect the $TempString1.
                                     
@@ -1948,9 +1999,9 @@ You saddle him and [[leave the barn|Ride]].
                                     [[Leave forest]]
 
 :: Fight
-                                    You fight the $TempString.
+                                    You fight the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
                                     <<if $Weapon is true>>
-                                    You defeat the $TempString using your weapon.
+                                    You defeat the <<if $NightTime is true>>monster<<else>>$TempString<</if>> using your weapon.
                                         <<if $TempString is "Bat">> \
                                         <<set $Reward to "Bat Wing">> \
                                         <<elseif $TempString is "Slime">> \
@@ -1959,13 +2010,13 @@ You saddle him and [[leave the barn|Ride]].
                                         <<set $Reward to "Eye of Newt">> \
                                         <</if>> \
                                     <<if Fresh()>>\
-                                    <<run $UserIngredients.pushUnique($Reward)>> \
+                                    <<run $UserIngredients.push($Reward)>> \
                                     <</if>>
                                     You obtain $Reward.
 
                                     [[Leave forest]]
                                     <<else>>
-                                    You punch at the $TempString.
+                                    You punch at the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
                                         <<if $TempString is "Bat">>
                                         The bat simply evades your punch and bites you.
 
@@ -2360,7 +2411,7 @@ After waiting for a few minutes without any activity, you become impatient.
             <<set $Ostra to true>>
             You are caught red handed as you nervously stuff the paper back into the desk.
 
-            The students take notice of your behavior. You have become socially ostracized. You will now have trouble making friends.
+            The students take notice of your behavior. <b>You have become socially ostracized.</b> You will now have trouble making friends.
 
             The professor shows you mercy and merely demands that you [[return to your seat|Return to your seat]].
             <</if>>
