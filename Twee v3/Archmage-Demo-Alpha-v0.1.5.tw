@@ -12,6 +12,8 @@ Harvest buttons should take player to a passage that explains they have harveste
 
 Determine the number of relationships
 
+Incorporate teacher item effects
+
 Incorporate Potion effects
 Establish relationships
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
@@ -30,12 +32,16 @@ Too many bad ends in bath house
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
 Changelog v0.1.5
+-Items can now be found in the teacher's dormitory
+-Faucets can now be turned individually (Test Message)
+-Entering the incorrect faucet combination now changes the secret combination (Test)
+-Entering a certain combination of faucets now provides a hint (Incomplete)
 -Player cannot identify plants and enemies at night
 -Confrontations are still randomized, but now prioritize unique confrontations
 -Horse is now rideable directly from campus
--Fixed a bug where opening the inventory menu affected forest confrontations
+-Fixed bug where opening the inventory menu affected forest confrontations
 -Fixed bug where plants aged by leaving the cloister multiple times
--Fixed bug where plants were harvestable ebfore being fully grown (Test)
+-Fixed bug where plants were harvestable before being fully grown (Test)
 
 Bug Log v0.1.2
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -177,6 +183,7 @@ body.no-save #menu-item-saves {
 <<set $Show to false>>
 <<set $Temp to 0>>
 <<set $TempString to "">>
+<<set $TempBool to false>>
 <<set $Male to true>>
 <<set $Day to 0>>
 <<set $NightTime to false>>
@@ -387,143 +394,143 @@ You notice a suspicious latch on the ceiling.
 [[Pull latch]]
 
 :: Male dorm
-    You enter the male dorm<<if $Male is false>> even though you are female. 
+You enter the male dorm<<if $Male is false>> even though you are female. 
 
-    You are worried that you are not supposed to be here and that somebody might notice you snooping around.
+You are worried that you are not supposed to be here and that somebody might notice you snooping around.
 
-    [[Leave dorm]]
-    [[Stick around]]
-    <<else>>.
+[[Leave dorm]]
+[[Stick around]]
+<<else>>.
 
-    This is where you belong. 
+This is where you belong. 
 
-    [[Explore]]
-    [[Sleep]]
-    [[Leave|Demo]]
-    <</if>>
+[[Explore]]
+[[Sleep]]
+[[Leave|Demo]]
+<</if>>
 
 :: Female dorm
-    You enter the female dorm<<if $Male is true>>  even though you are male. 
+You enter the female dorm<<if $Male is true>>  even though you are male. 
 
-    You are worried that you are not supposed to be here and that somebody might notice you snooping around.
+You are worried that you are not supposed to be here and that somebody might notice you snooping around.
 
-    [[Leave dorm]]
-    [[Stick around]]
-    <<else>>.
+[[Leave dorm]]
+[[Stick around]]
+<<else>>.
 
-    This is where you belong.
+This is where you belong.
 
-    [[Explore]]
-    [[Sleep]]
-    [[Leave|Demo]]
-    <</if>>
+[[Explore]]
+[[Sleep]]
+[[Leave|Demo]]
+<</if>>
 
 :: Explore
-        You explore the dormitory.
-        /* If you get caught then ostracized, chance to find a clue or item such as a potion or seeds */
-        You find nothing of interest.
+You explore the dormitory.
+/* If you get caught then ostracized, chance to find a clue or item such as a potion or seeds */
+You find nothing of interest.
 
-        [[Sleep]]
-        [[Leave|Demo]]
+[[Sleep]]
+[[Leave|Demo]]
         
 :: Leave dorm
-        You leave the dorm and make your way back.
+You leave the dorm and make your way back.
 
-        [[Enter another dormitory|Dormitory]]
-        [[Leave|Demo]]
+[[Enter another dormitory|Dormitory]]
+[[Leave|Demo]]
 
 :: Stick around
-        Even though you probably shouldn't be in this dorm, you decide to stay anyway.
-        
-        Fortunately, there aren't many students around and you manage to avoid detection as you sneak your way through the dorm rooms.
-        
-        [[Search student's belongings]]
-        [[Eavesdrop]]
-                
-:: Search student's belongings
-            You search the student's personal effects.
-            /* RNG to find various items or clues OR get caught */
-            You find nothing of interest.
+Even though you probably shouldn't be in this dorm, you decide to stay anyway.
 
-            [[Leave dorm]]
-            [[Stick around]]
+Fortunately, there aren't many students around and you manage to avoid detection as you sneak your way through the dorm rooms.
+
+[[Search student's belongings]]
+[[Eavesdrop]]
+        
+:: Search student's belongings
+You search the student's personal effects.
+/* RNG to find various items or clues OR get caught */
+You find nothing of interest.
+
+[[Leave dorm]]
+[[Stick around]]
 
 :: Eavesdrop
-            <<if $Ostra is true>> 
-            The students notice you eavesdropping and report you to the administration in a panic.
+<<if $Ostra is true>> 
+The students notice you eavesdropping and report you to the administration in a panic.
 
-            You have been hauled off to [[jail][$Day += 15]].
-            <<else>>
-            You eavesdrop on the student's conversation.
-            /* Incorporate RNG similiar to gossip */
-            You hear nothing of interest.
+You have been hauled off to [[jail][$Day += 15]].
+<<else>>
+You eavesdrop on the student's conversation.
+/* Incorporate RNG similiar to gossip */
+You hear nothing of interest.
 
-            [[Stick around]]
-            [[Leave dorm]]
-            <</if>>
+[[Stick around]]
+[[Leave dorm]]
+<</if>>
 
 :: jail
-                You have been thrown into a jail cell for the crime of being sneaky.
+You have been thrown into a jail cell for the crime of being sneaky.
 
-                You will not receive a trial and you have not been notified of the duration of your stay in jail.
+You will not receive a trial and you have not been notified of the duration of your stay in jail.
 
-                Many days have passed...
+Many days have passed...
 
-                [[Wait patiently][$Day += 739]]
-                [[Attempt escape]]
+[[Wait patiently][$Day += 739]]
+[[Attempt escape]]
 
 :: Wait patiently
-                    You waited patiently to be released from your jail cell.
+You waited patiently to be released from your jail cell.
 
-                    You have no clue how much time has passed since you entered this cell.
+You have no clue how much time has passed since you entered this cell.
 
-                    You are skinny and haven't had a proper meal in a long time.
+You are skinny and haven't had a proper meal in a long time.
 
-                    <div align='center' style='font-size: 300%;'>\
-                    <span class='fadeIn'><span style="color:red"><b>YOU DIED OF STARVATION</b></span></span>
-                    </div> 
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU DIED OF STARVATION</b></span></span>
+</div> 
 
 :: Attempt escape
-                    You take your future into your own hands and attempt escape from your cell.
+You take your future into your own hands and attempt escape from your cell.
 
-                    {Path under construction}
+{Path under construction}
 
-                    /* IF player previously hid items in cell they can be used to escape */
-                    /* IF player used a potion on themself previously, the effect may be helpful */
-                    /* IF player established a relationship with the guard previously, that may be helpful */
+/* IF player previously hid items in cell they can be used to escape */
+/* IF player used a potion on themself previously, the effect may be helpful */
+/* IF player established a relationship with the guard previously, that may be helpful */
 
 :: Pull latch
-    You pull the latch. 
-    
-    The door is locked, but you don't see a keyhole of any kind. 
-    
-    Maybe <<if $CeilingKey is false>>there is some other way of opening<<else>>the passphrase you learned will open<</if>> this door?
-    
-    [[Choose a dormitory|Dormitory]]
-    <<if $CeilingKey is true>> \
-    [[Utter the passphrase|Passphrase]]
-    <</if>> \
-    [[Leave|Demo]]
+You pull the latch. 
+
+The door is locked, but you don't see a keyhole of any kind. 
+
+Maybe <<if $CeilingKey is false>>there is some other way of opening<<else>>the passphrase you learned will open<</if>> this door?
+
+[[Choose a dormitory|Dormitory]]
+<<if $CeilingKey is true>> \
+[[Utter the passphrase|Passphrase]]
+<</if>> \
+[[Leave|Demo]]
         
 :: Passphrase
-        You utter the passphrase.
-        
-        You hear a clicking noise and the latch unlocks.
+You utter the passphrase.
 
-        [[Enter the darkness]]
+You hear a clicking noise and the latch unlocks.
+
+[[Enter the darkness]]
 
 :: Enter the darkness
-            You swing a door down and climb into the ceiling.
-            
-            The teacher's dorm appears quite similar to the student dorms, however there are fewer beds.
+You swing a door down and climb into the ceiling.
 
-            You notice teacher's belongings strewn about.
+The teacher's dorm appears quite similar to the student dorms, however there are fewer beds.
 
-            There are currently no teachers around, but you may not want to press your luck.
+You notice teacher's belongings strewn about.
 
-            [[Search teacher's belongings]]
-            [[Hide and wait for a teacher to show up|WIP]]
-            [[Leave dorm]]
+There are currently no teachers around, but you may not want to press your luck.
+
+[[Search teacher's belongings][$TempBool to false]]
+[[Hide and wait for a teacher to show up|Hide][$TempBool to true]]
+[[Leave dorm]]
 
 :: Search teacher's belongings
 You open some dressers and bags, searching for an interesting item.
@@ -557,7 +564,7 @@ A teacher enters the dorm while you are searching.
 <<if $UserPotions.length gt 0>>\
 [[Drink a potion|WIP]]
 <</if>>\
-[[Confront them|WIP]]
+[[Confront them]]
 [[Hide]]
 <<elseif $Temp is 8>>
 You get lucky and find a legendary item. /* Figure this out. Ideas: Sword of Siren Slaying, A key to a tomb in the forest, key to locked door in library, secret scroll of fire breathing */
@@ -597,7 +604,7 @@ You find the \
 <</if>>
 
 :: Hide
-You hide from the teacher. You crouch in a corner in an attempt to avoid detection. 
+<<if $TempBool is false>>You hide from the teacher. <</if>>You crouch in a corner in an attempt to avoid detection. <<if $TempBool is true>>A teacher enters the dormitory.<</if>>
 /* Incorporate other options */
 Your foot slips and you fall onto the floor, making a noise.
 
@@ -623,21 +630,21 @@ You do your best to convince them that you belong in the teacher's dormitory for
 <</if>>\
         
 :: Sleep
-        <<set $Day += 1>> \
-        <<set $NightTime to true>> \
-        You go to sleep.
+<<set $Day += 1>> \
+<<set $NightTime to true>> \
+You go to sleep.
 
-        You dream of an odd future that awaits you, but you can't quite make out the ending.
+You dream of an odd future that awaits you, but you can't quite make out the ending.
 
-        Maybe it involves <<print $Dream.random()>>...?
+Maybe it involves <<print $Dream.random()>>...?
 
-        [[Wake Up|Demo]]
+[[Wake Up|Demo]]
 
-        <<for _i to 0; _i lt $PlantAge.length; _i++>>
-            <<if $PlantAge[_i] gt 0>>
-                <<set $PlantAge[_i] += 1>>
-            <</if>>
-        <</for>>
+<<for _i to 0; _i lt $PlantAge.length; _i++>>
+    <<if $PlantAge[_i] gt 0>>
+        <<set $PlantAge[_i] += 1>>
+    <</if>>
+<</for>>
 
 :: Temple
 You enter the temple.
@@ -654,41 +661,41 @@ Wooden pews line the stone floors and an imposing statue watches over the space.
 [[Leave|Demo]]
 
 :: Pray at a pew
-    You locate a pew that seems comfortable enough.
-    
-    You immerse yourself in prayer, increasing your reverence and probably making you a more likeable person.
-    
-    You spend the remainder of your day in deep introspection despite still feeling like a relatively similar person afterwards.
-    <<set $NightTime to true>> /* Find an item/clue under the pew one day (rand) */
-    [[Eat dinner]]
-    [[Sleep]]
+You locate a pew that seems comfortable enough.
+
+You immerse yourself in prayer, increasing your reverence and probably making you a more likeable person.
+
+You spend the remainder of your day in deep introspection despite still feeling like a relatively similar person afterwards.
+<<set $NightTime to true>> /* Find an item/clue under the pew one day (rand) */
+[[Eat dinner]]
+[[Sleep]]
 
 :: Pray to the statue
-    You kneel before the statue and begin praying to the imposing figure before you.
-    <<if $Holy is 1>>    
-    For a second you lose focus and your eyes open, revealing the statue before you. The figure's eyes are glowing a deep blue color.
-    
-    In surprise, you blink a couple times and reinspect the statue's face. The glow is gone.
-    <<elseif $Holy is 3>>
-    Your homage progresses entirely normally. However, when you finish your prayer and stand up to face the statue, something strange happens.
-    
-    You stare into the face of the statue and your own face stares back. Suddenly the eyes in the statue turn blue again and glow intensely until fizzling out and leaving behind the normal face of the statue. You feel tingling in your limbs. 
-    <<set $HolyPower to true>>
-    You have been imbued with a holy power.
-    <</if>> \
-    <<if $Holy isnot 3>>
-    You spend the remainder of your day paying homage to the figure before you.
-    <</if>> \
-    <<set $NightTime to true>>
-    [[Eat dinner]]
-    [[Sleep]]
+You kneel before the statue and begin praying to the imposing figure before you.
+<<if $Holy is 1>>    
+For a second you lose focus and your eyes open, revealing the statue before you. The figure's eyes are glowing a deep blue color.
+
+In surprise, you blink a couple times and reinspect the statue's face. The glow is gone.
+<<elseif $Holy is 3>>
+Your homage progresses entirely normally. However, when you finish your prayer and stand up to face the statue, something strange happens.
+
+You stare into the face of the statue and your own face stares back. Suddenly the eyes in the statue turn blue again and glow intensely until fizzling out and leaving behind the normal face of the statue. You feel tingling in your limbs. 
+<<set $HolyPower to true>>
+You have been imbued with a holy power.
+<</if>> \
+<<if $Holy isnot 3>>
+You spend the remainder of your day paying homage to the figure before you.
+<</if>> \
+<<set $NightTime to true>>
+[[Eat dinner]]
+[[Sleep]]
 
 :: Search the temple
-    You search the temple and find nothing of interest.
+You search the temple and find nothing of interest.
 
-    [[Pray at a pew]] 
-    [[Pray to the statue][$Holy += 1]]
-    [[Leave|Demo]]
+[[Pray at a pew]] 
+[[Pray to the statue][$Holy += 1]]
+[[Leave|Demo]]
 
 :: Cloister
 You enter the cloister.
@@ -705,125 +712,125 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
 [[Leave|Demo]]
 
 :: Inspect the plants
-    You inspect the plants and notice a decent variety of plant life.
+You inspect the plants and notice a decent variety of plant life.
 
-    There is open soil that seems fertile enough for growing plants.
+There is open soil that seems fertile enough for growing plants.
 
-    <<if $Planting is false>>\
-    Maybe you could plant some seeds here.
-    <<set $Planting to true>>
-    <<elseif $Planted.length gt 0>>\
-    You have planted: $Planted.
+<<if $Planting is false>>\
+Maybe you could plant some seeds here.
+<<set $Planting to true>>
+<<elseif $Planted.length gt 0>>\
+You have planted: $Planted.
 
-    [[Check on your plants]]    
-    <</if>> \ 
-    [[Plant seeds]] 
-    [[Daydream]]
-    [[Leave|Demo]]
+[[Check on your plants]]    
+<</if>> \ 
+[[Plant seeds]] 
+[[Daydream]]
+[[Leave|Demo]]
 
 :: Check on your plants
-        <<for _i to 0; _i lt $PlantAge.length; _i++>>\
-            <<set $Temp to $PlantAge[_i] - 1>>\
-            <<if $PlantAge[_i] gt 0 and $PlantAge[_i] lt $SproutAge[_i]>>\   
-                You planted $MasterPlants[_i] seeds. The plant has not yet sprouted. It was planted $Temp day(s) ago. 
-            <<elseif $PlantAge[_i] gt $SproutAge[_i] - 1 and $PlantAge[_i] lt $HarvestAge[_i]>>\
-                A $MasterPlants[_i] plant has sprouted. It was planted $Temp days ago.
-            <<elseif $PlantAge[_i] gt $HarvestAge[_i] - 1>>\ 
-                <<set $Harvest to true>>\
-                <<if $UserPlants.includes($MasterPlants[_i])>>\
-                <<else>><<run $UserPlantsUnique($MasterPlants[_i])>>\
-                <</if>>\
-                Your $MasterPlants[_i] plant is fully grown and can be harvested.
-            <</if>>\
-        <</for>>\
-        
-        <<if $Harvest is true>> \
-        [[Harvest]]
+<<for _i to 0; _i lt $PlantAge.length; _i++>>\
+    <<set $Temp to $PlantAge[_i] - 1>>\
+    <<if $PlantAge[_i] gt 0 and $PlantAge[_i] lt $SproutAge[_i]>>\   
+        You planted $MasterPlants[_i] seeds. The plant has not yet sprouted. It was planted $Temp day(s) ago. 
+    <<elseif $PlantAge[_i] gt $SproutAge[_i] - 1 and $PlantAge[_i] lt $HarvestAge[_i]>>\
+        A $MasterPlants[_i] plant has sprouted. It was planted $Temp days ago.
+    <<elseif $PlantAge[_i] gt $HarvestAge[_i] - 1>>\ 
+        <<set $Harvest to true>>\
+        <<if $UserPlants.includes($MasterPlants[_i])>>\
+        <<else>><<run $UserPlantsUnique($MasterPlants[_i])>>\
         <</if>>\
-        [[Daydream]]
-        [[Leave|Demo]]
+        Your $MasterPlants[_i] plant is fully grown and can be harvested.
+    <</if>>\
+<</for>>\
+
+<<if $Harvest is true>> \
+[[Harvest]]
+<</if>>\
+[[Daydream]]
+[[Leave|Demo]]
         
 :: Harvest
-            Which plant would you like to harvest?
-            <<nobr>>            
-                <<for _i to 0; _i lt $UserPlants.length; _i++>>\
-                    <<capture _i>>\
-                        <<if $UserIngredients.includes($UserPlants[_i]) is false and $PlantAge[_i] isnot lt $HarvestAge[_i]>>\
-                            <<button [[$UserPlants[_i]|Harvested]]>><<run $UserIngredients.pushUnique($UserPlants[_i])>><<set $Temp to $UserPlants[_i]>><</button>>\
-                        <</if>>\
-                    <</capture>>\
-                <</for>>
-            <</nobr>>
-            [[Leave|Demo]]
+Which plant would you like to harvest?
+<<nobr>>            
+    <<for _i to 0; _i lt $UserPlants.length; _i++>>\
+        <<capture _i>>\
+            <<if $UserIngredients.includes($UserPlants[_i]) is false and $PlantAge[_i] isnot lt $HarvestAge[_i]>>\
+                <<button [[$UserPlants[_i]|Harvested]]>><<run $UserIngredients.pushUnique($UserPlants[_i])>><<set $Temp to $UserPlants[_i]>><</button>>\
+            <</if>>\
+        <</capture>>\
+    <</for>>
+<</nobr>>
+[[Leave|Demo]]
 
 :: Harvested
-                You harvested from your $Temp plant.
+You harvested from your $Temp plant.
 
-                [[Harvest another plant|Harvest]]
-                [[Leave|Demo]]
+[[Harvest another plant|Harvest]]
+[[Leave|Demo]]
 
 :: Plant seeds
-        <<set $Grow to "">> \
-        Which seed will you plant?
-        <<if $Seeds.length lt 1>>
-        You currently have no seeds.
+<<set $Grow to "">> \
+Which seed will you plant?
+<<if $Seeds.length lt 1>>
+You currently have no seeds.
 
-        <<else>>
-        Select a seed to plant.
-        
-            <<for _i to 0; _i lt $Seeds.length; _i++>>\
-                <<capture _i>>\
-                    <<button [[$Seeds[_i]|Plant seed]]>><<set $Grow to $Seeds[_i]>><<run $Seeds.delete($Grow); $Planted.pushUnique($Grow)>><</button>>  \
-                <</capture>>\
-            <</for>>
+<<else>>
+Select a seed to plant.
 
-         <</if>>\
-        [[Daydream]]
-        [[Leave|Demo]]
+    <<for _i to 0; _i lt $Seeds.length; _i++>>\
+        <<capture _i>>\
+            <<button [[$Seeds[_i]|Plant seed]]>><<set $Grow to $Seeds[_i]>><<run $Seeds.delete($Grow); $Planted.pushUnique($Grow)>><</button>>  \
+        <</capture>>\
+    <</for>>
+
+ <</if>>\
+[[Daydream]]
+[[Leave|Demo]]
         
 :: Plant seed [Test]
-                <<if $UserPlants.includes($Grow)>>\
-                You have already planted this seed.
-                <<if Fresh()>><<run $Seeds.pushUnique($Grow)>><</if>>
-                You can only plant one of each seed type.
+<<if $UserPlants.includes($Grow)>>\
+You have already planted this seed.
+<<if Fresh()>><<run $Seeds.pushUnique($Grow)>><</if>>
+You can only plant one of each seed type.
 
-                Maybe you can find another use for this seed.
-                
-                [[Try again|Plant seeds]]
-                [[Eat dinner]]
-                [[Sleep]]
-                <<else>>\
-                You plant the $Grow seed.
-                <<run $UserPlants.pushUnique($Grow)>>                
-                Check back later to see if your plant is grown.
+Maybe you can find another use for this seed.
 
-                [[Eat dinner]]
-                [[Sleep]]
+[[Try again|Plant seeds]]
+[[Eat dinner]]
+[[Sleep]]
+<<else>>\
+You plant the $Grow seed.
+<<run $UserPlants.pushUnique($Grow)>>                
+Check back later to see if your plant is grown.
 
-                /* Better method using $MasterPlants? */ \
-                    <<if Fresh()>>
-                        <<switch $Grow>>
-                            <<case "Marijuana">>
-                                <<set $PlantAge [0] to 1>>
-                            <<case "Poppy">>
-                                <<set $PlantAge [1] to 1>>
-                            <<case "Tulip">>
-                                <<set $PlantAge [2] to 1>>
-                            <<case "Nightshade">>
-                                <<set $PlantAge [3] to 1>>
-                            <<case "Hemlock">>
-                                <<set $PlantAge [4] to 1>>
-                        <</switch>>
-                    <</if>>
-                <</if>>
+[[Eat dinner]]
+[[Sleep]]
+
+/* Better method using $MasterPlants? */ \
+    <<if Fresh()>>
+        <<switch $Grow>>
+            <<case "Marijuana">>
+                <<set $PlantAge [0] to 1>>
+            <<case "Poppy">>
+                <<set $PlantAge [1] to 1>>
+            <<case "Tulip">>
+                <<set $PlantAge [2] to 1>>
+            <<case "Nightshade">>
+                <<set $PlantAge [3] to 1>>
+            <<case "Hemlock">>
+                <<set $PlantAge [4] to 1>>
+        <</switch>>
+    <</if>>
+<</if>>
          
 :: Daydream
-    You laze about the cloister, daydreaming all the while. 
+You laze about the cloister, daydreaming all the while. 
 
-    You realize that you accomplished very little, but you also don't care about that at all.
-    <<set $NightTime to true>> /* Small random chance of something COOL happening (1/20?), generate random daydreams to make this option more entertaining for the player */
-    [[Eat dinner]]
-    [[Sleep]]
+You realize that you accomplished very little, but you also don't care about that at all.
+<<set $NightTime to true>> /* Small random chance of something COOL happening (1/20?), generate random daydreams to make this option more entertaining for the player */
+[[Eat dinner]]
+[[Sleep]]
 
 :: Refectory
 You enter the refectory.
@@ -838,98 +845,98 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 [[Leave|Demo]]
 
 :: Help prepare dinner
-    You enter the kitchen. 
+You enter the kitchen. 
 
-    The cooks are preparing food in anticipation of the upcoming meal.
+The cooks are preparing food in anticipation of the upcoming meal.
 
-    You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
+You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
 
-    [[Send out the food]]
-    <<if $Poison is true>>
-    [[Poison the food]]
-    
-    [[Poison the drinking water]]
-    <</if>>
-    <<if $Potion is true>> \
-    [[Use potion on food]]
-    
-    [[Use potion on drinking water]]
-    <</if>>
+[[Send out the food]]
+<<if $Poison is true>>
+[[Poison the food]]
+
+[[Poison the drinking water]]
+<</if>>
+<<if $Potion is true>> \
+[[Use potion on food]]
+
+[[Use potion on drinking water]]
+<</if>>
 
 :: Poison the food
-        You slip the poison out of your pocket.
+You slip the poison out of your pocket.
 
-        Whose meal will you poison?
+Whose meal will you poison?
 
-        {Path under construction}
+{Path under construction}
 
-        /* List targets once a relationship is developed, variables for tracking relationships */
+/* List targets once a relationship is developed, variables for tracking relationships */
 
 :: Poison the drinking water
-        You sneak over to the water keg and poison the water.
+You sneak over to the water keg and poison the water.
 
-        {Path under construction}
+{Path under construction}
 
-        /* Majority of campus dies, write ending */
+/* Majority of campus dies, write ending */
 
 :: Send out the food
-        You do enough work to finish preparing the food and send out the meals.
+You do enough work to finish preparing the food and send out the meals.
 
-        By the time you get a chance to eat, only the cooks remain in the refectory. 
+By the time you get a chance to eat, only the cooks remain in the refectory. 
 
-        You eat your meal alongside them.
-        /* Find clue? */
-        [[Sleep]]
+You eat your meal alongside them.
+/* Find clue? */
+[[Sleep]]
 
 :: Eat dinner
-    After a hard day's work, you enter the refectory for a meal.
-    <<set $NightTime to true>>    
-    You take a seat at a table and eat your meal surrounded by the other students.
-    
-    [[Listen to gossip]]
-    [[Eat in peace]]
+After a hard day's work, you enter the refectory for a meal.
+<<set $NightTime to true>>    
+You take a seat at a table and eat your meal surrounded by the other students.
+
+[[Listen to gossip]]
+[[Eat in peace]]
 
 :: Listen to gossip
-        <<if $Ostra is true>> \
-        You decide to eavesdrop again while <b>socially ostracized</b>.
-        
-        Despite your best attempts, you can't make out any useful information. <<if $Sneaky is false>>The other students seem to have caught onto your game.
+<<if $Ostra is true>> \
+You decide to eavesdrop again while <b>socially ostracized</b>.
 
-        They warn you that if you try to eavesdrop once more, they will ensure that you never again have the chance.
-        
-        They seem completely serious about the threat.<</if>> 
-        
-        You finish your meal and [[make your way back to your dorm]]. 
-        <<else>>
-            You figure that you require information about the lives of others.
-            <<set $Temp to random(9)>>
-            While eating your meal, you inconspicuously listen into the conversations of the other students in an attempt to glean some juicy gossip.
-            <<if $Temp is 0>>
-            The students notice you are listening to their conversation and huddle together uncomfortably.
-            <<set $Ostra to true>>
-            You are not able to hear anything and <b>you have become socially ostracized</b>. You will be unable to make friends with other students.
+Despite your best attempts, you can't make out any useful information. <<if $Sneaky is false>>The other students seem to have caught onto your game.
 
-            You must be careful with future social interactions.
+They warn you that if you try to eavesdrop once more, they will ensure that you never again have the chance.
 
-            You finish your meal and turn in your dishes. 
-            
-            [[Sleep]]
-            <<elseif $Temp is 9>>
-            <b>You manage to overhear to their conversation at the perfect time.</b>
+They seem completely serious about the threat.<</if>> 
 
-            You overhear the numbers: <<print $Faucets>>
-            /* Random Puzzle Solution - Incorporate other solutions and randomize - Make this a function() */ \
-            <<else>>
-            You manage to make out a snippet of their conversation.
+You finish your meal and [[make your way back to your dorm]]. 
+<<else>>
+    You figure that you require information about the lives of others.
+    <<set $Temp to random(9)>>
+    While eating your meal, you inconspicuously listen into the conversations of the other students in an attempt to glean some juicy gossip.
+    <<if $Temp is 0>>
+    The students notice you are listening to their conversation and huddle together uncomfortably.
+    <<set $Ostra to true>>
+    You are not able to hear anything and <b>you have become socially ostracized</b>. You will be unable to make friends with other students.
 
-            //<<print $Hint.random()>>// 
-            <</if>> 
-        <</if>> \
-        <<if $Ostra isnot true>>\
-        You finish your meal and turn in your dishes. 
-            
-        [[Sleep]]
-        <</if>>
+    You must be careful with future social interactions.
+
+    You finish your meal and turn in your dishes. 
+    
+    [[Sleep]]
+    <<elseif $Temp is 9>>
+    <b>You manage to overhear to their conversation at the perfect time.</b>
+
+    You overhear the numbers: <<print $Faucets>>
+    /* Random Puzzle Solution - Incorporate other solutions and randomize - Make this a function() */ \
+    <<else>>
+    You manage to make out a snippet of their conversation.
+
+    //<<print $Hint.random()>>// 
+    <</if>> 
+<</if>> \
+<<if $Ostra isnot true>>\
+You finish your meal and turn in your dishes. 
+    
+[[Sleep]]
+<</if>>
 
 :: make your way back to your dorm
 <<if $Sneaky is true>>
@@ -950,13 +957,13 @@ You make your way back to the dorm in peace.
 <</if>>\
 
 :: Eat in peace
-        You decide to eat in peace.
+You decide to eat in peace.
 
-        You grab your meal and move to a location at a different table that isn't quite so noisy.
-        /* If relationship, can be approached intiating an event */
-        You enjoy your meal and feel satisfied.
+You grab your meal and move to a location at a different table that isn't quite so noisy.
+/* If relationship, can be approached intiating an event */
+You enjoy your meal and feel satisfied.
 
-        [[Sleep]]
+[[Sleep]]
 
 :: Library
 You enter the library.
@@ -969,60 +976,60 @@ You notice many bookshelves and various students spread out across the room, dil
 [[Leave|Demo]]
 
 :: Study 
-    You decide to brush up on your reading. 
-    <<set $Temp to random(9)>>
-    You pick out a book and read up on <<print $Dream.random()>>.
+You decide to brush up on your reading. 
+<<set $Temp to random(9)>>
+You pick out a book and read up on <<print $Dream.random()>>.
 
-    You find a note left in the book that reads: \
-    <<if $Temp is 9>>\
-    $Faucets\
-    <<else>>\
-    <<print $Notes.random()>>.
-    <</if>>
-    [[Eat dinner]]
-    [[Sleep]] 
+You find a note left in the book that reads: \
+<<if $Temp is 9>>\
+$Faucets\
+<<else>>\
+<<print $Notes.random()>>.
+<</if>>
+[[Eat dinner]]
+[[Sleep]] 
 
 :: Interrupt another student
-    You find another student studying and pull them away from their work.
-    
-    The student is obviously annoyed with you. You are undeterred. 
-    
-    You probe them seeking the secrets of The Monastery.
-    <<if $Ostra is true>>
-    They tell you to get lost.
+You find another student studying and pull them away from their work.
 
-    You are escorted out of the library. 
+The student is obviously annoyed with you. You are undeterred. 
 
-    [[Eat dinner]]
-    [[Sleep]]
-    <<else>>
-    They consider for a second, but seem uncomfortable.
-    /* conditional based on big friend or enemy */
-    Ultimately, they were not convinced and you leave empty handed.
-    
-    [[Eat dinner]]
-    [[Sleep]]
-    <</if>>    
+You probe them seeking the secrets of The Monastery.
+<<if $Ostra is true>>
+They tell you to get lost.
+
+You are escorted out of the library. 
+
+[[Eat dinner]]
+[[Sleep]]
+<<else>>
+They consider for a second, but seem uncomfortable.
+/* conditional based on big friend or enemy */
+Ultimately, they were not convinced and you leave empty handed.
+
+[[Eat dinner]]
+[[Sleep]]
+<</if>>    
 /* Expand passage */
 
 :: Find the librarian
-    You search the library, unable to locate a librarian.
+You search the library, unable to locate a librarian.
 
-    You notice a door to a back room.
+You notice a door to a back room.
 
-    [[Open door|LibraryDoor]]
-    [[Study]]
-    [[Interrupt another student]]
-    [[Leave|Demo]]
+[[Open door|LibraryDoor]]
+[[Study]]
+[[Interrupt another student]]
+[[Leave|Demo]]
 
 :: LibraryDoor
-        You turn the knob.
-        /* Where is the key? In the teacher's dorm */
-        The door is locked.
+You turn the knob.
+/* Where is the key? In the teacher's dorm */
+The door is locked.
 
-        [[Study]]
-        [[Interrupt another student]]
-        [[Leave|Demo]]
+[[Study]]
+[[Interrupt another student]]
+[[Leave|Demo]]
 
 :: Laboratory
 You enter the laboratory.
@@ -1041,34 +1048,34 @@ A strange lady sits in the corner staring at you without blinking.
 [[Leave|Demo]]
 
 :: Brew potion 
-    You approach the potion station.
-    <<set _IngredientList to []>>
-    <<if $Eggs gt 0>><<run _IngredientList.push('Egg')>><</if>>\
-    <<if $Milk gt 0>><<run _IngredientList.push('Milk')>><</if>>\
-    <<if $Keg gt 0>><<run _IngredientList.push('Ale')>><</if>>\
-    <<for _i to 0; _i lt $UserIngredients.length; _i++>>\
-        <<run _IngredientList.pushUnique($UserIngredients[_i])>>\
-    <</for>>\
-    <<if _IngredientList.length gt 1>>\
-        Select first ingredient:
-        <<set $FirstIngredient to ""; $SecondIngredient to "">>
-        <<listbox "$FirstIngredient" autoselect>>
-            <<optionsfrom _IngredientList>>
-        <</listbox>>
+You approach the potion station.
+<<set _IngredientList to []>>
+<<if $Eggs gt 0>><<run _IngredientList.push('Egg')>><</if>>\
+<<if $Milk gt 0>><<run _IngredientList.push('Milk')>><</if>>\
+<<if $Keg gt 0>><<run _IngredientList.push('Ale')>><</if>>\
+<<for _i to 0; _i lt $UserIngredients.length; _i++>>\
+    <<run _IngredientList.pushUnique($UserIngredients[_i])>>\
+<</for>>\
+<<if _IngredientList.length gt 1>>\
+    Select first ingredient:
+    <<set $FirstIngredient to ""; $SecondIngredient to "">>
+    <<listbox "$FirstIngredient" autoselect>>
+        <<optionsfrom _IngredientList>>
+    <</listbox>>
 
-        Select second ingredient:
+    Select second ingredient:
 
-        <<listbox "$SecondIngredient" autoselect>>
-            <<optionsfrom _IngredientList>>
-        <</listbox>>
-        
-        [[Create potion]]
-    <<else>>\
-        You don't have enough ingredients for potion brewing.<br>
-    <</if>>\
-    [[Leave|Demo]]
+    <<listbox "$SecondIngredient" autoselect>>
+        <<optionsfrom _IngredientList>>
+    <</listbox>>
+    
+    [[Create potion]]
+<<else>>\
+    You don't have enough ingredients for potion brewing.<br>
+<</if>>\
+[[Leave|Demo]]
 
-    <<set _IngredientList to []>>\
+<<set _IngredientList to []>>\
 
 :: Create potion [noreturn, Test]
 <<if $FirstIngredient is $SecondIngredient>>\
@@ -1205,28 +1212,28 @@ A strange lady sits in the corner staring at you without blinking.
 <</if>>
 
 :: Talk to her
-    You approach the strange unblinking lady.
+You approach the strange unblinking lady.
 
-    She explains that she is the scientist in charge of the laboratory.
+She explains that she is the scientist in charge of the laboratory.
 
-    You can work with her to perform experiments and brew potions or poisons.
-    <<set $Lab to true>>
-    She spends the day familiarizing you with the laboratory equipment.
-    <<set $NightTime to true>>
-    [[Eat dinner]]
-    [[Sleep]]
+You can work with her to perform experiments and brew potions or poisons.
+<<set $Lab to true>>
+She spends the day familiarizing you with the laboratory equipment.
+<<set $NightTime to true>>
+[[Eat dinner]]
+[[Sleep]]
 
 :: Inspect the chamber
-    You approach the metal chamber. 
+You approach the metal chamber. 
 
-    You hear a dim humming emanating from the capsule and feel a gentle vibration when you lay your hand on it.
+You hear a dim humming emanating from the capsule and feel a gentle vibration when you lay your hand on it.
 
-    You tap with your finger and an agonizing scream is released from within the capsule.
+You tap with your finger and an agonizing scream is released from within the capsule.
 
-    The horrendous sound is forever etched into your mind and you shake uncontrollably.
-    /* Open chamber by stealing her key */
-    [[Talk to the lady in the corner|Talk to her]]
-    [[Leave|Demo]]
+The horrendous sound is forever etched into your mind and you shake uncontrollably.
+/* Open chamber by stealing her key */
+[[Talk to the lady in the corner|Talk to her]]
+[[Leave|Demo]]
 
 :: Balneary
 You enter the balneary.
@@ -1239,47 +1246,52 @@ There are numbered faucets on both the fountain and the sink, although none of t
 
 Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
 
-[[Turn on individual faucets|WIP]]
+[[Turn on individual faucets]]
 [[Turn on all the faucets][$Temp to 0]]
 [[Wait for another student]]
 [[Leave|Demo]]
 
-/* :: Turn on individual faucets
-    Comment: (Output which faucets are running) \
-    \
-    Faucets 1 through 3 are located in the sink.
+:: Turn on individual faucets
+Faucets 1 through 3 are located in the sink.
 
-    Faucets 4 and 5 are located on the fountain.
+Faucets 4 and 5 are located on the fountain.
 
-    <label>Which faucet? <<numberbox '$SingleFacuet' 0>></label>
+Select a faucet to turn on:
+<<set _Faucet to [1,2,3,4,5]>>
+<<listbox '$SingleFaucet' autoselect>>
+    <<optionsfrom _Faucet>>
+<</listbox>>
 
-    [[Turn handle]]
-    [[Leave|Demo]] */
+[[Turn handle]]
+[[Leave|Demo]] 
 
-/* :: Turn handle 
-        Comment: (Track ON/OFF status with variables and recognize this when giving user output in this passage, boolean array?) 
-        <<if ($UserFaucets[0] lte 0) or ($UserFaucets[0] gte 6)>> \ 
-        There is no faucet with that number. 
+:: Turn handle 
+You turn the handle of Faucet: $SingleFaucet.
+<<if ($SingleFaucet is 4) or ($SingleFaucet is 5)>>
+This faucet is located on the fountain.
 
-        [[Try again|Turn on individual faucets]] \
-        <<else>> \
-        You turn the handle of Faucet $SingleFaucet.
-        <<if ($SingleFaucet is 4) or ($SingleFaucet is 5)>>
-        It is located on the fountain.
+Steam rises and beads of water drip from a gargoyle's snout.
 
-        Steam rises and beads of water drip from a gargoyle's snout.
-        <<else>>
-        It is located in the sink.
+You turn off the faucet.
+<<else>>
+This faucet is located in the sink.
 
-        Steam rises and fogs the mirror above.
+Steam rises and fogs the mirror above.
 
-        A message appears in the mirror.
-
-        The mirror reads: Comment: (The position of the faucet number in the solution array +1)
-
+A message appears in the mirror.
+<<nobr>>
+    <<for _i to 0; _i lt $Faucets.length; _i++>>
+        <<if $SingleFacuet is $Faucets[_i]>>
+            <<set $Temp to _i + 1>>
         <</if>>
-        [[Turn another faucet|Turn on individual faucets]]
-        [[Leave|Demo]] */
+    <</for>>
+<</nobr>>
+The mirror reads: $Temp.
+
+You turn off the faucet and the steam vanishes, along with the message.
+<</if>>
+[[Turn another faucet|Turn on individual faucets]]
+[[Leave|Demo]] 
 
 :: Turn on all the faucets 
 <<if $Temp isnot 5>>Choose which faucets to turn.
@@ -1334,8 +1346,8 @@ Students use this area to wash up before meals and collect water for bathing in 
 <<else>>
     <<for _i to 0;  _i lt $Faucets.length; _i++>> \
         <<if $Faucets[_i] isnot $UserFaucets[_i]>> \
-            Nothing happens.
-            <<set $UserFaucets to []>>
+            The running faucets shut themselves off. Maybe you did somewthing wrong.
+            <<set $UserFaucets to []; $Faucets to $Faucets.shuffle(); $BathHouse to false>>
             [[Leave|Demo]]<<break>>
         <<elseif _i == 4>> \
             <<set $BathHouse to true>> \
@@ -1352,84 +1364,81 @@ Students use this area to wash up before meals and collect water for bathing in 
 <</if>>
 
 :: Secret bath
-            You descend the secret passageway and find yourself in an underground bath house.
+You descend the secret passageway and find yourself in an underground bath house.
 
-            You explore for a while until your hear footsteps coming from the shadows. 
-            
-            You start to feel a bit fuzzy the longer you stay in the water.
-            
-            Suddenly, you notice glowing eyes approaching you.
+You explore for a while until your hear footsteps coming from the shadows. 
 
-            [[Attempt an escape|Escape Nurse]]
-            [[Stand your ground|Wait Nurse]]
-            [[Embrace the figure|Embrace Nurse]]
+You start to feel a bit fuzzy the longer you stay in the water.
+
+Suddenly, you notice glowing eyes approaching you.
+
+[[Attempt an escape|Escape Nurse]]
+[[Stand your ground|Wait Nurse]]
+[[Embrace the figure|Embrace Nurse]]
 
 :: Escape Nurse
-/* Populate these passages */
-                You attempt to escape... unsuccessfully.
+You attempt to escape... unsuccessfully.
 
-                The creature catches you and stares its prey in the eyes.
+The creature catches you and stares its prey in the eyes.
 
-                She lifts you into the air. You feel talons on your skin.
+She lifts you into the air. You feel talons on your skin.
 
-                In a monstruously sweet voice, she hisses at you.
+In a monstruously sweet voice, she hisses at you.
 
-                She gives you a choice to submit to her.
+She gives you a choice to submit to her.
 
-                [[Submit|Slavery]]
-                [[Reject offer|Execution]]
+[[Submit|Slavery]]
+[[Reject offer|Execution]]
 
 :: Execution
-                    You reject her offer. 
+You reject her offer. 
 
-                    She hisses in anger.
+She hisses in anger.
 
-                    You feel her talons slide across your skin and in a swift motion, she slices open your abdomen.
+You feel her talons slide across your skin and in a swift motion, she slices open your abdomen.
 
-                    Your guts slide out of your body and plop down onto the floor.
+Your guts slide out of your body and plop down onto the floor.
 
-                    As you bleed out and lose consciousness, a serpentine tongue flicks across your body...
+As you bleed out and lose consciousness, a serpentine tongue flicks across your body...
 
-                    <div align='center' style='font-size: 300%;'>\
-                    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-                    </div> 
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+</div> 
 
 :: Wait Nurse
-/* Intrigued, she approaches you with curiousity and admiration, possibility for cooperation/leadership */
-                You stay still and wait for the creature to approach you.
+You stay still and wait for the creature to approach you.
 
-                She emerges from the shadows. The nurse stands before you gazing upon you with curiousity. 
+She emerges from the shadows. The nurse stands before you gazing upon you with curiousity. 
 
-                You notice she has some animalistic features. She surveys you like a predator would prey. A serpentine tongue flicks out of her mouth.
+You notice she has some animalistic features. She surveys you like a predator would prey. A serpentine tongue flicks out of her mouth.
 
-                With some reservation, she petitions your help.
+With some reservation, she petitions your help.
 
-                [[Escape Nurse]]
-                [[Completely submit to her|Slavery]]
-                [[Offer to help|Siren Partner]]
+[[Escape Nurse]]
+[[Completely submit to her|Slavery]]
+[[Offer to help|Siren Partner]]
 
 :: Embrace Nurse
-/* you fawn over her, leading to your submission (slavery or accomplice) */
-                You run towards the glowing eyes and extend your arms out to embrace the shadowy figure.
+You run towards the glowing eyes and extend your arms out to embrace the shadowy figure.
 
-                You tighten your grip and feel breasts and long hair.
-                
-                You loosen your grip and step backwards into the light. You see the nurse standing before you with certain animalistic features.
+You tighten your grip and feel breasts and long hair.
 
-                With gentle eyes, she petitions your help.
+You loosen your grip and step backwards into the light. You see the nurse standing before you with certain animalistic features.
 
-                [[Completely submit to her|Slavery]]
-                [[Offer to help|Siren Partner]]
+With gentle eyes, she petitions your help.
+
+[[Completely submit to her|Slavery]]
+[[Offer to help|Siren Partner]]
 
 :: Wait for another student
-    You patiently and creepily wait for another student to enter the balneary. 
+You patiently and creepily wait for another student to enter the balneary. 
 
-    Eventually, a student enters with a bucket and fills it with water at one of the faucets.
+Eventually, a student enters with a bucket and fills it with water at one of the faucets.
 
-    He looks uncomfortable as he makes eye contact with you before leaving.
-    <<set $NightTime to true>>
-    [[Eat dinner]]
-    [[Sleep]]
+He looks uncomfortable as he makes eye contact with you before leaving.
+<<set $NightTime to true>>
+[[Eat dinner]]
+[[Sleep]]
 
 :: Infirmary
 You enter the infirmary.
@@ -1451,290 +1460,290 @@ You are ready to work.
 [[Leave|Demo]]
 
 :: Inspect the beds
-    <<if $NurseWork is false>>You inspect the beds. They are empty.
+<<if $NurseWork is false>>You inspect the beds. They are empty.
 
-    Some of the sheets have stains of various colors. 
+Some of the sheets have stains of various colors. 
 
-    There is nothing under the bed. /* Randomly or conditionally put something important under bed? */
-    <<else>>
-    You notice some patients in the beds.
+There is nothing under the bed. /* Randomly or conditionally put something important under bed? */
+<<else>>
+You notice some patients in the beds.
 
-    [[Treat a patient]]<</if>>
-    [[Enter the office]]
-    [[Raid the cabinet]]
-    [[Lave|Demo]]
+[[Treat a patient]]<</if>>
+[[Enter the office]]
+[[Raid the cabinet]]
+[[Lave|Demo]]
 
 :: Treat a patient
-        You approach a patient.
-        <<set $NightTime to true>>
-        You ask the patient some basic questions and fill out some forms in their medical file.
+You approach a patient.
+<<set $NightTime to true>>
+You ask the patient some basic questions and fill out some forms in their medical file.
 
-        You take measurements of their vitals and after examining their symptoms, perform some standard tests.
+You take measurements of their vitals and after examining their symptoms, perform some standard tests.
 
-        You slide the medical file through a compartment into the nurse's office. Eventually, she leaves her office, opens her medicine cabinet and prescribes medicine to the patient, leaving the patient back in your care.
+You slide the medical file through a compartment into the nurse's office. Eventually, she leaves her office, opens her medicine cabinet and prescribes medicine to the patient, leaving the patient back in your care.
 
-        Your work in the infirmary is finished for the day.
-        /* Treating enough patients gives access to medicine cabinet */
-        [[Steal the patient's medicine|WIP]]
-        <<if $Poison is true>> \
-        [[Poison the patient]]
-        <</if>> \
-        [[Eat dinner]]
-        [[Sleep]]
+Your work in the infirmary is finished for the day.
+/* Treating enough patients gives access to medicine cabinet */
+[[Steal the patient's medicine|WIP]]
+<<if $Poison is true>> \
+[[Poison the patient]]
+<</if>> \
+[[Eat dinner]]
+[[Sleep]]
         
 :: Enter the office
-    You twist the doorknob. The door is locked.
+You twist the doorknob. The door is locked.
 
-    [[Knock]]
-    [[Leave|Demo]]
+[[Knock]]
+[[Leave|Demo]]
 
 :: Knock
-    You knock on the door.
-    <<if $NurseWork is false>> 
-    The lock clicks and the door opens to reveal an attractive young nurse.
+You knock on the door.
+<<if $NurseWork is false>> 
+The lock clicks and the door opens to reveal an attractive young nurse.
 
-    She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
+She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
 
-    You uncomfortably sit down across from her. She examines you for a while before talking.
+You uncomfortably sit down across from her. She examines you for a while before talking.
 
-    She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
+She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
 
-    [[Accept][$NurseWork to true]]
-    [[Decline]]
-    <<else>> 
-    The lock clicks and the door opens to reveal the nurse looking very annoyed with you.
+[[Accept][$NurseWork to true]]
+[[Decline]]
+<<else>> 
+The lock clicks and the door opens to reveal the nurse looking very annoyed with you.
 
-    She asks why you are bothering her and you can't think of a good answer.
+She asks why you are bothering her and you can't think of a good answer.
 
-    [[Apologize to her|Nurse Apology]]
-    [[Hug her|Hug Nurse]]
-    <</if>> \
-    [[Insult her|Insult Nurse]]
+[[Apologize to her|Nurse Apology]]
+[[Hug her|Hug Nurse]]
+<</if>> \
+[[Insult her|Insult Nurse]]
 
 :: Accept
-        You accept the nurse's work offer.
+You accept the nurse's work offer.
 
-        With a pleased smile, she spends the day explaining your duties as her student assistant.
+With a pleased smile, she spends the day explaining your duties as her student assistant.
 
-        Once finished, she sees you out and requests your presence tomorrow.
-        <<set $NightTime to true>>
-        [[Eat dinner]]
-        [[Sleep]]
+Once finished, she sees you out and requests your presence tomorrow.
+<<set $NightTime to true>>
+[[Eat dinner]]
+[[Sleep]]
 
 :: Decline
-        You decline the nurse's offer.
+You decline the nurse's offer.
 
-        She frowns, seemingly disappointed and directs you out the door.
+She frowns, seemingly disappointed and directs you out the door.
 
-        [[Leave|Demo]]
+[[Leave|Demo]]
 
 :: Nurse Apology
-        <<if $NurseApology is false>> \
-        You apologize for disturbing her and she rolls her eyes at you before slamming her door shut.
-        <<set $NurseApology to true>>
-        You fear that she might no be so patient with you the next time you disturb her.
-        <<set $NightTime to true>>
-        [[Treat a patient]]
-        [[Leave|Demo]]
-        <<else>>
-        You nervously stutter out yet another apology.
+<<if $NurseApology is false>> \
+You apologize for disturbing her and she rolls her eyes at you before slamming her door shut.
+<<set $NurseApology to true>>
+You fear that she might no be so patient with you the next time you disturb her.
+<<set $NightTime to true>>
+[[Treat a patient]]
+[[Leave|Demo]]
+<<else>>
+You nervously stutter out yet another apology.
 
-        She shuts her eyes for a moment and takes a deep breath.
+She shuts her eyes for a moment and takes a deep breath.
 
-        You let your gaurd down as she seems relatively calm.
+You let your gaurd down as she seems relatively calm.
 
-        You notice long talons extending from her fingertips and in a flash and flurry, your gut has ben sliced open.
+You notice long talons extending from her fingertips and in a flash and flurry, your gut has ben sliced open.
 
-        She watches in anticipation as your entrails slowly slide out of your body as gravity pulls them onto floor of the infirmary.
+She watches in anticipation as your entrails slowly slide out of your body as gravity pulls them onto floor of the infirmary.
 
-        Your lose your balance and your vision fades as your body slams to the floor. You hear the nurse begin feasting upon your entrails.
+Your lose your balance and your vision fades as your body slams to the floor. You hear the nurse begin feasting upon your entrails.
 
-        <div align='center' style='font-size: 300%;'>\
-        <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-        </div> 
-        <</if>>
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+</div> 
+<</if>>
 
 :: Hug Nurse
-        You panic and hug the nurse for some reason. 
+You panic and hug the nurse for some reason. 
 
-        The annoyance vanishes and her face slowly contorts into a menacing and ominous smile. 
+The annoyance vanishes and her face slowly contorts into a menacing and ominous smile. 
 
-        Her eyes sharpen as her brow furrows. You think you noticed sharp teeth. 
+Her eyes sharpen as her brow furrows. You think you noticed sharp teeth. 
 
-        [[Hold onto her]]
-        [[Let go and step back]]
+[[Hold onto her]]
+[[Let go and step back]]
 
 :: Hold onto her
-            You continue to hold onto her.
+You continue to hold onto her.
 
-            You look upwards to face her directly. 
+You look upwards to face her directly. 
 
-            Suddenly she kisses you and liquid pours from her mouth directly into yours. 
+Suddenly she kisses you and liquid pours from her mouth directly into yours. 
 
-            You swallow, unable to break away from her grasp. Eventually, she lets go after you have swallowed a sizeable amount of the liquid and begin to feel a bit fuzzy.
+You swallow, unable to break away from her grasp. Eventually, she lets go after you have swallowed a sizeable amount of the liquid and begin to feel a bit fuzzy.
 
-            She doesn't appear human anymore and you can't think clearly. 
+She doesn't appear human anymore and you can't think clearly. 
 
-            You have become [[completely obedient]] to her.
+You have become [[completely obedient]] to her.
 
 :: completely obedient
-                You feel an overwhelming desire to follow all of her commands.
-                <<set $SirenPet to true>>
-                She hisses and gently runs her hand over your head like a lap dog.
-                <<set $NightTime to true>>
-                You are entirely under her control.
+You feel an overwhelming desire to follow all of her commands.
+<<set $SirenPet to true>>
+She hisses and gently runs her hand over your head like a lap dog.
+<<set $NightTime to true>>
+You are entirely under her control.
 
-                While she lulls you into a state of relaxation, she speaks in a tongue that you cannot understand. 
+While she lulls you into a state of relaxation, she speaks in a tongue that you cannot understand. 
 
-                Her speech further soothes you and puts you into a deeper trance. You have been reprogrammed.
+Her speech further soothes you and puts you into a deeper trance. You have been reprogrammed.
 
-                You will now only be able to make choices based on your programming.
+You will now only be able to make choices based on your programming.
 
-                You feel sleepy.
+You feel sleepy.
 
-                [[Sleep]]
-                /* This path will be complicated because it will still present the player with a narrative based on their previous decisions, but they will be unable to make any more decisions moving forward */
+[[Sleep]]
+/* This path will be complicated because it will still present the player with a narrative based on their previous decisions, but they will be unable to make any more decisions moving forward */
 
 :: Let go and step back
-            You let go of her and step backwards.
+You let go of her and step backwards.
 
-            She becomes defensive and takes a fighting stance despite the smile remaining on her face. She stares at you like prey. 
-            
-            You notice long talons extending from her fingertips and in a flash and flurry, \
-            <<if $Weapon is false>>\
-            your gut has ben sliced open.
+She becomes defensive and takes a fighting stance despite the smile remaining on her face. She stares at you like prey. 
 
-            She watches in anticipation as your entrails slowly slide out of your body as gravity pulls them onto floor of the infirmary.
+You notice long talons extending from her fingertips and in a flash and flurry, \
+<<if $Weapon is false>>\
+your gut has ben sliced open.
 
-            Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
+She watches in anticipation as your entrails slowly slide out of your body as gravity pulls them onto floor of the infirmary.
 
-            <div align='center' style='font-size: 300%;'>\
-            <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-            </div> 
-            <<else>>\
-            she strikes at you.
+Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
 
-            However, you manage to defend yourself, blocking her swipe with your weapon.
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+</div> 
+<<else>>\
+she strikes at you.
 
-            Her talons clang against the metal.
+However, you manage to defend yourself, blocking her swipe with your weapon.
 
-            She recoils in surprise, examining you from afar. She absorbs details as she looks you up and down.
+Her talons clang against the metal.
 
-            [[Strike her]]
-            [[Wait for her to strike]]
-            <</if>>
+She recoils in surprise, examining you from afar. She absorbs details as she looks you up and down.
+
+[[Strike her]]
+[[Wait for her to strike]]
+<</if>>
 
 :: Strike her
-                You take the initiative and lunge forward to strike at her.
+You take the initiative and lunge forward to strike at her.
 
-                She swiftly dodges and slithers around you.
+She swiftly dodges and slithers around you.
 
-                Her talons slice your gut open.
+Her talons slice your gut open.
 
-                She watches in anticipation as your entrails slowly slide out of your body as gravity pulls them onto floor of the infirmary.
+She watches in anticipation as your entrails slowly slide out of your body as gravity pulls them onto floor of the infirmary.
 
-                Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
+Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
 
-                <div align='center' style='font-size: 300%;'>\
-                <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-                </div> 
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+</div> 
 
 :: Wait for her to strike
-                You center yourself and prepare for her next attack.
+You center yourself and prepare for her next attack.
 
-                To your surprise, it never comes. She simply watches you in anticipation, waiting for you to act.
+To your surprise, it never comes. She simply watches you in anticipation, waiting for you to act.
 
-                She deems you a worthy opponent.
+She deems you a worthy opponent.
 
-                Once you are satisified that she doesn't intend to strike, you put your weapon away.
+Once you are satisified that she doesn't intend to strike, you put your weapon away.
 
-                Her talons recede and she walks towards you.
+Her talons recede and she walks towards you.
 
-                She explains that she is a siren who uses men to her advantage in accomplishing her goals.
-                <<if $Male is true>>
-                She is impressed that you resisted her temptations.
-                <</if>>
-                She offers that you work together with her to take control over the campus.
+She explains that she is a siren who uses men to her advantage in accomplishing her goals.
+<<if $Male is true>>
+She is impressed that you resisted her temptations.
+<</if>>
+She offers that you work together with her to take control over the campus.
 
-                [[Accept|Siren Partner]]
-                [[Reject|Siren Enemy]]
+[[Accept|Siren Partner]]
+[[Reject|Siren Enemy]]
 
 :: Siren Partner
-                    You accept the siren's offer to work together.
+You accept the siren's offer to work together.
 
-                    She is now your accomplice. Or maybe your partner.
-                    <<set $SirenPartner to true>>
-                    Either way, you get the impression that she will probably boss you around.
+She is now your accomplice. Or maybe your partner.
+<<set $SirenPartner to true>>
+Either way, you get the impression that she will probably boss you around.
 
-                    Still, you reason that it's better than making her your enemy.
+Still, you reason that it's better than making her your enemy.
 
-                    She licks your cheek with a split tongue and happily slithers away.
+She licks your cheek with a split tongue and happily slithers away.
 
-                    [[Eat dinner]]
-                    [[Sleep]]
+[[Eat dinner]]
+[[Sleep]]
 
 :: Siren Enemy
-                    You reject the siren's offer.
+You reject the siren's offer.
 
-                    She is now your enemy. Or maybe you are her target.
-                    <<set $SirenEnemy to true>>
-                    Either way, she seems displeased with your answer and furiously slithers away..
+She is now your enemy. Or maybe you are her target.
+<<set $SirenEnemy to true>>
+Either way, she seems displeased with your answer and furiously slithers away..
 
-                    You may want to be more careful around her in the future.
-                    <<set $NightTime to true>>                  
-                    You let out a tired sigh of relief and thank your lucky stars for surviving the encounter.
+You may want to be more careful around her in the future.
+<<set $NightTime to true>>                  
+You let out a tired sigh of relief and thank your lucky stars for surviving the encounter.
 
-                    [[Eat dinner]]
-                    [[Sleep]]
+[[Eat dinner]]
+[[Sleep]]
 
 :: Insult Nurse
-        Clearly this lady is being disrespectful.
+Clearly this lady is being disrespectful.
 
-        You decide that this nurse is arrogant and that it is your duty to bring her down a peg.
+You decide that this nurse is arrogant and that it is your duty to bring her down a peg.
 
-        You give her a piece of your mind...  Maybe even a couple pieces.
+You give her a piece of your mind...  Maybe even a couple pieces.
 
-        She doesn't react at all. She simply stares at you with what seems to be curiousity and appetite as if she were hunting you with her eyes. 
+She doesn't react at all. She simply stares at you with what seems to be curiousity and appetite as if she were hunting you with her eyes. 
 
-        [[Apologize|Bad End Slavery][$Temp to 0]]
-        [[Leave the office|Bad End Slavery][$Temp to 1]]
+[[Apologize|Bad End Slavery][$Temp to 0]]
+[[Leave the office|Bad End Slavery][$Temp to 1]]
 
 :: Bad End Slavery
-            You make an attempt to <<if $Temp is 0>>apologize<<else>>leave<</if>>, but this lady is not having any of that. 
+You make an attempt to <<if $Temp is 0>>apologize<<else>>leave<</if>>, but this lady is not having any of that. 
 
-            She has something else in mind... 
+She has something else in mind... 
 
-            With great swiftness, she pulls a needle out of her coat pocket and jabs you with it before you even notice what happened.
+With great swiftness, she pulls a needle out of her coat pocket and jabs you with it before you even notice what happened.
 
-            You look down at the injection sight in surpise and [[you suddenly feel drowsy...|Slavery]]
+You look down at the injection sight in surpise and [[you suddenly feel drowsy...|Slavery]]
 
 :: Slavery  
-                You find yourself in a dark room.
+You find yourself in a dark room.
 
-                You can hear running water. The air is cold and you get the feeling that you are underground.
+You can hear running water. The air is cold and you get the feeling that you are underground.
 
-                You try to move but notice that you are chained to a stone wall. You can't break free no matter how you struggle.
+You try to move but notice that you are chained to a stone wall. You can't break free no matter how you struggle.
 
-                The nurse appears from the shadows and strokes your hair while smiling.
+The nurse appears from the shadows and strokes your hair while smiling.
 
-                She welcomes you to her underground lair and informs you that you will spend the rest of your days as her slave.
+She welcomes you to her underground lair and informs you that you will spend the rest of your days as her slave.
 
-                Maybe you shouldn't have been so rude to her...
+Maybe you shouldn't have been so rude to her...
 
-                <div align='center' style='font-size: 300%;'>\
-                <span class='fadeIn'><span style="color:red"><b>YOU ARE NO LONGER YOUR OWN</b></span></span>
-                </div> 
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU ARE NO LONGER YOUR OWN</b></span></span>
+</div> 
 
 :: Raid the cabinet
-    You attempt to raid the cabinet in the hopes of acquiring drugs.
+You attempt to raid the cabinet in the hopes of acquiring drugs.
 
-    Unfortunately, the cabinet is locked.
+Unfortunately, the cabinet is locked.
 
-    No drugs for you.
-    /* Conditional for cabinet access */
-    [[Inspect the beds]]
-    [[Enter the office]]
-    [[Leave|Demo]]
+No drugs for you.
+/* Conditional for cabinet access */
+[[Inspect the beds]]
+[[Enter the office]]
+[[Leave|Demo]]
 
 :: Injured butt
 The nurse begins treating your injured rear end. 
@@ -1764,89 +1773,89 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 [[Leave|Demo]]
 
 :: Look for a person
-    You decide to look for a person instead of blindly messing around with the animals.
-    
-    After a bit of searching, you eventually make contact with the campus farmer. She works as a professor and tends to the animals in her down time with the help of some of the students.
-    
-    In return for assisting her with her work, you will get access to the animals when she is not around.
+You decide to look for a person instead of blindly messing around with the animals.
 
-    [[Help her out]]
-    [[Decline|Decline farmer]]
+After a bit of searching, you eventually make contact with the campus farmer. She works as a professor and tends to the animals in her down time with the help of some of the students.
+
+In return for assisting her with her work, you will get access to the animals when she is not around.
+
+[[Help her out]]
+[[Decline|Decline farmer]]
     
 :: Help her out
-        You decide to help out the farmer with her work.
-        <<set $BarnWork to true>>
-        She shows you around the barn, explaining how to take care of each animal and showing you where she keeps the animal food and tools.
-        <<set $NightTime to true>>
-        [[Eat dinner]]
-        [[Sleep]]
+You decide to help out the farmer with her work.
+<<set $BarnWork to true>>
+She shows you around the barn, explaining how to take care of each animal and showing you where she keeps the animal food and tools.
+<<set $NightTime to true>>
+[[Eat dinner]]
+[[Sleep]]
 
 :: Decline farmer
-        You decline to help the farmer.
+You decline to help the farmer.
 
-        She seems deeply disappointed.
+She seems deeply disappointed.
 
-        [[Leave|Demo]]
+[[Leave|Demo]]
 
 :: Approach the animals
-    You decide to approach the animals. 
+You decide to approach the animals. 
 
-    Which animal are you interested in?
+Which animal are you interested in?
 
-    [[Horses]]
-    [[Cow]]
-    [[Chickens]]
+[[Horses]]
+[[Cow]]
+[[Chickens]]
 
 :: Horses
-        You enter the stables and find a few horses. 
-        
-        Some of them don't appear too friendly based on their body language.
+You enter the stables and find a few horses. 
 
-        They might be dangerous if not handled properly.
-        <<if $HorseFriend is false>>
-        [[Take one for a ride]]
-        <<else>> 
-        [[Ride your friend immediately|Take him for a ride]]
-        [[Wait for night to ride your friend|Wait for nightfall]]
-        <</if>> \
-        [[Look for a person]]
+Some of them don't appear too friendly based on their body language.
+
+They might be dangerous if not handled properly.
+<<if $HorseFriend is false>>
+[[Take one for a ride]]
+<<else>> 
+[[Ride your friend immediately|Take him for a ride]]
+[[Wait for night to ride your friend|Wait for nightfall]]
+<</if>> \
+[[Look for a person]]
 
 :: Take one for a ride
-            You approach one of the unfriendly horses.
+You approach one of the unfriendly horses.
 
-            You saddle it and attempt to mount the horse when it gets spooked.
+You saddle it and attempt to mount the horse when it gets spooked.
 
-            It panics and bucks you off, kicking around the stable furiously.
+It panics and bucks you off, kicking around the stable furiously.
 
-            [[Calm the horse]]
-            [[Escape the stable]]
+[[Calm the horse]]
+[[Escape the stable]]
 
 :: Calm the horse
-                You try to calm the horse from its panicked state.
-                <<set $Temp to random(1)>>
-                You rub its mane and make soothing sounds in a desperate attempt to calm down the excited equine.
-                <<if $Temp is 1>>
-                You successfully manage to calm down the large creature.
+You try to calm the horse from its panicked state.
+<<set $Temp to random(1)>>
+You rub its mane and make soothing sounds in a desperate attempt to calm down the excited equine.
+<<if $Temp is 1>>
+You successfully manage to calm down the large creature.
 
-                As he collects himself, he recognizes you as a friend.
-                <<set $HorseFriend to true>>
-                He will now allow you to ride him.
+As he collects himself, he recognizes you as a friend.
+<<set $HorseFriend to true>>
+He will now allow you to ride him.
 
-                [[Take him for a ride]]
-                [[Wait for nightfall]]
-                <<else>>
-                You aure unsuccessful in calming the large creature.
+[[Take him for a ride]]
+[[Wait for nightfall]]
+<<else>>
+You aure unsuccessful in calming the large creature.
 
-                A furious hoof makes direct contact with your temple killing you instantly.
+A furious hoof makes direct contact with your temple killing you instantly.
 
-                The horse continues kicking around hay and unintentionally covers your body, concealing it.
+The horse continues kicking around hay and unintentionally covers your body, concealing it.
 
-                You are not found until you begin smelling bad. And nobody noticed you were missing either.
+You are not found until you begin smelling bad. And nobody noticed you were missing either.
 
-                <div align='center' style='font-size: 300%;'>\
-                <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-                </div> 
-                <</if>>
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+</div> 
+<</if>>
 
 :: Ride Horse
 You approach the horse.
@@ -1860,424 +1869,424 @@ You saddle him and [[leave the barn|Ride]].
 <</if>>
 
 :: Take him for a ride
-                    You saddle the horse and ride him out of the barn despite the consipicuous sunlight.
+You saddle the horse and ride him out of the barn despite the consipicuous sunlight.
 
-                    You are immediately noticed by a student a reported for your misbehavior.
+You are immediately noticed by a student a reported for your misbehavior.
 
-                    You recieve disciplinary actions for your misbehavior.
+You recieve disciplinary actions for your misbehavior.
 
-                    You are now definitely socially ostracized if you weren't already.
-                    <<set $Ostra to true>>
-                    [[Leave|Demo]]
+You are now definitely socially ostracized if you weren't already.
+<<set $Ostra to true>>
+[[Leave|Demo]]
 
 
 :: Wait for nightfall
-                    You figure it might not be a great idea to take the horse for a ride when its owner has no idea where he went and might notice he is missing.
-                    <<set $NightTime to true>>
-                    You hide out and wait.
+You figure it might not be a great idea to take the horse for a ride when its owner has no idea where he went and might notice he is missing.
+<<set $NightTime to true>>
+You hide out and wait.
 
-                    Once night breaks and you're sure nobody will notice, you saddle him and [[spur him out of the barn|Ride]].
+Once night breaks and you're sure nobody will notice, you saddle him and [[spur him out of the barn|Ride]].
 
 :: Ride
-                        You are riding a horse outside the barn.
-                        <<if $NightTime is true>>
-                        It is very dark outside the campus.
-                        <</if>>
-                        You can explore the outskirts of the campus as well as the surrounding forest.
+You are riding a horse outside the barn.
+<<if $NightTime is true>>
+It is very dark outside the campus.
+<</if>>
+You can explore the outskirts of the campus as well as the surrounding forest.
 
-                        [[Explore the campus outskirts]]
-                        [[Enter the forest]]
+[[Explore the campus outskirts]]
+[[Enter the forest]]
 
 :: Explore the campus outskirts
-                            You ride along the campus outskirts.
+You ride along the campus outskirts.
 
-                            The air rushes through your hair as you speed around.
+The air rushes through your hair as you speed around.
+
+Wildlife skitters around you. \
+<<nobr>>
+    <<set _Plants to $Plants>>
+    /* Checks if player has each forest plant somewhere in the inventory */
+    <<for _i to 0; _i lt $Seeds.length; _i++>>
+        <<if $Seeds[_i] is 'Marijuana' or $Seeds[_i] is 'Tulip' or $Seeds[_i] is 'Poppy'>>
+            <<run _Plants.delete($Seeds[_i])>>
+        <</if>>
+    <</for>>
+    <<for _i to 0; _i lt $UserPlants.length; _i++>>
+        <<if $UserPlants[_i] is 'Marijuana' or $UserPlants[_i] is 'Tulip' or $UserPlants[_i] is 'Poppy'>>
+            <<run _Plants.delete($UserPlants[_i])>>
+        <</if>>
+    <</for>>
+    <<for _i to 0; _i lt $UserIngredients.length; _i++>>
+        <<if $UserIngredients[_i] is 'Marijuana' or $UserIngredients[_i] is 'Tulip' or $UserIngredients[_i] is 'Poppy'>>
+            <<run _Plants.delete($UserIngredients[_i])>>
+        <</if>>
+    <</for>>
+    <<if _Plants.length gt 0>>
+        <<set $TempString to _Plants.random()>>
+    <<else>>
+        <<set $TempString to $Plants.random()>>
+    <</if>>
+<</nobr>>
+<<if $NightTime is true>>\
+It is difficult to see in the darkness.
+
+[[Dismount and search for plants in the dark]]
+<<else>>
+You notice many interesting plants.
                             
-                            Wildlife skitters around you. \
-                            <<nobr>>
-                                <<set _Plants to $Plants>>
-                                /* Checks if player has each forest plant somewhere in the inventory */
-                                <<for _i to 0; _i lt $Seeds.length; _i++>>
-                                    <<if $Seeds[_i] is 'Marijuana' or $Seeds[_i] is 'Tulip' or $Seeds[_i] is 'Poppy'>>
-                                        <<run _Plants.delete($Seeds[_i])>>
-                                    <</if>>
-                                <</for>>
-                                <<for _i to 0; _i lt $UserPlants.length; _i++>>
-                                    <<if $UserPlants[_i] is 'Marijuana' or $UserPlants[_i] is 'Tulip' or $UserPlants[_i] is 'Poppy'>>
-                                        <<run _Plants.delete($UserPlants[_i])>>
-                                    <</if>>
-                                <</for>>
-                                <<for _i to 0; _i lt $UserIngredients.length; _i++>>
-                                    <<if $UserIngredients[_i] is 'Marijuana' or $UserIngredients[_i] is 'Tulip' or $UserIngredients[_i] is 'Poppy'>>
-                                        <<run _Plants.delete($UserIngredients[_i])>>
-                                    <</if>>
-                                <</for>>
-                                <<if _Plants.length gt 0>>
-                                    <<set $TempString to _Plants.random()>>
-                                <<else>>
-                                    <<set $TempString to $Plants.random()>>
-                                <</if>>
-                            <</nobr>>
-                            <<if $NightTime is true>>\
-                            It is difficult to see in the darkness.
-
-                            [[Dismount and search for plants in the dark]]
-                            <<else>>
-                            You notice many interesting plants.
-                                                        
-                            [[Inspect a plant]]
-                            <</if>> \
-                            [[Enter the forest]]
-                            [[Return to campus]]
+[[Inspect a plant]]
+<</if>> \
+[[Enter the forest]]
+[[Return to campus]]
 
 :: Dismount and search for plants in the dark
-                                You dismount and fumble around in the dark searching for a plant.
-                                
-                                You eventually find one, but it is too dark to determine which plant.
-                                                      
-                                [[Collect seeds]]
-                                [[Collect leaves]]
-                                [[Eat the plant]]
+You dismount and fumble around in the dark searching for a plant.
+
+You eventually find one, but it is too dark to determine which plant.
+                      
+[[Collect seeds]]
+[[Collect leaves]]
+[[Eat the plant]]
 
 :: Inspect a plant 
-                                You dismount and inspect an interesting plant.
-                                
-                                It is a $TempString plant.
-                                                      
-                                [[Collect seeds]]
-                                [[Collect leaves]]
-                                [[Eat the plant]]
+You dismount and inspect an interesting plant.
+
+It is a $TempString plant.
+                      
+[[Collect seeds]]
+[[Collect leaves]]
+[[Eat the plant]]
 
 :: Eat the plant
-                                You eat the plant.
-                                <<switch $TempString>>
-                                <<case "Marijuana">>
-                                It smells gross, but tastes like you imagine any other leafy plant would taste.
+You eat the plant.
+<<switch $TempString>>
+<<case "Marijuana">>
+It smells gross, but tastes like you imagine any other leafy plant would taste.
 
-                                You begin to feel sleepy and hungry. 
-                                <<case "Poppy">>
-                                It tastes strange.
+You begin to feel sleepy and hungry. 
+<<case "Poppy">>
+It tastes strange.
 
-                                You seen begin to feel hazy and droopy.
+You seen begin to feel hazy and droopy.
 
-                                You slump to the ground and your vision fades. Your body melts into the ground.
+You slump to the ground and your vision fades. Your body melts into the ground.
 
-                                Your horse gets spooked for some reason and starts running. He tramples your chest crushing your heart.
+Your horse gets spooked for some reason and starts running. He tramples your chest crushing your heart.
 
-                                <div align='center' style='font-size: 300%;'>\
-                                <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-                                </div> 
-                                <<case "Tulip">>
-                                It tastes aromatic and gross.
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+</div> 
+<<case "Tulip">>
+It tastes aromatic and gross.
 
-                                You stomach is upset.  
-                                <</switch>>
-                                <<if $TempString isnot "Poppy">>\
-                                [[Return to campus]]
-                                <</if>>
+You stomach is upset.  
+<</switch>>
+<<if $TempString isnot "Poppy">>\
+[[Return to campus]]
+<</if>>
 
 :: Collect seeds 
-                                    <<if Fresh()>>\
-                                        <<if $Seeds.includes($TempString)>>\
-                                        You already have these seeds.
-                                        <<else>>\
-                                        You collect $TempString seeds.
-                                        <<run $Seeds.pushUnique($TempString)>>\
-                                        <</if>>\
-                                    <<else>>\
-                                    You collect $TempString seeds.
-                                    <</if>>
-                                    [[Return to campus]]
+<<if Fresh()>>\
+    <<if $Seeds.includes($TempString)>>\
+    You already have these seeds.
+    <<else>>\
+    You collect $TempString seeds.
+    <<run $Seeds.pushUnique($TempString)>>\
+    <</if>>\
+<<else>>\
+You collect $TempString seeds.
+<</if>>
+[[Return to campus]]
 
 :: Collect leaves
-                                    <<if Fresh()>>\
-                                        <<if $UserIngredients.includes($TempString)>>\
-                                        You already have these leaves.
-                                        <<else>>\
-                                        You collect $TempString leaves.
-                                        <<run $UserIngredients.pushUnique($TempString)>>\
-                                        <</if>>\
-                                    <<else>>\
-                                    You collect $TempString leaves.
-                                    <</if>>
-                                    [[Return to campus]]
+<<if Fresh()>>\
+    <<if $UserIngredients.includes($TempString)>>\
+    You already have these leaves.
+    <<else>>\
+    You collect $TempString leaves.
+    <<run $UserIngredients.pushUnique($TempString)>>\
+    <</if>>\
+<<else>>\
+You collect $TempString leaves.
+<</if>>
+[[Return to campus]]
 
 :: Enter the forest
-                            The forest is dark and spooky.
-                            <<if $Weapon is true>>
-                            You are comforted by your weapon. 
-                            <<else>>
-                            You wish you had a weapon right about now...
-                            <</if>>
-                            <<link [[Forge onwards]]>>
-                                <<set _Plants to []>>
-                                /* Checks if player has each forest plant somewhere in the inventory */
-                                <<for _i to 0; _i lt $Seeds.length; _i++>>
-                                    <<if $Seeds[_i] is 'Nightshade' or $Seeds[_i] is 'Hemlock'>>
-                                        <<run _Plants.pushUnique($Seeds[_i])>>
-                                    <</if>>
-                                <</for>>
-                                <<for _i to 0; _i lt $UserPlants.length; _i++>>
-                                    <<if $UserPlants[_i] is 'Nightshade' or $UserPlants[_i] is 'Hemlock'>>
-                                        <<run _Plants.pushUnique($UserPlants[_i])>>
-                                    <</if>>
-                                <</for>>
-                                <<for _i to 0; _i lt $UserIngredients.length; _i++>>
-                                    <<if $UserIngredients[_i] is 'Mushroom' or $UserIngredients[_i] is 'Nightshade' or $UserIngredients[_i] is 'Hemlock'>>
-                                        <<run _Plants.pushUnique($UserIngredients[_i])>>
-                                    <</if>>
-                                <</for>>
-                                /* If player has all plants, confront animal */
-                                <<if _Plants.length gt 2>>
-                                    <<set $Temp to 0>>
-                                <<else>>
-                                    <<set $Temp to random(1)>>
-                                    /* Confront unique plants first */
-                                    <<set _ForestPlants to $ForestPlant>>
-                                    <<for _i to 0; _i lt _Plants.length; _i++>>
-                                        <<if _ForestPlants.includes(_Plants[_i])>>
-                                            <<run _ForestPlants.delete(_Plants[_i])>>
-                                        <</if>>
-                                    <</for>> 
-                                    <<set $TempString1 to _ForestPlants.random()>>
-                                <</if>>
-                                /* Confront an animal with a unique reward first */
-                                <<set _ForestAnimals to $ForestAnimals>>
-                                <<for _i to 0; _i lt $ForestAnimals.length; _i++>>
-                                    <<if $UserIngredients[_i] is 'Bat Wing' or $UserIngredients[_i] is 'Slime' or $UserIngredients[_i] is 'Eye of Newt'>>
-                                        <<run _ForestAnimals.delete('Bat')>>
-                                    <<elseif $UserIngredients[_i] is 'Eye of Newt'>>
-                                        <<run _ForestAnimals.delete('Newt')>>
-                                    <<elseif $UserIngredients[_i] is 'Slime'>>
-                                        <<run _ForestAnimals.delete('Slime')>>
-                                    <</if>>
-                                <</for>>
-                                <<if _ForestAnimals.length gt 0>>
-                                    <<set $TempString to _ForestAnimals.random()>>
-                                <<else>>
-                                    <<set $TempString to $ForestAnimals.random()>>
-                                <</if>>                                
-                            <</link>> 
-                            [[Leave the forest]]
+The forest is dark and spooky.
+<<if $Weapon is true>>
+You are comforted by your weapon. 
+<<else>>
+You wish you had a weapon right about now...
+<</if>>
+<<link [[Forge onwards]]>>
+    <<set _Plants to []>>
+    /* Checks if player has each forest plant somewhere in the inventory */
+    <<for _i to 0; _i lt $Seeds.length; _i++>>
+        <<if $Seeds[_i] is 'Nightshade' or $Seeds[_i] is 'Hemlock'>>
+            <<run _Plants.pushUnique($Seeds[_i])>>
+        <</if>>
+    <</for>>
+    <<for _i to 0; _i lt $UserPlants.length; _i++>>
+        <<if $UserPlants[_i] is 'Nightshade' or $UserPlants[_i] is 'Hemlock'>>
+            <<run _Plants.pushUnique($UserPlants[_i])>>
+        <</if>>
+    <</for>>
+    <<for _i to 0; _i lt $UserIngredients.length; _i++>>
+        <<if $UserIngredients[_i] is 'Mushroom' or $UserIngredients[_i] is 'Nightshade' or $UserIngredients[_i] is 'Hemlock'>>
+            <<run _Plants.pushUnique($UserIngredients[_i])>>
+        <</if>>
+    <</for>>
+    /* If player has all plants, confront animal */
+    <<if _Plants.length gt 2>>
+        <<set $Temp to 0>>
+    <<else>>
+        <<set $Temp to random(1)>>
+        /* Confront unique plants first */
+        <<set _ForestPlants to $ForestPlant>>
+        <<for _i to 0; _i lt _Plants.length; _i++>>
+            <<if _ForestPlants.includes(_Plants[_i])>>
+                <<run _ForestPlants.delete(_Plants[_i])>>
+            <</if>>
+        <</for>> 
+        <<set $TempString1 to _ForestPlants.random()>>
+    <</if>>
+    /* Confront an animal with a unique reward first */
+    <<set _ForestAnimals to $ForestAnimals>>
+    <<for _i to 0; _i lt $ForestAnimals.length; _i++>>
+        <<if $UserIngredients[_i] is 'Bat Wing' or $UserIngredients[_i] is 'Slime' or $UserIngredients[_i] is 'Eye of Newt'>>
+            <<run _ForestAnimals.delete('Bat')>>
+        <<elseif $UserIngredients[_i] is 'Eye of Newt'>>
+            <<run _ForestAnimals.delete('Newt')>>
+        <<elseif $UserIngredients[_i] is 'Slime'>>
+            <<run _ForestAnimals.delete('Slime')>>
+        <</if>>
+    <</for>>
+    <<if _ForestAnimals.length gt 0>>
+        <<set $TempString to _ForestAnimals.random()>>
+    <<else>>
+        <<set $TempString to $ForestAnimals.random()>>
+    <</if>>                                
+<</link>> 
+[[Leave the forest]]
 
 :: Forge onwards 
-                                You forge onwards, deep into the forest. 
-                                <<if $Temp is 1>>
-                                    You happen upon a <<if $NightTime is true>>plant, but you can't see identify it in the dark<<else>>$TempString1<</if>>.
+You forge onwards, deep into the forest. 
+<<if $Temp is 1>>
+    You happen upon a <<if $NightTime is true>>plant, but you can't see identify it in the dark<<else>>$TempString1<</if>>.
 
-                                    [[Collect]]
-                                    <<if $TempString1 is not 'Mushroom'>>\
-                                        [[Take seeds]]
-                                    <</if>>\
-                                <<else>>                                
-                                    You are confronted by a <<if $NightTime is true>>monster, but you can't see it in the dark<<else>>$TempString<</if>>.
+    [[Collect]]
+    <<if $TempString1 is not 'Mushroom'>>\
+        [[Take seeds]]
+    <</if>>\
+<<else>>                                
+    You are confronted by a <<if $NightTime is true>>monster, but you can't see it in the dark<<else>>$TempString<</if>>.
 
-                                    [[Fight]]
-                                    [[Run]]
-                                <</if>>
+    [[Fight]]
+    [[Run]]
+<</if>>
 
 :: Collect
-                                    <<if Fresh()>>\
-                                    <<run $UserIngredients.push($TempString1)>>\
-                                    <</if>>\                                    
-                                    You collect the $TempString1.
-                                    
-                                    [[Leave forest]]
+<<if Fresh()>>\
+<<run $UserIngredients.push($TempString1)>>\
+<</if>>\                                    
+You collect the $TempString1.
+
+[[Leave forest]]
 
 :: Take seeds
-                                    <<if Fresh()>>\
-                                    <<run $Seeds.pushUnique($TempString1)>>\
-                                    <</if>>\
-                                    You take the $TempString1 seeds.
+<<if Fresh()>>\
+<<run $Seeds.pushUnique($TempString1)>>\
+<</if>>\
+You take the $TempString1 seeds.
 
-                                    [[Leave forest]]
+[[Leave forest]]
 
 :: Fight
-                                    You fight the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
-                                    <<if $Weapon is true>>
-                                    You defeat the <<if $NightTime is true>>monster<<else>>$TempString<</if>> using your weapon.
-                                        <<if $TempString is "Bat">> \
-                                        <<set $Reward to "Bat Wing">> \
-                                        <<elseif $TempString is "Slime">> \
-                                        <<set $Reward to "Slime">> \
-                                        <<elseif $TempString is "Newt">> \
-                                        <<set $Reward to "Eye of Newt">> \
-                                        <</if>> \
-                                    <<if Fresh()>>\
-                                    <<run $UserIngredients.push($Reward)>> \
-                                    <</if>>
-                                    You obtain $Reward.
+You fight the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
+<<if $Weapon is true>>
+You defeat the <<if $NightTime is true>>monster<<else>>$TempString<</if>> using your weapon.
+    <<if $TempString is "Bat">> \
+    <<set $Reward to "Bat Wing">> \
+    <<elseif $TempString is "Slime">> \
+    <<set $Reward to "Slime">> \
+    <<elseif $TempString is "Newt">> \
+    <<set $Reward to "Eye of Newt">> \
+    <</if>> \
+<<if Fresh()>>\
+<<run $UserIngredients.push($Reward)>> \
+<</if>>
+You obtain $Reward.
 
-                                    [[Leave forest]]
-                                    <<else>>
-                                    You punch at the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
-                                        <<if $TempString is "Bat">>
-                                        The bat simply evades your punch and bites you.
+[[Leave forest]]
+<<else>>
+You punch at the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
+    <<if $TempString is "Bat">>
+    The bat simply evades your punch and bites you.
 
-                                        You get rabies and die from fear of water.
-                                        <<elseif $TempString is "Slime">>
-                                        You punch the slime and your fist sinks into it.
+    You get rabies and die from fear of water.
+    <<elseif $TempString is "Slime">>
+    You punch the slime and your fist sinks into it.
 
-                                        It sucks you in and swallows you up.
-                                        <<elseif $TempString is "Newt">>
-                                        You punch the newt and its poison contacts your skin.
+    It sucks you in and swallows you up.
+    <<elseif $TempString is "Newt">>
+    You punch the newt and its poison contacts your skin.
 
-                                        The poison paralyzes you and you die of stavration, lying in the forest.
-                                        <</if>>
-                                        <div align='center' style='font-size: 300%;'>\
-                                        <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-                                        </div> 
-                                    <</if>>
+    The poison paralyzes you and you die of stavration, lying in the forest.
+    <</if>>
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+    </div> 
+<</if>>
 
 :: Run
-                                    You flee like a coward.
+You flee like a coward.
 
-                                    You exit the forest and head [[back to campus|Return to campus]].
+You exit the forest and head [[back to campus|Return to campus]].
 
 :: Leave forest
-                                        You exit the forest and head [[back to campus|Return to campus]]. 
+You exit the forest and head [[back to campus|Return to campus]]. 
 
 :: Leave the forest     
-                                You get spooked by the forest and turn around.
+You get spooked by the forest and turn around.
 
-                                [[Explore the campus outskirts]]
-                                [[Return to campus]]
+[[Explore the campus outskirts]]
+[[Return to campus]]
 
 :: Return to campus
-                                    You are back in the barn.
-                                    <<set $NightTime to true>>                                    
-                                    You enter the stable and unsaddle your horse.
+You are back in the barn.
+<<set $NightTime to true>>                                    
+You enter the stable and unsaddle your horse.
 
-                                    After feeding him and getting him comfortable, you leave the barn.
+After feeding him and getting him comfortable, you leave the barn.
 
-                                    [[Eat dinner]]
-                                    [[Sleep]]
+[[Eat dinner]]
+[[Sleep]]
 
 :: Escape the stable
-                You run towards the stable exit.
+You run towards the stable exit.
 
-                You slip and fall to the ground.
+You slip and fall to the ground.
 
-                As you stand up, a furious hoof makes direct contact with your temple killing you instantly.
+As you stand up, a furious hoof makes direct contact with your temple killing you instantly.
 
-                The horse continues kicking around hay and unintentionally covers your body, concealing it.
+The horse continues kicking around hay and unintentionally covers your body, concealing it.
 
-                You are not found until you begin smelling bad. And nobody noticed you were missing either.
+You are not found until you begin smelling bad. And nobody noticed you were missing either.
 
-                <div align='center' style='font-size: 300%;'>\
-                <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-                </div> 
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+</div> 
 
 :: Cow
-        You enter the barn and notice a dairy cow that seems to be in need of milking.
+You enter the barn and notice a dairy cow that seems to be in need of milking.
 
-        You're not sure if you should milk the cow without permission.
+You're not sure if you should milk the cow without permission.
 
-        [[Milk the cow anyway]]
-        [[Look for a person]]
+[[Milk the cow anyway]]
+[[Look for a person]]
 
 :: Milk the cow anyway
-            You take some initiative and figure the cow needs to be milked.
-            <<set $Temp to random(1)>>
-            Having permission is a minor detail.
-            <<if $Temp is 1>>
-            You successfully milk the cow without incident.
-            <<set $Milk += 1>>
-            You have acquired a bottle of milk.
-            <<else>>
-            You make a proper mess of milking the cow.
-            
-            She squirms all over the place. Milk squirts in random directions.
+You take some initiative and figure the cow needs to be milked.
+<<set $Temp to random(1)>>
+Having permission is a minor detail.
+<<if $Temp is 1>>
+You successfully milk the cow without incident.
+<<set $Milk += 1>>
+You have acquired a bottle of milk.
+<<else>>
+You make a proper mess of milking the cow.
 
-            She makes so much noise that it draws the attention of the farmer.
+She squirms all over the place. Milk squirts in random directions.
 
-            She thinks you are some kind of udder pervert and word eventually spreads.
+She makes so much noise that it draws the attention of the farmer.
 
-            You have //definitely// been socially ostracized if you weren't already.
-            <<set $Ostra to true>> \           
-            <</if>> 
-            [[Leave|Demo]]
+She thinks you are some kind of udder pervert and word eventually spreads.
+
+You have //definitely// been socially ostracized if you weren't already.
+<<set $Ostra to true>> \           
+<</if>> 
+[[Leave|Demo]]
 
 :: Chickens
-        You enter the coup and find a few chickens running around. 
+You enter the coup and find a few chickens running around. 
 
-        The chickens don't recognize you and begin furiously pecking at your ankles.
+The chickens don't recognize you and begin furiously pecking at your ankles.
 
-        [[Calm them down]]
-        [[Look for a person]]
+[[Calm them down]]
+[[Look for a person]]
         
 :: Calm them down
-            ou take some initiative and figure the eggs are yours for the taking.
-            <<set $Temp to random(1)>>
-            Having permission is a minor detail.
-            <<if $Temp is 1>>
-            You successfully retreive an egg amid the frenzied chickens without incident.
-            <<set $Eggs += 1>>
-            You have acquired an egg.
-            <<else>>
-            You make a proper mess of navigating the chickens.
-            
-            They run all over the place. You accidentally step on a few of them.
+You take some initiative and figure the eggs are yours for the taking.
+<<set $Temp to random(1)>>
+Having permission is a minor detail.
+<<if $Temp is 1>>
+You successfully retreive an egg amid the frenzied chickens without incident.
+<<set $Eggs += 1>>
+You have acquired an egg.
+<<else>>
+You make a proper mess of navigating the chickens.
 
-            They make so much noise that it draws the attention of the farmer.
+They run all over the place. You accidentally step on a few of them.
 
-            She thinks you are some kind of chicken killer and word eventually spreads.
+They make so much noise that it draws the attention of the farmer.
 
-            You have //definitely// been socially ostracized if you weren't already.
-            <<set $Ostra to true>> \           
-            <</if>> 
-            [[Leave|Demo]]
+She thinks you are some kind of chicken killer and word eventually spreads.
+
+You have //definitely// been socially ostracized if you weren't already.
+<<set $Ostra to true>> \           
+<</if>> 
+[[Leave|Demo]]
 
 :: Take care of the animals
-    You take care of each group of animals, feeding them and tending to their individual needs.
-    
-    You notice they are more familiar with you and your relationship increases.
-    <<set $AnimalShip += 1>>
-    [[Approach the animals individually]] 
-    [[Eat dinner]]
-    [[Sleep]]
+You take care of each group of animals, feeding them and tending to their individual needs.
+
+You notice they are more familiar with you and your relationship increases.
+<<set $AnimalShip += 1>>
+[[Approach the animals individually]] 
+[[Eat dinner]]
+[[Sleep]]
 
 :: Approach the animals individually
-        Approach which animal?        
-        <<if $AnimalShip gt 0>>
-        [[Approach chicken]]
-        <</if>> \
-        <<if $AnimalShip gt 1>> \
-        [[Approach cow]]
-        <</if>> \
-        <<if $AnimalShip gt 2>> \
-        [[Approach horse]]
-        <</if>> \
-        [[Leave|Demo]]
+Approach which animal?        
+<<if $AnimalShip gt 0>>
+[[Approach chicken]]
+<</if>> \
+<<if $AnimalShip gt 1>> \
+[[Approach cow]]
+<</if>> \
+<<if $AnimalShip gt 2>> \
+[[Approach horse]]
+<</if>> \
+[[Leave|Demo]]
 
 :: Approach chicken
-            You approach the chicken.
+You approach the chicken.
 
-            The chicken is not very interested and basically ignores you.
-            <<set $Eggs += 1>>
-            However, you do get some eggs.
+The chicken is not very interested and basically ignores you.
+<<set $Eggs += 1>>
+However, you do get some eggs.
 
-            [[Eat dinner]]
-            [[Sleep]]
+[[Eat dinner]]
+[[Sleep]]
 
 :: Approach cow
-            You approach the cow.
+You approach the cow.
 
-            She seems like she needs to be milked.
+She seems like she needs to be milked.
 
-            You milk her and gain a bottle of milk.
-            <<set $Milk += 1>>
-            She moos happily.
+You milk her and gain a bottle of milk.
+<<set $Milk += 1>>
+She moos happily.
 
-            [[Eat dinner]]
-            [[Sleep]]
+[[Eat dinner]]
+[[Sleep]]
 
 :: Approach horse
-            You approach the horse.
-            <<set $HorseFriend to true>>
-            He is excited to see you and anticipates going for a stroll.
+You approach the horse.
+<<set $HorseFriend to true>>
+He is excited to see you and anticipates going for a stroll.
 
-            You saddle him and [[leave the barn|Ride]].
+You saddle him and [[leave the barn|Ride]].
 
 :: Forge
 You enter the forge.
@@ -2288,12 +2297,6 @@ Whoever used them last must not be too organized.
 
 [[Mess around with the tools randomly|Mess around]]
 <<elseif $Forge is 1>>
-<<if $Weapon is true>> \
-You already have a weapon.
-
-[[Learn to smith comething else|Forge learn]]
-[[Leave|Demo]]
-<<else>> \
 [[Create weapon]]
 [[Leave|Demo]]
 <</if>>
@@ -2304,45 +2307,42 @@ The smith [[turns you away|Demo]].
 <</if>>
 
 :: Create weapon
-    You smelt standard metals and create a basic weapon.
-    <<set $Weapon to true>>
-    You will now be able to defend yourself.
-    <<set $NightTime to true>>
-    [[Eat dinner]]
-    [[Sleep]]
-
-/* :: Forge learn */
-/* What else can be forged? */
+You smelt standard metals and create a basic weapon.
+<<set $Weapon to true>>
+You will now be able to defend yourself.
+<<set $NightTime to true>>
+[[Eat dinner]]
+[[Sleep]]
 
 :: Mess around
-    You sling tools around like a dufus.
+You sling tools around like a dufus.
 
-    You manage to make contact with lots of metal things and generate much noise in the process.
+You manage to make contact with lots of metal things and generate much noise in the process.
 
-    It seems to have woken up the blacksmith, who makes his way into the forge rubbing the sleep from his eyes.
+It seems to have woken up the blacksmith, who makes his way into the forge rubbing the sleep from his eyes.
 
-    [[Stop smashing random metal things together and talk to him|Blacksmith]]
-    [[Be dumb]]
+[[Stop smashing random metal things together and talk to him|Blacksmith]]
+[[Be dumb]]
 
 :: Blacksmith
-        After correcting your behavior, the smith asks if you would like to work with him as a student apprentice. 
-        
-        You gladly agree. After showing you around the equipment, he hands you a hammer of your own.
+After correcting your behavior, the smith asks if you would like to work with him as a student apprentice. 
 
-        You manage to forge a very crude, basic weapon that certainly would do no good in combat.
+You gladly agree. After showing you around the equipment, he hands you a hammer of your own.
 
-        You hold it in the air, admiring your handiwork wirth a goofy smile on your face.
-        <<set $NightTime to true>>
-        [[Eat dinner]]
-        [[Sleep]]
-        <<set $Forge to 1>>
+You manage to forge a very crude, basic weapon that certainly would do no good in combat.
+
+You hold it in the air, admiring your handiwork wirth a goofy smile on your face.
+<<set $NightTime to true>>
+[[Eat dinner]]
+[[Sleep]]
+<<set $Forge to 1>>
 
 :: Be dumb
-    You keep smacking metal things together like an idiot.
-    <<set $Forge to 2>>
-    The smith doesn't seem to appreciate your behavior and makes his opinion known by putting his boot up your ass. 
+You keep smacking metal things together like an idiot.
+<<set $Forge to 2>>
+The smith doesn't seem to appreciate your behavior and makes his opinion known by putting his boot up your ass. 
 
-    Your ass is injured and you must [[go to the infirmary|Injured butt]]
+Your ass is injured and you must [[go to the infirmary|Injured butt]]
 
 :: Brewery
 You enter the brewery.
@@ -2360,40 +2360,40 @@ The brewmaster is asleep in a corner.
 <</if>>
 
 :: Wake Brewmaster
-    You shake the brewmaster until he comes to.
+You shake the brewmaster until he comes to.
 
-    He knocks over a few empty bottles as he slowly stands up. 
+He knocks over a few empty bottles as he slowly stands up. 
 
-    He happily welcomes you to the brewery and invites you to work with him.
+He happily welcomes you to the brewery and invites you to work with him.
 
-    [[Agree|Yes Brew]]
-    [[Decline|No Brew]]
+[[Agree|Yes Brew]]
+[[Decline|No Brew]]
 
 :: Yes Brew
-        The brewmaster doesn't seem too bad and you decide to take up his craft.
-        <<set $Brew to true>>
-        He takes you under his wing and teaches you about all the equipment and how to brew a traditional batch of ale.
+The brewmaster doesn't seem too bad and you decide to take up his craft.
+<<set $Brew to true>>
+He takes you under his wing and teaches you about all the equipment and how to brew a traditional batch of ale.
 
-        When you return to the brewery, you will be able to brew batches on your own. 
-        <<set $NightTime to true>>
-        [[Eat dinner]]
-        [[Sleep]]
+When you return to the brewery, you will be able to brew batches on your own. 
+<<set $NightTime to true>>
+[[Eat dinner]]
+[[Sleep]]
 
 :: No Brew
-        The brewmaster's behavior seems relatively unbecoming and you decide to take your talents elsewhere.
+The brewmaster's behavior seems relatively unbecoming and you decide to take your talents elsewhere.
 
-        He seems dissapointed. [[You leave him alone and wish him sweet dreams.|Demo]] 
+He seems dissapointed. [[You leave him alone and wish him sweet dreams.|Demo]] 
 
 :: Brew
-    You decide to brew a batch of ale.
-    <<set $Keg += 1>>
-    <<if $Poison is true>>
-    <<elseif $Potion is true>>
-    <<else>>You prepare a keg. You can use this keg to throw a party!
-    <<set $NightTime to true>>
-    [[Eat dinner]]
-    [[Sleep]]
-    <</if>>
+You decide to brew a batch of ale.
+<<set $Keg += 1>>
+<<if $Poison is true>>
+<<elseif $Potion is true>>
+<<else>>You prepare a keg. You can use this keg to throw a party!
+<<set $NightTime to true>>
+[[Eat dinner]]
+[[Sleep]]
+<</if>>
 
 :: Classroom
 You sit down in an empty chair in the classroom and wait for class to start. There are no students or professors in sight.
@@ -2407,113 +2407,113 @@ After waiting for a few minutes without any activity, you become impatient.
 [[Leave|Demo]]
 
 :: Wait Patiently
-    You figure that scouring through random items in the classroom might not be a good idea, so you simply wait for class to start...
+You figure that scouring through random items in the classroom might not be a good idea, so you simply wait for class to start...
 
-    Eventually, students begin filtering into the classroom, and settling into their respective seats. 
-    <<if $ClassFriend is false>>
-        A large, muscular brute of a woman walks through the door. Her school uniform doesn't seem to fit her quite right as certain muscles on her body bulge out, stretching the fabric in odd places. 
-        <<set $ClassFriend to true>>  
-        You chuckle quietly at the sight, but do your best to contain the noise since you imagine she could easily smash your skull should the desire ever arise.
+Eventually, students begin filtering into the classroom, and settling into their respective seats. 
+<<if $ClassFriend is false>>
+    A large, muscular brute of a woman walks through the door. Her school uniform doesn't seem to fit her quite right as certain muscles on her body bulge out, stretching the fabric in odd places. 
+    <<set $ClassFriend to true>>  
+    You chuckle quietly at the sight, but do your best to contain the noise since you imagine she could easily smash your skull should the desire ever arise.
 
-        Much to your surprise, she walks directly towards you and taps on your shoulder, letting out nothing but a grunt.
+    Much to your surprise, she walks directly towards you and taps on your shoulder, letting out nothing but a grunt.
 
-        A bead of sweat runs down your brow. 
-        
-        <<if $Ostra is false>> \
-        [[Ask how you can help her]]
-        <</if>> \
-        [[Ignore her]]
-        [[Lash out in self defense]]
-    <<else>>
-    The professor enters and [[class begins|Class]]. 
-    <</if>>
+    A bead of sweat runs down your brow. 
+    
+    <<if $Ostra is false>> \
+    [[Ask how you can help her]]
+    <</if>> \
+    [[Ignore her]]
+    [[Lash out in self defense]]
+<<else>>
+The professor enters and [[class begins|Class]]. 
+<</if>>
 
 :: Ignore her
-        You pretend not to notice her.
+You pretend not to notice her.
 
-        Somehow, she decides not to press the matter and peacefully sits in another seat holding her head low.
+Somehow, she decides not to press the matter and peacefully sits in another seat holding her head low.
 
-        The professor enters and [[class begins|Class]]. 
+The professor enters and [[class begins|Class]]. 
         
 :: Lash out in self defense
-        You can't imagine that this lady has a good reason for bothering you.
+You can't imagine that this lady has a good reason for bothering you.
 
-        You lash out at her, insulting her size and ugliness in front of the rest of the class.
+You lash out at her, insulting her size and ugliness in front of the rest of the class.
 
-        You get a couple chuckles from the crowd and she sinks back into a different seat while holding back tears.
-        <<set $BigEnemy to true>>
-        You have made a very large enemy. May God have mercy on your soul.
+You get a couple chuckles from the crowd and she sinks back into a different seat while holding back tears.
+<<set $BigEnemy to true>>
+You have made a very large enemy. May God have mercy on your soul.
 
-        The professor enters and [[class begins|Class]]. 
+The professor enters and [[class begins|Class]]. 
         
 :: Ask how you can help her
-        You polite ask her how you can help her.
+You polite ask her how you can help her.
 
-        She looks a bit embarrassed and motions towards the inside of the desk.
+She looks a bit embarrassed and motions towards the inside of the desk.
 
-        You are confused. She clears her throat and more obviously motions towards the inside of the desk.
+You are confused. She clears her throat and more obviously motions towards the inside of the desk.
 
-        You look inside and notice some XL tampons she must have left behind last time she sat in this seat.
+You look inside and notice some XL tampons she must have left behind last time she sat in this seat.
 
-        You discreetly hand them over to her.
-        <<set $BigFriend to true>>
-        She happily takes them from you. She takes a seat with a smile on her face.
+You discreetly hand them over to her.
+<<set $BigFriend to true>>
+She happily takes them from you. She takes a seat with a smile on her face.
 
-        You have made a friend.
+You have made a friend.
 
-        [[Class begins|Class]]
+[[Class begins|Class]]
         
 :: Search the Classroom
-    You can't handle waiting for class to start and your curiosity gets the better of you.
-    <<set $ClassSearch to true>>
-    You survey the classroom and notice a few objects of interest.
+You can't handle waiting for class to start and your curiosity gets the better of you.
+<<set $ClassSearch to true>>
+You survey the classroom and notice a few objects of interest.
 
-    [[Steal from the bookshelf]]
-    [[Open the desk drawers]]
+[[Steal from the bookshelf]]
+[[Open the desk drawers]]
 
 :: Steal from the bookshelf
-        You dig around the bookshelf searcxhing for something valuable to steal.
-        /* Incorporate something valuable that can be stolen from here */
-        Just as you do, the professor and multiple students walk through the door.
+You dig around the bookshelf searcxhing for something valuable to steal.
+/* Incorporate something valuable that can be stolen from here */
+Just as you do, the professor and multiple students walk through the door.
 
-        You are able to convince them that you had forgotten your textbook and needed to borrow a replacement.
+You are able to convince them that you had forgotten your textbook and needed to borrow a replacement.
 
-        You take a seat and [[class begins|Class]].
+You take a seat and [[class begins|Class]].
 
 :: Open the desk drawers
-        You open the drawers of the teacher's desk.
+You open the drawers of the teacher's desk.
 
-        You see various office supplies and a bunch of boring paperwork.
+You see various office supplies and a bunch of boring paperwork.
 
-        One paper catches your eye. It appears to be some kind of official document personally signed by the headmaster. 
+One paper catches your eye. It appears to be some kind of official document personally signed by the headmaster. 
 
-        [[Take the document]]
-        [[Return to your seat]]
+[[Take the document]]
+[[Return to your seat]]
 
 :: Take the document
-            <<set $Temp to random(1)>> \
-            You take the document. 
-            <<if $Temp is 1>>
-            <<set $CeilingKey to true>> \
-            You read through the document. It is an onboarding document for new professors. 
-            
-            It describes the accomodations in the staff dormitory and provides a passphrase for access.
-            
-            You memorize the passphrase and [[return to your seat|Return to your seat]].
-            <<else>>
-            Just as you do, the professor and multiple students walk through the door.
-            <<set $Ostra to true>>
-            You are caught red handed as you nervously stuff the paper back into the desk.
+<<set $Temp to random(1)>> \
+You take the document. 
+<<if $Temp is 1>>
+<<set $CeilingKey to true>> \
+You read through the document. It is an onboarding document for new professors. 
 
-            The students take notice of your behavior. <b>You have become socially ostracized.</b> You will now have trouble making friends.
+It describes the accomodations in the staff dormitory and provides a passphrase for access.
 
-            The professor shows you mercy and merely demands that you [[return to your seat|Return to your seat]].
-            <</if>>
+You memorize the passphrase and [[return to your seat|Return to your seat]].
+<<else>>
+Just as you do, the professor and multiple students walk through the door.
+<<set $Ostra to true>>
+You are caught red handed as you nervously stuff the paper back into the desk.
+
+The students take notice of your behavior. <b>You have become socially ostracized.</b> You will now have trouble making friends.
+
+The professor shows you mercy and merely demands that you [[return to your seat|Return to your seat]].
+<</if>>
 
 :: Return to your seat
-            You sit down in an open seat. 
+You sit down in an open seat. 
 
-            The remaining seats fill up and the [[class begins|Class]].
+The remaining seats fill up and the [[class begins|Class]].
 
 :: Class
 Your professor takes her podium and begins teaching.
