@@ -8,7 +8,7 @@ Unfinished Tasks:
 
 Isolate Fresh conditionals
 
-Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen and prevent them from harvesting again. 
+Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen {and prevent them from harvesting again?}.
 
 Determine the number of relationships
 
@@ -346,6 +346,7 @@ Where do you want to go?
 [[Forge]]
 [[Brewery]]
 [[Dormitory]]
+[[Wait for night|WIP]]
 <<if $HorseFriend is true and $BarnWork is true>>
 [[Ride Horse|Approach horse]]
 <<elseif $AnimalShip gt 2>> 
@@ -521,16 +522,41 @@ You notice a suspicious latch on the ceiling.
             [[Leave dorm]]
 
 :: Search teacher's belongings
-                You take a look around the dorm and notice a few different areas you can search.
+You open some dressers and bags, searching for an interesting item.
+<<Set $Temp to random(10)>>\
+<<if $Temp is 9 or $Temp is 10>>
+A teacher enters the dorm while you are searching.
+/* Invis pot helps */
+[[Confront them|WIP]]
+[[Hide|WIP]]
+<<elseif $Temp is 8>>
+You get lucky and find a legendary item. /* Figure this out. Ideas: Sword of Siren Slaying, A key to a tomb in the forest, key to locked door in library, secret scroll of fire breathing */
 
-                [[Nurse's belongings|WIP]]
-                [[Librarian's belongings|WIP]]
-                [[Smith's belongings|WIP]]
-                [[Cook's belongings|WIP]]
-                [[Scientist's belongings|WIP]]
-                [[Priest's bleongings|WIP]]
-                [[Gardener's belongings|WIP]]
-                [[Brewmaster's belongings|WIP]]
+[[Continue searching|Search teacher's belongings]]
+[[Leave dorm]]
+<<else>>
+You find the \
+    <<switch $Temp>>\
+    <<case 0>>\
+    nurse's syringe.
+    <<case 1>>\
+    librarian's glasses.
+    <<case 2>>\
+    smith's chisel.
+    <<case 3>>\
+    cook's knife.
+    <<case 4>>\
+    scientist's 
+    <<case 5>>\
+    priest's thurible.
+    <<case 6>>\
+    gardener's trowl.
+    <<case 7>>\
+    brewmaster's stirring spoon.
+    <</switch>>
+[[Continue searching|Search teacher's belongings]]
+[[Leave dorm]]
+<</if>>
 
 /* :: Belonging */
                     /* Set variables and alter item found for each one, each search takes time and risks getting caught, multiple searches of the same belongings may yield another item (randomize these) */
