@@ -6,6 +6,8 @@ Harvest conditional
 
 Unfinished Tasks: 
 
+Working in the kitchen relieves social ostracization.
+
 Isolate Fresh conditionals
 
 Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen {and prevent them from harvesting again?}.
@@ -31,8 +33,10 @@ Too many bad ends in bath house
 
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
-Changelog v0.1.5
--Items can now be found in the teacher's dormitory
+Changelog v0.2.0
+-Game is now winnable
+-Implemented legendary items
+-Teacher's belongings can now be "found" in the teacher's dormitory
 -Faucets can now be turned individually (Test Message)
 -Entering the incorrect faucet combination now changes the secret combination (Test)
 -Entering a certain combination of faucets now provides a hint (Incomplete)
@@ -248,6 +252,8 @@ body.no-save #menu-item-saves {
 <<set $MasterIngredients to 0>> 
 <<set $Sneaky to false>>
 <<set $Items to []>>
+<<set $LegendaryItems to ['Sword of Siren Slaying','Skeleton Key','Scroll of Fire Breathing','Opus Pocus']>> /* Opus Pocus is an artistic transforming item; Skeleton key is literally a key in the shape of a skull */
+<<set $UserlegendaryItems to []>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -291,6 +297,9 @@ Items: $Items
 <<if $UserPotions.length gt 0>> \
 Potions: <<print $UserPotions>>
 <</if>>
+<<if $UserLegendaryItems.length gt 0>>\
+Legendary Items: $UserLegendaryItems
+<</if>> 
 [[Return|previous()][$Show to true]]
 
 :: Status [noreturn menu]
@@ -535,72 +544,82 @@ There are currently no teachers around, but you may not want to press your luck.
 :: Search teacher's belongings
 You open some dressers and bags, searching for an interesting item.
 <<nobr>>
-<<set _rand to [0,1,2,3,4,5,6,7,8,9,10,11]>>
-<<for _i to 0; _i lt $Items.length; _i++>>
-    <<switch $Items[_i]>>
-        <<case 'Syringe'>>
-            <<run _rand.delete(0)>>
-        <<case 'Glasses'>>
-            <<run _rand.delete(1)>>
-        <<case 'Chisel'>>
-            <<run _rand.delete(2)>>
-        <<case 'Knife'>>
-            <<run _rand.delete(3)>>
-        <<case 'Coat'>>
-            <<run _rand.delete(4)>>
-        <<case 'Thurible'>>
-            <<run _rand.delete(5)>>
-        <<case 'Trowl'>>
-            <<run _rand.delete(6)>>
-        <<case 'Spoon'>>
-            <<run _rand.delete(7)>>
-    <</switch>>
-<</for>>
-<<Set $Temp to _rand.random()>>\
+    <<set _rand to [0,1,2,3,4,5,6,7,8,9,10,11]>>
+    <<for _i to 0; _i lt $Items.length; _i++>>
+        <<switch $Items[_i]>>
+            <<case 'Syringe'>>
+                <<run _rand.delete(0)>>
+            <<case 'Glasses'>>
+                <<run _rand.delete(1)>>
+            <<case 'Chisel'>>
+                <<run _rand.delete(2)>>
+            <<case 'Knife'>>
+                <<run _rand.delete(3)>>
+            <<case 'Coat'>>
+                <<run _rand.delete(4)>>
+            <<case 'Thurible'>>
+                <<run _rand.delete(5)>>
+            <<case 'Trowl'>>
+                <<run _rand.delete(6)>>
+            <<case 'Spoon'>>
+                <<run _rand.delete(7)>>
+        <</switch>>
+    <</for>>
+    <<Set $Temp to _rand.random()>>\
 <</nobr>>
 <<if $Temp is 9 or $Temp is 10>>
-A teacher enters the dorm while you are searching.
+    A teacher enters the dorm while you are searching.
 
-<<if $UserPotions.length gt 0>>\
-[[Drink a potion|WIP]]
-<</if>>\
-[[Confront them]]
-[[Hide]]
+    <<if $UserPotions.length gt 0>>\
+    [[Drink a potion|WIP]]
+    <</if>>\
+    [[Confront them]]
+    [[Hide]]
 <<elseif $Temp is 8>>
-You get lucky and find a legendary item. /* Figure this out. Ideas: Sword of Siren Slaying, A key to a tomb in the forest, key to locked door in library, secret scroll of fire breathing */
+    <<set _LegendaryItems to $LegendaryItems;$TempString to ''>>
+    <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>
+        <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>
+    <</for>>
+    <<if _LegendaryItems.length gt 0>>
+        <<set $TempString to _LegendaryItems.random()>>
+    <<else>>
+    /* Working here */
+    <</if>>
+    You get lucky and find a $TempString. 
+    <<run $UserLegendaryitems.push($TempString)>>\
 
-[[Continue searching|Search teacher's belongings]]
-[[Leave dorm]]
+    [[Continue searching|Search teacher's belongings]]
+    [[Leave dorm]]
 <<else>>
-You find the \
+    You find the \
     <<switch $Temp>>\
-    <<case 0>>\
-    nurse's syringe.\
-    <<run $Items.pushUnique('Syringe')>>
-    <<case 1>>\
-    librarian's glasses.\
-    <<run $Items.pushUnique('Glasses')>>
-    <<case 2>>\
-    smith's chisel.\
-    <<run $Items.pushUnique('Chisel')>>
-    <<case 3>>\
-    cook's knife.\
-    <<run $Items.pushUnique('Knife')>>
-    <<case 4>>\
-    scientist's coat.\
-    <<run $Items.pushUnique('Coat')>>
-    <<case 5>>\
-    priest's thurible.\
-    <<run $Items.pushUnique('Thurible')>>
-    <<case 6>>\
-    gardener's trowl.\
-    <<run $Items.pushUnique('Trowl')>>
-    <<case 7>>\
-    brewmaster's stirring spoon.\
-    <<run $Items.pushUnique('Spoon')>>
+        <<case 0>>\
+        nurse's syringe.\
+        <<run $Items.pushUnique('Syringe')>>
+        <<case 1>>\
+        librarian's glasses.\
+        <<run $Items.pushUnique('Glasses')>>
+        <<case 2>>\
+        smith's chisel.\
+        <<run $Items.pushUnique('Chisel')>>
+        <<case 3>>\
+        cook's knife.\
+        <<run $Items.pushUnique('Knife')>>
+        <<case 4>>\
+        scientist's coat.\
+        <<run $Items.pushUnique('Coat')>>
+        <<case 5>>\
+        priest's thurible.\
+        <<run $Items.pushUnique('Thurible')>>
+        <<case 6>>\
+        gardener's trowl.\
+        <<run $Items.pushUnique('Trowl')>>
+        <<case 7>>\
+        brewmaster's stirring spoon.\
+        <<run $Items.pushUnique('Spoon')>>
     <</switch>>
-[[Continue searching|Search teacher's belongings]]
-[[Leave dorm]]
+    [[Continue searching|Search teacher's belongings]]
+    [[Leave dorm]]
 <</if>>
 
 :: Hide
@@ -2074,7 +2093,10 @@ You forge onwards, deep into the forest.
 <<if $Temp is 1>>
     You happen upon a <<if $NightTime is true>>plant, but you can't see identify it in the dark<<else>>$TempString1<</if>>.
 
-    [[Collect]]
+    You notice a tomb in the distance.
+
+    [[Investigate the tomb|Tomb]]
+    [[Harvest plant|Collect]]
     <<if $TempString1 is not 'Mushroom'>>\
         [[Take seeds]]
     <</if>>\
@@ -2084,6 +2106,46 @@ You forge onwards, deep into the forest.
     [[Fight]]
     [[Run]]
 <</if>>
+
+:: Tomb
+You approach the tomb. it is sealed shut.
+
+There is a skeleton on the door.
+<<if $UserLegendaryItems.includes('Skeleton Key')>>
+[[Use the Skeleton Key on the Skeleton Door|Open Tomb]]
+<</if>>
+[[Open door]]
+[[Leave forest]]
+
+:: Open door
+It won't budge.
+<<if $UserLegendaryItems.includes('Skeleton Key')>>
+[[Use the Skeleton Key on the Skeleton Door|Open Tomb]]
+<</if>>
+[[Leave forest]]
+
+:: Open Tomb
+You insert the Skeleton Key and the Skeleton Door slowly slides open, eating your key. 
+
+You find yourself in a vast open chamber. Skeletons rise up from the ground and encircle you. Their eyes glow.
+
+They brings their hands together in prayer and chant a hymn.
+
+In glorious worship, their beautiful, melodic voices praise you.
+
+Your body tingles. You start glowing.
+
+Golden wings sprout from your back and you rise above the ground levitating.
+
+Great power courses through your veins. You raise your arms to your side and raise your head, instinctually joining in the holy hymn.
+
+A great vortex rages through the tomb and engulfs your acolytes, thrusting them into your body. You absorb their power and you are bombarded with visions of the world. 
+
+You can now monitor and control events that were once far beyond your comprehension or awareness. 
+
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:yellow"><b>YOU HAVE BECOME GOD</b></span></span>
+</div>
 
 :: Collect
 <<if Fresh()>>\
