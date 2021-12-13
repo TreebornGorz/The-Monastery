@@ -1823,21 +1823,45 @@ You saddle him and [[leave the barn|Ride]].
 
                             The air rushes through your hair as you speed around.
                             
-                            Wildlife skitters around you. 
-                            <<if $NightTime is true>>
+                            Wildlife skitters around you.
+                            <<nobr>>
+                                <<set _Plants to $Plants>>
+                                /* Checks if player has each forest plant somewhere in the inventory */
+                                <<for _i to 0; _i lt $Seeds.length; _i++>>
+                                    <<if $Seeds[_i] is 'Marijuana' or $Seeds[_i] is 'Tulip' or $Seeds[_i] is 'Poppy'>>
+                                        <<run _Plants.delete($Seeds[_i])>>
+                                    <</if>>
+                                <</for>>
+                                <<for _i to 0; _i lt $UserPlants.length; _i++>>
+                                    <<if $UserPlants[_i] is 'Marijuana' or $UserPlants[_i] is 'Tulip' or $UserPlants[_i] is 'Poppy'>>
+                                        <<run _Plants.delete($UserPlants[_i])>>
+                                    <</if>>
+                                <</for>>
+                                <<for _i to 0; _i lt $UserIngredients.length; _i++>>
+                                    <<if $UserIngredients[_i] is 'Marijuana' or $UserIngredients[_i] is 'Tulip' or $UserIngredients[_i] is 'Poppy'>>
+                                        <<run _Plants.delete($UserIngredients[_i])>>
+                                    <</if>>
+                                <</for>>
+                                <<if _Plants.length gt 0>>
+                                    <<set $TempString to _Plants.random()>>
+                                <<else>>
+                                    <<set $TempString to $Plants.random()>>
+                                <</if>>
+                            <</nobr>>
+                            <<if $NightTime is true>>\
                             It is difficult to see in the darkness.
 
-                            [[Dismount and search for plants in the dark][$TempString to $Plants.random()]]
+                            [[Dismount and search for plants in the dark]]
                             <<else>>
                             You notice many interesting plants.
                                                         
-                            [[Inspect a plant][$TempString to $Plants.random()]]
+                            [[Inspect a plant]]
                             <</if>> \
                             [[Enter the forest]]
                             [[Return to campus]]
 
 :: Dismount and search for plants in the dark
-                                You dismount and fumble around in teh dark searching for a plant.
+                                You dismount and fumble around in the dark searching for a plant.
                                 
                                 You eventually find one, but it is too dark to determine which plant.
                                                       
