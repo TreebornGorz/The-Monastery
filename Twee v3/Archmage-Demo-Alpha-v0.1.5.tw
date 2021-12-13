@@ -1823,7 +1823,7 @@ You saddle him and [[leave the barn|Ride]].
 
                             The air rushes through your hair as you speed around.
                             
-                            Wildlife skitters around you.
+                            Wildlife skitters around you. \
                             <<nobr>>
                                 <<set _Plants to $Plants>>
                                 /* Checks if player has each forest plant somewhere in the inventory */
