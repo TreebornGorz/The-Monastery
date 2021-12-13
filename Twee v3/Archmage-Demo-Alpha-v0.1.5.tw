@@ -363,7 +363,11 @@ Where do you want to go?
 [[Forge]]
 [[Brewery]]
 [[Dormitory]]
-<<if $HorseFriend is true>>
+<<if $HorseFriend is true and $BarnWork is true>>
+[[Ride Horse|Approach horse]]
+<<elseif $AnimalShip gt 2>> 
+[[Ride Horse|Approach horse]]
+<<elseif $HorseFriend is true>>
 [[Ride Horse]]
 <</if>>
 
