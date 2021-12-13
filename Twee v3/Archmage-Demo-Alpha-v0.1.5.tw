@@ -6,56 +6,39 @@ Harvest conditional
 
 Unfinished Tasks: 
 
-make horse more accessible
 Isolate Fresh conditionals
-Fix Faucet buttons
 
 Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen and prevent them from harvesting again. 
 
 Determine the number of relationships
 
-Add slime to potion ingredient table
-
-Establish various Potions & Ingredients [Mix and match chart -> function]
-
-Verify/Apply $NightTime variable consistently across game - Prevents access to progression after progressing in another area 
-Use buttons for faucets
 Incorporate Potion effects
-Horse should be ridable if befriended after accepting work without grinding Barn work
-Create function for randomized rewards
-Secondary use for seeds?
 Establish relationships
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
-Incorporate events that occur if player doesn't take an action in a certain amount of time
+Incorporate events that occur if player doesn't take an action in a certain amount of time 
 Steam from faucets creates messages in mirrors
-Evaluate usefulness of butcher and tanner for dead animals
-One hint for each of the seven deadly sins
 411 combination on faucets provides a personalize hint
 Inspecting the stained glass foreshadows certain endings; begin with randomization; consider filtering based on available endings
 Figured what to do if already ostracized and player should be ostracized again in all cases 
-Implement conditionals for $Weapon is true
 Figure out $SirenPet mechanics, filters all future options if true based on the siren's preferences, provides options that wouldn't  normally exist to lead to unique endings based on other pre-existing boolean variable values
 Create separate passage for exploring campus at night? Requires a portable light?
-Verify/Configure Inventory and Status
 Create mechanic for collecting/ingesting secret bath water
 Expand library options
 
 Too many bad ends in bath house
 
-Need mechanic to confront player with enemies/plants they haven't encountered yet.
-Make forest encounters unseeable at night.
-Check fresh for history control.
+Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
-If player agrees to help with barn, than horse riding shouldn't be problematic and should be able to approach horse individually
-
-Changelog v0.1.4
+Changelog v0.1.5
 -Player cannot identify plants and enemies at night
--Confrontations are still randomized, but now prioritize unique confrontations (Incomplete - campus plants)
+-Confrontations are still randomized, but now prioritize unique confrontations
+-Horse is now rideable directly from campus
 -Fixed a bug where opening the inventory menu affected forest confrontations
+-Fixed bug where plants aged by leaving the cloister multiple times
+-Fixed bug where plants were harvestable ebfore being fully grown (Test)
 
 Bug Log v0.1.2
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
--Plants can age by leaving the cloister; move var increment to sleep
 
 */
 
