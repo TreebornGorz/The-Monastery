@@ -2,7 +2,7 @@
 
 Test: 
 
-Plant and Growing systems -
+Harvest conditional
 
 Unfinished Tasks: 
 
@@ -344,7 +344,7 @@ Are you Male or Female?
 [[Female|Demo][$Male to false, $Day to 1]]
 
 :: Demo
-<<if $Day lt 26>> \
+<<if $Day lt 50>> \
 You are on campus. 
 
 There are several areas to explore.
@@ -366,12 +366,6 @@ Where do you want to go?
 <<if $HorseFriend is true>>
 [[Ride Horse]]
 <</if>>
-
-<<for _i to 0; _i lt $PlantAge.length; _i++>>
-    <<if $PlantAge[_i] gt 0>>
-        <<set $PlantAge[_i] += 1>>
-    <</if>>
-<</for>>
 
 <<set $Show to true>>
 <<set $NightTime to false>>
@@ -569,6 +563,12 @@ You notice a suspicious latch on the ceiling.
 
         [[Wake Up|Demo]]
 
+        <<for _i to 0; _i lt $PlantAge.length; _i++>>
+            <<if $PlantAge[_i] gt 0>>
+                <<set $PlantAge[_i] += 1>>
+            <</if>>
+        <</for>>
+
 :: Temple
 You enter the temple.
 
@@ -675,15 +675,15 @@ Four walls surround the area in a square shape. Various bushes and flowers line 
         
 :: Harvest
             Which plant would you like to harvest?
-                        
-            <<for _i to 0; _i lt $UserPlants.length; _i++>>\
-                <<capture _i>>\
-                    <<if $UserIngredients.includes($UserPlants[_i]) is false>>\
-                        <<button [[$UserPlants[_i]|Harvested]]>><<run $UserIngredients.pushUnique($UserPlants[_i])>><<set $Temp to $UserPlants[_i]>><</button>>\
-                    <</if>>\
-                <</capture>>\
-            <</for>>
-            
+            <<nobr>>            
+                <<for _i to 0; _i lt $UserPlants.length; _i++>>\
+                    <<capture _i>>\
+                        <<if $UserIngredients.includes($UserPlants[_i]) is false and $PlantAge[_i] isnot lt $HarvestAge[_i]>>\
+                            <<button [[$UserPlants[_i]|Harvested]]>><<run $UserIngredients.pushUnique($UserPlants[_i])>><<set $Temp to $UserPlants[_i]>><</button>>\
+                        <</if>>\
+                    <</capture>>\
+                <</for>>
+            <</nobr>>
             [[Leave|Demo]]
 
 :: Harvested
