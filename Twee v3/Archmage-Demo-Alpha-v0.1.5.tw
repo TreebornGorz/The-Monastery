@@ -240,6 +240,7 @@ body.no-save #menu-item-saves {
 <<set $UserHemlock to false>>
 <<set $MasterIngredients to 0>> 
 <<set $Sneaky to false>>
+<<set $Items to []>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -276,6 +277,9 @@ Ingredients: <<print $UserIngredients>>
 <</if>> 
 <<if $UserPlants.length gt 0>> \
 Planted: <<print $UserPlants>>
+<</if>>
+<<if $Items.length gt 0>>\
+Items: $Items
 <</if>> 
 <<if $UserPotions.length gt 0>> \
 Potions: <<print $UserPotions>>
@@ -523,12 +527,38 @@ You notice a suspicious latch on the ceiling.
 
 :: Search teacher's belongings
 You open some dressers and bags, searching for an interesting item.
-<<Set $Temp to random(10)>>\
+<<nobr>>
+<<set _rand to [0,1,2,3,4,5,6,7,8,9,10,11]>>
+<<for _i to 0; _i lt $Items.length; _i++>>
+    <<switch $Items[_i]>>
+        <<case 'Syringe'>>
+            <<run _rand.delete(0)>>
+        <<case 'Glasses'>>
+            <<run _rand.delete(1)>>
+        <<case 'Chisel'>>
+            <<run _rand.delete(2)>>
+        <<case 'Knife'>>
+            <<run _rand.delete(3)>>
+        <<case 'Coat'>>
+            <<run _rand.delete(4)>>
+        <<case 'Thurible'>>
+            <<run _rand.delete(5)>>
+        <<case 'Trowl'>>
+            <<run _rand.delete(6)>>
+        <<case 'Spoon'>>
+            <<run _rand.delete(7)>>
+    <</switch>>
+<</for>>
+<<Set $Temp to _rand.random()>>\
+<</nobr>>
 <<if $Temp is 9 or $Temp is 10>>
 A teacher enters the dorm while you are searching.
-/* Invis pot helps */
+
+<<if $UserPotions.length gt 0>>\
+[[Drink a potion|WIP]]
+<</if>>\
 [[Confront them|WIP]]
-[[Hide|WIP]]
+[[Hide]]
 <<elseif $Temp is 8>>
 You get lucky and find a legendary item. /* Figure this out. Ideas: Sword of Siren Slaying, A key to a tomb in the forest, key to locked door in library, secret scroll of fire breathing */
 
@@ -538,32 +568,59 @@ You get lucky and find a legendary item. /* Figure this out. Ideas: Sword of Sir
 You find the \
     <<switch $Temp>>\
     <<case 0>>\
-    nurse's syringe.
+    nurse's syringe.\
+    <<run $Items.pushUnique('Syringe')>>
     <<case 1>>\
-    librarian's glasses.
+    librarian's glasses.\
+    <<run $Items.pushUnique('Glasses')>>
     <<case 2>>\
-    smith's chisel.
+    smith's chisel.\
+    <<run $Items.pushUnique('Chisel')>>
     <<case 3>>\
-    cook's knife.
+    cook's knife.\
+    <<run $Items.pushUnique('Knife')>>
     <<case 4>>\
-    scientist's 
+    scientist's coat.\
+    <<run $Items.pushUnique('Coat')>>
     <<case 5>>\
-    priest's thurible.
+    priest's thurible.\
+    <<run $Items.pushUnique('Thurible')>>
     <<case 6>>\
-    gardener's trowl.
+    gardener's trowl.\
+    <<run $Items.pushUnique('Trowl')>>
     <<case 7>>\
-    brewmaster's stirring spoon.
+    brewmaster's stirring spoon.\
+    <<run $Items.pushUnique('Spoon')>>
     <</switch>>
 [[Continue searching|Search teacher's belongings]]
 [[Leave dorm]]
 <</if>>
 
-/* :: Belonging */
-                    /* Set variables and alter item found for each one, each search takes time and risks getting caught, multiple searches of the same belongings may yield another item (randomize these) */
+:: Hide
+You hide from the teacher. You crouch in a corner in an attempt to avoid detection. 
+/* Incorporate other options */
+Your foot slips and you fall onto the floor, making a noise.
 
-/* :: Hide teach */
-                /* Wait for a staff member(s) to show up, maybe on or maybe multiple (random), gets caught or escapes with info (binary, random) */
+The teacher hears you and walks over, staring you in the eyes. You have been caught.
 
+All of your stolen items are confiscated and you are expelled from The Monastery for theft and trespassing.
+
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+</div>
+
+:: Confront them
+You confront the teacher who now recognizes you as an intruder. 
+
+You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.
+
+<<if $UserPotions.length gt 0>>\
+[[Douse the teacher with a potion|WIP]]
+<<else>>\
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+</div>
+<</if>>\
         
 :: Sleep
         <<set $Day += 1>> \
