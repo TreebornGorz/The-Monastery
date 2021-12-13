@@ -1,4 +1,4 @@
-The Monastery is a demo for the currently in-development "The Archmage", a text adventure fantasy game which provides the player with //significant// agency.
+The Monastery is a demo for "The Archmage", an in-development text adventure fantasy game.
 
 The Monastery provides players with a teaser for the main project. It displays gameplay mechanics without widening the scope to the unwieldy levels of the main project. 
 
