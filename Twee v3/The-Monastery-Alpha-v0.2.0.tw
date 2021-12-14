@@ -2378,9 +2378,16 @@ Whoever used them last must not be too organized.
 
 [[Mess around with the tools randomly|Mess around]]
 <<elseif $Forge is 1>>
-[[Create weapon]]
+    <<if $Weapon is false>>\
+        <<if $UserLegendaryItems.includes('Sword of Siren Slaying') is false>>\
+            [[Create weapon]]
+        <<else>>\
+            You already have a weapon.<br>
+        <</if>>\
+    <<else>>\
+        You already have a weapon.<br>
+    <</if>>\
 [[Leave|Demo]]
-<</if>>
 <<else>>
 You are no longer welcome here.
 
