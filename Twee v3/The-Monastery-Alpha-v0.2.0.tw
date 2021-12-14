@@ -36,25 +36,27 @@ Check fresh for history control. Does fresh work when going back and forth betwe
 Changelog v0.2.0
 -Changed the title for clarity
 -Game is now technically winnable
--No more dead links
+-No more dead links (Incomplete)
 -Introduced legendary items 
 -Teacher's belongings can now be "found" in the teacher's dormitory
 -Socially ostracized players now have a remedy
+-Daydreaming is now randomly useful
 -Faucets can now be turned individually 
 -Entering the incorrect faucet combination now changes the secret combination 
--Entering a certain combination of faucets now provides a hint (Incomplete)
+-Entering a certain combination of faucets now works
 -Player cannot identify plants and enemies at night
 -Confrontations are still randomized, but now prioritize unique confrontations
 -Horse is now rideable directly from campus
 -Forge now recognizes if you already have a weapon
 -Fixed bug where opening the inventory menu affected forest confrontations
 -Fixed bug where plants aged by leaving the cloister multiple times
--Fixed bug where plants were harvestable before being fully grown (Test)
+-Fixed bug where plants were harvestable before being fully grown
 -Upcoming: Potion effects and Item effects
 
-Bug Log v0.1.2
+Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
 -History control causes $Temp to bug out and not randomize in the teacher's dorm when searching belongings
+-If player has all seeds, They find an error plant
 
 */
 
@@ -233,7 +235,7 @@ body.no-save #menu-item-saves {
 <<set $Plants to ["Marijuana","Poppy","Tulip"]>>
 <<set $PlantAge to [0,0,0,0,0]>> 
 <<set $SproutAge to [2,3,2,4,3]>>
-<<set $HarvestAge to [4,6,4,7,5]>>
+<<set $HarvestAge to [5,6,4,7,5]>>
 <<set $MasterPlants to ["Marijuana","Poppy","Tulip","Nightshade","Hemlock"]>>
 <<set $UserPlants to []>>
 <<set $Planted to []>>
@@ -763,19 +765,18 @@ You have planted: $Planted.
 :: Check on your plants
 <<for _i to 0; _i lt $PlantAge.length; _i++>>\
     <<set $Temp to $PlantAge[_i] - 1>>\
-    <<if $PlantAge[_i] gt 0 and $PlantAge[_i] lt $SproutAge[_i]>>\   
+    <<if $PlantAge[_i] gt 0 and $PlantAge[_i] lt $SproutAge[_i] + 1>>\   
         You planted $MasterPlants[_i] seeds. The plant has not yet sprouted. It was planted $Temp day(s) ago. 
-    <<elseif $PlantAge[_i] gt $SproutAge[_i] - 1 and $PlantAge[_i] lt $HarvestAge[_i]>>\
+    <<elseif $PlantAge[_i] gt $SproutAge[_i] and $PlantAge[_i] lt $HarvestAge[_i] + 1>>\
         A $MasterPlants[_i] plant has sprouted. It was planted $Temp days ago.
-    <<elseif $PlantAge[_i] gt $HarvestAge[_i] - 1>>\ 
+    <<elseif $PlantAge[_i] gte $HarvestAge[_i]>>\ 
         <<set $Harvest to true>>\
         <<if $UserPlants.includes($MasterPlants[_i])>>\
         <<else>><<run $UserPlantsUnique($MasterPlants[_i])>>\
         <</if>>\
         Your $MasterPlants[_i] plant is fully grown and can be harvested.
     <</if>>\
-<</for>>\
-
+<</for>>
 <<if $Harvest is true>> \
 [[Harvest]]
 <</if>>\
@@ -784,15 +785,17 @@ You have planted: $Planted.
         
 :: Harvest
 Which plant would you like to harvest?
+
 <<nobr>>            
     <<for _i to 0; _i lt $UserPlants.length; _i++>>\
         <<capture _i>>\
-            <<if $UserIngredients.includes($UserPlants[_i]) is false and $PlantAge[_i] isnot lt $HarvestAge[_i]>>\
+            <<if $UserIngredients.includes($UserPlants[_i]) is false and $PlantAge[_i] gte $HarvestAge[_i]>>\
                 <<button [[$UserPlants[_i]|Harvested]]>><<run $UserIngredients.pushUnique($UserPlants[_i])>><<set $Temp to $UserPlants[_i]>><</button>>\
             <</if>>\
         <</capture>>\
     <</for>>
 <</nobr>>
+
 [[Leave|Demo]]
 
 :: Harvested
@@ -862,6 +865,8 @@ Check back later to see if your plant is grown.<br>
 You laze about the cloister, daydreaming all the while. 
 
 You realize that you accomplished very little, but you also don't care about that at all.
+
+You feel peaceful and satisfied.
 <<set $Temp to random(9)>>
 <<set _LegendaryItems to $LegendaryItems;$TempString to ''>>\
 <<if $UserLegendaryItems.length gt 0>>\
@@ -1363,7 +1368,7 @@ You turn off the faucet and the steam vanishes, along with the message.
     <</for>>
 <</nobr>>\
 The faucets shut off and the gargoyles speak to you.
-
+<<set $Faucet1 to 'Off'; $Faucet2 to 'Off'; $Faucet3 to 'Off'; $Faucet4 to 'Off'; $Faucet5 to 'Off'>>
 They speak the number _Temp4 and then the number _Temp5.
 
 [[Turn on individual faucets]]
@@ -1433,11 +1438,12 @@ They speak the number _Temp4 and then the number _Temp5.
         <</for>> \
         <<if $BathHouse is true>> \
             You wait for a few seconds and then the floor begins to vibrate.
-
+            
             A passageway splits open in the wall. Water runs through the opening and down the steps.
 
             [[Enter the secret passage|Secret bath]]
         <</if>>
+    <<set $Faucet1 to 'Off'; $Faucet2 to 'Off'; $Faucet3 to 'Off'; $Faucet4 to 'Off'; $Faucet5 to 'Off'>>
     <</if>>
 <</if>>
 
@@ -2009,7 +2015,7 @@ Wildlife skitters around you.
 It is difficult to see in the darkness.
 
 [[Dismount and search for plants in the dark]]
-<<else>>
+<<else>>\
 You notice many interesting plants.
                             
 [[Inspect a plant]]
