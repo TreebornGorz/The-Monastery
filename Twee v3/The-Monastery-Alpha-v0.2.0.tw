@@ -27,32 +27,39 @@ Create separate passage for exploring campus at night? Requires a portable light
 Create mechanic for collecting/ingesting secret bath water
 Expand library options
 
+Consider limiting number of items obtained by daydreaming
+
 Too many bad ends in bath house
 
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
 Changelog v0.2.0
+-Changed the title for clarity
 -Game is now technically winnable
--Implemented legendary items
+-No more dead links
+-Introduced legendary items 
 -Teacher's belongings can now be "found" in the teacher's dormitory
--The socially ostracized now have a remedy
--Faucets can now be turned individually (Test Message)
--Entering the incorrect faucet combination now changes the secret combination (Test)
+-Socially ostracized players now have a remedy
+-Faucets can now be turned individually 
+-Entering the incorrect faucet combination now changes the secret combination 
 -Entering a certain combination of faucets now provides a hint (Incomplete)
 -Player cannot identify plants and enemies at night
 -Confrontations are still randomized, but now prioritize unique confrontations
 -Horse is now rideable directly from campus
+-Forge now recognizes if you already have a weapon
 -Fixed bug where opening the inventory menu affected forest confrontations
 -Fixed bug where plants aged by leaving the cloister multiple times
 -Fixed bug where plants were harvestable before being fully grown (Test)
+-Upcoming: Potion effects and Item effects
 
 Bug Log v0.1.2
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
+-History control causes $Temp to bug out and not randomize in the teacher's dorm when searching belongings
 
 */
 
 :: StoryTitle
-Archmage Demo
+The Monastery
 
 :: StorySubtitle
 Version: Alpha 0.2.0
@@ -68,6 +75,10 @@ Version: Alpha 0.2.0
 {
     config.history.controls = true; 
 }
+
+postdisplay['fadeIn-text'] = function (taskName) {
+	$('.fadeIn').hide().fadeIn(5000);  
+};
 
 /* Prevents passages from re-executing functions when enterting a menu and coming back using [menu] tag */
 window.Fresh = function () {
@@ -543,7 +554,7 @@ There are currently no teachers around, but you may not want to press your luck.
 :: Search teacher's belongings
 You open some dressers and bags, searching for an interesting item.
 <<nobr>>
-    <<set _rand to [0,1,2,3,4,5,6,7,8,9,10,11]>>
+    <<set _rand to [0,1,2,3,4,5,6,7,8,9,10]>>
     <<for _i to 0; _i lt $Items.length; _i++>>
         <<switch $Items[_i]>>
             <<case 'Syringe'>>
@@ -564,9 +575,11 @@ You open some dressers and bags, searching for an interesting item.
                 <<run _rand.delete(7)>>
         <</switch>>
     <</for>>
-    <<Set $Temp to _rand.random()>>\
+    <<if Fresh()>>
+        <<set $Temp to _rand.random()>>\
+    <</if>>
 <</nobr>>
-<<if $Temp is 9 or $Temp is 10>>
+<<if $Temp is 9 or $Temp is 10>>\
     A teacher enters the dorm while you are searching.
 
     <<if $UserPotions.length gt 0>>\
@@ -574,21 +587,23 @@ You open some dressers and bags, searching for an interesting item.
     <</if>>\
     [[Confront them]]
     [[Hide]]
-<<elseif $Temp is 8>>
-    <<set _LegendaryItems to $LegendaryItems;$TempString to ''>>
-    <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>
-        <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>
-    <</for>>
-    <<if _LegendaryItems.length gt 0 and _LegendaryItems.length lt 4>>
-        <<set $TempString to _LegendaryItems.random()>>
+<<elseif $Temp is 8>>\
+    <<set _LegendaryItems to $LegendaryItems;$TempString to ''>>\
+    <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>\
+        <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>\
+    <</for>>\
+    <<if _LegendaryItems.length gt 0 and _LegendaryItems.length lt 4>>\
+        <<if Fresh()>>\
+            <<set $TempString to _LegendaryItems.random()>>\
+        <</if>>\
         You get lucky and find a $TempString. 
         <<run $UserLegendaryItems.pushUnique($TempString)>>\
-    <<else>>
+    <<else>>\
         A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears. 
     <</if>>
     [[Continue searching|Search teacher's belongings]]
     [[Leave dorm]]
-<<else>>
+<<else>>\
     You find the \
     <<switch $Temp>>\
         <<case 0>>\
@@ -819,8 +834,10 @@ Maybe you can find another use for this seed.
 <<else>>\
 You plant the $Grow seed.
 <<run $UserPlants.pushUnique($Grow)>>                
-Check back later to see if your plant is grown.
-
+Check back later to see if your plant is grown.<br>
+<<if $Seeds.length gt 0>>\
+[[Plant another seed|Plant seeds]]
+<</if>>\
 [[Eat dinner]]
 [[Sleep]]
 
@@ -1319,7 +1336,7 @@ Steam rises and fogs the mirror above.
 A message appears in the mirror.
 <<nobr>>
     <<for _i to 0; _i lt $Faucets.length; _i++>>
-        <<if $SingleFacuet is $Faucets[_i]>>
+        <<if $SingleFaucet is $Faucets[_i]>>
             <<set $Temp to _i + 1>>
         <</if>>
     <</for>>
@@ -1329,75 +1346,98 @@ The mirror reads: $Temp.
 You turn off the faucet and the steam vanishes, along with the message.
 <</if>>
 [[Turn another faucet|Turn on individual faucets]]
+[[Turn on all the faucets][$Temp to 0]]
 [[Leave|Demo]] 
 
-:: Turn on all the faucets 
-<<if $Temp isnot 5>>Choose which faucets to turn.
-    <<if $Temp is 0>>\
-        <<set $Faucet1 to 'Off'; $Faucet2 to 'Off'; $Faucet3 to 'Off'; $Faucet4 to 'Off'; $Faucet5 to 'Off'>>\
-    <</if>>
-    <<button [["Faucet #1 - " + $Faucet1|Turn on all the faucets]]>>
-        <<set $Temp += 1>>
-        <<if $Faucet1 is 'Off'>>
-            <<set $Faucet1 to 'On'>>
-            <<run $UserFaucets.push(1)>>
-        <<else>>
-            <<set $Faucet1 to 'Off'>>
+:: Turn on all the faucets
+<<if $Temp is 3 and $UserFaucets[0] eq 4 and $UserFaucets[1] eq 1 and $UserFaucets[2] eq 1>>\
+<<nobr>>
+    <<set _Temp4 to 0; _Temp5 to 0>>
+    <<for _i to 0; _i lt $Faucets.length; _i++>>
+        <<if $Faucets[_i] eq 4>>
+            <<set _Temp4 to _i + 1>>
         <</if>>
-    <</button>><br>
-    <<button [["Faucet #2 - " + $Faucet2|Turn on all the faucets]]>>
-        <<set $Temp += 1>>
-        <<if $Faucet2 is 'Off'>>
-            <<set $Faucet2 to 'On'>>
-            <<run $UserFaucets.push(2)>>
-        <<else>>
-            <<set $Faucet2 to 'Off'>>
+        <<if $Faucets[_i] eq 5>>
+            <<set _Temp5 to _i + 1>>
         <</if>>
-    <</button>><br>
-    <<button [["Faucet #3 - " + $Faucet3|Turn on all the faucets]]>>
-        <<set $Temp += 1>>
-        <<if $Faucet3 is 'Off'>>
-            <<set $Faucet3 to 'On'>>
-            <<run $UserFaucets.push(3)>>
-        <<else>>
-            <<set $Faucet3 to 'Off'>>
-        <</if>>
-    <</button>><br>
-    <<button [["Faucet #4 - " + $Faucet4|Turn on all the faucets]]>>
-        <<set $Temp += 1>>
-        <<if $Faucet4 is 'Off'>>
-            <<set $Faucet4 to 'On'>>
-            <<run $UserFaucets.push(4)>>
-        <<else>>
-            <<set $Faucet4 to 'Off'>>
-        <</if>>
-    <</button>><br>
-    <<button [["Faucet #5 - " + $Faucet5|Turn on all the faucets]]>>
-        <<set $Temp += 1>>
-        <<if $Faucet5 is 'Off'>>
-            <<set $Faucet5 to 'On'>>
-            <<run $UserFaucets.push(5)>>
-        <<else>>
-            <<set $Faucet5 to 'Off'>>
-        <</if>>
-    <</button>>  
-<<else>>
-    <<for _i to 0;  _i lt $Faucets.length; _i++>> \
-        <<if $Faucets[_i] isnot $UserFaucets[_i]>> \
-            The running faucets shut themselves off. Maybe you did somewthing wrong.
-            <<set $UserFaucets to []; $Faucets to $Faucets.shuffle(); $BathHouse to false>>
-            [[Leave|Demo]]<<break>>
-        <<elseif _i == 4>> \
-            <<set $BathHouse to true>> \
-            <<set $UserFaucets to []>>\
-        <</if>> \
-    <</for>> \
-    <<if $BathHouse is true>> \
-        You wait for a few seconds and then the floor begins to vibrate.
+    <</for>>
+<</nobr>>\
+The faucets shut off and the gargoyles speak to you.
 
-        A passageway splits open in the wall. Water runs through the opening and down the steps.
+They speak the number _Temp4 and then the number _Temp5.
 
-        [[Enter the secret passage|Secret bath]]
+[[Turn on individual faucets]]
+[[Turn on all the faucets][$Temp to 0]]
+<<set $UserFaucets to []>>
+<<else>>\ 
+    <<if $Temp isnot 5>>Choose which faucets to turn.
+        <<if $Temp is 0>>\
+            <<set $Faucet1 to 'Off'; $Faucet2 to 'Off'; $Faucet3 to 'Off'; $Faucet4 to 'Off'; $Faucet5 to 'Off'>>\
+        <</if>>
+        <<button [["Faucet #1 - " + $Faucet1|Turn on all the faucets]]>>
+            <<set $Temp += 1>>
+            <<if $Faucet1 is 'Off'>>
+                <<set $Faucet1 to 'On'>>
+                <<run $UserFaucets.push(1)>>
+            <<else>>
+                <<set $Faucet1 to 'Off'>>
+                <<run $UserFaucets.push(1)>>
+            <</if>>
+        <</button>><br>
+        <<button [["Faucet #2 - " + $Faucet2|Turn on all the faucets]]>>
+            <<set $Temp += 1>>
+            <<if $Faucet2 is 'Off'>>
+                <<set $Faucet2 to 'On'>>
+                <<run $UserFaucets.push(2)>>
+            <<else>>
+                <<set $Faucet2 to 'Off'>>
+            <</if>>
+        <</button>><br>
+        <<button [["Faucet #3 - " + $Faucet3|Turn on all the faucets]]>>
+            <<set $Temp += 1>>
+            <<if $Faucet3 is 'Off'>>
+                <<set $Faucet3 to 'On'>>
+                <<run $UserFaucets.push(3)>>
+            <<else>>
+                <<set $Faucet3 to 'Off'>>
+            <</if>>
+        <</button>><br>
+        <<button [["Faucet #4 - " + $Faucet4|Turn on all the faucets]]>>
+            <<set $Temp += 1>>
+            <<if $Faucet4 is 'Off'>>
+                <<set $Faucet4 to 'On'>>
+                <<run $UserFaucets.push(4)>>
+            <<else>>
+                <<set $Faucet4 to 'Off'>>
+            <</if>>
+        <</button>><br>
+        <<button [["Faucet #5 - " + $Faucet5|Turn on all the faucets]]>>
+            <<set $Temp += 1>>
+            <<if $Faucet5 is 'Off'>>
+                <<set $Faucet5 to 'On'>>
+                <<run $UserFaucets.push(5)>>
+            <<else>>
+                <<set $Faucet5 to 'Off'>>
+            <</if>>
+        <</button>>  
+    <<else>>
+        <<for _i to 0;  _i lt $Faucets.length; _i++>> \
+            <<if $Faucets[_i] isnot $UserFaucets[_i]>> \
+                The running faucets shut themselves off. Maybe you did something wrong.
+                <<set $UserFaucets to []; $Faucets to $Faucets.shuffle(); $BathHouse to false>>
+                [[Leave|Demo]]<<break>>
+            <<elseif _i == 4>> \
+                <<set $BathHouse to true>> \
+                <<set $UserFaucets to []>>\
+            <</if>> \
+        <</for>> \
+        <<if $BathHouse is true>> \
+            You wait for a few seconds and then the floor begins to vibrate.
+
+            A passageway splits open in the wall. Water runs through the opening and down the steps.
+
+            [[Enter the secret passage|Secret bath]]
+        <</if>>
     <</if>>
 <</if>>
 
@@ -1940,7 +1980,7 @@ You ride along the campus outskirts.
 
 The air rushes through your hair as you speed around.
 
-Wildlife skitters around you. \
+Wildlife skitters around you. 
 <<nobr>>
     <<set _Plants to $Plants>>
     /* Checks if player has each forest plant somewhere in the inventory */
@@ -2111,10 +2151,11 @@ You wish you had a weapon right about now...
 You forge onwards, deep into the forest. 
 <<if $Temp is 1>>
     You happen upon a <<if $NightTime is true>>plant, but you can't see identify it in the dark<<else>>$TempString1<</if>>.
+    <<if $NightTime is true>>
+        You notice a tomb in the distance.
 
-    You notice a tomb in the distance.
-
-    [[Investigate the tomb|Tomb]]
+        [[Investigate the tomb|Tomb]]
+    <</if>>
     [[Harvest plant|Collect]]
     <<if $TempString1 is not 'Mushroom'>>\
         [[Take seeds]]
@@ -2132,7 +2173,7 @@ You approach the tomb. it is sealed shut.
 There is a skeleton on the door.
 <<if $UserLegendaryItems.includes('Skeleton Key')>>
 [[Use the Skeleton Key on the Skeleton Door|Open Tomb]]
-<</if>>
+<</if>>\
 [[Open door]]
 [[Leave forest]]
 
@@ -2140,7 +2181,7 @@ There is a skeleton on the door.
 It won't budge.
 <<if $UserLegendaryItems.includes('Skeleton Key')>>
 [[Use the Skeleton Key on the Skeleton Door|Open Tomb]]
-<</if>>
+<</if>>\
 [[Leave forest]]
 
 :: Open Tomb
@@ -2184,35 +2225,38 @@ You take the $TempString1 seeds.
 
 :: Fight
 You fight the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
-<<if $Weapon is true>>
+<<if $Weapon is true or $UserLegendaryItems.includes('Sword of Siren Slaying')>>
 You defeat the <<if $NightTime is true>>monster<<else>>$TempString<</if>> using your weapon.
     <<if $TempString is "Bat">> \
-    <<set $Reward to "Bat Wing">> \
+        <<set $Reward to "Bat Wing">> \
     <<elseif $TempString is "Slime">> \
-    <<set $Reward to "Slime">> \
+      <<set $Reward to "Slime">> \
     <<elseif $TempString is "Newt">> \
-    <<set $Reward to "Eye of Newt">> \
-    <</if>> \
-<<if Fresh()>>\
-<<run $UserIngredients.push($Reward)>> \
-<</if>>
+        <<set $Reward to "Eye of Newt">> \
+    <</if>>\
+    <<if Fresh()>>\
+        <<run $UserIngredients.push($Reward)>> \
+    <</if>>
 You obtain $Reward.
+<<set $NightTime to true>>
+You notice a tomb in the distance.
 
+[[Investigate the tomb|Tomb]]
 [[Leave forest]]
 <<else>>
 You punch at the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
     <<if $TempString is "Bat">>
-    The bat simply evades your punch and bites you.
+    A bat simply evades your punch and bites you.
 
     You get rabies and die from fear of water.
     <<elseif $TempString is "Slime">>
-    You punch the slime and your fist sinks into it.
+    You punch a slime and your fist sinks into it.
 
     It sucks you in and swallows you up.
     <<elseif $TempString is "Newt">>
-    You punch the newt and its poison contacts your skin.
+    You punch a newt and its poison contacts your skin.
 
-    The poison paralyzes you and you die of stavration, lying in the forest.
+    The poison paralyzes you and you die of starvation, lying in the forest.
     <</if>>
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
@@ -2587,7 +2631,7 @@ You read through the document. It is an onboarding document for new professors.
 
 It describes the accomodations in the staff dormitory and provides a passphrase for access.
 
-You memorize the passphrase and [[return to your seat|Return to your seat]].
+You <b>memorize the passphrase</b> and [[return to your seat|Return to your seat]].
 <<else>>
 Just as you do, the professor and multiple students walk through the door.
 <<set $Ostra to true>>
