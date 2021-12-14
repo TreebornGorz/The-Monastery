@@ -6,8 +6,6 @@ Harvest conditional
 
 Unfinished Tasks: 
 
-Working in the kitchen relieves social ostracization.
-
 Isolate Fresh conditionals
 
 Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen {and prevent them from harvesting again?}.
@@ -34,9 +32,10 @@ Too many bad ends in bath house
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
 Changelog v0.2.0
--Game is now winnable
+-Game is now technically winnable
 -Implemented legendary items
 -Teacher's belongings can now be "found" in the teacher's dormitory
+-The socially ostracized now have a remedy
 -Faucets can now be turned individually (Test Message)
 -Entering the incorrect faucet combination now changes the secret combination (Test)
 -Entering a certain combination of faucets now provides a hint (Incomplete)
@@ -56,7 +55,7 @@ Bug Log v0.1.2
 Archmage Demo
 
 :: StorySubtitle
-Version: Alpha 0.1.5
+Version: Alpha 0.2.0
 
 :: StoryData
 {
@@ -197,7 +196,7 @@ body.no-save #menu-item-saves {
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
 <<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed tests! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random."]>> /* "What's the 411? Give me the lowdown." , add after single faucet function */
-<<set $Notes to["I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Never trust a snake. Their scales may be dry, but they are truly slimy.","Sometimes, persistence is key. Trying things over and over again might lead to better results."]>>
+<<set $Notes to["I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Never trust a snake. Their scales may be dry, but they are truly slimy.","Sometimes, persistence is key. Trying things again might be the key to better results."]>>
 <<set $Poison to false>>
 <<set $Brew to false>>
 <<set $Potion to false>>
@@ -253,7 +252,7 @@ body.no-save #menu-item-saves {
 <<set $Sneaky to false>>
 <<set $Items to []>>
 <<set $LegendaryItems to ['Sword of Siren Slaying','Skeleton Key','Scroll of Fire Breathing','Opus Pocus']>> /* Opus Pocus is an artistic transforming item; Skeleton key is literally a key in the shape of a skull */
-<<set $UserlegendaryItems to []>>
+<<set $UserLegendaryItems to []>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -580,14 +579,13 @@ You open some dressers and bags, searching for an interesting item.
     <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>
         <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>
     <</for>>
-    <<if _LegendaryItems.length gt 0>>
+    <<if _LegendaryItems.length gt 0 and _LegendaryItems.length lt 4>>
         <<set $TempString to _LegendaryItems.random()>>
+        You get lucky and find a $TempString. 
+        <<run $UserLegendaryItems.pushUnique($TempString)>>\
     <<else>>
-    /* Working here */
+        A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears. 
     <</if>>
-    You get lucky and find a $TempString. 
-    <<run $UserLegendaryitems.push($TempString)>>\
-
     [[Continue searching|Search teacher's belongings]]
     [[Leave dorm]]
 <<else>>
@@ -847,7 +845,25 @@ Check back later to see if your plant is grown.
 You laze about the cloister, daydreaming all the while. 
 
 You realize that you accomplished very little, but you also don't care about that at all.
-<<set $NightTime to true>> /* Small random chance of something COOL happening (1/20?), generate random daydreams to make this option more entertaining for the player */
+<<set $Temp to random(9)>>
+<<set _LegendaryItems to $LegendaryItems;$TempString to ''>>\
+<<if $UserLegendaryItems.length gt 0>>\
+    <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>\
+        <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>\
+    <</for>>\
+<</if>>\
+<<if $Temp is 0>>\
+    <<if _LegendaryItems.length gt 0 and _LegendaryItems.length lt 4>>\
+        <<set $TempString to _LegendaryItems.random()>>\
+        As you stare up the sky, something falls down and lands in the grass next to you.
+
+        You pick it up. You obtain a $TempString. 
+        <<run $UserLegendaryItems.pushUnique($TempString)>>
+    <<else>>
+        A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.
+    <</if>>\
+<</if>>\
+<<set $NightTime to true>> /* Generate random daydreams to make this option more entertaining for the player */ \
 [[Eat dinner]]
 [[Sleep]]
 
@@ -869,7 +885,10 @@ You enter the kitchen.
 The cooks are preparing food in anticipation of the upcoming meal.
 
 You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
-
+<<if $Ostra is true>>
+The students notice you and appreciate your work. your social status increases and your are <b>no longer socially ostracized</b>.
+<<set $Ostra to false>>\
+<</if>> 
 [[Send out the food]]
 <<if $Poison is true>>
 [[Poison the food]]
