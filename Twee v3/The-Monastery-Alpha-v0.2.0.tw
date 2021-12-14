@@ -2,13 +2,11 @@
 
 Test: 
 
-Harvest conditional
-
 Unfinished Tasks: 
 
 Isolate Fresh conditionals
 
-Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen {and prevent them from harvesting again?}.
+Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen.
 
 Determine the number of relationships
 
@@ -18,10 +16,7 @@ Incorporate Potion effects
 Establish relationships
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
 Incorporate events that occur if player doesn't take an action in a certain amount of time 
-Steam from faucets creates messages in mirrors
-411 combination on faucets provides a personalize hint
 Inspecting the stained glass foreshadows certain endings; begin with randomization; consider filtering based on available endings
-Figured what to do if already ostracized and player should be ostracized again in all cases 
 Figure out $SirenPet mechanics, filters all future options if true based on the siren's preferences, provides options that wouldn't  normally exist to lead to unique endings based on other pre-existing boolean variable values
 Create separate passage for exploring campus at night? Requires a portable light?
 Create mechanic for collecting/ingesting secret bath water
@@ -36,7 +31,7 @@ Check fresh for history control. Does fresh work when going back and forth betwe
 Changelog v0.2.0
 -Changed the title for clarity
 -Game is now technically winnable
--No more dead links (Incomplete)
+-No more dead links except for potion effect links
 -Introduced legendary items 
 -Teacher's belongings can now be "found" in the teacher's dormitory
 -Socially ostracized players now have a remedy
@@ -51,7 +46,7 @@ Changelog v0.2.0
 -Fixed bug where opening the inventory menu affected forest confrontations
 -Fixed bug where plants aged by leaving the cloister multiple times
 -Fixed bug where plants were harvestable before being fully grown
--Upcoming: Potion effects and Item effects
+-Upcoming: Potion effects and Item effects - Neither exist currently
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -378,7 +373,7 @@ Where do you want to go?
 [[Forge]]
 [[Brewery]]
 [[Dormitory]]
-[[Wait for night|WIP]]
+/* [[Wait for night|WIP]] */
 <<if $HorseFriend is true and $BarnWork is true>>
 [[Ride Horse|Approach horse]]
 <<elseif $AnimalShip gt 2>> 
@@ -1568,7 +1563,6 @@ You slide the medical file through a compartment into the nurse's office. Eventu
 
 Your work in the infirmary is finished for the day.
 /* Treating enough patients gives access to medicine cabinet */
-[[Steal the patient's medicine|WIP]]
 <<if $Poison is true>> \
 [[Poison the patient]]
 <</if>> \
