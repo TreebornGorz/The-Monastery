@@ -343,7 +343,7 @@ You drink the $Temp.
     <<case 'Vision Potion'>>
         Your eyes roll back into your head. A vision overcomes you.
 
-        /* Implement conditional vision */
+        /* Implement conditional vision - WIP */
     <<case 'Love Potion'>>
         Intense feelings of affection overwhelm you.
         <<set $Love to true>>
@@ -353,86 +353,209 @@ You drink the $Temp.
         If you concentrate you feel that your vision may shift.
         <<set $Xray to true>>
     <<case 'Philosophy Potion'>>
+        You feel great insight overcome you. Pondering complex problems may now come easier. 
         <<set $Philosophy to true>>
     <<case 'Vampire Potion'>>
+        Fangs sprout in your mouth and your skin turns pale.
+
+        Beware sunlight.
         <<set $Vampire to true>>
     <<case 'Undead Potion'>>
+        Or rather, chewing may be a better description.
+
+        You turn undead. Your limbs rot in front of your eyes and your intelligence leaves you.
         <<set $Undead to true>>
     <<case 'Succubus Potion'>>
+        <<if $Male is false>>
+            You sprout wings and a tail. You now have the ability to hypnotize men. 
+            <<set $Succubus to true>>
+        <<else>>
+            As a man, you fall victim to the powers of the succubi. Women will now have control over you. 
+            <<set $Seduced to true>>
+        <</if>>
     <<case 'Incubus Potion'>>
+        <<if $Male is true>>
+            You sprout wings and a tail. You now have the ability to hypnotize women.
+            <<set $Incubus to true>>
+        <<else>>
+            As a woman, you fall victim to the powers of the incubi. Men will now have control over you.
+            <<set $Seduced to true>>
+        <</if>>
     <<case 'Bat Potion'>>
+        You sprout wings and turn into a tiny bat.
         <<set $Bat to true>>
     <<case 'Curse Potion'>>
+        You have been cursed. 
+
+        May God have mercy on your soul.
         <<set $Curse to true>>
     <<case 'Nightmare Potion'>>
+        Nothing happens.
         <<set $Nightmare to true>>
     <<case 'Lust Potion'>>
+        You notice a burning desire for a <<if $Male is true>>woman<<else>>man<</if>>.
         <<set $Lust to true>>
     <<case 'Demon Potion'>>
+        You grow talons, a snout, and wings. Your skeletal structure changes dramatically.
+
+        You were born to sew chaos.
         <<set $Demon to true>>
     <<case 'Depression Potion'>>
         <<set $Depression to true>>
     <<case 'Temporary Death Potion'>>
+        Your hearts stops and you lose consciousness...
+
+        You fall to the ground.
+
+        Some time later, [[you regain consciousness|Tomb]].
         <<set $TempDeath to true>>
     <<case 'Intangibility Potion'>>
         <<set $Intangibility to true>>
     <<case 'Gargoyle Potion'>>
+        You open the stopper and the once stationary liquid pours down your throat. 
+
+        You sprout large wings and grow horns. You feel a compelling urge to stand still.
         <<set $Gargoyle to true>>
     <<case 'Octopus Potion'>>
+        the slimy potion slides down your gullet. 
         <<set $Octopus to true>>
     <<case 'Disintegration Potion'>>
-        <<set $Disintegartion to true>>
+        You swallow the potion and feel an uncomfortable pulse on your gut.
+
+        You turn entirely to dust.
+        <<set $Disintegration to true>>    
+        <div align='center' style='font-size: 300%;'>\
+        <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+        </div> 
     <<case 'Slime Potion'>>
+        You turn into a ball of slime. 
         <<set $Slime to true>>
     <<case 'Poison'>>
         You are fine for a while, but eventually the poison catches up to you.
 
-        As you are going about a routine task, you topple over dead.
-
+        As you are going about a routine task, you topple over.
+        <<set $Poison to true>>
         <div align='center' style='font-size: 300%;'>\
-        <span class='fadeIn'><span style="color:red"><b>YOU DIED OF STARVATION</b></span></span>
-        </div>  
+        <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+        </div>
+    <<case 'Vision Milk'>>
+        You receive a strange vision. /* WIP */
+    <<case 'Vision Ale'>>
+        You receive a funny vision.  /* WIP */
+    <<case 'Chocolate Milk'>>
+        It tastes sugary.
+    <<case 'Porter'>>
+        It tastes of hops and malt.
+    <<case 'Rotten Egg'>>
+        How is that even possible?
+
+        Well, it's gross anyway.
+    <<case 'Sedative'>>
+        You [[fall asleep|Sleep]]. /* Test to see if this breaks anything - WIP - Check situation to see if player dies */
+    <<case 'Perfume'>>
+        Disgusting!
+    <<case 'Magic Milk'>>
+        You can now hear colors and taste lights.
+        <<set $Synesthesia1 to true>>
+    <<case 'Funky Dragon'>>
+        You can now taste colors and hear lights.
+        <<set $Synesthesia2 to true>>
+    <<case 'Green Milk' 'Green Dragon'>>
+        You feel hungry and lazy. Everything appears funny to you, even when it's not.
+    <<case 'Milkshake'>>
+        It tastes delicious.
+    <<case 'Milk Stout'>>
+        It's not your favorite ale, but you can appreciate it.
+    <<case 'Droopy Juice'>>
+        Your body liquifies, starting with your fingertips and moving down to your toes.
+
+        You melt onto the floor. The world melts around you.
+        /* Test to see if this breaks anything - WIP - Check situation to see if player dies */ 
+        [[Go to sleep|Sleep]]
+    <<case 'Fragrant Ale'>>
+        It smells nice, but doesn't taste very good.
+    <<case 'Truth Serum'>>
+        You blurt out a random secret. You tell of /* Conditional - WIP - Check previous location somehow for NPCs? */
+    <<case 'Pre-Workout'>>
+        You feel full of protein and stoked to pump some iron.
+    <<case 'Sour Milk'>> 
+        It is chunky and disgusting. Your stomach is upset. 
 <</switch>>\
-[[Continue|previous()]]
+<<if $Disintegration is true or $Poison is true>>
+<<else>>\
+[[Continue|$return]]
+<</if>>
 
 :: Examine Potion [menu noreturn]
 You examine the $Temp.
 <<switch $Temp>>
     <<case 'Gorgon Potion'>>
-        It is green and swirls around inside the phial. Quiet hissing noises escape the phial every so often.
+        A green liquid swirls around inside the phial. Quiet hissing noises escape every so often.
     <<case 'Invisibility Potion'>>
-        It is entirely transparent. You can't see any liquid but you can hear it splash if you shake the phial.
+        The phial is entirely transparent. You can't see any liquid but you can hear it splash if you shake the phial.
     <<case 'Blinding Potion'>>
         It is entirely pitch black.
     <<case 'Vision Potion'>>
-        It is an opaque milky color. 
+        The liquid is an opaque milky color. 
 
         Every so often, a darker image of an eyeball appears in the liquid, flittering around inside the phial as if searching for something and then disappears. 
     <<case 'Love Potion'>>
-        It is a pleasant pink color.
+        The liquid is a pleasant pink color.
     <<case 'X-ray Potion'>>
         The liquid in the phial strobes periodically between black, white, and transparent.
     <<case 'Philosophy Potion'>>
+        The potion is perfectly normal and mundane in appearance.
     <<case 'Vampire Potion'>>
+        Deep black and red colors swirl inside the phial, as if playing with one another.
     <<case 'Undead Potion'>>
+        The phial contains a rather viscous and chunky green substance.
     <<case 'Succubus Potion'>>
+        The phial contains a swirling purple liquid which forms the shape of a devilish grin occasionally. 
     <<case 'Incubus Potion'>>
+        The phial contains a swirling purple liquid which forms the shape of a devilish grin occasionally.
     <<case 'Bat Potion'>>
+        The liquid is a black color. 
     <<case 'Curse Potion'>>
+        You remove the phial stopper. A puff of smoke rises and forms into the shape of a skull as it disippates into the air.
     <<case 'Nightmare Potion'>>
+        As you peer into the phial, a disturbing image takes shape before your eyes. 
+
+        You quickly put the phial away.
     <<case 'Lust Potion'>>
+        The liquid is a bright pink color. The phial gives you goosebumps when you hold it. 
     <<case 'Demon Potion'>>
+        The liquid is a dark red color. The phial feels warm to the touch.
     <<case 'Depression Potion'>>
+        It appears bleak and unassuming.
     <<case 'Temporary Death Potion'>>
+        You hear a slight clicking noise periodically.
     <<case 'Intangibility Potion'>>
+        It appears relatively normal. 
+
+        While holding it, you attempt to touch it with your other hand and it passes right through the phial. 
     <<case 'Gargoyle Potion'>>
+        The grey contents remain perfectly still, no matter how you twist and turn the phial. 
+
+        It is clearly a liquid however as you can see flecks moving about internally.
     <<case 'Octopus Potion'>>
+        The liquid changes color to match it's environment when in contact with a surface.
+
+        As you swirl it around, the liquid sticks to the phial.   
     <<case 'Disintegration Potion'>>
+        The dark purple liquid is suspended inside the phial, not making contact with the glass at all.
+
+        The liquid sphere pulsates, compressing and decompressing with each pulse. You can feel the phial vibrate slightly with each compression. 
     <<case 'Slime Potion'>>
+        It is goopy and green.
     <<case 'Poison'>>
+        It is standard poison.
+    <<case 'Truth Serum'>>
+        A beautiful silver liquid swirls around the vial, producing mesmerizing striations.
+    <<default>>
+        It looks like $Temp in a phial.
 <</switch>>
 [[Return to Inventory|Inventory]]
-[[Return to Game|previous()]]
+[[Return to Game|$return]]
 
 :: WIP [noreturn menu]
 
@@ -2272,6 +2395,14 @@ You forge onwards, deep into the forest.
 <</if>>
 
 :: Tomb
+<<if $TempDeath is true>>\
+You have been entombed. 
+
+Luckily, you still have all of your belongings.
+
+[[Use an item|WIP]]
+[[Drink a potion|WIP]]
+<<else>>\
 You approach the tomb. it is sealed shut.
 
 There is a skeleton on the door.
@@ -2280,6 +2411,7 @@ There is a skeleton on the door.
 <</if>>\
 [[Open door]]
 [[Leave forest]]
+<</if>>
 
 :: Open door
 It won't budge.
