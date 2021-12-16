@@ -28,25 +28,8 @@ Too many bad ends in bath house
 
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
-Changelog v0.2.0
--Changed the title for clarity
--Game is now technically winnable
--No more dead links except for potion effect links
--Introduced legendary items 
--Teacher's belongings can now be "found" in the teacher's dormitory
--Socially ostracized players now have a remedy
--Daydreaming is now randomly useful
--Faucets can now be turned individually 
--Entering the incorrect faucet combination now changes the secret combination 
--Entering a certain combination of faucets now works
--Player cannot identify plants and enemies at night
--Confrontations are still randomized, but now prioritize unique confrontations
--Horse is now rideable directly from campus
--Forge now recognizes if you already have a weapon
--Fixed bug where opening the inventory menu affected forest confrontations
--Fixed bug where plants aged by leaving the cloister multiple times
--Fixed bug where plants were harvestable before being fully grown
--Upcoming: Potion effects and Item effects - Neither exist currently
+Changelog v0.2.1
+-Players can drink potions
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -59,7 +42,7 @@ Bug Log
 The Monastery
 
 :: StorySubtitle
-Version: Alpha 0.2.0
+Version: Alpha 0.2.1
 
 :: StoryData
 {
@@ -74,7 +57,7 @@ Version: Alpha 0.2.0
 }
 
 postdisplay['fadeIn-text'] = function (taskName) {
-	$('.fadeIn').hide().fadeIn(5000);  
+    $('.fadeIn').hide().fadeIn(5000);  
 };
 
 /* Prevents passages from re-executing functions when enterting a menu and coming back using [menu] tag */
@@ -183,11 +166,12 @@ $(document).on("keyup", function (e) {
 /* Keyboard links - End */
 
 :: UserStylesheet[stylesheet]
+/* Removes the ability to save in a passage when passage is tagged with [no-save] */
 /* 
 body.no-save #menu-item-saves {
     display: none;
 }
-*/ /* Removes the ability to save in a passage when passage is tagged with [no-save] */
+*/ 
 
 :: StoryInit
 /* Initializes starting variables before game loads */
@@ -302,7 +286,7 @@ Planted: <<print $UserPlants>>
 Items: $Items
 <</if>> 
 <<if $UserPotions.length gt 0>> \
-Potions: <<print $UserPotions>>
+[[Potions]]: <<print $UserPotions>>
 <</if>>
 <<if $UserLegendaryItems.length gt 0>>\
 Legendary Items: $UserLegendaryItems
@@ -329,6 +313,126 @@ You have been imbued with a holy power.
 <</if>> \
 
 [[Return|previous()][$Show to true]]
+
+:: Potions [noreturn menu]
+Your Potions: 
+<<for _i to 0; _i lt $UserPotions.length; _i++>>
+    <<capture _i>>
+        $UserPotions[_i]: [[Drink $UserPotions[_i]|Drink Potion][$Temp to $UserPotions[_i]] [[Examine $UserPotions[_i]|Examine Potion][$Temp to $UserPotions[_i]]
+    <</capture>>
+<</for>>
+[[Return to Inventory|Inventory]]
+[[Return to Game|previous()]]
+
+:: Drink Potion [noreturn]
+You drink the $Temp.
+<<switch $Temp>>
+    <<case 'Gorgon Potion'>>
+        You hair transforms into living snakes.
+
+        Your eyes become powerful, infused with energy.  
+        <<set $Gorgon to true>>
+    <<case 'Invisibility Potion'>>
+        You slowly fade out of visibility, unable to see your own body.
+
+        Light passes straight through you.
+        <<set $Invisibility to true>>
+    <<case 'Blinding Potion'>>
+        Your vision fades. Everything truns black.
+        <<set $Blind to true>>
+    <<case 'Vision Potion'>>
+        Your eyes roll back into your head. A vision overcomes you.
+
+        /* Implement conditional vision */
+    <<case 'Love Potion'>>
+        Intense feelings of affection overwhelm you.
+        <<set $Love to true>>
+    <<case 'X-ray Potion'>> 
+        The world around you turns black and white. 
+
+        If you concentrate you feel that your vision may shift.
+        <<set $Xray to true>>
+    <<case 'Philosophy Potion'>>
+        <<set $Philosophy to true>>
+    <<case 'Vampire Potion'>>
+        <<set $Vampire to true>>
+    <<case 'Undead Potion'>>
+        <<set $Undead to true>>
+    <<case 'Succubus Potion'>>
+    <<case 'Incubus Potion'>>
+    <<case 'Bat Potion'>>
+        <<set $Bat to true>>
+    <<case 'Curse Potion'>>
+        <<set $Curse to true>>
+    <<case 'Nightmare Potion'>>
+        <<set $Nightmare to true>>
+    <<case 'Lust Potion'>>
+        <<set $Lust to true>>
+    <<case 'Demon Potion'>>
+        <<set $Demon to true>>
+    <<case 'Depression Potion'>>
+        <<set $Depression to true>>
+    <<case 'Temporary Death Potion'>>
+        <<set $TempDeath to true>>
+    <<case 'Intangibility Potion'>>
+        <<set $Intangibility to true>>
+    <<case 'Gargoyle Potion'>>
+        <<set $Gargoyle to true>>
+    <<case 'Octopus Potion'>>
+        <<set $Octopus to true>>
+    <<case 'Disintegration Potion'>>
+        <<set $Disintegartion to true>>
+    <<case 'Slime Potion'>>
+        <<set $Slime to true>>
+    <<case 'Poison'>>
+        You are fine for a while, but eventually the poison catches up to you.
+
+        As you are going about a routine task, you topple over dead.
+
+        <div align='center' style='font-size: 300%;'>\
+        <span class='fadeIn'><span style="color:red"><b>YOU DIED OF STARVATION</b></span></span>
+        </div>  
+<</switch>>\
+[[Continue|previous()]]
+
+:: Examine Potion [menu noreturn]
+You examine the $Temp.
+<<switch $Temp>>
+    <<case 'Gorgon Potion'>>
+        It is green and swirls around inside the phial. Quiet hissing noises escape the phial every so often.
+    <<case 'Invisibility Potion'>>
+        It is entirely transparent. You can't see any liquid but you can hear it splash if you shake the phial.
+    <<case 'Blinding Potion'>>
+        It is entirely pitch black.
+    <<case 'Vision Potion'>>
+        It is an opaque milky color. 
+
+        Every so often, a darker image of an eyeball appears in the liquid, flittering around inside the phial as if searching for something and then disappears. 
+    <<case 'Love Potion'>>
+        It is a pleasant pink color.
+    <<case 'X-ray Potion'>>
+        The liquid in the phial strobes periodically between black, white, and transparent.
+    <<case 'Philosophy Potion'>>
+    <<case 'Vampire Potion'>>
+    <<case 'Undead Potion'>>
+    <<case 'Succubus Potion'>>
+    <<case 'Incubus Potion'>>
+    <<case 'Bat Potion'>>
+    <<case 'Curse Potion'>>
+    <<case 'Nightmare Potion'>>
+    <<case 'Lust Potion'>>
+    <<case 'Demon Potion'>>
+    <<case 'Depression Potion'>>
+    <<case 'Temporary Death Potion'>>
+    <<case 'Intangibility Potion'>>
+    <<case 'Gargoyle Potion'>>
+    <<case 'Octopus Potion'>>
+    <<case 'Disintegration Potion'>>
+    <<case 'Slime Potion'>>
+    <<case 'Poison'>>
+<</switch>>
+[[Return to Inventory|Inventory]]
+[[Return to Game|previous()]]
 
 :: WIP [noreturn menu]
 
