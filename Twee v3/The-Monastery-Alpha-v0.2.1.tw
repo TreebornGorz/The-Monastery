@@ -4,6 +4,11 @@ Test:
 
 Unfinished Tasks: 
 
+Incorporate potion drinking into Status
+Reset temporary potions when sleeping
+Prevent player from drinking potions when they have no arms or hands
+Drinking certain potions should nullify the effects of other potions
+
 Isolate Fresh conditionals
 
 Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen.
@@ -30,6 +35,7 @@ Check fresh for history control. Does fresh work when going back and forth betwe
 
 Changelog v0.2.1
 -Players can drink potions
+-Fixed bug where plants could be harvested one day before grown
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -318,7 +324,7 @@ You have been imbued with a holy power.
 Your Potions: 
 <<for _i to 0; _i lt $UserPotions.length; _i++>>
     <<capture _i>>
-        $UserPotions[_i]: [[Drink $UserPotions[_i]|Drink Potion][$Temp to $UserPotions[_i]] [[Examine $UserPotions[_i]|Examine Potion][$Temp to $UserPotions[_i]]
+        $UserPotions[_i]: <<link [['Drink ' + $UserPotions[_i]|Drink Potion]]>><<set $Temp to $UserPotions[_i]>><</link>> <<link [['Examine ' + $UserPotions[_i]|Examine Potion]]>><<set $Temp to $UserPotions[_i]>><</link>>
     <</capture>>
 <</for>>
 [[Return to Inventory|Inventory]]
@@ -326,6 +332,7 @@ Your Potions:
 
 :: Drink Potion [noreturn]
 You drink the $Temp.
+<<run $UserPotions.delete($Temp)>>\
 <<switch $Temp>>
     <<case 'Gorgon Potion'>>
         You hair transforms into living snakes.
@@ -417,8 +424,9 @@ You drink the $Temp.
         You sprout large wings and grow horns. You feel a compelling urge to stand still.
         <<set $Gargoyle to true>>
     <<case 'Octopus Potion'>>
-        the slimy potion slides down your gullet. 
+        The slimy potion slides down your gullet. 
         <<set $Octopus to true>>
+        Tentacles sprout from your body.
     <<case 'Disintegration Potion'>>
         You swallow the potion and feel an uncomfortable pulse on your gut.
 
@@ -554,6 +562,7 @@ You examine the $Temp.
     <<default>>
         It looks like $Temp in a phial.
 <</switch>>
+[['Drink ' + $Temp|Drink Potion]]
 [[Return to Inventory|Inventory]]
 [[Return to Game|$return]]
 
@@ -991,7 +1000,7 @@ You have planted: $Planted.
         You planted $MasterPlants[_i] seeds. The plant has not yet sprouted. It was planted $Temp day(s) ago. 
     <<elseif $PlantAge[_i] gt $SproutAge[_i] and $PlantAge[_i] lt $HarvestAge[_i] + 1>>\
         A $MasterPlants[_i] plant has sprouted. It was planted $Temp days ago.
-    <<elseif $PlantAge[_i] gte $HarvestAge[_i]>>\ 
+    <<elseif $PlantAge[_i] gt $HarvestAge[_i]>>\ 
         <<set $Harvest to true>>\
         <<if $UserPlants.includes($MasterPlants[_i])>>\
         <<else>><<run $UserPlantsUnique($MasterPlants[_i])>>\
@@ -2405,8 +2414,8 @@ Luckily, you still have all of your belongings.
 <<else>>\
 You approach the tomb. it is sealed shut.
 
-There is a skeleton on the door.
-<<if $UserLegendaryItems.includes('Skeleton Key')>>
+There is a skeleton on the door. <br>
+<<if $UserLegendaryItems.includes('Skeleton Key')>>\
 [[Use the Skeleton Key on the Skeleton Door|Open Tomb]]
 <</if>>\
 [[Open door]]
@@ -2414,8 +2423,8 @@ There is a skeleton on the door.
 <</if>>
 
 :: Open door
-It won't budge.
-<<if $UserLegendaryItems.includes('Skeleton Key')>>
+It won't budge.<br>
+<<if $UserLegendaryItems.includes('Skeleton Key')>>\
 [[Use the Skeleton Key on the Skeleton Door|Open Tomb]]
 <</if>>\
 [[Leave forest]]
