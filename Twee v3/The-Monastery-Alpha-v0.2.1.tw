@@ -35,7 +35,7 @@ Changelog v0.3.0
 -Players can drink potions
 -Potions have effects (Incomplete) 
 -Fixed bug where plants could be harvested one day before grown (Test)
--Fixed bug where daydremaing prioritized hints (Incomplete)
+-Fixed bug where legendary items could not be obtained (Test)
 -Fixed bug where the plant outisde campus was glitched after the third collection (Incomplete)
 
 Bug Log 
@@ -668,30 +668,33 @@ Are you Male or Female?
 :: Demo
 <<if $Day lt 50>> \
 You are on campus. 
+<<if $GorgonPrey is true>>
+    It was noticed that people are being turned to stone.
+    <<set $GorgonPrey to false>>\
+<<else>>
+    There are several areas to explore.
 
-There are several areas to explore.
-
-Where do you want to go? 
-
-[[Classroom]]
-[[Temple]]
-[[Cloister]]
-[[Refectory]]
-[[Library]]
-[[Laboratory]]
-[[Balneary]]
-[[Infirmary]]
-[[Barn]]
-[[Forge]]
-[[Brewery]]
-[[Dormitory]]
-/* [[Wait for night|WIP]] */
-<<if $HorseFriend is true and $BarnWork is true>>
-[[Ride Horse|Approach horse]]
-<<elseif $AnimalShip gt 2>> 
-[[Ride Horse|Approach horse]]
-<<elseif $HorseFriend is true>>
-[[Ride Horse]]
+    Where do you want to go?
+    <</if>>
+    [[Classroom]]
+    [[Temple]]
+    [[Cloister]]
+    [[Refectory]]
+    [[Library]]
+    [[Laboratory]]
+    [[Balneary]]
+    [[Infirmary]]
+    [[Barn]]
+    [[Forge]]
+    [[Brewery]]
+    [[Dormitory]]
+    /* [[Wait for night|WIP]] */
+    <<if $HorseFriend is true and $BarnWork is true>>\
+    [[Ride Horse|Approach horse]]
+    <<elseif $AnimalShip gt 2>> \
+    [[Ride Horse|Approach horse]]
+    <<elseif $HorseFriend is true>> \
+    [[Ride Horse]]
 <</if>>
 
 <<set $Show to true>>
@@ -919,7 +922,7 @@ You open some dressers and bags, searching for an interesting item.
     <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>\
         <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>\
     <</for>>\
-    <<if _LegendaryItems.length gt 0 and _LegendaryItems.length lt 4>>\
+    <<if _LegendaryItems.length gte 0 and _LegendaryItems.length lt 4>>\
         <<if Fresh()>>\
             <<set $TempString to _LegendaryItems.random()>>\
         <</if>>\
@@ -980,9 +983,12 @@ You confront the teacher who now recognizes you as an intruder.
 
 You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.
 
+<<if $Gorgon is true>>
+
 <<if $UserPotions.length gt 0>>\
 [[Douse the teacher with a potion|WIP]]
-<<else>>\
+<</if>>\
+<<if >>\
 <div align='center' style='font-size: 300%;'>\
 <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
 </div>
@@ -1219,7 +1225,7 @@ You feel peaceful and satisfied.
     <</for>>\
 <</if>>\
 <<if $Temp is 0>>\
-    <<if _LegendaryItems.length gt 0 and _LegendaryItems.length lt 4>>\
+    <<if _LegendaryItems.length gte 0 and _LegendaryItems.length lt 4>>\
         <<set $TempString to _LegendaryItems.random()>>\
         As you stare up the sky, something falls down and lands in the grass next to you.
 
