@@ -251,6 +251,7 @@ body.no-save #menu-item-saves {
 <<set $Items to []>>
 <<set $LegendaryItems to ['Sword of Siren Slaying','Skeleton Key','Scroll of Fire Breathing','Opus Pocus']>> /* Opus Pocus is an artistic transforming item; Skeleton key is literally a key in the shape of a skull */
 <<set $UserLegendaryItems to []>>
+<<set $Arms to 2; $Legs to 2>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -300,7 +301,74 @@ Legendary Items: $UserLegendaryItems
 [[Return|previous()][$Show to true]]
 
 :: Status [noreturn menu]
-
+<<if $Gorgon is true>>\
+You are a gorgon. You have snakes for hair and a powerful gaze.<br><br>
+<</if>>\
+<<if $Invisibility is true>>\
+You are invisible. Others cannot see you.<br><br>
+<</if>>\
+<<if $Blind is true>>\
+You are blind. You cannot see with your eyes.<br><br>
+<</if>>\
+<<if $Love is true>>\
+You have intense feelings of affection.<br><br>
+<</if>>\
+<<if $Xray is true>>\
+Your vision is black and white. Concentrating may allow you to see through objects.<br><br>
+<</if>>\
+<<if $Philosophy is true>>\
+You are philosophical. You have access to great insights.<br><br>
+<</if>>\
+<<if $Vampire is true>>\
+You are a vampire. You can suck blood and transform into a bat.<br><br>
+<</if>>\
+<<if $Undead is true>>\
+You are undead. You have almost no intelligence remaining. You have $Arms arms and $Legs legs.<br><br>
+<</if>>\
+<<if $Succubus is true>>\
+You are a succubus. You can use your powers to seduce men.<br><br>
+<</if>>\
+<<if $Seduced is true>>\
+You have been seduced. <<if $Male is true>>Women<<else>>Men<</if>> have control over you .<br><br>
+<</if>>\
+<<if $Incubus is true>>\
+You are an incubus. You can use your powers to seduce women.<br><br>
+<</if>>\
+<<if $Bat is true>>\
+You are a bat. You have wings and you can fly.<br><br>
+<</if>>\
+<<if $Curse is true>>\
+You are cursed. May God have mercy on your soul.<br><br>
+<</if>>\
+<<if $Nightmare is true>>\
+You are afflicted with nightmares.<br><br>
+<</if>>\
+<<if $Lust is true>>\
+You are consumed by lust.<br><br>
+<</if>>\
+<<if $Demon is true>>\
+You are a demon. You have large wings and talons. You thirst for chaos and destruction.<br><br>
+<</if>>\
+<<if $Depression is true>>\
+You are depressed. You lack the willpower to be brash.<br><br>
+<</if>>\
+<<if $Intangibility is true>>\
+You have harnessed the power of intangibility. You can selectively pass through physical objects.<br><br>
+<</if>>\
+<<if $Gargoyle is true>>\
+You are a gargoyle. You have horns and wings. You feel the urge to remain still in one area.<br><br>
+<</if>>\
+<<if $Octopus is true>>\
+You have many tentacles.<br><br>
+<</if>>\
+<<if $Slime is true>>\
+You are a ball of slime.<br><br>
+<</if>>\
+<<if $Synesthesia1 is true>>\
+You have synesthesia. You now hear colors and taste lights.<br><br>
+<</if>>\
+<<if $Synesthesia2 is true>>\
+You have synesthesia. You now taste colors and hear lights.<br><br>
 <<if $Ostra is true>> \
 You are socially ostracized. You must be very careful.
 
@@ -465,9 +533,11 @@ You drink the $Temp.
     <<case 'Magic Milk'>>
         You can now hear colors and taste lights.
         <<set $Synesthesia1 to true>>
+        <<if $Synesthesia2 is true>><<set $Synesthesia2 to false>><</if>>\
     <<case 'Funky Dragon'>>
         You can now taste colors and hear lights.
         <<set $Synesthesia2 to true>>
+        <<if $Synesthesia1 is true>><<set $Synesthesia1 to false>><</if>>\
     <<case 'Green Milk' 'Green Dragon'>>
         You feel hungry and lazy. Everything appears funny to you, even when it's not.
     <<case 'Milkshake'>>
@@ -489,7 +559,7 @@ You drink the $Temp.
     <<case 'Sour Milk'>> 
         It is chunky and disgusting. Your stomach is upset. 
 <</switch>>\
-<<if $Disintegration is true or $Poison is true or $Temp is 'Droopy Juice'>>
+<<if $Disintegration is true or $Poison is true or $TempDeath is true or $Temp is 'Droopy Juice' or $Temp is 'Sedative'>>
 <<else>>\
 [[Continue|$return]]
 <</if>>
