@@ -4,10 +4,8 @@ Test:
 
 Unfinished Tasks: 
 
-Incorporate potion drinking into Status
-Reset temporary potions when sleeping
-Prevent player from drinking potions when they have no arms or hands
-Drinking certain potions should nullify the effects of other potions
+Prevent player from drinking potions when they have no arms
+Drinking certain potions should nullify the effects of other potions; i.e. certain transformations may be incompatible with one another
 
 Isolate Fresh conditionals
 
@@ -33,9 +31,12 @@ Too many bad ends in bath house
 
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
-Changelog v0.2.1
+Changelog v0.3.0
 -Players can drink potions
--Fixed bug where plants could be harvested one day before grown
+-Potions have effects (Incomplete) 
+-Fixed bug where plants could be harvested one day before grown (Test)
+-Fixed bug where daydremaing prioritized hints (Incomplete)
+-Fixed bug where the plant outisde campus was glitched after the third collection (Incomplete)
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -48,7 +49,7 @@ Bug Log
 The Monastery
 
 :: StorySubtitle
-Version: Alpha 0.2.1
+Version: Alpha 0.3.0
 
 :: StoryData
 {
@@ -252,6 +253,7 @@ body.no-save #menu-item-saves {
 <<set $LegendaryItems to ['Sword of Siren Slaying','Skeleton Key','Scroll of Fire Breathing','Opus Pocus']>> /* Opus Pocus is an artistic transforming item; Skeleton key is literally a key in the shape of a skull */
 <<set $UserLegendaryItems to []>>
 <<set $Arms to 2; $Legs to 2>>
+<<set $NoHands to false>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -389,6 +391,9 @@ You have been imbued with a holy power.
 [[Return|previous()][$Show to true]]
 
 :: Potions [noreturn menu]
+<<if $NoHands is true>>\
+You cannot drink or examine potions. You have no hands!
+<<else>>\
 Your Potions: 
 <<for _i to 0; _i lt $UserPotions.length; _i++>>
     <<capture _i>>
@@ -397,6 +402,7 @@ Your Potions:
 <</for>>
 [[Return to Inventory|Inventory]]
 [[Return to Game|previous()]]
+<</if>>
 
 :: Drink Potion [noreturn]
 You drink the $Temp.
@@ -458,7 +464,7 @@ You drink the $Temp.
         <</if>>
     <<case 'Bat Potion'>>
         You sprout wings and turn into a tiny bat.
-        <<set $Bat to true>>
+        <<set $Bat to true; $NoHands to true>>
     <<case 'Curse Potion'>>
         You have been cursed. 
 
@@ -505,7 +511,7 @@ You drink the $Temp.
         </div> 
     <<case 'Slime Potion'>>
         You turn into a ball of slime. 
-        <<set $Slime to true>>
+        <<set $Slime to true; $NoHands to true>>
     <<case 'Poison'>>
         You are fine for a while, but eventually the poison catches up to you.
 
@@ -779,9 +785,14 @@ You find nothing of interest.
 
 :: Eavesdrop
 <<if $Ostra is true>> 
-The students notice you eavesdropping and report you to the administration in a panic.
+The students notice you eavesdropping<<if $Gorgon is true>>.
 
-You have been hauled off to [[jail][$Day += 15]].
+    [[Look them in the eyes]]
+    [[Spare their lives]]
+    <<else>> and report you to the administration in a panic.
+
+    You have been hauled off to [[jail][$Day += 15]].
+    <</if>>
 <<else>>
 You eavesdrop on the student's conversation.
 /* Incorporate RNG similiar to gossip */
@@ -791,6 +802,19 @@ You hear nothing of interest.
 [[Leave dorm]]
 <</if>>
 
+:: Look them in the eyes
+You look the panicked students in the eyes and they turn to stone.
+<<set $GorgonPrey to true>>
+They are now unable to report you for your eavesdropping.
+
+[[Stick around]]
+[[Leave dorm]]
+
+:: Spare their lives
+The students report you to the administration in a panic.
+
+You have been hauled off to [[jail][$Day += 15]].
+
 :: jail
 You have been thrown into a jail cell for the crime of being sneaky.
 
@@ -799,7 +823,7 @@ You will not receive a trial and you have not been notified of the duration of y
 Many days have passed...
 
 [[Wait patiently][$Day += 739]]
-[[Attempt escape]]
+/* [[Attempt escape|WIP]] */
 
 :: Wait patiently
 You waited patiently to be released from your jail cell.
@@ -968,7 +992,26 @@ You do your best to convince them that you belong in the teacher's dormitory for
 <<set $Day += 1>> \
 <<set $NightTime to true>> \
 You go to sleep.
-
+<<if $Lust is true>>
+    The effects of the Lust Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<<if $Gargoyle is true>>
+    The effects of the Gargoyle Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<<if $Octopus is true>>
+    The effects of the Octopus Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<<if $Octopus is true>>
+    The effects of the Slime Potion wear off.
+    <<set $Slime to false>>
+<</if>>\
+<<if $Bat is true>>
+    The effects of the Bat Potion wear off.
+    <<set $Bat to false; $NoHands to false>>
+<</if>>\
 You dream of an odd future that awaits you, but you can't quite make out the ending.
 
 Maybe it involves <<print $Dream.random()>>...?
@@ -2919,7 +2962,7 @@ You survey the classroom and notice a few objects of interest.
 [[Open the desk drawers]]
 
 :: Steal from the bookshelf
-You dig around the bookshelf searcxhing for something valuable to steal.
+You dig around the bookshelf searching for something valuable to steal.
 /* Incorporate something valuable that can be stolen from here */
 Just as you do, the professor and multiple students walk through the door.
 
