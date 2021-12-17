@@ -489,7 +489,7 @@ You drink the $Temp.
     <<case 'Sour Milk'>> 
         It is chunky and disgusting. Your stomach is upset. 
 <</switch>>\
-<<if $Disintegration is true or $Poison is true>>
+<<if $Disintegration is true or $Poison is true or $Temp is 'Droopy Juice'>>
 <<else>>\
 [[Continue|$return]]
 <</if>>
