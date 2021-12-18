@@ -4,6 +4,8 @@ Test:
 
 Unfinished Tasks: 
 
+Prioritize unseen hints
+
 Prevent player from entering menu to drink potions to prevent loss - Use fresh()
 Petrified NPCs are stuck in the area after being petrified. Update area descriptions.
 
@@ -39,7 +41,8 @@ Changelog v0.3.0
 -Potions have effects (Incomplete) 
 -Fixed bug where plants could be harvested one day before grown (Test)
 -Fixed bug where legendary items could not be obtained (Test)
--Fixed bug where the plant outisde campus was glitched after the third collection (Incomplete)
+-Fixed bug where the plant outside campus was glitched after the third collection (Incomplete)
+-Fixed bug where a forest animal would be encountered multiple times before they had all been encountered
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -374,6 +377,7 @@ You have synesthesia. You now hear colors and taste lights.<br><br>
 <</if>>\
 <<if $Synesthesia2 is true>>\
 You have synesthesia. You now taste colors and hear lights.<br><br>
+<</if>>\
 <<if $Ostra is true>> \
 You are socially ostracized. You must be very careful.
 
@@ -672,7 +676,7 @@ Are you Male or Female?
 <<if $Day lt 50>> \
 You are on campus. 
 <<if $GorgonPrey is true>>
-    It was noticed that people are being turned to stone.
+    It has been noticed that people are being turned to stone.
     <<set $GorgonPrey to false>>\
 <<else>>
     There are several areas to explore.
@@ -885,7 +889,7 @@ There are currently no teachers around, but you may not want to press your luck.
 [[Leave dorm]]
 
 :: Search teacher's belongings
-You open some dressers and bags, searching for an interesting item.
+You open some dressers and bags, searching for an interesting item. 
 <<nobr>>
     <<set _rand to [0,1,2,3,4,5,6,7,8,9,10]>>
     <<for _i to 0; _i lt $Items.length; _i++>>
@@ -972,57 +976,94 @@ You open some dressers and bags, searching for an interesting item.
 <<if $TempBool is false>>You hide from the teacher. <</if>>You crouch in a corner in an attempt to avoid detection. <<if $TempBool is true>>A teacher enters the dormitory.<</if>>
 /* Incorporate other options */
 Your foot slips and you fall onto the floor, making a noise.
-
+/* Randomize this - WIP */
 The teacher hears you and walks over, staring you in the eyes. You have been caught.
 
-All of your stolen items are confiscated and you are expelled from The Monastery for theft and trespassing.
-
+<<if $Gorgon is true>>\
+[[Stare into their eyes]]
+<</if>>
+<<if $UserPotions.length gt 0>>\
+[[Douse the teacher with a potion]] 
+<</if>>\
+<<if $Gorgon is false and $UserPotions.length is false>>\ 
 <div align='center' style='font-size: 300%;'>\
 <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
 </div>
+<</if>>\
 
 :: Confront them
 You confront the teacher who now recognizes you as an intruder. 
 
 You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.
 
-<<if $Gorgon is true>>
+<<if $Gorgon is true>>\
 [[Stare into their eyes]]
 <</if>>
 <<if $UserPotions.length gt 0>>\
-[[Douse the teacher with a potion|WIP]]
+[[Douse the teacher with a potion]] 
 <</if>>\
-<<if >>\
+<<if $Gorgon is false and $UserPotions.length is false>>\ 
 <div align='center' style='font-size: 300%;'>\
 <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
 </div>
 <</if>>\
 
+:: Douse the teacher with a potion
+Select a potion to throw at the teacher:
+
+<<listbox "$TempString" autoselect>>
+    <<optionsfrom $UserPotions>>
+<</listbox>>
+
+[[Throw the potion]]
+
+:: Throw the potion
+You throw the $TempString at the teacher.
+
+They are doused in your $TempString.
+<<run $UserPotions.delete($TempString)>>\
+<<switch $TempString>>
+<<case 'Gorgon Potion'>>
+The teacher sprouts snakes from their scalp and makes eye contact with you.
+
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU ARE PETRIFIED</b></span></span>
+</div>
+<<default>>
+It has no useful effect.
+
+The teacher apprehends you and reports your misbehavior.
+
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+</div>
+<</switch>>
+
 :: Stare into their eyes
 You turn the teacher to stone and evade detection.
 <<set $GorgonPrey to true>>
-[[Continue searching|Search teacher's belongings]]
+[[Flee the scene and go to sleep|Sleep]]
 [[Leave dorm]]
         
 :: Sleep
-You go to sleep.
-<<if $Lust is true>>
+You go to sleep.<br>
+<<if $Lust is true>>\
     The effects of the Lust Potion wear off.
     <<set $Lust to false>>
 <</if>>\
-<<if $Gargoyle is true>>
+<<if $Gargoyle is true>>\
     The effects of the Gargoyle Potion wear off.
     <<set $Lust to false>>
 <</if>>\
-<<if $Octopus is true>>
+<<if $Octopus is true>>\
     The effects of the Octopus Potion wear off.
     <<set $Lust to false>>
 <</if>>\
-<<if $Octopus is true>>
+<<if $Octopus is true>>\
     The effects of the Slime Potion wear off.
     <<set $Slime to false>>
 <</if>>\
-<<if $Bat is true>>
+<<if $Bat is true>>\
     The effects of the Bat Potion wear off.
     <<set $Bat to false; $NoHands to false>>
 <</if>>\
@@ -1268,7 +1309,7 @@ The cooks are preparing food in anticipation of the upcoming meal.
 
 You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
 <<if $Ostra is true>>
-The students notice you and appreciate your work. your social status increases and your are <b>no longer socially ostracized</b>.
+The students notice you and appreciate your work. your social status increases and you are <b>no longer socially ostracized</b>.
 <<set $Ostra to false>>\
 <</if>> 
 [[Send out the food]]
@@ -1320,9 +1361,9 @@ You take a seat at a table and eat your meal surrounded by the other students.
 :: Turn them to stone
 You make eye contact with individual students at the table, progressively turning each one to stone.
 
-Unfortunately, there are some students who do not look you in the eyes and realize what is happening.
+Unfortunately, there are some students who do not look you in the eyes.
 
-Thhey nervously flee the refecctory and report you to the headmaster.
+After realizing the situation, they nervously flee the refectory and report you to the headmaster.
 
 <div align='center' style='font-size: 300%;'>\
 <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
@@ -1480,11 +1521,7 @@ You enter the laboratory.
 
     A strange lady sits in the corner staring at you without blinking.
 
-    <<if $Gorgon is true>>
-        [[Talk to her|Talk to her Gorgon]]
-    <<else>>
-        [[Talk to her]]
-    <</if>>
+    [[Talk to her]]
     [[Inspect the chamber]]
 <<else>> 
     [[Brew potion]]
@@ -2535,12 +2572,12 @@ You wish you had a weapon right about now...
     <</if>>
     /* Confront an animal with a unique reward first */
     <<set _ForestAnimals to $ForestAnimals>>
-    <<for _i to 0; _i lt $ForestAnimals.length; _i++>>
-        <<if $UserIngredients[_i] is 'Bat Wing' or $UserIngredients[_i] is 'Slime' or $UserIngredients[_i] is 'Eye of Newt'>>
+    <<for _i to 0; _i lt $UserIngredients.length; _i++>>
+        <<if $UserIngredients[_i] is 'Bat Wing'>>
             <<run _ForestAnimals.delete('Bat')>>
         <<elseif $UserIngredients[_i] is 'Eye of Newt'>>
             <<run _ForestAnimals.delete('Newt')>>
-        <<elseif $UserIngredients[_i] is 'Slime'>>
+        <<elseif $UserIngredients[_i] is 'Slime'>>  
             <<run _ForestAnimals.delete('Slime')>>
         <</if>>
     <</for>>
@@ -2555,12 +2592,12 @@ You wish you had a weapon right about now...
 :: Forge onwards 
 You forge onwards, deep into the forest. 
 <<if $Temp is 1>>
-    You happen upon a <<if $NightTime is true>>plant, but you can't see identify it in the dark<<else>>$TempString1<</if>>.
-    <<if $NightTime is true>>
+    You happen upon a <<if $NightTime is true>>plant, but you can't see identify it in the dark<<else>>$TempString1<</if>>.<br>
+    <<if $NightTime is true>>\
         You notice a tomb in the distance.
 
         [[Investigate the tomb|Tomb]]
-    <</if>>
+    <</if>>\
     [[Harvest plant|Collect]]
     <<if $TempString1 is not 'Mushroom'>>\
         [[Take seeds]]
@@ -2860,9 +2897,10 @@ Whoever used them last must not be too organized.
 You are no longer welcome here.
 
 The smith stands in your way.
-<<if $Gorgon is true>>
-[[Make eye contact]]
-[[Leave|Demo]].
+    <<if $Gorgon is true>>
+    [[Make eye contact]]
+    [[Leave|Demo]].
+    <</if>>
 <</if>>
 
 :: Make eye contact
@@ -2935,7 +2973,7 @@ He knocks over a few empty bottles as he slowly stands up.
 
 He happily welcomes you to the brewery and invites you to work with him.
 <<if $Gorgon is true>>
-You evade hsi gaze.
+You evade his gaze.
 <</if>>
 [[Agree|Yes Brew]]
 [[Decline|No Brew]]
