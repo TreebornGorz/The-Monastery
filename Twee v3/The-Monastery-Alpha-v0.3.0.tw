@@ -4,6 +4,9 @@ Test:
 
 Unfinished Tasks: 
 
+Prevent player from entering menu to drink potions to prevent loss - Use fresh()
+Petrified NPCs are stuck in the area after being petrified. Update area descriptions.
+
 Prevent player from drinking potions when they have no arms
 Drinking certain potions should nullify the effects of other potions; i.e. certain transformations may be incompatible with one another
 
@@ -984,7 +987,8 @@ You confront the teacher who now recognizes you as an intruder.
 You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.
 
 <<if $Gorgon is true>>
-
+[[Stare into their eyes]]
+<</if>>
 <<if $UserPotions.length gt 0>>\
 [[Douse the teacher with a potion|WIP]]
 <</if>>\
@@ -993,10 +997,14 @@ You do your best to convince them that you belong in the teacher's dormitory for
 <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
 </div>
 <</if>>\
+
+:: Stare into their eyes
+You turn the teacher to stone and evade detection.
+<<set $GorgonPrey to true>>
+[[Continue searching|Search teacher's belongings]]
+[[Leave dorm]]
         
 :: Sleep
-<<set $Day += 1>> \
-<<set $NightTime to true>> \
 You go to sleep.
 <<if $Lust is true>>
     The effects of the Lust Potion wear off.
@@ -1029,6 +1037,8 @@ Maybe it involves <<print $Dream.random()>>...?
         <<set $PlantAge[_i] += 1>>
     <</if>>
 <</for>>
+
+<<set $Day += 1; $NightTime to true>>
 
 :: Temple
 You enter the temple.
@@ -1262,15 +1272,13 @@ The students notice you and appreciate your work. your social status increases a
 <<set $Ostra to false>>\
 <</if>> 
 [[Send out the food]]
-<<if $Poison is true>>
-[[Poison the food]]
-
-[[Poison the drinking water]]
+<<if $UserPotions.includes('Poison')>>\
+[[Poison the food|WIP]]
+[[Poison the drinking water|WIP]]
 <</if>>
-<<if $Potion is true>> \
-[[Use potion on food]]
-
-[[Use potion on drinking water]]
+<<if $UserPotions.length>> \
+[[Use potion on food|WIP]]
+[[Use potion on drinking water|WIP]]
 <</if>>
 
 :: Poison the food
@@ -1303,8 +1311,22 @@ After a hard day's work, you enter the refectory for a meal.
 <<set $NightTime to true>>    
 You take a seat at a table and eat your meal surrounded by the other students.
 
+<<if $Gorgon is true>>\
+[[Turn them to stone]]
+<</if>>\
 [[Listen to gossip]]
 [[Eat in peace]]
+
+:: Turn them to stone
+You make eye contact with individual students at the table, progressively turning each one to stone.
+
+Unfortunately, there are some students who do not look you in the eyes and realize what is happening.
+
+Thhey nervously flee the refecctory and report you to the headmaster.
+
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+</div>
 
 :: Listen to gossip
 <<if $Ostra is true>> \
@@ -1373,6 +1395,9 @@ You grab your meal and move to a location at a different table that isn't quite 
 /* If relationship, can be approached intiating an event */
 You enjoy your meal and feel satisfied.
 
+<<if $Gorgon is true>>\
+[[Turn theother students to stone|Turn them to stone]]
+<</if>>\
 [[Sleep]]
 
 :: Library
@@ -1405,20 +1430,25 @@ You find another student studying and pull them away from their work.
 The student is obviously annoyed with you. You are undeterred. 
 
 You probe them seeking the secrets of The Monastery.
-<<if $Ostra is true>>
-They tell you to get lost.
+<<if $Gorgon is true>>
+    As your eyes meet, the student turns to stone.
+    <<<set $GorgonPrey to true>>>
+    You nervously flee the library.
+<<elseif $Ostra is true>>
+    They tell you to get lost.
 
-You are escorted out of the library. 
+    You are escorted out of the library. 
 
-[[Eat dinner]]
-[[Sleep]]
+    [[Eat dinner]]
+    [[Sleep]]
 <<else>>
-They consider for a second, but seem uncomfortable.
-/* conditional based on big friend or enemy */
-Ultimately, they were not convinced and you leave empty handed.
+    They consider for a second, but seem uncomfortable.
+    /* conditional based on big friend or enemy */
+    Ultimately, they were not convinced.
 
-[[Eat dinner]]
-[[Sleep]]
+
+    [[Eat dinner]]
+    [[Sleep]]
 <</if>>    
 /* Expand passage */
 
@@ -1444,18 +1474,31 @@ The door is locked.
 :: Laboratory
 You enter the laboratory.
 <<if $Lab is false>>
-There are beakers, test tubes, and other unrecognizable instruments neatly and fastidiously arranged around the room.
+    There are beakers, test tubes, and other unrecognizable instruments neatly and fastidiously arranged around the room.
 
-You notice a metal chamber that has been locked shut. An experiment is in progress.
+    You notice a metal chamber that has been locked shut. An experiment is in progress.
 
-A strange lady sits in the corner staring at you without blinking.
+    A strange lady sits in the corner staring at you without blinking.
 
-[[Talk to her]]
-[[Inspect the chamber]]
+    <<if $Gorgon is true>>
+        [[Talk to her|Talk to her Gorgon]]
+    <<else>>
+        [[Talk to her]]
+    <</if>>
+    [[Inspect the chamber]]
 <<else>> 
-[[Brew potion]]
+    [[Brew potion]]
 <</if>> \
 [[Leave|Demo]]
+
+:: Talk to her Gorgon
+As you talk to her, she searches for eye contact.
+
+Your gaze meets hers, but she remains alive for some reason.
+
+Maybe there is a reason she doesn't blink.
+
+[[Your conversation continues...|Talk to her]]
 
 :: Brew potion 
 You approach the potion station.
@@ -1622,8 +1665,9 @@ You approach the potion station.
 <</if>>
 
 :: Talk to her
-You approach the strange unblinking lady.
-
+<<if $Gorgon is false>>\
+You approach the strange unblinking lady.<br>
+<</if>>\
 She explains that she is the scientist in charge of the laboratory.
 
 You can work with her to perform experiments and brew potions or poisons.
@@ -1657,8 +1701,8 @@ There are numbered faucets on both the fountain and the sink, although none of t
 Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
 
 [[Turn on individual faucets]]
-[[Turn on all the faucets][$Temp to 0]]
-[[Wait for another student]]
+[[Turn on all the faucets][$Temp to 0]] \
+/* [[Wait for another student]] */ 
 [[Leave|Demo]]
 
 :: Turn on individual faucets
@@ -1814,7 +1858,9 @@ Suddenly, you notice glowing eyes approaching you.
 You attempt to escape... unsuccessfully.
 
 The creature catches you and stares its prey in the eyes.
-
+<<if $Gorgon is true>>
+Your gaze has no effect on her.
+<</if>>
 She lifts you into the air. You feel talons on your skin.
 
 In a monstruously sweet voice, she hisses at you.
@@ -1918,8 +1964,8 @@ You slide the medical file through a compartment into the nurse's office. Eventu
 
 Your work in the infirmary is finished for the day.
 /* Treating enough patients gives access to medicine cabinet */
-<<if $Poison is true>> \
-[[Poison the patient]]
+<<if $UserPotions.includes('Poison')>> \
+[[Poison the patient|WIP]]
 <</if>> \
 [[Eat dinner]]
 [[Sleep]]
@@ -1938,7 +1984,9 @@ The lock clicks and the door opens to reveal an attractive young nurse.
 She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
 
 You uncomfortably sit down across from her. She examines you for a while before talking.
-
+<<if $Gorgon is true>>
+You make eye contact, but it has no effect on her.
+<</if>>
 She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
 
 [[Accept][$NurseWork to true]]
@@ -2209,7 +2257,9 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 You decide to look for a person instead of blindly messing around with the animals.
 
 After a bit of searching, you eventually make contact with the campus farmer. She works as a professor and tends to the animals in her down time with the help of some of the students.
-
+<<if $Gorgon is true>>
+You avoid eye contact during your conversation.
+<</if>>
 In return for assisting her with her work, you will get access to the animals when she is not around.
 
 [[Help her out]]
@@ -2524,21 +2574,23 @@ You forge onwards, deep into the forest.
 
 :: Tomb
 <<if $TempDeath is true>>\
-You have been entombed. 
+    You have been entombed. 
 
-Luckily, you still have all of your belongings.
+    Luckily, you still have all of your belongings.
 
-[[Use an item|WIP]]
-[[Drink a potion|WIP]]
+    [[Use an item|WIP]]
+    <<if $UserPotions.length>>\
+    [[Drink a potion|WIP]]
+    <</if>>
 <<else>>\
-You approach the tomb. it is sealed shut.
+    You approach the tomb. it is sealed shut.
 
-There is a skeleton on the door. <br>
-<<if $UserLegendaryItems.includes('Skeleton Key')>>\
-[[Use the Skeleton Key on the Skeleton Door|Open Tomb]]
-<</if>>\
-[[Open door]]
-[[Leave forest]]
+    There is a skeleton on the door. <br>
+    <<if $UserLegendaryItems.includes('Skeleton Key')>>\
+    [[Use the Skeleton Key on the Skeleton Door|Open Tomb]]
+    <</if>>\
+    [[Open door]]
+    [[Leave forest]]
 <</if>>
 
 :: Open door
@@ -2610,9 +2662,17 @@ You notice a tomb in the distance.
 <<else>>
 You punch at the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
     <<if $TempString is "Bat">>
-    A bat simply evades your punch and bites you.
+    A bat simply evades your punch\
+        <<if $Gorgon is true>>. As he closes in to bite you, you make eye contact and turn him to stone, escaping the confrontation.
+        
+        You notice a tomb in the distance.
 
-    You get rabies and die from fear of water.
+        [[Investigate the tomb|Tomb]]
+        [[Leave forest]]\
+        <<else>> and bites you.
+
+        You get rabies and die from fear of water.\
+        <</if>>
     <<elseif $TempString is "Slime">>
     You punch a slime and your fist sinks into it.
 
@@ -2799,8 +2859,19 @@ Whoever used them last must not be too organized.
 <<else>>
 You are no longer welcome here.
 
-The smith [[turns you away|Demo]].
+The smith stands in your way.
+<<if $Gorgon is true>>
+[[Make eye contact]]
+[[Leave|Demo]].
 <</if>>
+
+:: Make eye contact
+You make eye contact with the smith, turning him to stone.
+<<set $GorgonPrey to true; $forge to 1>>
+You gain access to the forge.
+
+[[Create Weapon]]
+[[Leave|Demo]]
 
 :: Create weapon
 You smelt standard metals and create a basic weapon.
@@ -2821,8 +2892,10 @@ It seems to have woken up the blacksmith, who makes his way into the forge rubbi
 [[Be dumb]]
 
 :: Blacksmith
-After correcting your behavior, the smith asks if you would like to work with him as a student apprentice. 
-
+After correcting your behavior, the smith asks if you would like to work with him as a student apprentice.
+<<if $Gorgon is true>>
+You avert your gaze.
+<</if>>
 You gladly agree. After showing you around the equipment, he hands you a hammer of your own.
 
 You manage to forge a very crude, basic weapon that certainly would do no good in combat.
@@ -2861,7 +2934,9 @@ You shake the brewmaster until he comes to.
 He knocks over a few empty bottles as he slowly stands up. 
 
 He happily welcomes you to the brewery and invites you to work with him.
-
+<<if $Gorgon is true>>
+You evade hsi gaze.
+<</if>>
 [[Agree|Yes Brew]]
 [[Decline|No Brew]]
 
@@ -2915,9 +2990,7 @@ Eventually, students begin filtering into the classroom, and settling into their
 
     A bead of sweat runs down your brow. 
     
-    <<if $Ostra is false>> \
     [[Ask how you can help her]]
-    <</if>> \
     [[Ignore her]]
     [[Lash out in self defense]]
 <<else>>
@@ -2955,7 +3028,7 @@ You discreetly hand them over to her.
 <<set $BigFriend to true>>
 She happily takes them from you. She takes a seat with a smile on her face.
 
-You have made a friend.
+You have made a friend<<if $Ostra is true>> despite being socially ostracized<</if>>.
 
 [[Class begins|Class]]
         
