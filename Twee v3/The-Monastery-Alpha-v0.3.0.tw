@@ -4,6 +4,8 @@ Test:
 
 Unfinished Tasks: 
 
+Evaluate using clone() for _var to $var -> _var to clone($var)
+
 Check if Invisibility breaks Gorgon conditionals 
 
 Prioritize unseen hints
@@ -45,11 +47,14 @@ Changelog v0.3.0
 -Fixed bug where legendary items could not be obtained (Test)
 -Fixed bug where the plant outside campus was glitched after the third collection (Incomplete)
 -Fixed bug where a forest animal would be encountered multiple times before they had all been encountered
+-Fixed typos
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
 -History control causes $Temp to bug out and not randomize in the teacher's dorm when searching belongings
 -If player has all seeds, They find an error plant
+-Making a potion when holding mutiple ingredient uses all of them
+-Menu disappeared while invisible; Corrects on [[Demo]]
 
 */
 
@@ -95,7 +100,7 @@ $(document).on(":passagerender", function (ev) {
     // Search passages for links every 300ms, just in case they get updated, and marks them for key clicks
     KBIntervalID = setInterval(UpdateLinks, 300);
 });
-// Adds key shortcut indicators to links in passage if there are less than 11 links in the passsage.
+// Adds key shortcut indicators to links in passage if there are less than 11 links in the passage.
 function UpdateLinks(Container) {
     // Enables keyboard shortcuts on passages that do not have the "DisableKeyLinks" tag
     if (!tags().includes("DisableKeyLinks")) {
@@ -322,7 +327,7 @@ You are a gorgon. You have snakes for hair and a powerful gaze.<br><br>
 You are invisible. Others cannot see you.<br><br>
 <</if>>\
 <<if $Blind is true>>\
-You are blind. You cannot see with your eyes.<br><br>
+Your eyes are sealed shut. You cannot open them.<br><br>
 <</if>>\
 <<if $Love is true>>\
 You have intense feelings of affection.<br><br>
@@ -432,7 +437,9 @@ You drink the $Temp.
         Light passes straight through you.
         <<set $Invisibility to true>>
     <<case 'Blinding Potion'>>
-        Your vision fades. Everything truns black.
+        Your eyes seal shut. You cannot open them.
+        
+        Your vision fades. Everything turns black.
         <<set $Blind to true>>
     <<case 'Vision Potion'>>
         Your eyes roll back into your head. A vision overcomes you.
@@ -564,7 +571,7 @@ You drink the $Temp.
     <<case 'Milk Stout'>>
         It's not your favorite ale, but you can appreciate it.
     <<case 'Droopy Juice'>>
-        Your body liquifies, starting with your fingertips and moving down to your toes.
+        Your body liquefies, starting with your fingertips and moving down to your toes.
 
         You melt onto the floor. The world melts around you.
         /* Test to see if this breaks anything - WIP - Check situation to see if player dies */ 
@@ -613,7 +620,7 @@ You examine the $Temp.
     <<case 'Bat Potion'>>
         The liquid is a black color. 
     <<case 'Curse Potion'>>
-        You remove the phial stopper. A puff of smoke rises and forms into the shape of a skull as it disippates into the air.
+        You remove the phial stopper. A puff of smoke rises and forms into the shape of a skull as it dissipates into the air.
     <<case 'Nightmare Potion'>>
         As you peer into the phial, a disturbing image takes shape before your eyes. 
 
@@ -657,7 +664,7 @@ You examine the $Temp.
 
 :: WIP [noreturn menu]
 
-This passsage is under construction. 
+This passage is under construction. 
 
 [[Return|previous()]]
 
@@ -915,7 +922,7 @@ You open some dressers and bags, searching for an interesting item.
                 <<run _rand.delete(4)>>
             <<case 'Thurible'>>
                 <<run _rand.delete(5)>>
-            <<case 'Trowl'>>
+            <<case 'Trowel'>>
                 <<run _rand.delete(6)>>
             <<case 'Spoon'>>
                 <<run _rand.delete(7)>>
@@ -934,7 +941,7 @@ You open some dressers and bags, searching for an interesting item.
     [[Confront them]]
     [[Hide]]
 <<elseif $Temp is 8>>\
-    <<set _LegendaryItems to $LegendaryItems;$TempString to ''>>\
+    <<set _LegendaryItems to clone($LegendaryItems); $TempString to ''>>\
     <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>\
         <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>\
     <</for>>\
@@ -971,8 +978,8 @@ You open some dressers and bags, searching for an interesting item.
         priest's thurible.\
         <<run $Items.pushUnique('Thurible')>>
         <<case 6>>\
-        gardener's trowl.\
-        <<run $Items.pushUnique('Trowl')>>
+        gardener's trowel.\
+        <<run $Items.pushUnique('Trowel')>>
         <<case 7>>\
         brewmaster's stirring spoon.\
         <<run $Items.pushUnique('Spoon')>>
@@ -993,8 +1000,8 @@ Your foot slips and you fall onto the floor, making a noise.
 
     [[Leave dorm]]
 <<else>>\
-    over, staring you in the eyes. You have been caught.
-<</if>>
+    over, staring you in the eyes. You have been caught.<br>
+<</if>>\
 <<if $Gorgon is true>>\
     [[Stare into their eyes]]
 <</if>>\
@@ -1011,18 +1018,16 @@ Your foot slips and you fall onto the floor, making a noise.
 You confront the teacher who now recognizes you as an intruder. 
 <<if $Invisibility is true>>
 Due to your invisibility, the teacher has no idea you are there.
+
+[[Leave dorm]]
+<<else>>
+You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.<br><br>
 <</if>>\
-<<if $Invisibility is false>>
-You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.
-<</if>>
 <<if $Gorgon is true>>\
 [[Stare into their eyes]]
-<</if>>
+<</if>>\
 <<if $UserPotions.length gt 0>>\
 [[Douse the teacher with a potion]] 
-<</if>>\
-<<if $Invisibility is false>>\
-[[Leave the dorm]]
 <</if>>\
 <<if $Gorgon is false and $UserPotions.length is false and $Invisibility is false>>\ 
 <div align='center' style='font-size: 300%;'>\
@@ -1046,11 +1051,14 @@ They are doused in your $TempString.
 <<run $UserPotions.delete($TempString)>>\
 <<switch $TempString>>
     <<case 'Gorgon Potion'>>
-    The teacher sprouts snakes from their scalp and makes eye contact with you.
+    The teacher sprouts snakes from their scalp<<if $Invisibility is true>>, but is unable to make eye contact due to your invisibility.
+    
+    [[Leave|Demo]]<<else>> and makes eye contact with you.
 
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU ARE PETRIFIED</b></span></span>
     </div>
+    <</if>>
     <<case 'Invisibility Potion'>>
     The teacher turns invisible and promptly reports your misbehavior.
 
@@ -1260,15 +1268,15 @@ You laze about the cloister, daydreaming all the while.
 You realize that you accomplished very little, but you also don't care about that at all.
 
 You feel peaceful and satisfied.
-<<set $Temp to random(9)>>
-<<set _LegendaryItems to $LegendaryItems;$TempString to ''>>\
+<<set $Temp to random(7)>>
+<<set _LegendaryItems to clone($LegendaryItems); $TempString to ''>>\
 <<if $UserLegendaryItems.length gt 0>>\
     <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>\
         <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>\
     <</for>>\
 <</if>>\
 <<if $Temp is 0>>\
-    <<if _LegendaryItems.length gte 0 and _LegendaryItems.length lt 4>>\
+    <<if $UserLegendaryItems.length lt 4>>\
         <<set $TempString to _LegendaryItems.random()>>\
         As you stare up the sky, something falls down and lands in the grass next to you.
 
@@ -1298,24 +1306,20 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 You enter the kitchen. 
 
 The cooks are preparing food in anticipation of the upcoming meal.
-<<if $Invisibility is true>
+<<if $Invisibility is true>>
     [[Mess with the cooks]]
-<<else>>>
+<<else>>>\
     You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
     <<if $Ostra is true>>
-    The students notice you and appreciate your work. your social status increases and you are <b>no longer socially ostracized</b>.
-    <<set $Ostra to false>>\
+        The students notice you and appreciate your work. your social status increases and you are <b>no longer socially ostracized</b>.
+        <<set $Ostra to false>>\
     <</if>> 
-    [[Send out the food]]
-<</if>>
-    <<if $UserPotions.includes('Poison')>>\
-    [[Poison the food|WIP]]
-    [[Poison the drinking water|WIP]]
-    <</if>>
-    <<if $UserPotions.length>> \
+    [[Send out the food]] 
+<</if>>\
+<<if $UserPotions.length>> \
     [[Use potion on food|WIP]]
     [[Use potion on drinking water|WIP]]
-    <</if>>
+<</if>>
 
 
 :: Mess with the cooks
@@ -1323,7 +1327,7 @@ You walk around the kitchen sabotaging the cooks in ways that are hilarious to y
 
 You pull down their pants, turn off stoves to prevent water from boiling, knock over trash cans, and perform other miscellaneous acts of mischief.
 
-You steathily eat the few meals that managed to get cooked.
+You stealthily eat the few meals that managed to get cooked.
 
 Because you are invisible, they have no idea what is happening and become simultaneously angry and scared.
 
@@ -1368,7 +1372,7 @@ You take a seat at a table and eat your meal surrounded by the other students.
 [[Eat in peace]]
 
 :: Turn them to stone
-You make eye contact with individual students at the table, progressively turning each one to stone.
+You make eye contact with individual students at the table, <<if $Invisibility is false>>progressively turning each one to stone.
 
 Unfortunately, there are some students who do not look you in the eyes.
 
@@ -1377,11 +1381,16 @@ After realizing the situation, they nervously flee the refectory and report you 
 <div align='center' style='font-size: 300%;'>\
 <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
 </div>
+<<else>>\
+however, nobody can see your eyes.
 
+[[Listen to gossip]]
+[[Eat in peace]]
+<</if>>
 :: Listen to gossip
 <<if $Ostra is true>> \
 You decide to eavesdrop again while <b>socially ostracized</b>.
-<<if $Invisibilityy is true>>
+<<if $Invisibility is true>>
 You hover over the conversation while invisible. You eavesdrop until hearing something useful.
 
 You overhear the numbers: <<print $Faucets>>
@@ -1395,10 +1404,10 @@ They seem completely serious about the threat.<</if>>
 You <<if $invisibility is true>>sneak a meal<<else>>finish your meal<</if>> and [[make your way back to your dorm]]. 
 <<else>>
     You figure that you require information about the lives of others.
-    <<if $Invisibility is true>>
-        <<set $Temp to 9>>
-    <<else>>
-        <<set $Temp to random(9)>>
+    <<if $Invisibility is true>>\
+        <<set $Temp to 9>>\
+    <<else>>\
+        <<set $Temp to random(9)>>\
     <</if>>
     While eating your meal, you inconspicuously listen into the conversations of the other students in an attempt to glean some juicy gossip.
     <<if $Temp is 0>>
@@ -1495,8 +1504,8 @@ The student is obviously annoyed with you. You are undeterred.
 You probe them seeking the secrets of The Monastery.
 <<if $Gorgon is true>>
     As your eyes meet, the student turns to stone.
-    <<<set $GorgonPrey to true>>>
-    You nervously flee the library.
+    <<set $GorgonPrey to true>>
+    You nervously [[flee the library|Demo]]. /* Changed on return */
 <<elseif $Ostra is true>>
     They tell you to get lost.
 
@@ -1594,9 +1603,9 @@ You approach the potion station.
 
     <</nobr>><<if _Ingredients.includesAll('Eye of Newt','Bat Wing')>>\
         <<set $PotionTable to "Gorgon Potion">>\
-    <<elseif _Ingredients.includesAll('Eye of Newt','Hemlock')>>\
-        <<set $PotionTable to "Invisibility Potion">>\
     <<elseif _Ingredients.includesAll('Eye of Newt','Nightshade')>>\
+        <<set $PotionTable to "Invisibility Potion">>\
+    <<elseif _Ingredients.includesAll('Eye of Newt','Hemlock')>>\
         <<set $PotionTable to "Blinding Potion">>\
     <<elseif _Ingredients.includesAll('Eye of Newt','Milk')>>\
         <<set $PotionTable to "Vision Milk">>\
@@ -1952,7 +1961,7 @@ With some <<if $Invisibility is true>>curiousity<<else>>reservation<</if>>, she 
 [[Offer to help|Siren Partner]]
 
 :: Embrace Nurse
-You run towards the glowing eyes and extend your arms out to embrace the shadowy figure. <<if $Invisibility is true>>The creature flinchs in surprise.<</if>>
+You run towards the glowing eyes and extend your arms out to embrace the shadowy figure. <<if $Invisibility is true>>The creature flinches in surprise.<</if>>
 
 You tighten your grip and feel breasts and long hair.
 
@@ -2035,32 +2044,33 @@ You twist the doorknob. The door is locked.
 You knock on the door.
 <<if $NurseWork is false>> 
 The lock clicks and the door opens to reveal an attractive young nurse.
-<<if $Invisibility is true>>
-    She stares directly through you and appears confused. She slams the door shut in your face.
-    <<set $Knock to 1>>
-    [[Knock again]]
-    [[Raid the cabinet]]
-    [[Leave|Demo]]
-<<else>>
-    She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
+    <<if $Invisibility is true>>
+        She stares directly through you and appears confused. She slams the door shut in your face.
+        <<set $Knock to 1>>
+        [[Knock again]]
+        [[Raid the cabinet]]
+        [[Leave|Demo]]
+    <<else>>
+        She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
 
-    You uncomfortably sit down across from her. She examines you for a while before talking.
-    <<if $Gorgon is true>>
-    You make eye contact, but it has no effect on her.
+        You uncomfortably sit down across from her. She examines you for a while before talking.
+        <<if $Gorgon is true>>
+            You make eye contact, but it has no effect on her.
+        <</if>>
+        She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
+
+        [[Accept][$NurseWork to true]]
+        [[Decline]]
     <</if>>
-    She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
+<<else>> 
+The lock clicks and the door opens to reveal the nurse looking very annoyed with you.
 
-    [[Accept][$NurseWork to true]]
-    [[Decline]]
-    <<else>> 
-    The lock clicks and the door opens to reveal the nurse looking very annoyed with you.
+She asks why you are bothering her and you can't think of a good answer.
 
-    She asks why you are bothering her and you can't think of a good answer.
-
-    [[Apologize to her|Nurse Apology]]
-    [[Hug her|Hug Nurse]]
-    <</if>> \
-    [[Insult her|Insult Nurse]]
+[[Apologize to her|Nurse Apology]]
+[[Hug her|Hug Nurse]]
+[[Insult her|Insult Nurse]]
+<</if>>
 
 :: Knock again
 You knock on the door again. 
@@ -2081,7 +2091,7 @@ Every so often, she becomes upset for some reason and lets out hissing noises. E
 
 You flinch in surprise.
 
-She tilts her head to the side and her movements seize. She noticed your movement in the chair. A forked tongue flitters out of her mouth and she uses it to smells you.
+She tilts her head to the side and her movements cease. She noticed your movement in the chair. A forked tongue flitters out of her mouth and she uses it to smells you.
 
 She makes her way over to you and wraps her talons around your invisible throat.
 <<if $UserPotions.length>>
@@ -2100,7 +2110,6 @@ Select a potion to throw at the nurse:
 
 :: Throw Nurse
 You throw the $TempString at her.
-
 <<switch $TempString>>
     <<case 'Gorgon Potion'>>
     The nurse sprouts snakes from her scalp and strangles you.
@@ -2154,7 +2163,7 @@ You nervously stutter out yet another apology.
 
 She shuts her eyes for a moment and takes a deep breath.
 
-You let your gaurd down as she seems relatively calm.
+You let your guard down as she seems relatively calm.
 
 You notice long talons extending from her fingertips and in a flash and flurry, your gut has ben sliced open.
 
@@ -2259,7 +2268,7 @@ To your surprise, it never comes. She simply watches you in anticipation, waitin
 
 She deems you a worthy opponent.
 
-Once you are satisified that she doesn't intend to strike, you put your weapon away.
+Once you are satisfied that she doesn't intend to strike, you put your weapon away.
 
 Her talons recede and she walks towards you.
 
@@ -2307,7 +2316,7 @@ You decide that this nurse is arrogant and that it is your duty to bring her dow
 
 You give her a piece of your mind...  Maybe even a couple pieces.
 
-She doesn't react at all. She simply stares at you with what seems to be curiousity and appetite as if she were hunting you with her eyes. 
+She doesn't react at all. She simply stares at you with what seems to be curiosity and appetite as if she were hunting you with her eyes. 
 
 [[Apologize|Bad End Slavery][$Temp to 0]]
 [[Leave the office|Bad End Slavery][$Temp to 1]]
@@ -2319,7 +2328,7 @@ She has something else in mind...
 
 With great swiftness, she pulls a needle out of her coat pocket and jabs you with it before you even notice what happened.
 
-You look down at the injection sight in surpise and [[you suddenly feel drowsy...|Slavery]]
+You look down at the injection sight in surprise and [[you suddenly feel drowsy...|Slavery]]
 
 :: Slavery  
 You find yourself in a dark room.
@@ -2352,7 +2361,7 @@ No drugs for you.
 :: Injured butt
 The nurse begins treating your injured rear end. 
 
-You are somewhat embarrased, but you have enough pride to realize that she is actually lucky to see such a sight.
+You are somewhat embarrassed, but you have enough pride to realize that she is actually lucky to see such a sight.
 
 She seems annoyed with you, but prescribes some pain pills to you for the injury and sees you off.
 <<run $Drugs.pushUnique("Pain Pills")>> \ 
@@ -2476,20 +2485,20 @@ You approach the horse.
 [[Take him for a ride]]
 [[Wait for nightfall]]
 <<else>>
-<<<if $Invisibility is false>>>\
+<<if $Invisibility is false>>\
 He is excited to see you and anticipates going for a stroll.
 <</if>>\
 You saddle him and [[leave the barn|Ride]].
 <</if>>
 
 :: Take him for a ride
-You saddle the horse and ride him out of the barn despite the consipicuous sunlight.
+You saddle the horse and ride him out of the barn despite the conspicuous sunlight.
 
 You are immediately noticed by a student a reported for your misbehavior.
 <<if $Invisibility is true>>
-However, since you can't be identified no discipline befell you. You ismply return the horse to its stable and avoid further ruccus.
+However, since you can't be identified no discipline befell you. You simply return the horse to its stable and avoid further ruckus.
 <<else>>
-You recieve disciplinary actions for your misbehavior.
+You receive disciplinary actions for your misbehavior.
 
 You are now definitely socially ostracized if you weren't already.
 <<set $Ostra to true>>
@@ -2521,7 +2530,7 @@ The air rushes through your hair as you speed around.
 
 Wildlife skitters around you. 
 <<nobr>>
-    <<set _Plants to $Plants>>
+    <<set _Plants to clone($Plants)>>
     /* Checks if player has each forest plant somewhere in the inventory */
     <<for _i to 0; _i lt $Seeds.length; _i++>>
         <<if $Seeds[_i] is 'Marijuana' or $Seeds[_i] is 'Tulip' or $Seeds[_i] is 'Poppy'>>
@@ -2630,7 +2639,7 @@ You collect $TempString leaves.
 
 :: Enter the forest
 The forest is dark and spooky.
-<<if $Weapon is true>>
+<<if $Weapon is true or $UserLegendaryItems.includes('Sword of Siren Slaying')>>
 You are comforted by your weapon. 
 <<else>>
 You wish you had a weapon right about now...
@@ -2659,7 +2668,7 @@ You wish you had a weapon right about now...
     <<else>>
         <<set $Temp to random(1)>>
         /* Confront unique plants first */
-        <<set _ForestPlants to $ForestPlant>>
+        <<set _ForestPlants to clone($ForestPlant)>>
         <<for _i to 0; _i lt _Plants.length; _i++>>
             <<if _ForestPlants.includes(_Plants[_i])>>
                 <<run _ForestPlants.delete(_Plants[_i])>>
@@ -2668,7 +2677,7 @@ You wish you had a weapon right about now...
         <<set $TempString1 to _ForestPlants.random()>>
     <</if>>
     /* Confront an animal with a unique reward first */
-    <<set _ForestAnimals to $ForestAnimals>>
+    <<set _ForestAnimals to clone($ForestAnimals)>>
     <<for _i to 0; _i lt $UserIngredients.length; _i++>>
         <<if $UserIngredients[_i] is 'Bat Wing'>>
             <<run _ForestAnimals.delete('Bat')>>
@@ -2747,7 +2756,7 @@ Your body tingles. You start glowing.
 
 Golden wings sprout from your back and you rise above the ground levitating.
 
-Great power courses through your veins. You raise your arms to your side and raise your head, instinctually joining in the holy hymn.
+Great power courses through your veins. You raise your arms to your side and raise your head, instinctively joining in the holy hymn.
 
 A great vortex rages through the tomb and engulfs your acolytes, thrusting them into your body. You absorb their power and you are bombarded with visions of the world. 
 
@@ -2912,7 +2921,7 @@ You take some initiative and figure the eggs are yours for the taking.
 <<set $Temp to random(1)>>
 Having permission is a minor detail.
 <<if $Temp is 1>>
-You successfully retreive an egg amid the frenzied chickens without incident.
+You successfully retrieve an egg amid the frenzied chickens without incident.
 <<set $Eggs += 1>>
 You have acquired an egg.
 <<else>>
@@ -3005,17 +3014,27 @@ You are no longer welcome here.
 The smith stands in your way.
     <<if $Gorgon is true>>
     [[Make eye contact]]
-    [[Leave|Demo]].
-    <</if>>
+    <</if>>\
+    <<if $UserPotions.length>>\
+    /* [[Throw a potion]] - WIP */
+    <</if>>\
+[[Leave|Demo]].
 <</if>>
 
 :: Make eye contact
-You make eye contact with the smith, turning him to stone.
+You make eye contact with the smith, \
+<<if $Invisibility is true>>\
+but he can't see you.
+
+<<else>>\
+turning him to stone.
 <<set $GorgonPrey to true; $forge to 1>>
 You gain access to the forge.
 
 [[Create Weapon]]
+<</if>>\
 [[Leave|Demo]]
+
 
 :: Create weapon
 You smelt standard metals and create a basic weapon.
@@ -3026,7 +3045,7 @@ You will now be able to defend yourself.
 [[Sleep]]
 
 :: Mess around
-You sling tools around like a dufus.
+You sling tools around like a doofus.
 
 You manage to make contact with lots of metal things and generate much noise in the process.
 
@@ -3049,7 +3068,7 @@ You gladly agree. After showing you around the equipment, he hands you a hammer 
 
 You manage to forge a very crude, basic weapon that certainly would do no good in combat.
 
-You hold it in the air, admiring your handiwork wirth a goofy smile on your face.
+You hold it in the air, admiring your handiwork with a goofy smile on your face.
 <<set $NightTime to true>>
 [[Eat dinner]]
 [[Sleep]]
@@ -3107,7 +3126,7 @@ When you return to the brewery, you will be able to brew batches on your own.
 :: No Brew
 The brewmaster's behavior seems relatively unbecoming and you decide to take your talents elsewhere.
 
-He seems dissapointed. [[You leave him alone and wish him sweet dreams.|Demo]] 
+He seems disappointed. [[You leave him alone and wish him sweet dreams.|Demo]] 
 
 :: Brew
 You decide to brew a batch of ale.
@@ -3134,7 +3153,7 @@ After waiting for a few minutes without any activity, you become impatient.
 :: Wait Patiently
 You figure that scouring through random items in the classroom might not be a good idea, so you simply wait for class to start...
 <<if $Invisibility is true>>
-You find a spot in the back of the classrom to invisibly observe.
+You find a spot in the back of the classroom to invisibly observe.
 <</if>>
 Eventually, students begin filtering into the classroom, and settling into their respective seats. 
 <<if $ClassFriend is false and $Invisibility is false>>
@@ -3151,7 +3170,6 @@ Eventually, students begin filtering into the classroom, and settling into their
     [[Lash out in self defense]]
 <<else>>
 The professor enters and [[class begins|Class]]. 
-<</if>>
 <</if>>
 
 :: Ignore her
@@ -3204,7 +3222,7 @@ Just as you do, the professor and multiple students walk through the door.
 <<if $Invisibility is true>>
 You manage to returns the books to the shelf before anybody notices.
 
-You find a spot in the back of the classrom to invisibly observe and [[class begins|Class]].
+You find a spot in the back of the classroom to invisibly observe and [[class begins|Class]].
 <<else>>
 You are able to convince them that you had forgotten your textbook and needed to borrow a replacement.
 
@@ -3228,9 +3246,9 @@ You take the document.
 <<set $CeilingKey to true>> \
 You read through the document. It is an onboarding document for new professors. 
 
-It describes the accomodations in the staff dormitory and provides a passphrase for access.
+It describes the accommodations in the staff dormitory and provides a passphrase for access.
 
-You <b>memorize the passphrase</b> and <<if $Invisibility is true>>find a spot in the back of the classrom to invisibly observe and [[class begins|Class]]<<else>>[[return to your seat|Return to your seat]].<</if>>
+You <b>memorize the passphrase</b> and <<if $Invisibility is true>>find a spot in the back of the classroom to invisibly observe and [[class begins|Class]]<<else>>[[return to your seat|Return to your seat]].<</if>>
 <<else>>
 Just as you do, the professor and multiple students walk through the door.
 <<if $Invisibility is true>>
@@ -3240,10 +3258,10 @@ Just as you do, the professor and multiple students walk through the door.
 
     You read through the document. It is an onboarding document for new professors. 
 
-    It describes the accomodations in the staff dormitory and provides a passphrase for access.
+    It describes the accommodations in the staff dormitory and provides a passphrase for access.
 
     You <b>memorize the passphrase</b>.
-
+    <<set $CeilingKey to true>>
     [[Eat dinner]]
     [[Sleep]] 
 <<else>>\
