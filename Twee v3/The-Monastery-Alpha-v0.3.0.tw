@@ -261,6 +261,10 @@ body.no-save #menu-item-saves {
 <<set $Arms to 2; $Legs to 2>>
 <<set $NoHands to false>>
 
+/* Potion Effects */
+<<set $Gorgon to false>>
+<<set $Invisibility to false>>
+
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
 <<if $Show is true>>Sex: <<if $Male is true>>Male<<else>>Female<</if>><</if>> /* Player Sex */
@@ -674,14 +678,14 @@ Are you Male or Female?
 
 :: Demo
 <<if $Day lt 50>> \
-You are on campus. 
-<<if $GorgonPrey is true>>
-    It has been noticed that people are being turned to stone.
-    <<set $GorgonPrey to false>>\
-<<else>>
-    There are several areas to explore.
+    You are on campus. 
+    <<if $GorgonPrey is true>>
+        It has been noticed that people are being turned to stone.
+        <<set $GorgonPrey to false>>\
+    <<else>>
+        There are several areas to explore.
 
-    Where do you want to go?
+        Where do you want to go?
     <</if>>
     [[Classroom]]
     [[Temple]]
@@ -697,27 +701,27 @@ You are on campus.
     [[Dormitory]]
     /* [[Wait for night|WIP]] */
     <<if $HorseFriend is true and $BarnWork is true>>\
-    [[Ride Horse|Approach horse]]
+        [[Ride Horse|Approach horse]]
     <<elseif $AnimalShip gt 2>> \
-    [[Ride Horse|Approach horse]]
+        [[Ride Horse|Approach horse]]
     <<elseif $HorseFriend is true>> \
-    [[Ride Horse]]
-<</if>>
+        [[Ride Horse]]
+    <</if>>
 
-<<set $Show to true>>
-<<set $NightTime to false>>
+    <<set $Show to true>>
+    <<set $NightTime to false>>
 <<else>> \
-You spent your time on campus doing a whole lot of nothing. Maybe you could have been more interesting or taken more risks.
+    You spent your time on campus doing a whole lot of nothing. Maybe you could have been more interesting or taken more risks.
 
-Despite the fact that you had high hopes for your life after school, you turned out entirely ordinarily and accomplished nothing noteworthy for the rest of your life.
+    Despite the fact that you had high hopes for your life after school, you turned out entirely ordinarily and accomplished nothing noteworthy for the rest of your life.
 
-On the bright side, at least you didn't really screw anything up either. That's an accomplishment of sorts.
+    On the bright side, at least you didn't really screw anything up either. That's an accomplishment of sorts.
 
-It's the small things in life that count, right...?
+    It's the small things in life that count, right...?
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU EVENTUALLY DIED</b></span></span>
-</div> 
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU EVENTUALLY DIED</b></span></span>
+    </div> 
 <</if>>
 
 :: Dormitory
@@ -794,7 +798,7 @@ You find nothing of interest.
 [[Stick around]]
 
 :: Eavesdrop
-<<if $Ostra is true>> 
+<<if $Ostra is true and $Invisibility is false>> 
 The students notice you eavesdropping<<if $Gorgon is true>>.
 
     [[Look them in the eyes]]
@@ -805,7 +809,10 @@ The students notice you eavesdropping<<if $Gorgon is true>>.
     <</if>>
 <<else>>
 You eavesdrop on the student's conversation.
-/* Incorporate RNG similiar to gossip */
+/* Incorporate RNG similiar to gossip */ \
+<<if $Invisibility is true>>
+    Your invisibility allows you to avoid detection.
+<</if>>
 You hear nothing of interest.
 
 [[Stick around]]
@@ -977,32 +984,45 @@ You open some dressers and bags, searching for an interesting item.
 /* Incorporate other options */
 Your foot slips and you fall onto the floor, making a noise.
 /* Randomize this - WIP */
-The teacher hears you and walks over, staring you in the eyes. You have been caught.
+<<if $TempBool is true>>The<<else>>A<</if>> teacher hears you and walks \
+<<if $Invisibility is true>>directly towards you.
 
-<<if $Gorgon is true>>\
-[[Stare into their eyes]]
+    Due to your invisibility, the teacher is unable to locate you and eventually exits the dormitory.
+
+    [[Leave dorm]]
+<<else>>\
+    over, staring you in the eyes. You have been caught.
 <</if>>
-<<if $UserPotions.length gt 0>>\
-[[Douse the teacher with a potion]] 
+<<if $Gorgon is true>>\
+    [[Stare into their eyes]]
 <</if>>\
-<<if $Gorgon is false and $UserPotions.length is false>>\ 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
-</div>
+<<if $UserPotions.length gt 0>>\
+    [[Douse the teacher with a potion]] 
+<</if>>\
+<<if $Gorgon is false and $UserPotions.length is false and $Invisibility is false>>\ 
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+    </div>
 <</if>>\
 
 :: Confront them
 You confront the teacher who now recognizes you as an intruder. 
-
+<<if $Invisibility is true>>
+Due to your invisibility, the teacher has no idea you are there.
+<</if>>\
+<<if $Invisibility is false>>
 You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.
-
+<</if>>
 <<if $Gorgon is true>>\
 [[Stare into their eyes]]
 <</if>>
 <<if $UserPotions.length gt 0>>\
 [[Douse the teacher with a potion]] 
 <</if>>\
-<<if $Gorgon is false and $UserPotions.length is false>>\ 
+<<if $Invisibility is false>>\
+[[Leave the dorm]]
+<</if>>\
+<<if $Gorgon is false and $UserPotions.length is false and $Invisibility is false>>\ 
 <div align='center' style='font-size: 300%;'>\
 <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
 </div>
@@ -1023,20 +1043,26 @@ You throw the $TempString at the teacher.
 They are doused in your $TempString.
 <<run $UserPotions.delete($TempString)>>\
 <<switch $TempString>>
-<<case 'Gorgon Potion'>>
-The teacher sprouts snakes from their scalp and makes eye contact with you.
+    <<case 'Gorgon Potion'>>
+    The teacher sprouts snakes from their scalp and makes eye contact with you.
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU ARE PETRIFIED</b></span></span>
-</div>
-<<default>>
-It has no useful effect.
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU ARE PETRIFIED</b></span></span>
+    </div>
+    <<case 'Invisibility Potion'>>
+    The teacher turns invisible and promptly reports your misbehavior.
 
-The teacher apprehends you and reports your misbehavior.
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+    </div>
+    <<default>>
+    It has no useful effect.
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
-</div>
+    The teacher apprehends you and reports your misbehavior.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+    </div>
 <</switch>>
 
 :: Stare into their eyes
@@ -1045,42 +1071,6 @@ You turn the teacher to stone and evade detection.
 [[Flee the scene and go to sleep|Sleep]]
 [[Leave dorm]]
         
-:: Sleep
-You go to sleep.<br>
-<<if $Lust is true>>\
-    The effects of the Lust Potion wear off.
-    <<set $Lust to false>>
-<</if>>\
-<<if $Gargoyle is true>>\
-    The effects of the Gargoyle Potion wear off.
-    <<set $Lust to false>>
-<</if>>\
-<<if $Octopus is true>>\
-    The effects of the Octopus Potion wear off.
-    <<set $Lust to false>>
-<</if>>\
-<<if $Octopus is true>>\
-    The effects of the Slime Potion wear off.
-    <<set $Slime to false>>
-<</if>>\
-<<if $Bat is true>>\
-    The effects of the Bat Potion wear off.
-    <<set $Bat to false; $NoHands to false>>
-<</if>>\
-You dream of an odd future that awaits you, but you can't quite make out the ending.
-
-Maybe it involves <<print $Dream.random()>>...?
-
-[[Wake Up|Demo]]
-
-<<for _i to 0; _i lt $PlantAge.length; _i++>>
-    <<if $PlantAge[_i] gt 0>>
-        <<set $PlantAge[_i] += 1>>
-    <</if>>
-<</for>>
-
-<<set $Day += 1; $NightTime to true>>
-
 :: Temple
 You enter the temple.
 
@@ -1306,21 +1296,38 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 You enter the kitchen. 
 
 The cooks are preparing food in anticipation of the upcoming meal.
+<<if $Invisibility is true>
+    [[Mess with the cooks]]
+<<else>>>
+    You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
+    <<if $Ostra is true>>
+    The students notice you and appreciate your work. your social status increases and you are <b>no longer socially ostracized</b>.
+    <<set $Ostra to false>>\
+    <</if>> 
+    [[Send out the food]]
+<</if>>
+    <<if $UserPotions.includes('Poison')>>\
+    [[Poison the food|WIP]]
+    [[Poison the drinking water|WIP]]
+    <</if>>
+    <<if $UserPotions.length>> \
+    [[Use potion on food|WIP]]
+    [[Use potion on drinking water|WIP]]
+    <</if>>
 
-You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
-<<if $Ostra is true>>
-The students notice you and appreciate your work. your social status increases and you are <b>no longer socially ostracized</b>.
-<<set $Ostra to false>>\
-<</if>> 
-[[Send out the food]]
-<<if $UserPotions.includes('Poison')>>\
-[[Poison the food|WIP]]
-[[Poison the drinking water|WIP]]
-<</if>>
-<<if $UserPotions.length>> \
-[[Use potion on food|WIP]]
-[[Use potion on drinking water|WIP]]
-<</if>>
+
+:: Mess with the cooks
+You walk around the kitchen sabotaging the cooks in ways that are hilarious to you.
+
+You pull down their pants, turn off stoves to prevent water from boiling, knock over trash cans, and perform other miscellaneous acts of mischief.
+
+You steathily eat the few meals that managed to get cooked.
+
+Because you are invisible, they have no idea what is happening and become simultaneously angry and scared.
+
+The meal never gets properly prepared and the other students go to sleep hungry and annoyed.
+
+[[Sleep]]
 
 :: Poison the food
 You slip the poison out of your pocket.
@@ -1372,37 +1379,48 @@ After realizing the situation, they nervously flee the refectory and report you 
 :: Listen to gossip
 <<if $Ostra is true>> \
 You decide to eavesdrop again while <b>socially ostracized</b>.
+<<if $Invisibilityy is true>>
+You hover over the conversation while invisible. You eavesdrop until hearing something useful.
 
+You overhear the numbers: <<print $Faucets>>
+<<else>>
 Despite your best attempts, you can't make out any useful information. <<if $Sneaky is false>>The other students seem to have caught onto your game.
 
 They warn you that if you try to eavesdrop once more, they will ensure that you never again have the chance.
 
 They seem completely serious about the threat.<</if>> 
-
-You finish your meal and [[make your way back to your dorm]]. 
+<</if>>
+You <<if $invisibility is true>>sneak a meal<<else>>finish your meal<</if>> and [[make your way back to your dorm]]. 
 <<else>>
     You figure that you require information about the lives of others.
-    <<set $Temp to random(9)>>
+    <<if $Invisibility is true>>
+        <<set $Temp to 9>>
+    <<else>>
+        <<set $Temp to random(9)>>
+    <</if>>
     While eating your meal, you inconspicuously listen into the conversations of the other students in an attempt to glean some juicy gossip.
     <<if $Temp is 0>>
-    The students notice you are listening to their conversation and huddle together uncomfortably.
-    <<set $Ostra to true>>
-    You are not able to hear anything and <b>you have become socially ostracized</b>. You will be unable to make friends with other students.
+        The students notice you are listening to their conversation and huddle together uncomfortably.
+        <<set $Ostra to true>>
+        You are not able to hear anything and <b>you have become socially ostracized</b>. You will be unable to make friends with other students.
 
-    You must be careful with future social interactions.
+        You must be careful with future social interactions.
 
-    You finish your meal and turn in your dishes. 
-    
-    [[Sleep]]
+        You finish your meal and turn in your dishes. 
+        
+        [[Sleep]]
     <<elseif $Temp is 9>>
-    <b>You manage to overhear to their conversation at the perfect time.</b>
-
-    You overhear the numbers: <<print $Faucets>>
-    /* Random Puzzle Solution - Incorporate other solutions and randomize - Make this a function() */ \
+        <<if $Invisibility is true>>\
+        You hover over the conversation while invisible. You eavesdrop until hearing something useful.
+        <<else>>\
+        <b>You manage to overhear to their conversation at the perfect time.</b>
+        <</if>>
+        You overhear the numbers: <<print $Faucets>>
+        /* Random Puzzle Solution - Incorporate other solutions and randomize - Make this a function() */ \
     <<else>>
-    You manage to make out a snippet of their conversation.
+        You manage to make out a snippet of their conversation.
 
-    //<<print $Hint.random()>>// 
+        //<<print $Hint.random()>>// 
     <</if>> 
 <</if>> \
 <<if $Ostra isnot true>>\
@@ -1412,7 +1430,7 @@ You finish your meal and turn in your dishes.
 <</if>>
 
 :: make your way back to your dorm
-<<if $Sneaky is true>>
+<<if $Sneaky is true>>\
 On the way to the dorm, you begin feeling ill.
         
 Another student poisoned your food! You cough up your guts and collapse dead in the hallway.
@@ -1432,12 +1450,12 @@ You make your way back to the dorm in peace.
 :: Eat in peace
 You decide to eat in peace.
 
-You grab your meal and move to a location at a different table that isn't quite so noisy.
+You grab your meal and move to a location <<if $Invisibility is true>>where you can eat safely<<else>>at a different table that isn't as noisy<</if>>.
 /* If relationship, can be approached intiating an event */
 You enjoy your meal and feel satisfied.
 
 <<if $Gorgon is true>>\
-[[Turn theother students to stone|Turn them to stone]]
+[[Turn the other students to stone|Turn them to stone]]
 <</if>>\
 [[Sleep]]
 
@@ -1447,7 +1465,9 @@ You enter the library.
 You notice many bookshelves and various students spread out across the room, diligently studying in silence. 
 
 [[Study]]
+<<if $Invisibility is false>>\
 [[Interrupt another student]]
+<</if>>\
 [[Find the librarian]]
 [[Leave|Demo]]
 
@@ -1527,15 +1547,6 @@ You enter the laboratory.
     [[Brew potion]]
 <</if>> \
 [[Leave|Demo]]
-
-:: Talk to her Gorgon
-As you talk to her, she searches for eye contact.
-
-Your gaze meets hers, but she remains alive for some reason.
-
-Maybe there is a reason she doesn't blink.
-
-[[Your conversation continues...|Talk to her]]
 
 :: Brew potion 
 You approach the potion station.
@@ -1702,9 +1713,8 @@ You approach the potion station.
 <</if>>
 
 :: Talk to her
-<<if $Gorgon is false>>\
-You approach the strange unblinking lady.<br>
-<</if>>\
+You approach the strange unblinking lady.
+
 She explains that she is the scientist in charge of the laboratory.
 
 You can work with her to perform experiments and brew potions or poisons.
@@ -1893,14 +1903,16 @@ Suddenly, you notice glowing eyes approaching you.
 
 :: Escape Nurse
 You attempt to escape... unsuccessfully.
-
-The creature catches you and stares its prey in the eyes.
+<<if $Invisibility is true>>
+Despite being invisible, fleeing through the water provided the creature with a clear indication of your location.
+<</if>>
+The creature catches you<<if $Invisibility is false>> and stares its prey in the eyes<</if>>.
 <<if $Gorgon is true>>
-Your gaze has no effect on her.
+Your gaze has no effect on her<<if $Invisibility is true>> since she can't see your eyes<<if>>.
 <</if>>
 She lifts you into the air. You feel talons on your skin.
 
-In a monstruously sweet voice, she hisses at you.
+In a monstrously sweet voice, she hisses at you.
 
 She gives you a choice to submit to her.
 
@@ -1923,26 +1935,28 @@ As you bleed out and lose consciousness, a serpentine tongue flicks across your 
 </div> 
 
 :: Wait Nurse
-You stay still and wait for the creature to approach you.
+You stay still and wait for the creature to <<if $Invisibility is true>>pass<<else>>approach you<</if>>.
 
-She emerges from the shadows. The nurse stands before you gazing upon you with curiousity. 
+She emerges from the shadows. <<if $Invisibility is true>>You hold your breath as she walks past you. You notice the creature is the nurse. She has talons and a forked tongue flicks from her mouth.
 
+She smells you with her tongue and approaches your location. <<else>>The nurse stands before you gazing upon you<<if $Invisibility is true>>r location<</if>> with curiousity. 
+<<if $Invisibility is false>>
 You notice she has some animalistic features. She surveys you like a predator would prey. A serpentine tongue flicks out of her mouth.
-
-With some reservation, she petitions your help.
+<</if>>
+With some <<if $Invisibility is true>>curiousity<<else>>reservation<</if>>, she petitions your help.
 
 [[Escape Nurse]]
 [[Completely submit to her|Slavery]]
 [[Offer to help|Siren Partner]]
 
 :: Embrace Nurse
-You run towards the glowing eyes and extend your arms out to embrace the shadowy figure.
+You run towards the glowing eyes and extend your arms out to embrace the shadowy figure. <<if $Invisibility is true>>The creature flinchs in surprise.<</if>>
 
 You tighten your grip and feel breasts and long hair.
 
 You loosen your grip and step backwards into the light. You see the nurse standing before you with certain animalistic features.
 
-With gentle eyes, she petitions your help.
+With gentle eyes, she <<if $Invisibility is true>>curiously <</if>>petitions your help.
 
 [[Completely submit to her|Slavery]]
 [[Offer to help|Siren Partner]]
@@ -1984,11 +1998,13 @@ Some of the sheets have stains of various colors.
 There is nothing under the bed. /* Randomly or conditionally put something important under bed? */
 <<else>>
 You notice some patients in the beds.
-
-[[Treat a patient]]<</if>>
+    <<if $Invisibility is false>>
+    [[Treat a patient]]
+    <</if>>\
+<</if>>\
 [[Enter the office]]
 [[Raid the cabinet]]
-[[Lave|Demo]]
+[[Leave|Demo]]
 
 :: Treat a patient
 You approach a patient.
@@ -2017,26 +2033,94 @@ You twist the doorknob. The door is locked.
 You knock on the door.
 <<if $NurseWork is false>> 
 The lock clicks and the door opens to reveal an attractive young nurse.
+<<if $Invisibility is true>>
+    She stares directly through you and appears confused. She slams the door shut in your face.
+    <<set $Knock to 1>>
+    [[Knock again]]
+    [[Raid the cabinet]]
+    [[Leave|Demo]]
+<<else>>
+    She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
 
-She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
+    You uncomfortably sit down across from her. She examines you for a while before talking.
+    <<if $Gorgon is true>>
+    You make eye contact, but it has no effect on her.
+    <</if>>
+    She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
 
-You uncomfortably sit down across from her. She examines you for a while before talking.
-<<if $Gorgon is true>>
-You make eye contact, but it has no effect on her.
+    [[Accept][$NurseWork to true]]
+    [[Decline]]
+    <<else>> 
+    The lock clicks and the door opens to reveal the nurse looking very annoyed with you.
+
+    She asks why you are bothering her and you can't think of a good answer.
+
+    [[Apologize to her|Nurse Apology]]
+    [[Hug her|Hug Nurse]]
+    <</if>> \
+    [[Insult her|Insult Nurse]]
+
+:: Knock again
+You knock on the door again. 
+
+The nurse opens the door and appears clearly frustrated there is nobody on the other end.
+
+[[Slip into her office]]
+[[Leave|Demo]]
+
+:: Slip into her office
+As she stares into the infirmary searching for a culprit, you stealthily slide into her office while avoiding detection.
+
+Eventually, she closes her door and gets back to work. She sits down at her desk and works on paperwork. 
+
+You take a seat in a chair as you wait for her to finish her work.
+
+Every so often, she becomes upset for some reason and lets out hissing noises. Eventually, something really upsets her and she stands from her chair. Talons extend from her fingers and she lashes out at a vase, destroying it with a thunderous clash.
+
+You flinch in surprise.
+
+She tilts her head to the side and her movements seize. She noticed your movement in the chair. A forked tongue flitters out of her mouth and she uses it to smells you.
+
+She makes her way over to you and wraps her talons around your invisible throat.
+<<if $UserPotions.length>>
+[[Throw a potion at her]]
+<<else>>
 <</if>>
-She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
 
-[[Accept][$NurseWork to true]]
-[[Decline]]
-<<else>> 
-The lock clicks and the door opens to reveal the nurse looking very annoyed with you.
+:: Throw a potion at her
+Select a potion to throw at the nurse:
 
-She asks why you are bothering her and you can't think of a good answer.
+<<listbox "$TempString" autoselect>>
+    <<optionsfrom $UserPotions>>
+<</listbox>>
 
-[[Apologize to her|Nurse Apology]]
-[[Hug her|Hug Nurse]]
-<</if>> \
-[[Insult her|Insult Nurse]]
+[[Throw|Throw Nurse]]
+
+:: Throw Nurse
+You throw the $TempString at her.
+
+<<switch $TempString>>
+    <<case 'Gorgon Potion'>>
+    The nurse sprouts snakes from her scalp and strangles you.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+    </div>
+    <<case 'Invisibility Potion'>>
+    The nurse also turns invisible and strangles you.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+    </div>
+    <<default>>
+    It has no useful effect.
+
+    The nurse strangles you.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+    </div>
+<</switch>>
 
 :: Accept
 You accept the nurse's work offer.
@@ -3131,3 +3215,43 @@ You feel your brain growing with great knowledge.
 
 [[Eat dinner]]
 [[Sleep]]
+
+:: Sleep
+You go to sleep.<br>
+<<if $Lust is true>>\
+    The effects of the Lust Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<<if $Gargoyle is true>>\
+    The effects of the Gargoyle Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<<if $Octopus is true>>\
+    The effects of the Octopus Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<<if $Octopus is true>>\
+    The effects of the Slime Potion wear off.
+    <<set $Slime to false>>
+<</if>>\
+<<if $Bat is true>>\
+    The effects of the Bat Potion wear off.
+    <<set $Bat to false; $NoHands to false>>
+<</if>>\
+<<if $Invisibility is true>>\
+    The effects of the Invisibility Potion wear off.
+    <<set $Invisibility to false>>
+<</if>>\
+You dream of an odd future that awaits you, but you can't quite make out the ending.
+
+Maybe it involves <<print $Dream.random()>>...?
+
+[[Wake Up|Demo]]
+
+<<for _i to 0; _i lt $PlantAge.length; _i++>>
+    <<if $PlantAge[_i] gt 0>>
+        <<set $PlantAge[_i] += 1>>
+    <</if>>
+<</for>>
+
+<<set $Day += 1; $NightTime to true>>
