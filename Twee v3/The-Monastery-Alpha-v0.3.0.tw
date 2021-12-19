@@ -41,7 +41,8 @@ Check fresh for history control. Does fresh work when going back and forth betwe
 
 Changelog v0.2.1
 -Players can drink potions
--Potions have effects (4/25) 
+-Potions have effects (4/25)
+-Gossip prioritizes unseen hints (Test) 
 -Reinstated fountain hint
 -Fixed bug where plants could be harvested one day before grown 
 -Fixed bug where legendary items could not be obtained as intended
@@ -62,7 +63,7 @@ Bug Log
 The Monastery
 
 :: StorySubtitle
-Version: Alpha 0.3.0
+Version: Alpha 0.2.1
 
 :: StoryData
 {
@@ -208,6 +209,7 @@ body.no-save #menu-item-saves {
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
 <<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed tests! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","What's the 4,1,1? Give me the lowdown."]>> 
+<<set $UnseenHints to clone($Hint)>>
 <<set $Notes to["I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Never trust a snake. Their scales may be dry, but they are truly slimy.","Sometimes, persistence is key. Trying things again might be the key to better results."]>>
 <<set $Poison to false>>
 <<set $Brew to false>>
@@ -1501,8 +1503,15 @@ You <<if $invisibility is true>>sneak a meal<<else>>finish your meal<</if>> and 
         /* Random Puzzle Solution - Incorporate other solutions and randomize - Make this a function() */ \
     <<else>>
         You manage to make out a snippet of their conversation.
-
-        //<<print $Hint.random()>>// 
+        <<if $UnseenHints.length>>\
+            <<set $TempString to $UnseenHints.random()>>\
+            <<run $Unseenhints.delete($TempString)>>\
+        <<else>>\
+            <<set $UnseenHints to clone($Hint)>>\
+            <<set $TempString to $UnseenHints.random()>>\
+            <<run $Unseenhints.delete($TempString)>>\            
+        <</if>>
+        //$TempString// 
     <</if>> 
 <</if>> \
 <<if $Ostra isnot true>>\
