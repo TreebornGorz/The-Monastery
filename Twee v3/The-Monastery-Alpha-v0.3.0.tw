@@ -35,14 +35,14 @@ Too many bad ends in bath house
 
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
-Changelog v0.3.0
+Changelog v0.2.1
 -Players can drink potions
--Potions have effects (Incomplete) 
--Fixed bug where plants could be harvested one day before grown (Test)
--Fixed bug where legendary items could not be obtained (Test)
--Fixed bug where the plant outside campus was glitched after the third collection (Incomplete)
+-Potions have effects (4/25) 
+-Fixed bug where plants could be harvested one day before grown 
+-Fixed bug where legendary items could not be obtained as intended
+-Fixed bug where the plant outside campus was glitched after the third collection
 -Fixed bug where a forest animal would be encountered multiple times before they had all been encountered
--Fixed typos
+-Fixed typos/spacing
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -1278,8 +1278,8 @@ You feel peaceful and satisfied.
 
         You pick it up. You obtain a $TempString. 
         <<run $UserLegendaryItems.pushUnique($TempString)>>
-    <<else>>
-        A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.
+    <<else>>\
+        A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.<br>
     <</if>>\
 <</if>>\
 <<set $NightTime to true>> /* Generate random daydreams to make this option more entertaining for the player */ \
