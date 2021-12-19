@@ -2294,7 +2294,7 @@ Either way, she seems displeased with your answer and furiously slithers away..
 You may want to be more careful around her in the future.
 <<set $NightTime to true>>                  
 You let out a tired sigh of relief and thank your lucky stars for surviving the encounter.
-
+/* Explore secret bath - WIP */
 [[Eat dinner]]
 [[Sleep]]
 
@@ -2377,14 +2377,21 @@ You see horses in their stables, a cow in the barn, and chickens in their coup. 
 :: Look for a person
 You decide to look for a person instead of blindly messing around with the animals.
 
-After a bit of searching, you eventually make contact with the campus farmer. She works as a professor and tends to the animals in her down time with the help of some of the students.
-<<if $Gorgon is true>>
-You avoid eye contact during your conversation.
-<</if>>
-In return for assisting her with her work, you will get access to the animals when she is not around.
+After a bit of searching, you eventually locate the campus farmer. 
+<<if $Invisibility is true>>
+    You figure that talking to her will be more productive when you are not invisible.
 
-[[Help her out]]
-[[Decline|Decline farmer]]
+    [[Leave|Demo]]
+<<else>>
+    She works as a professor and tends to the animals in her down time with the help of some of the students.
+    <<if $Gorgon is true>>
+    You avoid eye contact during your conversation.
+    <</if>>
+    In return for assisting her with her work, you will get access to the animals when she is not around.
+
+    [[Help her out]]
+    [[Decline|Decline farmer]]
+<</if>>
     
 :: Help her out
 You decide to help out the farmer with her work.
@@ -2448,13 +2455,13 @@ He will now allow you to ride him.
 [[Take him for a ride]]
 [[Wait for nightfall]]
 <<else>>
-You aure unsuccessful in calming the large creature.
+You<<if $Invisibility is true>>r invisible self is<<else>> are<</if>> unsuccessful in calming the large creature.
 
 A furious hoof makes direct contact with your temple killing you instantly.
 
 The horse continues kicking around hay and unintentionally covers your body, concealing it.
 
-You are not found until you begin smelling bad. And nobody noticed you were missing either.
+You are not found until you begin smelling bad<<if $Invisibility is true>> and your visibility has returned<</if>>. Nobody noticed you were missing.
 
 <div align='center' style='font-size: 300%;'>\
 <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
@@ -2467,8 +2474,9 @@ You approach the horse.
 [[Take him for a ride]]
 [[Wait for nightfall]]
 <<else>>
+<<<if $Invisibility is false>>>\
 He is excited to see you and anticipates going for a stroll.
-
+<</if>>\
 You saddle him and [[leave the barn|Ride]].
 <</if>>
 
@@ -2476,11 +2484,14 @@ You saddle him and [[leave the barn|Ride]].
 You saddle the horse and ride him out of the barn despite the consipicuous sunlight.
 
 You are immediately noticed by a student a reported for your misbehavior.
-
+<<if $Invisibility is true>>
+However, since you can't be identified no discipline befell you. You ismply return the horse to its stable and avoid further ruccus.
+<<else>>
 You recieve disciplinary actions for your misbehavior.
 
 You are now definitely socially ostracized if you weren't already.
 <<set $Ostra to true>>
+<</if>>\
 [[Leave|Demo]]
 
 
@@ -2583,7 +2594,7 @@ Your horse gets spooked for some reason and starts running. He tramples your che
 <<case "Tulip">>
 It tastes aromatic and gross.
 
-You stomach is upset.  
+Your stomach is upset.  
 <</switch>>
 <<if $TempString isnot "Poppy">>\
 [[Return to campus]]
@@ -2763,7 +2774,7 @@ You take the $TempString1 seeds.
 :: Fight
 You fight the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
 <<if $Weapon is true or $UserLegendaryItems.includes('Sword of Siren Slaying')>>
-You defeat the <<if $NightTime is true>>monster<<else>>$TempString<</if>> using your weapon.
+    You defeat the <<if $NightTime is true>>monster<<else>>$TempString<</if>> using your weapon.
     <<if $TempString is "Bat">> \
         <<set $Reward to "Bat Wing">> \
     <<elseif $TempString is "Slime">> \
@@ -2774,32 +2785,41 @@ You defeat the <<if $NightTime is true>>monster<<else>>$TempString<</if>> using 
     <<if Fresh()>>\
         <<run $UserIngredients.push($Reward)>> \
     <</if>>
-You obtain $Reward.
-<<set $NightTime to true>>
-You notice a tomb in the distance.
+    You obtain $Reward.
+    <<set $NightTime to true>>
+    You notice a tomb in the distance.
 
-[[Investigate the tomb|Tomb]]
-[[Leave forest]]
+    [[Investigate the tomb|Tomb]]
+    [[Leave forest]]
 <<else>>
 You punch at the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
     <<if $TempString is "Bat">>
-    A bat simply evades your punch\
-        <<if $Gorgon is true>>. As he closes in to bite you, you make eye contact and turn him to stone, escaping the confrontation.
-        
-        You notice a tomb in the distance.
+        <<if $Invisibility is true>>
+            Your punch simply bounces off, doing him no harm. The bat flies away, unable to see you and therefore unable to retaliate.
+            
+            You notice a tomb in the distance.
 
-        [[Investigate the tomb|Tomb]]
-        [[Leave forest]]\
-        <<else>> and bites you.
+            [[Investigate the tomb|Tomb]]
+            [[Leave forest]]
+        <<else>>
+            <<if $NightTime is true>>A bat<<else>>It<</if>> simply evades your punch\
+            <<if $Gorgon is true>>. As he closes in to bite you, you make eye contact and turn him to stone, escaping the confrontation.
+            
+            You notice a tomb in the distance.
 
-        You get rabies and die from fear of water.\
+            [[Investigate the tomb|Tomb]]
+            [[Leave forest]]\
+            <<else>> and bites you.
+
+            You get rabies and die from fear of water.\
+            <</if>>
         <</if>>
     <<elseif $TempString is "Slime">>
-    You punch a slime and your fist sinks into it.
+    You punch <<if $NightTime is true>>a slime<<else>>it<</if>> and your fist sinks into it.
 
     It sucks you in and swallows you up.
     <<elseif $TempString is "Newt">>
-    You punch a newt and its poison contacts your skin.
+    You punch <<if $NightTime is true>>a newt<<else>>it<</if>> and its poison contacts your skin.
 
     The poison paralyzes you and you die of starvation, lying in the forest.
     <</if>>
@@ -3009,9 +3029,14 @@ You sling tools around like a dufus.
 You manage to make contact with lots of metal things and generate much noise in the process.
 
 It seems to have woken up the blacksmith, who makes his way into the forge rubbing the sleep from his eyes.
-
+<<if $Invisible is false>>
 [[Stop smashing random metal things together and talk to him|Blacksmith]]
 [[Be dumb]]
+<<else>>
+The smith can't fathom or logically reconcile his tools floating around the forge and clinking together. He assumes he must still be dreaming and falls back asleep.
+
+[[Leave|Demo]]
+<</if>>
 
 :: Blacksmith
 After correcting your behavior, the smith asks if you would like to work with him as a student apprentice.
@@ -3054,13 +3079,18 @@ The brewmaster is asleep in a corner.
 You shake the brewmaster until he comes to.
 
 He knocks over a few empty bottles as he slowly stands up. 
+<<if $Invisibility is false>>
+    He happily welcomes you to the brewery and invites you to work with him.
+    <<if $Gorgon is true>>
+    You evade his gaze.
+    <</if>>
+    [[Agree|Yes Brew]]
+    [[Decline|No Brew]]
+<<else>>
+    He doesn't notice anybody around and resumes resting.
 
-He happily welcomes you to the brewery and invites you to work with him.
-<<if $Gorgon is true>>
-You evade his gaze.
+    [[Leave|Demo]]
 <</if>>
-[[Agree|Yes Brew]]
-[[Decline|No Brew]]
 
 :: Yes Brew
 The brewmaster doesn't seem too bad and you decide to take up his craft.
@@ -3101,9 +3131,11 @@ After waiting for a few minutes without any activity, you become impatient.
 
 :: Wait Patiently
 You figure that scouring through random items in the classroom might not be a good idea, so you simply wait for class to start...
-
+<<if $Invisibility is true>>
+You find a spot in the back of the classrom to invisibly observe.
+<</if>>
 Eventually, students begin filtering into the classroom, and settling into their respective seats. 
-<<if $ClassFriend is false>>
+<<if $ClassFriend is false and $Invisibility is false>>
     A large, muscular brute of a woman walks through the door. Her school uniform doesn't seem to fit her quite right as certain muscles on her body bulge out, stretching the fabric in odd places. 
     <<set $ClassFriend to true>>  
     You chuckle quietly at the sight, but do your best to contain the noise since you imagine she could easily smash your skull should the desire ever arise.
@@ -3117,6 +3149,7 @@ Eventually, students begin filtering into the classroom, and settling into their
     [[Lash out in self defense]]
 <<else>>
 The professor enters and [[class begins|Class]]. 
+<</if>>
 <</if>>
 
 :: Ignore her
@@ -3157,7 +3190,7 @@ You have made a friend<<if $Ostra is true>> despite being socially ostracized<</
 :: Search the Classroom
 You can't handle waiting for class to start and your curiosity gets the better of you.
 <<set $ClassSearch to true>>
-You survey the classroom and notice a few objects of interest.
+You survey the classroom and notice a few areas of interest.
 
 [[Steal from the bookshelf]]
 [[Open the desk drawers]]
@@ -3166,10 +3199,15 @@ You survey the classroom and notice a few objects of interest.
 You dig around the bookshelf searching for something valuable to steal.
 /* Incorporate something valuable that can be stolen from here */
 Just as you do, the professor and multiple students walk through the door.
+<<if $Invisibility is true>>
+You manage to returns the books to the shelf before anybody notices.
 
+You find a spot in the back of the classrom to invisibly observe and [[class begins|Class]].
+<<else>>
 You are able to convince them that you had forgotten your textbook and needed to borrow a replacement.
 
 You take a seat and [[class begins|Class]].
+<</if>>
 
 :: Open the desk drawers
 You open the drawers of the teacher's desk.
@@ -3190,15 +3228,30 @@ You read through the document. It is an onboarding document for new professors.
 
 It describes the accomodations in the staff dormitory and provides a passphrase for access.
 
-You <b>memorize the passphrase</b> and [[return to your seat|Return to your seat]].
+You <b>memorize the passphrase</b> and <<if $Invisibility is true>>find a spot in the back of the classrom to invisibly observe and [[class begins|Class]]<<else>>[[return to your seat|Return to your seat]].<</if>>
 <<else>>
 Just as you do, the professor and multiple students walk through the door.
-<<set $Ostra to true>>
-You are caught red handed as you nervously stuff the paper back into the desk.
+<<if $Invisibility is true>>
+    They don't notice your presence since you are invisible.
+    
+    You manage to conceal the document and simply wait for class to end to return it to the desk.
 
-The students take notice of your behavior. <b>You have become socially ostracized.</b> You will now have trouble making friends.
+    You read through the document. It is an onboarding document for new professors. 
 
-The professor shows you mercy and merely demands that you [[return to your seat|Return to your seat]].
+    It describes the accomodations in the staff dormitory and provides a passphrase for access.
+
+    You <b>memorize the passphrase</b>.
+
+    [[Eat dinner]]
+    [[Sleep]] 
+<<else>>\
+    <<set $Ostra to true>>
+    You are caught red handed as you nervously stuff the paper back into the desk.
+
+    The students take notice of your behavior. <b>You have become socially ostracized.</b> You will now have trouble making friends.
+
+    The professor shows you mercy and merely demands that you [[return to your seat|Return to your seat]].
+    <</if>>
 <</if>>
 
 :: Return to your seat
