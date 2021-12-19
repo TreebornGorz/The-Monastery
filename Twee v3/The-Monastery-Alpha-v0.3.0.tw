@@ -4,33 +4,28 @@ Test:
 
 Unfinished Tasks: 
 
-Evaluate using clone() for _var to $var -> _var to clone($var)
-
-Check if Invisibility breaks Gorgon conditionals 
-
 Prioritize unseen hints
 
-Prevent player from entering menu to drink potions to prevent loss - Use fresh()
+Prevent player from entering menu to drink potions to prevent loss - Feature or bug?
 Petrified NPCs are stuck in the area after being petrified. Update area descriptions.
 
-Prevent player from drinking potions when they have no arms
 Drinking certain potions should nullify the effects of other potions; i.e. certain transformations may be incompatible with one another
 
 Isolate Fresh conditionals
 
 Harvest buttons should take player to a passage that explains they have harvested and then bring them back to the harvest screen.
 
-Determine the number of relationships
+Determine the number of NPCs
 
 Incorporate teacher item effects
 
 Incorporate Potion effects
-Establish relationships
+Establish NPCs/relationships
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
 Incorporate events that occur if player doesn't take an action in a certain amount of time 
 Inspecting the stained glass foreshadows certain endings; begin with randomization; consider filtering based on available endings
 Figure out $SirenPet mechanics, filters all future options if true based on the siren's preferences, provides options that wouldn't  normally exist to lead to unique endings based on other pre-existing boolean variable values
-Create separate passage for exploring campus at night? Requires a portable light?
+Create separate passage for exploring campus at night? Requires night vision?
 Create mechanic for collecting/ingesting secret bath water
 Expand library options
 
@@ -410,16 +405,16 @@ You have been imbued with a holy power.
 
 :: Potions [noreturn menu]
 <<if $NoHands is true>>\
-You cannot drink or examine potions. You have no hands!
+    You cannot drink or examine potions. You have no hands!
 <<else>>\
-Your Potions: 
-<<for _i to 0; _i lt $UserPotions.length; _i++>>
-    <<capture _i>>
-        $UserPotions[_i]: <<link [['Drink ' + $UserPotions[_i]|Drink Potion]]>><<set $Temp to $UserPotions[_i]>><</link>> <<link [['Examine ' + $UserPotions[_i]|Examine Potion]]>><<set $Temp to $UserPotions[_i]>><</link>>
-    <</capture>>
-<</for>>
-[[Return to Inventory|Inventory]]
-[[Return to Game|previous()]]
+    Your Potions: 
+    <<for _i to 0; _i lt $UserPotions.length; _i++>>
+        <<capture _i>>
+            $UserPotions[_i]: <<link [['Drink ' + $UserPotions[_i]|Drink Potion]]>><<set $Temp to $UserPotions[_i]>><</link>> <<link [['Examine ' + $UserPotions[_i]|Examine Potion]]>><<set $Temp to $UserPotions[_i]>><</link>>
+        <</capture>>
+    <</for>>
+    [[Return to Inventory|Inventory]]
+    [[Return to Game|previous()]]
 <</if>>
 
 :: Drink Potion [noreturn]
@@ -588,6 +583,7 @@ You drink the $Temp.
 <<if $Disintegration is true or $Poison is true or $TempDeath is true or $Temp is 'Droopy Juice' or $Temp is 'Sedative'>>
 <<else>>\
 [[Continue|$return]]
+<</if>>
 <</if>>
 
 :: Examine Potion [menu noreturn]
