@@ -4,7 +4,11 @@ Test:
 
 Unfinished Tasks: 
 
+Incorporate Blinding Potion effect
+
 Prioritize unseen hints
+
+Polish blind dorm exploration
 
 Prevent player from entering menu to drink potions to prevent loss - Feature or bug?
 Petrified NPCs are stuck in the area after being petrified. Update area descriptions.
@@ -734,12 +738,16 @@ Are you Male or Female?
 You enter the dormitory.
 
 The hallway forks. One direction leads to the male dorm, the other leads to the female dorm. 
-
-You notice a suspicious latch on the ceiling.
-/* WIP - Blind give left vs right */
-[[Male dorm]]
-[[Female dorm]]
-[[Pull latch]]
+<<if $Blind is true>>
+    [[Go left|Male dorm]]
+    [[Gor right|Female dorm]]
+<<else>>
+    You notice a suspicious latch on the ceiling.
+    /* WIP - Blind give left vs right */
+    [[Male dorm]]
+    [[Female dorm]]
+    [[Pull latch]]
+<</if>>
 
 :: Male dorm
 You enter the <<if $Blind is false>>male <</if>>dorm\
@@ -756,8 +764,11 @@ You enter the <<if $Blind is false>>male <</if>>dorm\
         [[Explore]]
         [[Sleep]]        
         [[Leave|Demo]]
-    <<else>>
+    <<elseif $Male is true>>
         [[Sleep|Sleep Blind]]
+        [[Leave|Demo]]
+    <<else>>
+        [[Sleep]]        
         [[Leave|Demo]]
     <</if>>
 <</if>>
@@ -824,17 +835,23 @@ You are worried that you are not supposed to be here and that somebody might not
         [[Explore]]
         [[Sleep]]        
         [[Leave|Demo]]
-    <<else>>
+    <<elseif $Male is false>>
         [[Sleep|Sleep Blind]]
+        [[Leave|Demo]]
+    <<else>>
+        [[Sleep]]        
         [[Leave|Demo]]
     <</if>>
 <</if>>
 
 :: Explore
-You explore the dormitory.
+You explore the dormitory. \
 /* If you get caught then ostracized, chance to find a clue or item such as a potion or seeds */
+<<if $Blind is true>>
+You can't see anything.
+<<else>>
 You find nothing of interest.
-
+<</if>>
 [[Sleep]]
 [[Leave|Demo]]
         
@@ -862,7 +879,7 @@ You find nothing of interest.
 
 :: Eavesdrop
 <<if $Ostra is true and $Invisibility is false>> 
-The students notice you eavesdropping<<if $Gorgon is true>>.
+The students notice you eavesdropping<<if $Gorgon is true and $Blind is false>>.
 
     [[Look them in the eyes]]
     [[Spare their lives]]
@@ -1056,7 +1073,7 @@ Your foot slips and you fall onto the floor, making a noise.
 <<else>>\
     over, staring you in the eyes. You have been caught.<br>
 <</if>>\
-<<if $Gorgon is true>>\
+<<if $Gorgon is true and $Blind is false>>\
     [[Stare into their eyes]]
 <</if>>\
 <<if $UserPotions.length gt 0>>\
@@ -1077,7 +1094,7 @@ Due to your invisibility, the teacher has no idea you are there.
 <<else>>
 You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.<br><br>
 <</if>>\
-<<if $Gorgon is true>>\
+<<if $Gorgon is true and $Blind is false>>\
 [[Stare into their eyes]]
 <</if>>\
 <<if $UserPotions.length gt 0>>\
@@ -1105,7 +1122,7 @@ They are doused in your $TempString.
 <<run $UserPotions.delete($TempString)>>\
 <<switch $TempString>>
     <<case 'Gorgon Potion'>>
-    The teacher sprouts snakes from their scalp<<if $Invisibility is true>>, but is unable to make eye contact due to your invisibility.
+    The teacher sprouts snakes from their scalp<<if $Invisibility is true or $Blind is true>>, but is unable to make eye contact due to your <<if $invisibility is true>>invisibility<<elseif $Blind is true>>eyes being closed<</if>>.
     
     [[Leave|Demo]]<<else>> and makes eye contact with you.
 
@@ -1419,7 +1436,7 @@ After a hard day's work, you enter the refectory for a meal.
 <<set $NightTime to true>>    
 You take a seat at a table and eat your meal surrounded by the other students.
 
-<<if $Gorgon is true>>\
+<<if $Gorgon is true and $Blind is false>>\
 [[Turn them to stone]]
 <</if>>\
 [[Listen to gossip]]
@@ -1519,7 +1536,7 @@ You grab your meal and move to a location <<if $Invisibility is true>>where you 
 /* If relationship, can be approached intiating an event */
 You enjoy your meal and feel satisfied.
 
-<<if $Gorgon is true>>\
+<<if $Gorgon is true and $Blind is false>>\
 [[Turn the other students to stone|Turn them to stone]]
 <</if>>\
 [[Sleep]]
@@ -1556,7 +1573,7 @@ You find another student studying and pull them away from their work.
 The student is obviously annoyed with you. You are undeterred. 
 
 You probe them seeking the secrets of The Monastery.
-<<if $Gorgon is true>>
+<<if $Gorgon is true and $Blind is false>>
     As your eyes meet, the student turns to stone.
     <<set $GorgonPrey to true>>
     You nervously [[flee the library|Demo]]. /* Changed on return */
@@ -1972,7 +1989,7 @@ You attempt to escape... unsuccessfully.
 Despite being invisible, fleeing through the water provided the creature with a clear indication of your location.
 <</if>>
 The creature catches you<<if $Invisibility is false>> and stares its prey in the eyes<</if>>.
-<<if $Gorgon is true>>
+<<if $Gorgon is true and $Blind is false>>
 Your gaze has no effect on her<<if $Invisibility is true>> since she can't see your eyes<<if>>.
 <</if>>
 She lifts you into the air. You feel talons on your skin.
@@ -2108,7 +2125,7 @@ The lock clicks and the door opens to reveal an attractive young nurse.
         She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
 
         You uncomfortably sit down across from her. She examines you for a while before talking.
-        <<if $Gorgon is true>>
+        <<if $Gorgon is true and $Blind is false>>
             You make eye contact, but it has no effect on her.
         <</if>>
         She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
@@ -2449,7 +2466,7 @@ After a bit of searching, you eventually locate the campus farmer.
     [[Leave|Demo]]
 <<else>>
     She works as a professor and tends to the animals in her down time with the help of some of the students.
-    <<if $Gorgon is true>>
+    <<if $Gorgon is true and $Blind is false>>
     You avoid eye contact during your conversation.
     <</if>>
     In return for assisting her with her work, you will get access to the animals when she is not around.
@@ -2868,7 +2885,7 @@ You punch at the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
             [[Leave forest]]
         <<else>>
             <<if $NightTime is true>>A bat<<else>>It<</if>> simply evades your punch\
-            <<if $Gorgon is true>>. As he closes in to bite you, you make eye contact and turn him to stone, escaping the confrontation.
+            <<if $Gorgon is true and $Blind is false>>. As he closes in to bite you, you make eye contact and turn him to stone, escaping the confrontation.
             
             You notice a tomb in the distance.
 
@@ -3066,7 +3083,7 @@ Whoever used them last must not be too organized.
 You are no longer welcome here.
 
 The smith stands in your way.
-    <<if $Gorgon is true>>
+    <<if $Gorgon is true and $Blind is false>>
     [[Make eye contact]]
     <</if>>\
     <<if $UserPotions.length>>\
@@ -3115,7 +3132,7 @@ The smith can't fathom or logically reconcile his tools floating around the forg
 
 :: Blacksmith
 After correcting your behavior, the smith asks if you would like to work with him as a student apprentice.
-<<if $Gorgon is true>>
+<<if $Gorgon is true and $Blind is false>>
 You avert your gaze.
 <</if>>
 You gladly agree. After showing you around the equipment, he hands you a hammer of your own.
@@ -3156,7 +3173,7 @@ You shake the brewmaster until he comes to.
 He knocks over a few empty bottles as he slowly stands up. 
 <<if $Invisibility is false>>
     He happily welcomes you to the brewery and invites you to work with him.
-    <<if $Gorgon is true>>
+    <<if $Gorgon is true and $Blind is false>>
     You evade his gaze.
     <</if>>
     [[Agree|Yes Brew]]
