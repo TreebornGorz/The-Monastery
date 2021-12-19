@@ -3029,7 +3029,7 @@ You sling tools around like a dufus.
 You manage to make contact with lots of metal things and generate much noise in the process.
 
 It seems to have woken up the blacksmith, who makes his way into the forge rubbing the sleep from his eyes.
-<<if $Invisible is false>>
+<<if $Invisibility is false>>
 [[Stop smashing random metal things together and talk to him|Blacksmith]]
 [[Be dumb]]
 <<else>>
