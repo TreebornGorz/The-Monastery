@@ -38,6 +38,7 @@ Check fresh for history control. Does fresh work when going back and forth betwe
 Changelog v0.2.1
 -Players can drink potions
 -Potions have effects (4/25) 
+-Reinstated fountain hint
 -Fixed bug where plants could be harvested one day before grown 
 -Fixed bug where legendary items could not be obtained as intended
 -Fixed bug where the plant outside campus was glitched after the third collection
@@ -202,7 +203,7 @@ body.no-save #menu-item-saves {
 <<set $HolyPower to false>>
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
-<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed tests! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random."]>> /* "What's the 411? Give me the lowdown." , add after single faucet function */
+<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed tests! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","What's the 4,1,1? Give me the lowdown."]>> 
 <<set $Notes to["I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Never trust a snake. Their scales may be dry, but they are truly slimy.","Sometimes, persistence is key. Trying things again might be the key to better results."]>>
 <<set $Poison to false>>
 <<set $Brew to false>>
@@ -735,29 +736,82 @@ You enter the dormitory.
 The hallway forks. One direction leads to the male dorm, the other leads to the female dorm. 
 
 You notice a suspicious latch on the ceiling.
-
+/* WIP - Blind give left vs right */
 [[Male dorm]]
 [[Female dorm]]
 [[Pull latch]]
 
 :: Male dorm
-You enter the male dorm<<if $Male is false>> even though you are female. 
+You enter the <<if $Blind is false>>male <</if>>dorm\
+<<if $Male is false and $Blind is false>> even though you are female. 
 
-You are worried that you are not supposed to be here and that somebody might notice you snooping around.
-
-[[Leave dorm]]
-[[Stick around]]
+    You are worried that you are not supposed to be here and that somebody might notice you snooping around.
+    
+    [[Leave dorm]]
+    [[Stick around]]
 <<else>>.
 
-This is where you belong. 
-
-[[Explore]]
-[[Sleep]]
-[[Leave|Demo]]
+    <<if $Blind is false>>
+        This is where you belong. 
+        [[Explore]]
+        [[Sleep]]        
+        [[Leave|Demo]]
+    <<else>>
+        [[Sleep|Sleep Blind]]
+        [[Leave|Demo]]
+    <</if>>
 <</if>>
 
+:: Sleep Blind
+You fall asleep.
+
+Unfortunately, you are in the wrong dorm.
+
+The other students freak out.
+<<set $Ostra to true>>
+<b>You have been socially ostracized.</b><br>
+<<if $Lust is true>>\
+    The effects of the Lust Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<<if $Gargoyle is true>>\
+    The effects of the Gargoyle Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<<if $Octopus is true>>\
+    The effects of the Octopus Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<<if $Octopus is true>>\
+    The effects of the Slime Potion wear off.
+    <<set $Slime to false>>
+<</if>>\
+<<if $Bat is true>>\
+    The effects of the Bat Potion wear off.
+    <<set $Bat to false; $NoHands to false>>
+<</if>>\
+<<if $Invisibility is true>>\
+    The effects of the Invisibility Potion wear off.
+    <<set $Invisibility to false>>
+<</if>>\
+<<if $Blind is true>>\
+    The effects of the Blinding Potion wear off.
+    <<set $Blind to false>>
+<</if>>\
+
+[[Wake Up|Demo]]
+
+<<for _i to 0; _i lt $PlantAge.length; _i++>>
+    <<if $PlantAge[_i] gt 0>>
+        <<set $PlantAge[_i] += 1>>
+    <</if>>
+<</for>>
+
+<<set $Day += 1; $NightTime to true>>
+
 :: Female dorm
-You enter the female dorm<<if $Male is true>>  even though you are male. 
+You enter the <<if $Blind is false>>female <</if>>dorm\
+<<if $Male is true and $Blind is false>>  even though you are male. 
 
 You are worried that you are not supposed to be here and that somebody might notice you snooping around.
 
@@ -765,11 +819,15 @@ You are worried that you are not supposed to be here and that somebody might not
 [[Stick around]]
 <<else>>.
 
-This is where you belong.
-
-[[Explore]]
-[[Sleep]]
-[[Leave|Demo]]
+    <<if $Blind is false>>
+        This is where you belong. 
+        [[Explore]]
+        [[Sleep]]        
+        [[Leave|Demo]]
+    <<else>>
+        [[Sleep|Sleep Blind]]
+        [[Leave|Demo]]
+    <</if>>
 <</if>>
 
 :: Explore
@@ -3310,6 +3368,10 @@ You go to sleep.<br>
 <<if $Invisibility is true>>\
     The effects of the Invisibility Potion wear off.
     <<set $Invisibility to false>>
+<</if>>\
+<<if $Blind is true>>\
+    The effects of the Blinding Potion wear off.
+    <<set $Blind to false>>
 <</if>>\
 You dream of an odd future that awaits you, but you can't quite make out the ending.
 
