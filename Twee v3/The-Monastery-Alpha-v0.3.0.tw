@@ -4,6 +4,8 @@ Test:
 
 Unfinished Tasks: 
 
+Check if Invisibility breaks Gorgon conditionals 
+
 Prioritize unseen hints
 
 Prevent player from entering menu to drink potions to prevent loss - Use fresh()
@@ -499,7 +501,7 @@ You drink the $Temp.
 
         You fall to the ground.
 
-        Some time later, [[you regain consciousness|Tomb]].
+        Some time later, [[you regain consciousness|Tomb]]. /* WIP */
         <<set $TempDeath to true>>
     <<case 'Intangibility Potion'>>
         <<set $Intangibility to true>>
@@ -1592,9 +1594,9 @@ You approach the potion station.
 
     <</nobr>><<if _Ingredients.includesAll('Eye of Newt','Bat Wing')>>\
         <<set $PotionTable to "Gorgon Potion">>\
-    <<elseif _Ingredients.includesAll('Eye of Newt','Nightshade')>>\
-        <<set $PotionTable to "Invisibility Potion">>\
     <<elseif _Ingredients.includesAll('Eye of Newt','Hemlock')>>\
+        <<set $PotionTable to "Invisibility Potion">>\
+    <<elseif _Ingredients.includesAll('Eye of Newt','Nightshade')>>\
         <<set $PotionTable to "Blinding Potion">>\
     <<elseif _Ingredients.includesAll('Eye of Newt','Milk')>>\
         <<set $PotionTable to "Vision Milk">>\
