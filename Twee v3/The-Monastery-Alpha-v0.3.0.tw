@@ -42,7 +42,8 @@ Check fresh for history control. Does fresh work when going back and forth betwe
 Changelog v0.2.1
 -Players can drink potions
 -Potions have effects (4/25)
--Gossip prioritizes unseen hints (Test) 
+-Introduced Holy Water
+-Gossip prioritizes unseen hints  
 -Reinstated fountain hint
 -Fixed bug where plants could be harvested one day before grown 
 -Fixed bug where legendary items could not be obtained as intended
@@ -273,6 +274,7 @@ body.no-save #menu-item-saves {
 /* Potion Effects */
 <<set $Gorgon to false>>
 <<set $Invisibility to false>>
+<<set $Blind to false>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -585,12 +587,14 @@ You drink the $Temp.
     <<case 'Pre-Workout'>>
         You feel full of protein and stoked to pump some iron.
     <<case 'Sour Milk'>> 
-        It is chunky and disgusting. Your stomach is upset. 
+        It is chunky and disgusting. Your stomach is upset.
+    <<case 'Holy Water'>>
+        You have been purified. You are now fully human.
+        <<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
 <</switch>>\
 <<if $Disintegration is true or $Poison is true or $TempDeath is true or $Temp is 'Droopy Juice' or $Temp is 'Sedative'>>
 <<else>>\
 [[Continue|$return]]
-<</if>>
 <</if>>
 
 :: Examine Potion [menu noreturn]
@@ -658,6 +662,8 @@ You examine the $Temp.
         It is standard poison.
     <<case 'Truth Serum'>>
         A beautiful silver liquid swirls around the vial, producing mesmerizing striations.
+    <<case 'Holy Water'>>
+        It looks like normal water.
     <<default>>
         It looks like $Temp in a phial.
 <</switch>>
@@ -1199,7 +1205,7 @@ You spend the remainder of your day paying homage to the figure before you.
 [[Sleep]]
 
 :: Search the temple
-You search the temple and find nothing of interest.
+You search the temple and find <<if $UserPotions.includes('Holy Water')>>nothing of interest.<<else>>Holy Water. <<run $UserPotions.pushUnique('Holy Water')>><</if>>
 
 [[Pray at a pew]] 
 [[Pray to the statue][$Holy += 1]]
@@ -1505,11 +1511,11 @@ You <<if $invisibility is true>>sneak a meal<<else>>finish your meal<</if>> and 
         You manage to make out a snippet of their conversation.
         <<if $UnseenHints.length>>\
             <<set $TempString to $UnseenHints.random()>>\
-            <<run $Unseenhints.delete($TempString)>>\
+            <<run $UnseenHints.delete($TempString)>>\
         <<else>>\
             <<set $UnseenHints to clone($Hint)>>\
             <<set $TempString to $UnseenHints.random()>>\
-            <<run $Unseenhints.delete($TempString)>>\            
+            <<run $UnseenHints.delete($TempString)>>\            
         <</if>>
         //$TempString// 
     <</if>> 
@@ -1611,7 +1617,9 @@ You notice a door to a back room.
 
 [[Open door|LibraryDoor]]
 [[Study]]
+<<if $Invisibiility is false>>\
 [[Interrupt another student]]
+<</if>>\
 [[Leave|Demo]]
 
 :: LibraryDoor
@@ -1670,137 +1678,143 @@ You approach the potion station.
 <<set _IngredientList to []>>\
 
 :: Create potion [noreturn, Test]
-<<if $FirstIngredient is $SecondIngredient>>\
-    You selected the same ingredient twice.
+<<if $NoHands is true>>\
+You need hands in order to brew a potion.
 
-    This will have no effect.
-
-    [[Go back|previous()]]
+[[Leave|Demo]]
 <<else>>\
-    /* Find potion in potion table */
-    <<set _Ingredients to []; _Bool to true>>\
-    <<run _Ingredients.push ($FirstIngredient); _Ingredients.push ($SecondIngredient)>><<nobr>>
+    <<if $FirstIngredient is $SecondIngredient>>\
+        You selected the same ingredient twice.
 
-    <</nobr>><<if _Ingredients.includesAll('Eye of Newt','Bat Wing')>>\
-        <<set $PotionTable to "Gorgon Potion">>\
-    <<elseif _Ingredients.includesAll('Eye of Newt','Nightshade')>>\
-        <<set $PotionTable to "Invisibility Potion">>\
-    <<elseif _Ingredients.includesAll('Eye of Newt','Hemlock')>>\
-        <<set $PotionTable to "Blinding Potion">>\
-    <<elseif _Ingredients.includesAll('Eye of Newt','Milk')>>\
-        <<set $PotionTable to "Vision Milk">>\
-    <<elseif _Ingredients.includesAll('Eye of Newt','Poppy')>>\
-        <<set $PotionTable to "Vision Potion">>\
-    <<elseif _Ingredients.includesAll('Eye of Newt','Tulip')>>\
-        <<set $PotionTable to "Love Potion">>\
-    <<elseif _Ingredients.includesAll('Eye of Newt','Mushroom')>>\
-        <<set $PotionTable to "X-ray Potion">>\
-    <<elseif _Ingredients.includesAll('Eye of Newt','Marijuana')>>\
-        <<set $PotionTable to "Philosophy Potion">>\
-    <<elseif _Ingredients.includesAll('Eye of Newt','Ale')>>\
-        <<set $PotionTable to "Vision Ale">>\
-    <<elseif _Ingredients.includesAll('Bat Wing','Nightshade')>>\
-        <<set $PotionTable to "Vampire Potion">>\
-    <<elseif _Ingredients.includesAll('Bat Wing','Hemlock')>>\
-        <<set $PotionTable to "Undead Potion">>\
-    <<elseif _Ingredients.includesAll('Bat Wing','Milk') or _Ingredients.includesAll('Nightshade','Milk')>>\
-        <<set $PotionTable to "Chocolate Milk">>\
-    <<elseif _Ingredients.includesAll('Bat Wing','Poppy') or _Ingredients.includesAll('Hemlock','Tulip')>>\
-        <<set $PotionTable to "Succubus Potion">>\
-    <<elseif _Ingredients.includesAll('Bat Wing','Tulip')>>\
-        <<set $PotionTable to "Incubus Potion">>\
-    <<elseif _Ingredients.includesAll('Bat Wing','Mushroom')>>\
-        <<set $PotionTable to "Bat Potion">>\
-    <<elseif _Ingredients.includesAll('Bat Wing','Ale') or _Ingredients.includesAll('Nightshade','Ale')>>\
-        <<set $PotionTable to "Porter">>\
-    <<elseif _Ingredients.includesAll('Nightshade','Hemlock')>>\
-        <<set $PotionTable to "Curse Potion">>\
-    <<elseif _Ingredients.includesAll('Nightshade','Poppy')>>\
-        <<set $PotionTable to "Nightmare Potion">>\
-    <<elseif _Ingredients.includesAll('Nightshade','Tulip')>>\
-        <<set $PotionTable to "Lust Potion">>\
-    <<elseif _Ingredients.includesAll('Nightshade','Mushroom')>>\
-        <<set $PotionTable to "Demon Potion">>\
-    <<elseif _Ingredients.includesAll('Nightshade','Marijuana')>>\
-        <<set $PotionTable to "Depression Potion">>\
-    <<elseif _Ingredients.includesAll('Hemlock','Milk') or _Ingredients.includesAll('Hemlock','Poppy') or _Ingredients.includesAll('Hemlock','Marijuana') or _Ingredients.includesAll('Hemlock','Ale')>>\
-        <<set $PotionTable to "Poison">>\
-    <<elseif _Ingredients.includesAll('Hemlock','Mushroom')>>\
-        <<set $PotionTable to "Temporary Death Potion">>\
-    <<elseif _Ingredients.includesAll('Hemlock','Egg')>>\
-        <<set $PotionTable to "Rotten Egg">>\
-    <<elseif _Ingredients.includesAll('Milk','Poppy') or _Ingredients.includesAll('Ale','Poppy')>>\
-        <<set $PotionTable to "Sedative">>\
-    <<elseif _Ingredients.includesAll('Milk','Tulip')>>\
-        <<set $PotionTable to "Perfume">>\
-    <<elseif _Ingredients.includesAll('Milk','Mushroom')>>\
-        <<set $PotionTable to "Magic Milk">>\
-    <<elseif _Ingredients.includesAll('Milk','Marijuana')>>\
-        <<set $PotionTable to "Green Milk">>\
-    <<elseif _Ingredients.includesAll('Milk','Egg')>>\
-        <<set $PotionTable to "Milkshake">>\
-    <<elseif _Ingredients.includesAll('Milk','Ale')>>\
-        <<set $PotionTable to "Milk Stout">>\
-    <<elseif _Ingredients.includesAll('Poppy','Mushroom') or _Ingredients.includesAll('Poppy','Marijuana')>>\
-        <<set $PotionTable to "Droopy Juice">>\
-    <<elseif _Ingredients.includesAll('Tulip','Ale')>>\
-        <<set $PotionTable to "Fragrant Ale">>\
-    <<elseif _Ingredients.includesAll('Mushroom','Marijuana')>>\
-        <<set $PotionTable to "Truth Serum">>\
-    <<elseif _Ingredients.includesAll('Mushroom','Ale')>>\
-        <<set $PotionTable to "Funky Dragon">>\
-    <<elseif _Ingredients.includesAll('Marijuana','Ale')>>\
-        <<set $PotionTable to "Green Dragon">>\
-    <<elseif _Ingredients.includesAll('Egg','Ale')>>\
-        <<set $PotionTable to "Pre-Workout">>\
-    <<elseif _Ingredients.includesAll('Slime','Eye of Newt')>>\
-        <<set $PotionTable to "Intangibility Potion">>\
-    <<elseif _Ingredients.includesAll('Slime','Bat Wing')>>\
-        <<set $PotionTable to "Gargoyle Potion">>\
-    <<elseif _Ingredients.includesAll('Slime','Nightshade')>>\
-        <<set $PotionTable to "Octopus Potion">>\
-    <<elseif _Ingredients.includesAll('Slime','Hemlock')>>\
-        <<set $PotionTable to "Disintegration Potion">>\
-    <<elseif _Ingredients.includesAll('Slime','Milk')>>\
-        <<set $PotionTable to "Sour Milk">>\
-    <<elseif _Ingredients.includesAll('Slime','Mushroom') or _Ingredients.includesAll('Slime','Poppy')>>\
-        <<set $PotionTable to "Slime Potion">>\
+        This will have no effect.
+
+        [[Go back|previous()]]
     <<else>>\
-    These ingredients are incompatible.
-    <<set _Bool to false>>
-    [[Go back|previous()]]
-    <</if>><<nobr>>
-    
-    <</nobr>><<if Fresh() and _Bool is true>>\
-    /* Add potion to inventory */
-    <<run $UserPotions.pushUnique($PotionTable)>><<nobr>>
-    
-        /* Remove potion ingredients from inventory */
-        <</nobr>><<if $FirstIngredient is 'Egg'>>\
-            <<set $Eggs -= 1>>\
-        <<elseif $FirstIngredient is 'Milk'>>\
-            <<set $Milk -= 1>>\
-        <<elseif $FirstIngredient is 'Ale'>>\
-            <<set $Keg -= 1>>\
-        <<else>>\
-            <<run $UserIngredients.delete($FirstIngredient)>>\
-        <</if>>\
-        <<if $SecondIngredient is 'Egg'>>\
-            <<set $Eggs -= 1>>\
-        <<elseif $SecondIngredient is 'Milk'>>\
-            <<set $Milk -= 1>>\
-        <<elseif $SecondIngredient is 'Ale'>>\
-            <<set $Keg -= 1>>\
-        <<else>>\
-            <<run $UserIngredients.delete($SecondIngredient)>>\
-        <</if>>\
-    <</if>>\
-    <<if _Bool is true>>\  
-    You brew: $PotionTable!
+        /* Find potion in potion table */
+        <<set _Ingredients to []; _Bool to true>>\
+        <<run _Ingredients.push ($FirstIngredient); _Ingredients.push ($SecondIngredient)>><<nobr>>
 
-    [[Brew another|Brew potion]]
-    [[Leave|Demo]]
-    <</if>>\
+        <</nobr>><<if _Ingredients.includesAll('Eye of Newt','Bat Wing')>>\
+            <<set $PotionTable to "Gorgon Potion">>\
+        <<elseif _Ingredients.includesAll('Eye of Newt','Nightshade')>>\
+            <<set $PotionTable to "Invisibility Potion">>\
+        <<elseif _Ingredients.includesAll('Eye of Newt','Hemlock')>>\
+            <<set $PotionTable to "Blinding Potion">>\
+        <<elseif _Ingredients.includesAll('Eye of Newt','Milk')>>\
+            <<set $PotionTable to "Vision Milk">>\
+        <<elseif _Ingredients.includesAll('Eye of Newt','Poppy')>>\
+            <<set $PotionTable to "Vision Potion">>\
+        <<elseif _Ingredients.includesAll('Eye of Newt','Tulip')>>\
+            <<set $PotionTable to "Love Potion">>\
+        <<elseif _Ingredients.includesAll('Eye of Newt','Mushroom')>>\
+            <<set $PotionTable to "X-ray Potion">>\
+        <<elseif _Ingredients.includesAll('Eye of Newt','Marijuana')>>\
+            <<set $PotionTable to "Philosophy Potion">>\
+        <<elseif _Ingredients.includesAll('Eye of Newt','Ale')>>\
+            <<set $PotionTable to "Vision Ale">>\
+        <<elseif _Ingredients.includesAll('Bat Wing','Nightshade')>>\
+            <<set $PotionTable to "Vampire Potion">>\
+        <<elseif _Ingredients.includesAll('Bat Wing','Hemlock')>>\
+            <<set $PotionTable to "Undead Potion">>\
+        <<elseif _Ingredients.includesAll('Bat Wing','Milk') or _Ingredients.includesAll('Nightshade','Milk')>>\
+            <<set $PotionTable to "Chocolate Milk">>\
+        <<elseif _Ingredients.includesAll('Bat Wing','Poppy') or _Ingredients.includesAll('Hemlock','Tulip')>>\
+            <<set $PotionTable to "Succubus Potion">>\
+        <<elseif _Ingredients.includesAll('Bat Wing','Tulip')>>\
+            <<set $PotionTable to "Incubus Potion">>\
+        <<elseif _Ingredients.includesAll('Bat Wing','Mushroom')>>\
+            <<set $PotionTable to "Bat Potion">>\
+        <<elseif _Ingredients.includesAll('Bat Wing','Ale') or _Ingredients.includesAll('Nightshade','Ale')>>\
+            <<set $PotionTable to "Porter">>\
+        <<elseif _Ingredients.includesAll('Nightshade','Hemlock')>>\
+            <<set $PotionTable to "Curse Potion">>\
+        <<elseif _Ingredients.includesAll('Nightshade','Poppy')>>\
+            <<set $PotionTable to "Nightmare Potion">>\
+        <<elseif _Ingredients.includesAll('Nightshade','Tulip')>>\
+            <<set $PotionTable to "Lust Potion">>\
+        <<elseif _Ingredients.includesAll('Nightshade','Mushroom')>>\
+            <<set $PotionTable to "Demon Potion">>\
+        <<elseif _Ingredients.includesAll('Nightshade','Marijuana')>>\
+            <<set $PotionTable to "Depression Potion">>\
+        <<elseif _Ingredients.includesAll('Hemlock','Milk') or _Ingredients.includesAll('Hemlock','Poppy') or _Ingredients.includesAll('Hemlock','Marijuana') or _Ingredients.includesAll('Hemlock','Ale')>>\
+            <<set $PotionTable to "Poison">>\
+        <<elseif _Ingredients.includesAll('Hemlock','Mushroom')>>\
+            <<set $PotionTable to "Temporary Death Potion">>\
+        <<elseif _Ingredients.includesAll('Hemlock','Egg')>>\
+            <<set $PotionTable to "Rotten Egg">>\
+        <<elseif _Ingredients.includesAll('Milk','Poppy') or _Ingredients.includesAll('Ale','Poppy')>>\
+            <<set $PotionTable to "Sedative">>\
+        <<elseif _Ingredients.includesAll('Milk','Tulip')>>\
+            <<set $PotionTable to "Perfume">>\
+        <<elseif _Ingredients.includesAll('Milk','Mushroom')>>\
+            <<set $PotionTable to "Magic Milk">>\
+        <<elseif _Ingredients.includesAll('Milk','Marijuana')>>\
+            <<set $PotionTable to "Green Milk">>\
+        <<elseif _Ingredients.includesAll('Milk','Egg')>>\
+            <<set $PotionTable to "Milkshake">>\
+        <<elseif _Ingredients.includesAll('Milk','Ale')>>\
+            <<set $PotionTable to "Milk Stout">>\
+        <<elseif _Ingredients.includesAll('Poppy','Mushroom') or _Ingredients.includesAll('Poppy','Marijuana')>>\
+            <<set $PotionTable to "Droopy Juice">>\
+        <<elseif _Ingredients.includesAll('Tulip','Ale')>>\
+            <<set $PotionTable to "Fragrant Ale">>\
+        <<elseif _Ingredients.includesAll('Mushroom','Marijuana')>>\
+            <<set $PotionTable to "Truth Serum">>\
+        <<elseif _Ingredients.includesAll('Mushroom','Ale')>>\
+            <<set $PotionTable to "Funky Dragon">>\
+        <<elseif _Ingredients.includesAll('Marijuana','Ale')>>\
+            <<set $PotionTable to "Green Dragon">>\
+        <<elseif _Ingredients.includesAll('Egg','Ale')>>\
+            <<set $PotionTable to "Pre-Workout">>\
+        <<elseif _Ingredients.includesAll('Slime','Eye of Newt')>>\
+            <<set $PotionTable to "Intangibility Potion">>\
+        <<elseif _Ingredients.includesAll('Slime','Bat Wing')>>\
+            <<set $PotionTable to "Gargoyle Potion">>\
+        <<elseif _Ingredients.includesAll('Slime','Nightshade')>>\
+            <<set $PotionTable to "Octopus Potion">>\
+        <<elseif _Ingredients.includesAll('Slime','Hemlock')>>\
+            <<set $PotionTable to "Disintegration Potion">>\
+        <<elseif _Ingredients.includesAll('Slime','Milk')>>\
+            <<set $PotionTable to "Sour Milk">>\
+        <<elseif _Ingredients.includesAll('Slime','Mushroom') or _Ingredients.includesAll('Slime','Poppy')>>\
+            <<set $PotionTable to "Slime Potion">>\
+        <<else>>\
+        These ingredients are incompatible.
+        <<set _Bool to false>>
+        [[Go back|previous()]]
+        <</if>><<nobr>>
+        
+        <</nobr>><<if Fresh() and _Bool is true>>\
+        /* Add potion to inventory */
+        <<run $UserPotions.pushUnique($PotionTable)>><<nobr>>
+        
+            /* Remove potion ingredients from inventory */
+            <</nobr>><<if $FirstIngredient is 'Egg'>>\
+                <<set $Eggs -= 1>>\
+            <<elseif $FirstIngredient is 'Milk'>>\
+                <<set $Milk -= 1>>\
+            <<elseif $FirstIngredient is 'Ale'>>\
+                <<set $Keg -= 1>>\
+            <<else>>\
+                <<run $UserIngredients.delete($FirstIngredient)>>\
+            <</if>>\
+            <<if $SecondIngredient is 'Egg'>>\
+                <<set $Eggs -= 1>>\
+            <<elseif $SecondIngredient is 'Milk'>>\
+                <<set $Milk -= 1>>\
+            <<elseif $SecondIngredient is 'Ale'>>\
+                <<set $Keg -= 1>>\
+            <<else>>\
+                <<run $UserIngredients.delete($SecondIngredient)>>\
+            <</if>>\
+        <</if>>\
+        <<if _Bool is true>>\  
+        You brew: $PotionTable!
+
+        [[Brew another|Brew potion]]
+        [[Leave|Demo]]
+        <</if>>\
+    <</if>>
 <</if>>
 
 :: Talk to her
