@@ -41,7 +41,7 @@ Check fresh for history control. Does fresh work when going back and forth betwe
 
 Changelog v0.2.1
 -Players can drink potions
--Potions have effects (4/25)
+-Potions have effects (5/25: Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
 -Introduced Holy Water
 -Gossip prioritizes unseen hints  
 -Reinstated fountain hint
@@ -1142,6 +1142,12 @@ They are doused in your $TempString.
     <</if>>
     <<case 'Invisibility Potion'>>
     The teacher turns invisible and promptly reports your misbehavior.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+    </div>
+    <<case 'Blindness Potion'>>
+    The teacher becomes temporarily blind, but still remembered your face and eventually reports your misbehavior.
 
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
@@ -2250,6 +2256,12 @@ You throw the $TempString at her.
     </div>
     <<case 'Invisibility Potion'>>
     The nurse also turns invisible and strangles you.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+    </div>
+    <<case 'Blindness Potion'>>
+    The nurse loses her sight and strangles you.
 
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
