@@ -718,12 +718,14 @@ Are you Male or Female?
     [[Brewery]]
     [[Dormitory]]
     /* [[Wait for night|WIP]] */
-    <<if $HorseFriend is true and $BarnWork is true>>\
-        [[Ride Horse|Approach horse]]
-    <<elseif $AnimalShip gt 2>> \
-        [[Ride Horse|Approach horse]]
-    <<elseif $HorseFriend is true>> \
-        [[Ride Horse]]
+    <<if $Blind is false>>\
+        <<if $HorseFriend is true and $BarnWork is true>>\
+            [[Ride Horse|Approach horse]]
+        <<elseif $AnimalShip gt 2>> \
+            [[Ride Horse|Approach horse]]
+        <<elseif $HorseFriend is true>> \
+            [[Ride Horse]]
+        <</if>>
     <</if>>
 
     <<set $Show to true>>
@@ -1162,17 +1164,28 @@ You turn the teacher to stone and evade detection.
         
 :: Temple
 You enter the temple.
-
+<<if $Blind is true>>
+[[Pray][$Holy += 1]]
+<<else>>
 This is probably the most magnificent room in the entire campus. It is open and spacious, but also majestically decorated.
 
 The stained glass windows depict epic scenes in glorious colors as sunlight shines through, flooding the room. 
 
 Wooden pews line the stone floors and an imposing statue watches over the space.
 
-[[Pray at a pew]] 
+[[Pray at a pew][$Holy += 1]] 
 [[Pray to the statue][$Holy += 1]]
 [[Search the temple]]
 [[Leave|Demo]]
+<</if>>
+
+:: Pray
+You pray blindly.
+
+Holiness overwhelms you.
+
+[[Eat dinner]]
+[[Sleep]]
 
 :: Pray at a pew
 You locate a pew that seems comfortable enough.
@@ -1213,17 +1226,21 @@ You search the temple and find <<if $UserPotions.includes('Holy Water')>>nothing
 
 :: Cloister
 You enter the cloister.
+<<if $Blind is true>>
+    [[Daydream]]
+    [[Leave|Demo]]
+<<else>>
+    There is a large tree in the center of the field surrounded by open grass. 
 
-There is a large tree in the center of the field surrounded by open grass. 
+    Four walls surround the area in a square shape. Various bushes and flowers line the walls. 
 
-Four walls surround the area in a square shape. Various bushes and flowers line the walls. 
-
-[[Inspect the plants]]
-<<if $Planting is true>> \
-[[Plant seeds]]
-<</if>> \
-[[Daydream]]
-[[Leave|Demo]]
+    [[Inspect the plants]]
+    <<if $Planting is true>> \
+    [[Plant seeds]]
+    <</if>> \
+    [[Daydream]]
+    [[Leave|Demo]]
+<</if>>
 
 :: Inspect the plants
 You inspect the plants and notice a decent variety of plant life.
@@ -1342,7 +1359,7 @@ Check back later to see if your plant is grown.<br>
 <</if>>
          
 :: Daydream
-You laze about the cloister, daydreaming all the while. 
+You laze about the cloister, <<if $Blind is true>>blindly <</if>>daydreaming all the while. 
 
 You realize that you accomplished very little, but you also don't care about that at all.
 
@@ -1357,7 +1374,7 @@ You feel peaceful and satisfied.
 <<if $Temp is 0>>\
     <<if $UserLegendaryItems.length lt 4>>\
         <<set $TempString to _LegendaryItems.random()>>\
-        As you stare up the sky, something falls down and lands in the grass next to you.
+        As you <<if $Blind is true>>lay in the grass<<else>>stare up the sky<</if>>, something falls down and lands in the grass next to you.
 
         You pick it up. You obtain a $TempString. 
         <<run $UserLegendaryItems.pushUnique($TempString)>>
@@ -1371,13 +1388,13 @@ You feel peaceful and satisfied.
 
 :: Refectory
 You enter the refectory.
-
+<<if $Blind is false>>
 The vacuous hall has two long wooden dining tables that extend the length of the room. 
 
 Atop the tables lie lace tablecloths with chalices and dishes placed intermittently in front of chairs. Candles burn in the center of the tables. 
 
 The stone floor is immaculate and the ceiling meets at a point with wooden rafters clearly visible. The walls are bare, giving the room an orderly and prestigious air.
-
+<</if>>
 [[Help prepare dinner]]
 [[Leave|Demo]]
 
@@ -1385,21 +1402,28 @@ The stone floor is immaculate and the ceiling meets at a point with wooden rafte
 You enter the kitchen. 
 
 The cooks are preparing food in anticipation of the upcoming meal.
-<<if $Invisibility is true>>
-    [[Mess with the cooks]]
-<<else>>>\
-    You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
-    <<if $Ostra is true>>
-        The students notice you and appreciate your work. your social status increases and you are <b>no longer socially ostracized</b>.
-        <<set $Ostra to false>>\
-    <</if>> 
-    [[Send out the food]] 
-<</if>>\
-<<if $UserPotions.length>> \
-    [[Use potion on food|WIP]]
-    [[Use potion on drinking water|WIP]]
-<</if>>
+<<if $Blind is true>>
+You fumbly around blinding, knocking over kitchen equipment and screwing up dinner preparation.
+<<set $Ostra to true>>
+<b>You have been socially ostracized.</b>
 
+[[Sleep]]
+<<else>>
+    <<if $Invisibility is true>>
+        [[Mess with the cooks]]
+    <<else>>>\
+        You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
+        <<if $Ostra is true>>
+            The students notice you and appreciate your work. your social status increases and you are <b>no longer socially ostracized</b>.
+            <<set $Ostra to false>>\
+        <</if>> 
+        [[Send out the food]] 
+    <</if>>\
+    <<if $UserPotions.length>> \
+        [[Use potion on food|WIP]]
+        [[Use potion on drinking water|WIP]]
+    <</if>>
+<</if>>
 
 :: Mess with the cooks
 You walk around the kitchen sabotaging the cooks in ways that are hilarious to you.
@@ -1547,7 +1571,7 @@ You make your way back to the dorm in peace.
 :: Eat in peace
 You decide to eat in peace.
 
-You grab your meal and move to a location <<if $Invisibility is true>>where you can eat safely<<else>>at a different table that isn't as noisy<</if>>.
+You grab your meal and move to a location <<if $Invisibility is true>>where you can eat safely without being noticed<<else>>at a different table that isn't as noisy<</if>>.
 /* If relationship, can be approached intiating an event */
 You enjoy your meal and feel satisfied.
 
@@ -1558,26 +1582,32 @@ You enjoy your meal and feel satisfied.
 
 :: Library
 You enter the library.
-
+<<if $Blind is false>>
 You notice many bookshelves and various students spread out across the room, diligently studying in silence. 
-
+<</if>>
 [[Study]]
-<<if $Invisibility is false>>\
+<<if $Invisibility is false and $Blind is false>>\
 [[Interrupt another student]]
 <</if>>\
+<<if $Blind is false>>\
 [[Find the librarian]]
+<</if>>\
 [[Leave|Demo]]
 
 :: Study 
-You decide to brush up on your reading. 
-<<set $Temp to random(9)>>
-You pick out a book and read up on <<print $Dream.random()>>.
+You decide to brush up on your reading.
+<<if $Blind is true>>
+Unfortunately, you are blind, making it difficult to read.
+<<else>>
+    <<set $Temp to random(9)>>
+    You pick out a book and read up on <<print $Dream.random()>>.
 
-You find a note left in the book that reads: \
-<<if $Temp is 9>>\
-$Faucets\
-<<else>>\
-<<print $Notes.random()>>.
+    You find a note left in the book that reads: \
+    <<if $Temp is 9>>\
+        $Faucets\
+    <<else>>\
+        <<print $Notes.random()>>.
+    <</if>>
 <</if>>
 [[Eat dinner]]
 [[Sleep]] 
@@ -1633,7 +1663,7 @@ The door is locked.
 
 :: Laboratory
 You enter the laboratory.
-<<if $Lab is false>>
+<<if $Lab is false and $Blind is false>>
     There are beakers, test tubes, and other unrecognizable instruments neatly and fastidiously arranged around the room.
 
     You notice a metal chamber that has been locked shut. An experiment is in progress.
@@ -1642,7 +1672,7 @@ You enter the laboratory.
 
     [[Talk to her]]
     [[Inspect the chamber]]
-<<else>> 
+<<elseif $Blind is false>> 
     [[Brew potion]]
 <</if>> \
 [[Leave|Demo]]
@@ -1809,7 +1839,7 @@ You need hands in order to brew a potion.
             <</if>>\
         <</if>>\
         <<if _Bool is true>>\  
-        You brew: $PotionTable!
+        You brew: <<if $Blind is false>>$PotionTable!<<else>>Something. You can't tell what it is due to blindness.<</if>>
 
         [[Brew another|Brew potion]]
         [[Leave|Demo]]
@@ -1843,7 +1873,7 @@ The horrendous sound is forever etched into your mind and you shake uncontrollab
 
 :: Balneary
 You enter the balneary.
-
+<<if $Blind is false>>
 There is a large fountain in the middle of the room and a sink that spans across the entire back wall.
 
 There is a long mirror that spans across the sink. 
@@ -1851,17 +1881,18 @@ There is a long mirror that spans across the sink.
 There are numbered faucets on both the fountain and the sink, although none of them are running at the moment.
 
 Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
-
+<</if>>
 [[Turn on individual faucets]]
 [[Turn on all the faucets][$Temp to 0]] \
 /* [[Wait for another student]] */ 
 [[Leave|Demo]]
 
 :: Turn on individual faucets
+<<if $Blind is false>>\
 Faucets 1 through 3 are located in the sink.
 
-Faucets 4 and 5 are located on the fountain.
-
+Faucets 4 and 5 are located on the fountain.<br>
+<</if>>\
 Select a faucet to turn on:
 <<set _Faucet to [1,2,3,4,5]>>
 <<listbox '$SingleFaucet' autoselect>>
@@ -1874,27 +1905,29 @@ Select a faucet to turn on:
 :: Turn handle 
 You turn the handle of Faucet: $SingleFaucet.
 <<if ($SingleFaucet is 4) or ($SingleFaucet is 5)>>
-This faucet is located on the fountain.
+    <<if $Blind is false>>\
+    This faucet is located on the fountain.
+    <</if>>
+    Steam rises and beads of water drip from a gargoyle's snout.
 
-Steam rises and beads of water drip from a gargoyle's snout.
-
-You turn off the faucet.
+    You turn off the faucet.
 <<else>>
-This faucet is located in the sink.
-
-Steam rises and fogs the mirror above.
-
-A message appears in the mirror.
-<<nobr>>
-    <<for _i to 0; _i lt $Faucets.length; _i++>>
-        <<if $SingleFaucet is $Faucets[_i]>>
-            <<set $Temp to _i + 1>>
-        <</if>>
-    <</for>>
-<</nobr>>
-The mirror reads: $Temp.
-
-You turn off the faucet and the steam vanishes, along with the message.
+    <<if $Blind is false>>\
+    This faucet is located in the sink.
+    <</if>>
+    Steam rises and fogs the mirror above.
+    <<if $Blind is false>>
+    A message appears in the mirror.
+    <<nobr>>
+        <<for _i to 0; _i lt $Faucets.length; _i++>>
+            <<if $SingleFaucet is $Faucets[_i]>>
+                <<set $Temp to _i + 1>>
+            <</if>>
+        <</for>>
+    <</nobr>>
+    The mirror reads: $Temp.
+    <</if>>
+    You turn off the faucet and the steam vanishes, along with the message.
 <</if>>
 [[Turn another faucet|Turn on individual faucets]]
 [[Turn on all the faucets][$Temp to 0]]
@@ -1902,24 +1935,24 @@ You turn off the faucet and the steam vanishes, along with the message.
 
 :: Turn on all the faucets
 <<if $Temp is 3 and $UserFaucets[0] eq 4 and $UserFaucets[1] eq 1 and $UserFaucets[2] eq 1>>\
-<<nobr>>
-    <<set _Temp4 to 0; _Temp5 to 0>>
-    <<for _i to 0; _i lt $Faucets.length; _i++>>
-        <<if $Faucets[_i] eq 4>>
-            <<set _Temp4 to _i + 1>>
-        <</if>>
-        <<if $Faucets[_i] eq 5>>
-            <<set _Temp5 to _i + 1>>
-        <</if>>
-    <</for>>
-<</nobr>>\
-The faucets shut off and the gargoyles speak to you.
-<<set $Faucet1 to 'Off'; $Faucet2 to 'Off'; $Faucet3 to 'Off'; $Faucet4 to 'Off'; $Faucet5 to 'Off'>>
-They speak the number _Temp4 and then the number _Temp5.
+    <<nobr>>
+        <<set _Temp4 to 0; _Temp5 to 0>>
+        <<for _i to 0; _i lt $Faucets.length; _i++>>
+            <<if $Faucets[_i] eq 4>>
+                <<set _Temp4 to _i + 1>>
+            <</if>>
+            <<if $Faucets[_i] eq 5>>
+                <<set _Temp5 to _i + 1>>
+            <</if>>
+        <</for>>
+    <</nobr>>\
+    The faucets shut off and the gargoyles speak to you.
+    <<set $Faucet1 to 'Off'; $Faucet2 to 'Off'; $Faucet3 to 'Off'; $Faucet4 to 'Off'; $Faucet5 to 'Off'>>
+    They speak the number _Temp4 and then the number _Temp5.
 
-[[Turn on individual faucets]]
-[[Turn on all the faucets][$Temp to 0]]
-<<set $UserFaucets to []>>
+    [[Turn on individual faucets]]
+    [[Turn on all the faucets][$Temp to 0]]
+    <<set $UserFaucets to []>>
 <<else>>\ 
     <<if $Temp isnot 5>>Choose which faucets to turn.
         <<if $Temp is 0>>\
@@ -1996,11 +2029,11 @@ They speak the number _Temp4 and then the number _Temp5.
 :: Secret bath
 You descend the secret passageway and find yourself in an underground bath house.
 
-You explore for a while until your hear footsteps coming from the shadows. 
+You explore <<if $Blind is true>>blindly <</if>>for a while until your hear footsteps coming from the shadows. 
 
 You start to feel a bit fuzzy the longer you stay in the water.
 
-Suddenly, you notice glowing eyes approaching you.
+Suddenly, you <<if $Blind is false>>hear faint footsteps <<else>>notice glowing eyes <</if>>approaching you.
 
 [[Attempt an escape|Escape Nurse]]
 [[Stand your ground|Wait Nurse]]
@@ -2042,10 +2075,10 @@ As you bleed out and lose consciousness, a serpentine tongue flicks across your 
 :: Wait Nurse
 You stay still and wait for the creature to <<if $Invisibility is true>>pass<<else>>approach you<</if>>.
 
-She emerges from the shadows. <<if $Invisibility is true>>You hold your breath as she walks past you. You notice the creature is the nurse. She has talons and a forked tongue flicks from her mouth.
+She emerges from the shadows. <<if $Invisibility is true>>You hold your breath as she walks past you.<<if $Blind is false>> You notice the creature is the nurse. She has talons and a forked tongue flicks from her mouth.<</if>>
 
-She smells you with her tongue and approaches your location. <<else>>The nurse stands before you gazing upon you<<if $Invisibility is true>>r location<</if>> with curiousity. 
-<<if $Invisibility is false>>
+She smells you with her tongue and approaches your location. <<else>><<if $Blind is flase>>The nurse stands before you gazing upon you<<if $Invisibility is true>>r location<</if>> with curiousity.<</if>> 
+<<if $Invisibility is false and $Blind is false>>
 You notice she has some animalistic features. She surveys you like a predator would prey. A serpentine tongue flicks out of her mouth.
 <</if>>
 With some <<if $Invisibility is true>>curiousity<<else>>reservation<</if>>, she petitions your help.
@@ -2059,9 +2092,9 @@ You run towards the glowing eyes and extend your arms out to embrace the shadowy
 
 You tighten your grip and feel breasts and long hair.
 
-You loosen your grip and step backwards into the light. You see the nurse standing before you with certain animalistic features.
+You loosen your grip and step backwards<<if $Blind is false>> into the light. You see the nurse standing before you with certain animalistic features<</if>>.
 
-With gentle eyes, she <<if $Invisibility is true>>curiously <</if>>petitions your help.
+<<if $Blind is false>>With gentle eyes, s<<else>>S<</if>>he <<if $Invisibility is true>>curiously <</if>>petitions your help.
 
 [[Completely submit to her|Slavery]]
 [[Offer to help|Siren Partner]]
@@ -2078,21 +2111,25 @@ He looks uncomfortable as he makes eye contact with you before leaving.
 
 :: Infirmary
 You enter the infirmary.
-<<if $NurseWork is false>>
-There are a few beds with hanging privacy sheets and an office behind a closed door.
+<<if $Blind is true>>
+You can't see anything.
+<<else>>
+    <<if $NurseWork is false>>
+    There are a few beds with hanging privacy sheets and an office behind a closed door.
 
-You notice a tray with various medical tools strewn across, such as a scalpel, thermometer, and needles. 
+    You notice a tray with various medical tools strewn across, such as a scalpel, thermometer, and needles. 
 
-There is a cabinet containing various prescription drugs. 
+    There is a cabinet containing various prescription drugs. 
 
-<<else>> 
-You are ready to work. 
+    <<else>> 
+    You are ready to work. 
 
-[[Treat a patient]]
-<</if>> \
-[[Inspect the beds]]
-[[Enter the office]]
-[[Raid the cabinet]]
+    [[Treat a patient]]
+    <</if>> \
+    [[Inspect the beds]]
+    [[Enter the office]]
+    [[Raid the cabinet]]
+<<if>>
 [[Leave|Demo]]
 
 :: Inspect the beds
@@ -2426,7 +2463,7 @@ You look down at the injection sight in surprise and [[you suddenly feel drowsy.
 
 :: Slavery  
 You find yourself in a dark room.
-
+<<set $Blind to false; $Invisibility to false>>
 You can hear running water. The air is cold and you get the feeling that you are underground.
 
 You try to move but notice that you are chained to a stone wall. You can't break free no matter how you struggle.
@@ -2465,17 +2502,19 @@ She seems annoyed with you, but prescribes some pain pills to you for the injury
 
 :: Barn
 You enter the barn.
-
+<<if $AnimalShip lt 3>>
 You are excited to develop relationships with the animals.
+<</if>>\
 <<if $BarnWork is false>>
-You open a couple large barn doors.  
+    You open a couple large barn doors.  
+    <<if $Blind is false>>
+    You see horses in their stables, a cow in the barn, and chickens in their coup. There are no people to be seen. 
 
-You see horses in their stables, a cow in the barn, and chickens in their coup. There are no people to be seen. 
-
-[[Look for a person]] 
-[[Approach the animals]]
-<<else>>
-[[Take care of the animals]]
+    [[Look for a person]] 
+    [[Approach the animals]]
+    <</if>>\
+<<elseif $Blind is false>>
+    [[Take care of the animals]]
 <</if>> \
 [[Leave|Demo]]
 
@@ -3085,12 +3124,12 @@ You saddle him and [[leave the barn|Ride]].
 
 :: Forge
 You enter the forge.
-<<if $Forge is 0>>
-You see an anvil and a hulking furnace. Various tools such as tongs and hammers are strewn across the floor and workbench. 
+<<if $Forge is 0 and $Blind is false>>
+    You see an anvil and a hulking furnace. Various tools such as tongs and hammers are strewn across the floor and workbench. 
 
-Whoever used them last must not be too organized.
+    Whoever used them last must not be too organized.
 
-[[Mess around with the tools randomly|Mess around]]
+    [[Mess around with the tools randomly|Mess around]]
 <<elseif $Forge is 1>>
     <<if $Weapon is false>>\
         <<if $UserLegendaryItems.includes('Sword of Siren Slaying') is false>>\
@@ -3101,18 +3140,18 @@ Whoever used them last must not be too organized.
     <<else>>\
         You already have a weapon.<br>
     <</if>>\
-[[Leave|Demo]]
+    [[Leave|Demo]]
 <<else>>
-You are no longer welcome here.
+    You are no longer welcome here.
 
-The smith stands in your way.
-    <<if $Gorgon is true and $Blind is false>>
-    [[Make eye contact]]
-    <</if>>\
-    <<if $UserPotions.length>>\
-    /* [[Throw a potion]] - WIP */
-    <</if>>\
-[[Leave|Demo]].
+    The smith stands in your way.
+        <<if $Gorgon is true and $Blind is false>>
+        [[Make eye contact]]
+        <</if>>\
+        <<if $UserPotions.length>>\
+        /* [[Throw a potion]] - WIP */
+        <</if>>\
+    [[Leave|Demo]].
 <</if>>
 
 :: Make eye contact
@@ -3177,17 +3216,18 @@ Your ass is injured and you must [[go to the infirmary|Injured butt]]
 
 :: Brewery
 You enter the brewery.
-<<if $Brew is false>>
-This is where the real magic happens. Students love the reprieve of refreshing ale after a hard day's work. 
+<<if $Brew is false and $Blind is false>>
+    This is where the real magic happens. Students love the reprieve of refreshing ale after a hard day's work. 
 
-You notice kettles, kegs, a boiler, tanks, and ingredients such as mash. 
+    You notice kettles, kegs, a boiler, tanks, and ingredients such as mash. 
 
-The brewmaster is asleep in a corner.
+    The brewmaster is asleep in a corner.
 
-[[Wake up the brewmaster|Wake Brewmaster]]
+    [[Wake up the brewmaster|Wake Brewmaster]]
+<<elseif $Blind is false>>
+    [[Work on a brew|Brew]]
 <<else>>
-[[Work on a brew|Brew]]
-[[Maybe Later|Demo]]
+    [[Maybe Later|Demo]]
 <</if>>
 
 :: Wake Brewmaster
@@ -3234,23 +3274,23 @@ You decide to brew a batch of ale.
 <</if>>
 
 :: Classroom
-You sit down in an empty chair in the classroom and wait for class to start. There are no students or professors in sight.
+You sit down in an empty chair in the classroom and wait for class to start. <<if $Blind is false>>There are no students or professors in sight.
 /* If Ostra, then get picked on during class */
 After waiting for a few minutes without any activity, you become impatient. 
-
+<</if>>
 [[Wait Patiently]]
-<<if $ClassSearch is false>> \
+<<if $ClassSearch is false and $Blind is false>> \
 [[Search the Classroom]]
 <</if>> \
 [[Leave|Demo]]
 
 :: Wait Patiently
-You figure that scouring through random items in the classroom might not be a good idea, so you simply wait for class to start...
+You <<if $Blind is false>>figure that scouring through random items in the classroom might not be a good idea, so you <</if>>simply wait for class to start...
 <<if $Invisibility is true>>
 You find a spot in the back of the classroom to invisibly observe.
 <</if>>
 Eventually, students begin filtering into the classroom, and settling into their respective seats. 
-<<if $ClassFriend is false and $Invisibility is false>>
+<<if $ClassFriend is false and $Invisibility is false and $Blind is false>>
     A large, muscular brute of a woman walks through the door. Her school uniform doesn't seem to fit her quite right as certain muscles on her body bulge out, stretching the fabric in odd places. 
     <<set $ClassFriend to true>>  
     You chuckle quietly at the sight, but do your best to contain the noise since you imagine she could easily smash your skull should the desire ever arise.
