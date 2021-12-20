@@ -1,4 +1,16 @@
-Changelog v0.2.0
+v0.2.1
+-Players can drink potions
+-Potions have effects (5/25: Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
+-Introduced Holy Water
+-Gossip prioritizes unseen hints  
+-Reinstated fountain hint
+-Fixed bug where plants could be harvested one day before grown 
+-Fixed bug where legendary items could not be obtained as intended
+-Fixed bug where the plant outside campus was glitched after the third collection
+-Fixed bug where a forest animal would be encountered multiple times before they had all been encountered
+-Fixed typos/spacing
+
+v0.2.0
 -Changed the title for clarity
 -Game is now technically winnable
 -No more dead links except for potion effect links
