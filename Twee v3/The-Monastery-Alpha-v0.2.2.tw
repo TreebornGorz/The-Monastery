@@ -2,7 +2,11 @@
 
 Test: 
 
+Infirmary syntax fix
+
 Unfinished Tasks: 
+
+Access to medicine cabinet if you treat patients successfully and earn the nurse's trust
 
 Incorporate X-ray Potion effect
 
@@ -39,23 +43,15 @@ Too many bad ends in bath house
 
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
-Changelog v0.2.1
--Players can drink potions
--Potions have effects (5/25: Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
--Introduced Holy Water
--Gossip prioritizes unseen hints  
--Reinstated fountain hint
--Fixed bug where plants could be harvested one day before grown 
--Fixed bug where legendary items could not be obtained as intended
--Fixed bug where the plant outside campus was glitched after the third collection
--Fixed bug where a forest animal would be encountered multiple times before they had all been encountered
--Fixed typos/spacing
+Changelog v0.2.2
+-The teacher's important document can now be found in the desk even if a previous search attempt failed
+-Potions have effects (6/25: X-ray Potion, Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
+-Syntax bugfix in Infirmary
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
--History control causes $Temp to bug out and not randomize in the teacher's dorm when searching belongings
+-History control causes $Temp to bug out and not randomize in the teacher's dorm when searching belongings (Test)
 -If player has all seeds, They find an error plant
--Making a potion when holding mutiple ingredient uses all of them
 -Menu disappeared while invisible; Corrects on [[Demo]]
 
 */
@@ -983,7 +979,7 @@ The teacher's dorm appears quite similar to the student dorms, however there are
 You notice teacher's belongings strewn about.
 
 There are currently no teachers around, but you may not want to press your luck.
-<<if $Xray is true>>
+<<if $Xray is true and $Blind is false>>
 [[Use your X-ray vision to find a particular item|Teacher Belonging Xray][$TempBool to false]]
 <</if>>\
 [[Search teacher's belongings][$TempBool to false]]
@@ -1025,7 +1021,7 @@ Select an item to take:
 <</nobr>>
 <<for _i to 0; _i lt _Items.length; _i++>>\
     <<capture _i>>\
-        <<button [[_Items[_i]|Take xray item]]>><<set $TempString to _Items[_i]>><<run $Seeds.delete($Grow); $Planted.pushUnique($Grow)>><</button>>  \
+        <<button [[_Items[_i]|Take xray item]]>><<set $TempString to _Items[_i]>><</button>>  \
     <</capture>>\
 <</for>>
 <<set $Temp to _Items.length>>
@@ -1048,14 +1044,14 @@ You hear footsteps approaching.
 :: Stupid thief
 You decide to continue taking items despite approaching footsteps.
 
-As you scan your potential targets, a teacher enters the room and notices your attempts at thievery<<if $Invisible is true>> despite your invisibility. They can notice objects moving through the air after all.<</if>>.
+As you scan your potential item targets, a teacher enters the room. <<if $Invisible is true>>Despite your invisibility, they will notice objects moving through the air if you continue with your thievery.<</if>>.
 
 [[Confront them]]
 [[Hide]]
 <<if $UserPotions.length>>\
 [[Douse the teacher with a potion]]
 <</if>>
-/* WIP - Incorporate remaining potion effects */
+/* WIP - Incorporate remaining MC potion effects */
 
 :: Search teacher's belongings
 You open some dressers and bags, searching for an interesting item. 
@@ -1224,6 +1220,12 @@ They are doused in your $TempString.
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
     </div>
+    <<case 'X-ray Potion'>>
+    The teacher's eyesight is enhanced. They report your misbehavior.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+    </div>
     <<default>>
     It has no useful effect.
 
@@ -1291,6 +1293,9 @@ You have been imbued with a holy power.
 <<if $Holy isnot 3>>
 You spend the remainder of your day paying homage to the figure before you.
 <</if>> \
+<<if $$Xray is true>>
+Using your x-ray vision, you peer into the statue. You can see a light glowing within.<br>
+<</if>>\
 <<set $NightTime to true>>
 [[Eat dinner]]
 [[Sleep]]
@@ -1311,7 +1316,7 @@ You enter the cloister.
     There is a large tree in the center of the field surrounded by open grass. 
 
     Four walls surround the area in a square shape. Various bushes and flowers line the walls. 
-
+    /* WIP - Option to interact with tree and unlock its secrets */
     [[Inspect the plants]]
     <<if $Planting is true>> \
     [[Plant seeds]]
@@ -1472,6 +1477,9 @@ The vacuous hall has two long wooden dining tables that extend the length of the
 Atop the tables lie lace tablecloths with chalices and dishes placed intermittently in front of chairs. Candles burn in the center of the tables. 
 
 The stone floor is immaculate and the ceiling meets at a point with wooden rafters clearly visible. The walls are bare, giving the room an orderly and prestigious air.
+    <<if $Xray is true>>
+    Using your x-ray vision, you see cooks working busily in the kitchen on the other side of the wall.
+    <</if>>
 <</if>>
 [[Help prepare dinner]]
 [[Leave|Demo]]
@@ -1492,8 +1500,10 @@ You fumbly around blinding, knocking over kitchen equipment and screwing up dinn
     <<else>>>\
         You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
         <<if $Ostra is true>>
-            The students notice you and appreciate your work. your social status increases and you are <b>no longer socially ostracized</b>.
+            The students notice you and appreciate your work. Your social status increases and you are <b>no longer socially ostracized</b>.
             <<set $Ostra to false>>\
+        <<else>>
+            The students notice you and appreciate your work. Your social status increases.
         <</if>> 
         [[Send out the food]] 
     <</if>>\
@@ -1570,19 +1580,19 @@ however, nobody can see your eyes.
 <</if>>
 :: Listen to gossip
 <<if $Ostra is true>> \
-You decide to eavesdrop again while <b>socially ostracized</b>.
-<<if $Invisibility is true>>
-You hover over the conversation while invisible. You eavesdrop until hearing something useful.
+    You decide to eavesdrop again while <b>socially ostracized</b>.
+        <<if $Invisibility is true>>
+        You hover over the conversation while invisible. You eavesdrop until hearing something useful.
 
-You overhear the numbers: <<print $Faucets>>
-<<else>>
-Despite your best attempts, you can't make out any useful information. <<if $Sneaky is false>>The other students seem to have caught onto your game.
+        You overhear the numbers: <<print $Faucets>>
+        <<else>>
+        Despite your best attempts, you can't make out any useful information. <<if $Sneaky is false>>The other students seem to have caught onto your game.
 
-They warn you that if you try to eavesdrop once more, they will ensure that you never again have the chance.
+        They warn you that if you try to eavesdrop once more, they will ensure that you never again have the chance.
 
-They seem completely serious about the threat.<</if>> 
-<</if>>
-You <<if $invisibility is true>>sneak a meal<<else>>finish your meal<</if>> and [[make your way back to your dorm]]. 
+        They seem completely serious about the threat.<</if>> 
+        <</if>>
+    You <<if $invisibility is true>>sneak a meal<<else>>finish your meal<</if>> and [[make your way back to your dorm]]. 
 <<else>>
     You figure that you require information about the lives of others.
     <<if $Invisibility is true>>\
@@ -1675,7 +1685,7 @@ You notice many bookshelves and various students spread out across the room, dil
 :: Study 
 You decide to brush up on your reading.
 <<if $Blind is true>>
-Unfortunately, you are blind, making it difficult to read.
+    Unfortunately, you are blind, making it difficult to read.
 <<else>>
     <<set $Temp to random(9)>>
     You pick out a book and read up on <<print $Dream.random()>>.
@@ -1685,7 +1695,7 @@ Unfortunately, you are blind, making it difficult to read.
         $Faucets\
     <<else>>\
         <<print $Notes.random()>>.
-    <</if>>
+    <</if>> /* WIP - Prioritize notes? */
 <</if>>
 [[Eat dinner]]
 [[Sleep]] 
@@ -1709,9 +1719,8 @@ You probe them seeking the secrets of The Monastery.
     [[Sleep]]
 <<else>>
     They consider for a second, but seem uncomfortable.
-    /* conditional based on big friend or enemy */
+    /* WIP - conditional based on big friend or enemy? */
     Ultimately, they were not convinced.
-
 
     [[Eat dinner]]
     [[Sleep]]
@@ -1722,7 +1731,9 @@ You probe them seeking the secrets of The Monastery.
 You search the library, unable to locate a librarian.
 
 You notice a door to a back room.
-
+<<if $Xray is true>>
+You peer through the door using your X-ray vison. On the other side you see a dim dungeon and various torture instruments. /* WIP - How do you find a key to open this door? */
+<</if>>
 [[Open door|LibraryDoor]]
 [[Study]]
 <<if $Invisibiility is false>>\
@@ -1941,11 +1952,13 @@ She spends the day familiarizing you with the laboratory equipment.
 You approach the metal chamber. 
 
 You hear a dim humming emanating from the capsule and feel a gentle vibration when you lay your hand on it.
+<<if $Xray is true>>
+Using your X-ray vision, you gaze into the chamber. You see a developing fetus or baby of some sort floating around in a yellow liquid. It twitches as it floats around. It has horns and glowing eyes.
+<</if>>
+You tap the chamber with your finger and <<if $Xray is true>>the strange child enters a pained frenzy. It opens its demonic mouth and wails as it releases an agonizing scream.<<else>>an agonizing scream is released from within the capsule.<</if>>
 
-You tap with your finger and an agonizing scream is released from within the capsule.
+The horrendous <<if $Xray is true>>image<<else>>sound<</if>> is forever etched into your mind and you shake uncontrollably.
 
-The horrendous sound is forever etched into your mind and you shake uncontrollably.
-/* Open chamber by stealing her key */
 [[Talk to the lady in the corner|Talk to her]]
 [[Leave|Demo]]
 
@@ -1960,9 +1973,12 @@ There are numbered faucets on both the fountain and the sink, although none of t
 
 Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
 <</if>>
+<<if $Xray is true>>
+Using your X-ray vision, you stare through the balneary wall and see an underground bath on the other side of the sink wall. <br>
+<</if>>\
 [[Turn on individual faucets]]
 [[Turn on all the faucets][$Temp to 0]] \
-/* [[Wait for another student]] */ 
+/* WIP - Keep? Random NPC? [[Wait for another student]] */ 
 [[Leave|Demo]]
 
 :: Turn on individual faucets
@@ -2252,7 +2268,10 @@ You twist the doorknob. The door is locked.
 :: Knock
 You knock on the door.
 <<if $NurseWork is false>> 
-The lock clicks and the door opens to reveal an attractive young nurse.
+    The lock clicks and the door opens to reveal an attractive young nurse.
+    <<if $Xray is true>>
+        Using your X-ray vision, you gaze through her clothing. She has lovely skin, but in some places you notice scales where skin should be.
+    <</if>>
     <<if $Invisibility is true>>
         She stares directly through you and appears confused. She slams the door shut in your face.
         <<set $Knock to 1>>
@@ -2273,6 +2292,9 @@ The lock clicks and the door opens to reveal an attractive young nurse.
     <</if>>
 <<else>> 
 The lock clicks and the door opens to reveal the nurse looking very annoyed with you.
+<<if $Xray is true>>
+    Using your X-ray vision, you gaze through her clothing. She has lovely skin, but in some places you notice scales where skin should be.
+<</if>>
 
 She asks why you are bothering her and you can't think of a good answer.
 
@@ -2285,7 +2307,9 @@ She asks why you are bothering her and you can't think of a good answer.
 You knock on the door again. 
 
 The nurse opens the door and appears clearly frustrated there is nobody on the other end.
-
+<<if $Xray is true>>
+    Using your X-ray vision, you gaze through her clothing. She has lovely skin, but in some places you notice scales where skin should be.
+<</if>>
 [[Slip into her office]]
 [[Leave|Demo]]
 
@@ -2334,6 +2358,12 @@ You throw the $TempString at her.
     </div>
     <<case 'Blindness Potion'>>
     The nurse loses her sight and strangles you.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+    </div>
+    <<case 'X-ray Potion'>>
+    The nurse's sight is enhanced and she strangles you.
 
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
@@ -2566,7 +2596,9 @@ Maybe you shouldn't have been so rude to her...
 You attempt to raid the cabinet in the hopes of acquiring drugs.
 
 Unfortunately, the cabinet is locked.
-
+<<if $Xray is true>>
+    Using your X-ray vision, you peer into the cabinet. You see pain pills, antiobiotics, and an odd key with a skull on it. /* WIP - Incorporate method for opening cabinet to make the game realistically winnable */
+<</if>>
 No drugs for you.
 /* Conditional for cabinet access */
 [[Inspect the beds]]
@@ -2661,7 +2693,9 @@ They might be dangerous if not handled properly.
 
 :: Take one for a ride
 You approach one of the unfriendly horses.
-
+<<if $Xray is true>>
+Using your X-ray vision, you can see the horse's internal organs. 
+<</if>>
 You saddle it and attempt to mount the horse when it gets spooked.
 
 It panics and bucks you off, kicking around the stable furiously.
@@ -2944,8 +2978,11 @@ You forge onwards, deep into the forest.
     <</if>>
 <<else>>\
     You approach the tomb. it is sealed shut.
-
-    There is a skeleton on the door. <br>
+    
+    There is a skeleton on the door.
+    <<if $Xray is true>>
+        You attempt to see through the door using your X-ray vision, but a magical force prevents you from seeing through. 
+    <</if>>
     <<if $UserLegendaryItems.includes('Skeleton Key')>>\
     [[Use the Skeleton Key on the Skeleton Door|Open Tomb]]
     <</if>>\
@@ -2962,7 +2999,7 @@ It won't budge.<br>
 
 :: Open Tomb
 You insert the Skeleton Key and the Skeleton Door slowly slides open, eating your key. 
-
+<<run $UserLegendaryItems.delete('Skeleton Key')>>
 You find yourself in a vast open chamber. Skeletons rise up from the ground and encircle you. Their eyes glow.
 
 They brings their hands together in prayer and chant a hymn.
@@ -2978,7 +3015,7 @@ Great power courses through your veins. You raise your arms to your side and rai
 A great vortex rages through the tomb and engulfs your acolytes, thrusting them into your body. You absorb their power and you are bombarded with visions of the world. 
 
 You can now monitor and control events that were once far beyond your comprehension or awareness. 
-
+/* WIP - Expand story to confront nurse before achieving victory */
 <div align='center' style='font-size: 300%;'>\
 <span class='fadeIn'><span style="color:yellow"><b>YOU HAVE BECOME GOD</b></span></span>
 </div>
@@ -3097,7 +3134,9 @@ You are not found until you begin smelling bad. And nobody noticed you were miss
 
 :: Cow
 You enter the barn and notice a dairy cow that seems to be in need of milking.
-
+<<if $Xray is true>>
+Using your X-ray vision, you can see the cow's internal organs. It definitely needs milking... 
+<</if>>
 You're not sure if you should milk the cow without permission.
 
 [[Milk the cow anyway]]
@@ -3127,7 +3166,9 @@ You have //definitely// been socially ostracized if you weren't already.
 
 :: Chickens
 You enter the coup and find a few chickens running around. 
-
+<<if $Xray is true>>
+Using your X-ray vision, you can see the chicken's internal organs. 
+<</if>>
 The chickens don't recognize you and begin furiously pecking at your ankles.
 
 [[Calm them down]]
@@ -3363,7 +3404,7 @@ You sit down in an empty chair in the classroom and wait for class to start. <<i
 After waiting for a few minutes without any activity, you become impatient. 
 <</if>>
 [[Wait Patiently]]
-<<if $ClassSearch is false and $Blind is false>> \
+<<if $Blind is false>> \
 [[Search the Classroom]]
 <</if>> \
 [[Leave|Demo]]
@@ -3427,9 +3468,11 @@ You have made a friend<<if $Ostra is true>> despite being socially ostracized<</
         
 :: Search the Classroom
 You can't handle waiting for class to start and your curiosity gets the better of you.
-<<set $ClassSearch to true>>
-You survey the classroom and notice a few areas of interest.
 
+You survey the classroom and notice a few areas of interest.
+<<if $Xray is true>>
+    Using your X-ray vision, you notice a suspicious document in the desk. 
+<</if>>
 [[Steal from the bookshelf]]
 [[Open the desk drawers]]
 
@@ -3446,15 +3489,22 @@ You are able to convince them that you had forgotten your textbook and needed to
 
 You take a seat and [[class begins|Class]].
 <</if>>
-
+/* Chance of finding something useful - WIP */
 :: Open the desk drawers
 You open the drawers of the teacher's desk.
 
-You see various office supplies and a bunch of boring paperwork.
+<<if $Xray is true>>
+    You quickly locate the suspicious document.
 
-One paper catches your eye. It appears to be some kind of official document personally signed by the headmaster. 
+    [[Take the document]]
+<<else>>
+    You see various office supplies and a bunch of boring paperwork. <br>
+    <<if $CeilingKey is false>>\
+    One paper catches your eye. It appears to be some kind of official document personally signed by the headmaster. 
 
-[[Take the document]]
+    [[Take the document]] 
+    <</if>>\
+<</if>>\
 [[Return to your seat]]
 
 :: Take the document
