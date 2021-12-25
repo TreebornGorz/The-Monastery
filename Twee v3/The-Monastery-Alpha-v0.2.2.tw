@@ -1041,19 +1041,20 @@ You hear footsteps approaching.
 [[Confront them]]
 [[Hide]]
 <<else>>
-[[Continue taking items]]
+[[Continue taking items|Take an item]]
 [[Leave dorm]]
 <</if>>
-
-:: Continue taking items
 
 :: Stupid thief
 You decide to continue taking items despite approaching footsteps.
 
 As you scan your potential targets, a teacher enters the room and notices your attempts at thievery<<if $Invisible is true>> despite your invisibility. They can notice objects moving through the air after all.<</if>>.
 
-
-
+[[Confront them]]
+[[Hide]]
+<<if $UserPotions.length>>\
+[[Douse the teacher with a potion]]
+<</if>>
 /* WIP - Incorporate remaining potion effects */
 
 :: Search teacher's belongings
@@ -2206,7 +2207,7 @@ You can't see anything.
     [[Inspect the beds]]
     [[Enter the office]]
     [[Raid the cabinet]]
-<<if>>
+<</if>>
 [[Leave|Demo]]
 
 :: Inspect the beds
