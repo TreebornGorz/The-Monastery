@@ -4,7 +4,7 @@ Test:
 
 Unfinished Tasks: 
 
-Incorporate Blinding Potion effect
+Incorporate X-ray Potion effect
 
 Prioritize unseen hints
 
@@ -64,7 +64,7 @@ Bug Log
 The Monastery
 
 :: StorySubtitle
-Version: Alpha 0.2.1
+Version: Alpha 0.2.2
 
 :: StoryData
 {
@@ -266,6 +266,7 @@ body.no-save #menu-item-saves {
 <<set $MasterIngredients to 0>> 
 <<set $Sneaky to false>>
 <<set $Items to []>>
+<<set $TeacherItems to ['Syringe','Glasses','Chisel','Knife','Coat','Thruible','Trowel','Spoon']>>
 <<set $LegendaryItems to ['Sword of Siren Slaying','Skeleton Key','Scroll of Fire Breathing','Opus Pocus']>> /* Opus Pocus is an artistic transforming item; Skeleton key is literally a key in the shape of a skull */
 <<set $UserLegendaryItems to []>>
 <<set $Arms to 2; $Legs to 2>>
@@ -956,7 +957,9 @@ You take your future into your own hands and attempt escape from your cell.
 You pull the latch. 
 
 The door is locked, but you don't see a keyhole of any kind. 
-
+<<if $Xray is true>>
+Using your X-ray vision, you peer through the ceiling. You notice stairs leading into a corridor which presumably leads to some sort of secret room.
+<</if>>
 Maybe <<if $CeilingKey is false>>there is some other way of opening<<else>>the passphrase you learned will open<</if>> this door?
 
 [[Choose a dormitory|Dormitory]]
@@ -980,10 +983,78 @@ The teacher's dorm appears quite similar to the student dorms, however there are
 You notice teacher's belongings strewn about.
 
 There are currently no teachers around, but you may not want to press your luck.
-
+<<if $Xray is true>>
+[[Use your X-ray vision to find a particular item|Teacher Belonging Xray][$TempBool to false]]
+<</if>>\
 [[Search teacher's belongings][$TempBool to false]]
 [[Hide and wait for a teacher to show up|Hide][$TempBool to true]]
 [[Leave dorm]]
+
+:: Teacher Belonging Xray
+You traverse the dormitory, inspecting the teacher's various bags, chests, and miscellaneous containers. 
+
+Peering through them, you notice some interesting items.
+
+[[Take an item]]
+[[Leave dorm]]
+
+:: Take an item
+Select an item to take:
+<<nobr>>
+    <<set _Items to clone($TeacherItems)>>
+    <<for _i to 0; _i lt $Items.length; _i++>>
+        <<switch $Items[_i]>>
+            <<case 'Syringe'>>
+                <<run _Items.delete('Syringe')>>
+            <<case 'Glasses'>>
+                <<run _Items.delete('Glasses')>>
+            <<case 'Chisel'>>
+                <<run _Items.delete('Chisel')>>
+            <<case 'Knife'>>
+                <<run _Items.delete('Knife')>>
+            <<case 'Coat'>>
+                <<run _Items.delete('Coat')>>
+            <<case 'Thurible'>>
+                <<run _Items.delete('Thurible')>>
+            <<case 'Trowel'>>
+                <<run _Items.delete('Trowel')>>
+            <<case 'Spoon'>>
+                <<run _Items.delete('Spoon')>>
+        <</switch>>
+    <</for>>
+<</nobr>>
+<<for _i to 0; _i lt _Items.length; _i++>>\
+    <<capture _i>>\
+        <<button [[_Items[_i]|Take xray item]]>><<set $TempString to _Items[_i]>><<run $Seeds.delete($Grow); $Planted.pushUnique($Grow)>><</button>>  \
+    <</capture>>\
+<</for>>
+<<set $Temp to _Items.length>>
+
+:: Take xray item
+You take: $TempString.
+<<run $Items.pushUnique($TempString)>>
+<<set $Temp to random($Temp)>>\
+<<if $Temp is 0>>
+You hear footsteps approaching.
+
+[[Continue taking items|Stupid thief]]
+[[Confront them]]
+[[Hide]]
+<<else>>
+[[Continue taking items]]
+[[Leave dorm]]
+<</if>>
+
+:: Continue taking items
+
+:: Stupid thief
+You decide to continue taking items despite approaching footsteps.
+
+As you scan your potential targets, a teacher enters the room and notices your attempts at thievery<<if $Invisible is true>> despite your invisibility. They can notice objects moving through the air after all.<</if>>.
+
+
+
+/* WIP - Incorporate remaining potion effects */
 
 :: Search teacher's belongings
 You open some dressers and bags, searching for an interesting item. 
