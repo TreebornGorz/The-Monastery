@@ -3,8 +3,10 @@
 Test: 
 
 Infirmary syntax fix
+Transformation Potion Effects
 
 Unfinished Tasks: 
+Incorporate different options at night
 
 Access to medicine cabinet if you treat patients successfully and earn the nurse's trust
 
@@ -693,7 +695,15 @@ Are you Male or Female?
 
 :: Demo
 <<if $Day lt 50>> \
-    You are on campus. 
+    You are on campus.
+    <<if $NightTime is true>>
+        It is dark.<br>
+        <<if $Vampire is true>>
+            The darkness comforts you.<br>
+        <</if>>\
+    <<elseif $Vampire is true>>
+        The light seeping through the windows taunts you. You long for the darkness.<br>
+    <</if>>\ 
     <<if $GorgonPrey is true>>
         It has been noticed that people are being turned to stone.
         <<set $GorgonPrey to false>>\
@@ -714,7 +724,6 @@ Are you Male or Female?
     [[Forge]]
     [[Brewery]]
     [[Dormitory]]
-    /* [[Wait for night|WIP]] */
     <<if $Blind is false>>\
         <<if $HorseFriend is true and $BarnWork is true>>\
             [[Ride Horse|Approach horse]]
@@ -722,8 +731,9 @@ Are you Male or Female?
             [[Ride Horse|Approach horse]]
         <<elseif $HorseFriend is true>> \
             [[Ride Horse]]
-        <</if>>
-    <</if>>
+        <</if>>\
+    <</if>>\
+    [[Wait for night|Demo][$NightTime to true]]
 
     <<set $Show to true>>
     <<set $NightTime to false>>
@@ -750,7 +760,7 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
     [[Gor right|Female dorm]]
 <<else>>
     You notice a suspicious latch on the ceiling.
-    /* WIP - Blind give left vs right */
+
     [[Male dorm]]
     [[Female dorm]]
     [[Pull latch]]
