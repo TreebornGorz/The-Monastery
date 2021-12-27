@@ -734,9 +734,7 @@ Are you Male or Female?
         <</if>>\
     <</if>>\
     [[Wait for night|Demo][$NightTime to true]]
-
     <<set $Show to true>>
-    <<set $NightTime to false>>
 <<else>> \
     You spent your time on campus doing a whole lot of nothing. Maybe you could have been more interesting or taken more risks.
 
@@ -777,15 +775,16 @@ You enter the <<if $Blind is false>>male <</if>>dorm\
 <<else>>.
 
     <<if $Blind is false>>
-        This is where you belong. 
+        This is where you belong.
+
         [[Explore]]
         [[Sleep]]        
         [[Leave|Demo]]
     <<elseif $Male is true>>
-        [[Sleep|Sleep Blind]]
+        [[Sleep]]
         [[Leave|Demo]]
     <<else>>
-        [[Sleep]]        
+        [[Sleep|Sleep Blind]]        
         [[Leave|Demo]]
     <</if>>
 <</if>>
@@ -800,10 +799,6 @@ The other students freak out.
 <b>You have been socially ostracized.</b><br>
 <<if $Lust is true>>\
     The effects of the Lust Potion wear off.
-    <<set $Lust to false>>
-<</if>>\
-<<if $Gargoyle is true>>\
-    The effects of the Gargoyle Potion wear off.
     <<set $Lust to false>>
 <</if>>\
 <<if $Octopus is true>>\
@@ -827,7 +822,7 @@ The other students freak out.
     <<set $Blind to false>>
 <</if>>\
 
-[[Wake Up|Demo]]
+[[Wake Up|Demo][$NightTime to false]]
 
 <<for _i to 0; _i lt $PlantAge.length; _i++>>
     <<if $PlantAge[_i] gt 0>>
@@ -843,12 +838,16 @@ You enter the <<if $Blind is false>>female <</if>>dorm\
 
 You are worried that you are not supposed to be here and that somebody might notice you snooping around.
 
+<<if $NightTime is true and $Vampire is true>>
+[[Suck a student's blood][$TempString to female]] 
+<</if>>\
 [[Leave dorm]]
 [[Stick around]]
 <<else>>.
 
     <<if $Blind is false>>
         This is where you belong. 
+
         [[Explore]]
         [[Sleep]]        
         [[Leave|Demo]]
@@ -860,6 +859,24 @@ You are worried that you are not supposed to be here and that somebody might not
         [[Leave|Demo]]
     <</if>>
 <</if>>
+
+:: Suck a student's blood
+Using the cover of night, you find an unsuspecting $TempString student and suck their blood.
+
+You enjoy your meal, feeling satisfied. Your powers grow. 
+<<set $BatPower to true; $BloodCounter to 0>>
+The student passses out and you flee the scene.
+
+[[Fly away]]
+[[Return to campus|Demo]]
+
+:: Fly away
+You transform into a bat and fly out the window.
+/* WIP - Passages */ 
+[[Perch on top of the Monastery]]
+[[Find a window]]
+[[Fly into the forest]]
+[[Sleep]]
 
 :: Explore
 You explore the dormitory. \
@@ -3573,9 +3590,6 @@ You go to sleep.<br>
     The effects of the Lust Potion wear off.
     <<set $Lust to false>>
 <</if>>\
-<<if $Gargoyle is true>>\
-    The effects of the Gargoyle Potion wear off.
-    <<set $Lust to false>>
 <</if>>\
 <<if $Octopus is true>>\
     The effects of the Octopus Potion wear off.
@@ -3601,7 +3615,7 @@ You dream of an odd future that awaits you, but you can't quite make out the end
 
 Maybe it involves <<print $Dream.random()>>...?
 
-[[Wake Up|Demo]]
+[[Wake Up|Demo][$NightTime to false]]
 
 <<for _i to 0; _i lt $PlantAge.length; _i++>>
     <<if $PlantAge[_i] gt 0>>
