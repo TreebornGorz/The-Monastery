@@ -461,16 +461,16 @@ You drink the $Temp.
         Fangs sprout in your mouth and your skin turns pale.
 
         Beware sunlight.
-        <<set $Vampire to true>>
+        <<set $Vampire to true; $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false; $Gargoyle to false>>
     <<case 'Undead Potion'>>
         Or rather, chewing may be a better description.
 
         You turn undead. Your limbs rot in front of your eyes and your intelligence leaves you.
-        <<set $Undead to true>>
+        <<set $Undead to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Gargoyle to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
     <<case 'Succubus Potion'>>
         <<if $Male is false>>
             You sprout wings and a tail. You now have the ability to hypnotize men. 
-            <<set $Succubus to true>>
+            <<set $Succubus to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
         <<else>>
             As a man, you fall victim to the powers of the succubi. Women will now have control over you. 
             <<set $Seduced to true>>
@@ -478,14 +478,14 @@ You drink the $Temp.
     <<case 'Incubus Potion'>>
         <<if $Male is true>>
             You sprout wings and a tail. You now have the ability to hypnotize women.
-            <<set $Incubus to true>>
+            <<set $Incubus to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
         <<else>>
             As a woman, you fall victim to the powers of the incubi. Men will now have control over you.
             <<set $Seduced to true>>
         <</if>>
     <<case 'Bat Potion'>>
         You sprout wings and turn into a tiny bat.
-        <<set $Bat to true; $NoHands to true>>
+        <<set $Bat to true; $NoHands to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
     <<case 'Curse Potion'>>
         You have been cursed. 
 
@@ -501,7 +501,7 @@ You drink the $Temp.
         You grow talons, a snout, and wings. Your skeletal structure changes dramatically.
 
         You were born to sew chaos.
-        <<set $Demon to true>>
+        <<set $Demon to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
     <<case 'Depression Potion'>>
         <<set $Depression to true>>
     <<case 'Temporary Death Potion'>>
@@ -517,7 +517,7 @@ You drink the $Temp.
         You open the stopper and the once stationary liquid pours down your throat. 
 
         You sprout large wings and grow horns. You feel a compelling urge to stand still.
-        <<set $Gargoyle to true>>
+        <<set $Gargoyle to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
     <<case 'Octopus Potion'>>
         The slimy potion slides down your gullet. 
         <<set $Octopus to true>>
@@ -532,7 +532,7 @@ You drink the $Temp.
         </div> 
     <<case 'Slime Potion'>>
         You turn into a ball of slime. 
-        <<set $Slime to true; $NoHands to true>>
+        <<set $Slime to true; $NoHands to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
     <<case 'Poison'>>
         You are fine for a while, but eventually the poison catches up to you.
 
