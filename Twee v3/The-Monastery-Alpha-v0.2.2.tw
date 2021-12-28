@@ -7,6 +7,12 @@ Transformation Reversion
 
 Unfinished Tasks: 
 
+WIP - Here
+
+Mimic encounter
+
+Turn sleeping into a function
+
 Vampire/Bat potion effects
 
 Incorporate blood counter for vampire is true
@@ -1008,6 +1014,18 @@ You explore deep into the cave. You reach a fork.
 <</if>>
 
 :: Open Chest
+You open the chest.
+<<if $Mimic is true>
+    As your hand approaches the chest. It opens of its own accord, bearing gnarly fangs, and bites your head.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+    </div> 
+<<else>>>
+    You find $TempString.
+    <<run $UserLegendaryItems.pushUnique('$TempString')>>
+    [[/* WIP - Here */]]
+<</if>>
 
 :: Cave monster
 You follow the path. As you tread, you hear strange noises in the distance.
