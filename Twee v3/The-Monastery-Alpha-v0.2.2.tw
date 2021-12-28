@@ -3,7 +3,7 @@
 Test: 
 
 Infirmary syntax fix
-Transformation Potion Effects
+Transformation Reversion
 
 Unfinished Tasks: 
 
@@ -772,14 +772,19 @@ You enter the <<if $Blind is false>>male <</if>>dorm\
 <<if $Male is false and $Blind is false>> even though you are female. 
 
     You are worried that you are not supposed to be here and that somebody might notice you snooping around.
-    
+    <<if $NightTime is true and $Vampire is true>>
+    [[Suck a student's blood][$TempString to male]] 
+    <</if>>\
     [[Leave dorm]]
     [[Stick around]]
 <<else>>.
 
     <<if $Blind is false>>
         This is where you belong.
-
+        
+        <<if $NightTime is true and $Vampire is true>>\
+        [[Suck a student's blood][$TempString to male]] 
+        <</if>>\
         [[Explore]]
         [[Sleep]]        
         [[Leave|Demo]]
@@ -839,18 +844,21 @@ The other students freak out.
 You enter the <<if $Blind is false>>female <</if>>dorm\
 <<if $Male is true and $Blind is false>>  even though you are male. 
 
-You are worried that you are not supposed to be here and that somebody might notice you snooping around.
+    You are worried that you are not supposed to be here and that somebody might notice you snooping around.
 
-<<if $NightTime is true and $Vampire is true>>
-[[Suck a student's blood][$TempString to female]] 
-<</if>>\
-[[Leave dorm]]
-[[Stick around]]
+    <<if $NightTime is true and $Vampire is true>>
+    [[Suck a student's blood][$TempString to female]] 
+    <</if>>\
+    [[Leave dorm]]
+    [[Stick around]]
 <<else>>.
 
     <<if $Blind is false>>
-        This is where you belong. 
+        This is where you belong.
 
+        <<if $NightTime is true and $Vampire is true>>\
+        [[Suck a student's blood][$TempString to female]] 
+        <</if>>\ 
         [[Explore]]
         [[Sleep]]        
         [[Leave|Demo]]
