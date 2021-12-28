@@ -7,6 +7,8 @@ Transformation Reversion
 
 Unfinished Tasks: 
 
+Vampire/Bat potion effects
+
 Incorporate blood counter for vampire is true
 
 Incorporate different options at night
@@ -49,8 +51,9 @@ Too many bad ends in bath house
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
 Changelog v0.2.2
+-New location: Cave
 -The teacher's important document can now be found in the desk even if a previous search attempt failed
--Potions have effects (6/25: X-ray Potion, Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
+-Potions have effects (8/25: Vampire Potion, Bat Potion, X-ray Potion, Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
 -Syntax bugfix in Infirmary
 
 Bug Log 
@@ -737,7 +740,11 @@ Are you Male or Female?
         <</if>>\
     <</if>>\
     [[Wait for night|Demo][$NightTime to true]]
-    <<set $Show to true>>
+    <<set $Show to true>>\
+    <<if $Bat is true>>\
+    [[Fly into the forest|Cave Find]]
+    [[Fly around campus]]
+    <</if>>\
 <<else>> \
     You spent your time on campus doing a whole lot of nothing. Maybe you could have been more interesting or taken more risks.
 
@@ -751,6 +758,13 @@ Are you Male or Female?
     <span class='fadeIn'><span style="color:red"><b>YOU EVENTUALLY DIED</b></span></span>
     </div> 
 <</if>>
+
+:: Fly around campus
+You fly around campus. You notice some areas you can explore.
+
+[[Roof]]
+[[Open window]]
+[[Forest]]
 
 :: Dormitory
 You enter the dormitory.
@@ -773,7 +787,7 @@ You enter the <<if $Blind is false>>male <</if>>dorm\
 
     You are worried that you are not supposed to be here and that somebody might notice you snooping around.
     <<if $NightTime is true and $Vampire is true>>
-    [[Suck a student's blood][$TempString to male]] 
+    [[Suck a student's blood][$TempString to 'male']] 
     <</if>>\
     [[Leave dorm]]
     [[Stick around]]
@@ -783,7 +797,7 @@ You enter the <<if $Blind is false>>male <</if>>dorm\
         This is where you belong.
         
         <<if $NightTime is true and $Vampire is true>>\
-        [[Suck a student's blood][$TempString to male]] 
+        [[Suck a student's blood][$TempString to 'male']] 
         <</if>>\
         [[Explore]]
         [[Sleep]]        
@@ -847,7 +861,7 @@ You enter the <<if $Blind is false>>female <</if>>dorm\
     You are worried that you are not supposed to be here and that somebody might notice you snooping around.
 
     <<if $NightTime is true and $Vampire is true>>
-    [[Suck a student's blood][$TempString to female]] 
+    [[Suck a student's blood][$TempString to 'female']] 
     <</if>>\
     [[Leave dorm]]
     [[Stick around]]
@@ -857,7 +871,7 @@ You enter the <<if $Blind is false>>female <</if>>dorm\
         This is where you belong.
 
         <<if $NightTime is true and $Vampire is true>>\
-        [[Suck a student's blood][$TempString to female]] 
+        [[Suck a student's blood][$TempString to 'female']] 
         <</if>>\ 
         [[Explore]]
         [[Sleep]]        
@@ -883,11 +897,123 @@ The student passses out and you flee the scene.
 
 :: Fly away
 You transform into a bat and fly out the window.
-/* WIP - Passages */ 
-[[Perch on top of the Monastery]]
+<<set $Bat to true; $NoHands to true>>
+[[Perch on top of the Monastery|Perch]]
 [[Find a window]]
-[[Fly into the forest]]
+[[Fly into the forest|Cave Find]]
 [[Sleep]]
+
+:: Perch
+You fly up to the roof and find a perch. You hang upside down looking out at the campus.
+
+You notice a glowing light deep in the forest.
+
+[[Fly to the light|Cave Find]]
+[[Explore the roof]]
+[[Sleep|Perch Sleep]]
+
+:: Perch Sleep
+You sleep on the roof. 
+
+:: Explore the roof
+After exploring for a while, you notice a key.
+
+[[Pick it up|Cabinet Key]]
+[[Fly to the forest|Cave Find]]
+[[Return to your perch|Perch]]
+[[Return to campus|Demo]]
+
+:: Find a window
+You fly around the monastery searching for a window. Eventually, you notice one that is open.
+
+You fly in through the window and find yourself in the infirmary. The nurse appears annoyed and swips at you with a talon, cutting you in two pieces. 
+
+<div align='center' style='font-size: 300%;'>\
+<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+</div> 
+/* WIP */
+
+:: Cave Find
+You fly into the forest. You find a cave. You notice your fellows bats hangling from the rock.
+
+[[Transform and explore]]
+[[Sleep|Cave Sleep]]
+
+:: Cave Sleep
+You fall asleep in the cave hanging from the rock.
+<<set $Bat to true; $NoHands to true>>
+[[You awake the next day.|Cave]]
+<<set $NightTime to false>>
+
+:: Cave 
+It is <<if $NightTime is false>>morning<<else>>night<</if>> in the cave.
+
+[[Fly back to campus|Demo]]
+[[Fly deeper into the cave|Fly cave]]
+[[Transform and explore]]
+
+:: Fly cave
+You fly deeper into the cave. You hear strange noises in the distance.
+
+[[Continue]]
+[[Turn back|Cave]]
+
+:: Continue
+<<if $Bat is true>>\
+    You fly deep into the cave. The strange noises grow louder.
+
+    You hear a deep grumbling and feel vibrations. Suddenly, teeth gnash at you and envelop your body.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+    </div>
+<<else>>
+    You walk deep into the cave. The strange noises grow louder.
+
+    You hear a deep grumbling and feel vibrations. You hear claws scraping against the rock and heavy breathing.
+
+    [[Confront the creature]]
+    [[Flee|Cave]]
+<</if>> 
+
+:: Confront the creature
+A large dragon stands before you. It has scales, wings, talons, and very large teeth.
+
+
+
+:: Transform and explore
+You return to your vampire form.
+<<set $Bat to false; $NoHands to false>>
+You explore deep into the cave. You reach a fork.
+
+[[Go left|Cave fork][$Temp to random(1)]]
+[[Go right|Cave monster][$Temp to random(1)]]
+
+:: Cave fork
+<<if $Temp is 1>>\
+    You happen upon a chest.
+    <<set $Temp to random(1)>>
+    <<if $Temp is 1>>\
+        <<set _Loot to clone($LegendaryItems)>>\
+        <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>\
+            <<run _Loot.delete($UserLegendaryItems[_i])>>\
+        <</for>>\
+        <<set $TempString to _Loot.random()>> \
+    <<else>>\
+        <<set $Mimic to true; $TempString to 'Mimic'>>\
+    <</if>>\
+    [[Open chest]]
+    [[Turn back|Cave]]
+<<else>>\
+<</if>>
+
+:: Open Chest
+
+:: Cave monster
+You follow the path. As you tread, you hear strange noises in the distance.
+
+[[Continue]]
+[[Turn back|Cave]]
 
 :: Explore
 You explore the dormitory. \
