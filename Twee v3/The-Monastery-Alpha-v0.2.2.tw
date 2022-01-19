@@ -123,6 +123,16 @@ Bug Log
 -If player has all seeds, They find an error plant
 -Menu disappeared while invisible; Corrects on [[Demo]]
 
+Brainstorm:
+Dragon guards scroll of fire breathing
+Opus Pocus found in library dungeon - Used to enchant items
+Sword of Siren Slaying found in the mimic chest
+Skeleton Key found in the graveyard by enchanting the Sword of Siren Slaying, breathing fire on it to set it abalaze, and inserting the flaming sword into the ground, engulfing the skeletons in enchanted flame and forging the key 
+Dragon breath can be blocked with enchanted items
+Dragon scales can be penetrated with an enchanted weapon
+Dragon can be defeated with potion effects such as poison, etc. (weapon can be coated - one time use)
+Mimic kills player while human by defualt, protected by enchanted equipment - Killed by breathing fire, potion effects
+
 */
 
 :: StoryTitle
@@ -274,7 +284,7 @@ body.no-save #menu-item-saves {
 <<set $HolyPower to false>>
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
-<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed tests! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","What's the 4,1,1? Give me the lowdown."]>> 
+<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed tests! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","What's the <b>4,1,1</b>? Give me the lowdown.","Sometimes daydreaming can be useful."]>> 
 <<set $UnseenHints to clone($Hint)>>
 <<set $Notes to["I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Never trust a snake. Their scales may be dry, but they are truly slimy.","Sometimes, persistence is key. Trying things again might be the key to better results."]>>
 <<set $Poison to false>>
@@ -332,11 +342,12 @@ body.no-save #menu-item-saves {
 <<set $Sneaky to false>>
 <<set $Items to []>>
 <<set $TeacherItems to ['Syringe','Glasses','Chisel','Knife','Coat','Thruible','Trowel','Spoon']>>
-<<set $LegendaryItems to ['Sword of Siren Slaying','Skeleton Key','Scroll of Fire Breathing','Opus Pocus']>> /* Opus Pocus is an artistic transforming item; Skeleton key is literally a key in the shape of a skull */
+<<set $LegendaryItems to ['Sword of Siren Slaying','Skeleton Key','Scroll of Fire Breathing','Opus Pocus']>> /* Opus Pocus is an artistic enchantment item; Skeleton key is literally a key in the shape of a skull */
 <<set $UserLegendaryItems to []>>
 <<set $Arms to 2; $Legs to 2>>
 <<set $NoHands to false>>
 <<set $Wings to false>>
+<<set $Daydream to false>>
 
 /* Potion Effects */
 <<set $Gorgon to false>>
@@ -1791,25 +1802,31 @@ You laze about the cloister, <<if $Blind is true>>blindly <</if>>daydreaming all
 You realize that you accomplished very little, but you also don't care about that at all.
 
 You feel peaceful and satisfied.
-<<set $Temp to random(7)>>
-<<set _LegendaryItems to clone($LegendaryItems); $TempString to ''>>\
-<<if $UserLegendaryItems.length gt 0>>\
-    <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>\
-        <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>\
-    <</for>>\
-<</if>>\
-<<if $Temp is 0>>\
-    <<if $UserLegendaryItems.length lt 4>>\
-        <<set $TempString to _LegendaryItems.random()>>\
-        As you <<if $Blind is true>>lay in the grass<<else>>stare up the sky<</if>>, something falls down and lands in the grass next to you.
-
-        You pick it up. You obtain a $TempString. 
-        <<run $UserLegendaryItems.pushUnique($TempString)>>
-    <<else>>\
-        A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.<br>
+<<if $Daydream is false>>\
+    <<set $Temp to random(7)>>
+    <<set $Daydream to true>>\
+    <<set _LegendaryItems to clone($LegendaryItems); $TempString to ''>>\
+    <<run _LegendaryItems.delete('Sekeleton Key')>>\
+    <<if $UserLegendaryItems.length gt 0>>\    
+        <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>\
+            <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>\
+        <</for>>\
     <</if>>\
+    <<if $Temp is 0>>\
+        <<if $UserLegendaryItems.length lt 3>>\
+            <<set $TempString to _LegendaryItems.random()>>\
+            As you <<if $Blind is true>>lay in the grass<<else>>stare up the sky<</if>>, something falls down and lands in the grass next to you.
+
+            You pick it up. You obtain a $TempString. 
+            <<run $UserLegendaryItems.pushUnique($TempString)>>
+        <<else>>\
+            A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.<br>
+        <</if>>\
+    <</if>>\
+<<else>>
+    A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.<br>        
 <</if>>\
-<<set $NightTime to true>> /* Generate random daydreams to make this option more entertaining for the player */ \
+<<set $NightTime to true>> /* WIP - Generate random daydreams to make this option more entertaining for the player */ \
 [[Eat dinner]]
 [[Sleep]]
 
