@@ -5,7 +5,18 @@ Test:
 Infirmary syntax fix
 Transformation Reversion
 
-Unfinished Tasks: 
+Unfinished Tasks:
+
+Current: Slime Potion
+
+Remaining: 
+Potions - Octopus, Gargoyle, Intangibility, temp Death, Depression, Nightmare, Curse, Undead, Philosophy, Magic Milk, Funky Dragon
+Map/Areas - Cave, Dungeon, Secret Bath, Tomb, Graveyard, Roof 
+Game Mechanics - Night, Wings
+NPC
+Quests 
+Items
+
 
 WIP - Here
 
@@ -40,7 +51,51 @@ Determine the number of NPCs
 
 Incorporate teacher item effects
 
-Incorporate Potion effects
+Incorporate Potion effects (Self)
+    -(Done) Gorgon: Turns others to stone if you look them in the eyes.
+    -(Done) Invisibility: Player cannot be seen by others. 
+    -(Done) Blinding: Player cannot see. 
+    -(Requires Quest) Vision: Player receives a vision of the future. 
+    -(Requires NPC) Love: Player permanently falls in love with the first person they see. 
+    -(Done - Verify) X-ray: Player can see through objects. 
+    -Philosophy: Player has great insights when examining objects. 
+    -(WIP - New Mechanics) Vampire: Player can permanently suck blood and go hunting at night. 
+    -Undead: Player permanently becomes undead. Limbs randomly come apart from time to time. 
+    -(Requires NPC) Succubus: (F) Player permanently can seduce male NPCs. (M) Player is automatically seduced by female NPCs. 
+    -(Requires NPC) Incubus: (M) Player permanently can seduce female NPCs. (F) Player is automatically seduced by male NPCs.
+    -(WIP) Bat: Player turns into a bat for the day. 
+    -Curse: Player becomes permanently unlucky for rolls. Random chance of death each day. 
+    -Nightmare: Player sees agonizing visions in their sleep for the remainder of the game. 
+    -(Requires NPC) Lust: Player will temporarily lose control of their behavior when confronted by an NPC of the opposite sex and ignore NPCs of the same sex.
+    -(Requires NPC) Demon: Player permanently turns into a demon. You will wreak havoc and kill NPCs occasionally.
+    -Depression: Player becomes sad. You lack the willpower to be brash.
+    -Temporary Death: Player temporarily dies and wakes up in the morgue or cemetery. 
+    -Intangibility: Player can traverse any physical barrier. 
+    -Gargoyle: Player temporarily turns into a gargoyle. 
+    -Octopus: Player temporarily grows tentacles. 
+    -(Done) Disintegration: Player disintegrates into a pile of dust and dies instantly. 
+    -Slime: Player temporarily turns into a blob of slime.
+    -(Done) Poison: Player dies eventually.
+
+    -Vision Milk: Player receives a weird vision.
+    -Vision Ale: Player receives a funny vision.
+    -(Done) Chocolate Milk: Tastes sugary.
+    -(Done) Porter: Tastes of hops and malt.
+    -(Done) Rotten Egg: Smells and tastes bad.
+    -Sedative: Player falls asleep.
+    -Perfume: Player smells good.
+    -Magic Milk: Player hears colors and tastes light. General synesthesia. 
+    -Funky Dragon: Player tastes colors and hears light. General synesthesia, opposite of Milk
+    -Green Milk: Player is tired and hungry.
+    -(Done) Milkshake: Tastes yummy!
+    -(Done) Milk Stout: Not your favorite beer, but you can appreciate it. 
+    -Droopy Juice: Player melts into the floor and wakes up the next day.
+    -(Done) Fragrant Ale: Smells good.
+    -(Requires NPC) Truth Serum: Blurt out a random secret about your past behavior. 
+    -Green Dragon: Player is tired and hungry.
+    -(Done) Pre-Workout: You feel buff.
+    -(Done) Sour Milk: Gross! Stomach ache.
+
 Establish NPCs/relationships
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
 Incorporate events that occur if player doesn't take an action in a certain amount of time 
@@ -281,6 +336,7 @@ body.no-save #menu-item-saves {
 <<set $UserLegendaryItems to []>>
 <<set $Arms to 2; $Legs to 2>>
 <<set $NoHands to false>>
+<<set $Wings to false>>
 
 /* Potion Effects */
 <<set $Gorgon to false>>
@@ -360,16 +416,16 @@ You are a vampire. You can suck blood and transform into a bat.<br><br>
 You are undead. You have almost no intelligence remaining. You have $Arms arms and $Legs legs.<br><br>
 <</if>>\
 <<if $Succubus is true>>\
-You are a succubus. You can use your powers to seduce men.<br><br>
+You are a succubus. You have wings and a tail. You can use your powers to seduce men.<br><br>
 <</if>>\
 <<if $Seduced is true>>\
 You have been seduced. <<if $Male is true>>Women<<else>>Men<</if>> have control over you .<br><br>
 <</if>>\
 <<if $Incubus is true>>\
-You are an incubus. You can use your powers to seduce women.<br><br>
+You are an incubus. You have wings and a tail. You can use your powers to seduce women.<br><br>
 <</if>>\
 <<if $Bat is true>>\
-You are a bat. You have wings and you can fly.<br><br>
+You are a bat. You have wings and look creepy.<br><br>
 <</if>>\
 <<if $Curse is true>>\
 You are cursed. May God have mercy on your soul.<br><br>
@@ -442,6 +498,10 @@ You drink the $Temp.
 <<run $UserPotions.delete($Temp)>>\
 <<switch $Temp>>
     <<case 'Gorgon Potion'>>
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <</if>>\
         You hair transforms into living snakes.
 
         Your eyes become powerful, infused with energy.  
@@ -472,34 +532,53 @@ You drink the $Temp.
         You feel great insight overcome you. Pondering complex problems may now come easier. 
         <<set $Philosophy to true>>
     <<case 'Vampire Potion'>>
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <</if>>\
         Fangs sprout in your mouth and your skin turns pale.
 
         Beware sunlight.
-        <<set $Vampire to true; $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false; $Gargoyle to false>>
+        <<set $Vampire to true>>
     <<case 'Undead Potion'>>
         Or rather, chewing may be a better description.
-
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>\
+        <</if>>
         You turn undead. Your limbs rot in front of your eyes and your intelligence leaves you.
-        <<set $Undead to true; $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Gargoyle to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
+        <<set $Undead to true>>
     <<case 'Succubus Potion'>>
-        <<if $Male is false>>
+        <<if $Male is false>>\
+            <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+                Your current form leaves you. 
+                <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+            <</if>>\        
             You sprout wings and a tail. You now have the ability to hypnotize men. 
-            <<set $Succubus to true; $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Gargoyle to false; $Incubus to false; $Slime to false; $Demon to false>>
-        <<else>>
+            <<set $Succubus to true; $Wings to true>>
+        <<else>>\
             As a man, you fall victim to the powers of the succubi. Women will now have control over you. 
             <<set $Seduced to true>>
         <</if>>
     <<case 'Incubus Potion'>>
-        <<if $Male is true>>
+        <<if $Male is true>>\
+            <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+                Your current form leaves you. 
+                <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+            <</if>>\        
             You sprout wings and a tail. You now have the ability to hypnotize women.
-            <<set $Incubus to true; $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Gargoyle to false; $Slime to false; $Demon to false>>
-        <<else>>
+            <<set $Incubus to true; $Wings to true>>
+        <<else>>\
             As a woman, you fall victim to the powers of the incubi. Men will now have control over you.
             <<set $Seduced to true>>
         <</if>>
     <<case 'Bat Potion'>>
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <</if>>\    
         You sprout wings and turn into a tiny bat.
-        <<set $Bat to true; $NoHands to true; $Gargoyle to false; $Gorgon to false; $Demon to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
+        <<set $Bat to true; $NoHands to true; $Wings to true>>
     <<case 'Curse Potion'>>
         You have been cursed. 
 
@@ -512,10 +591,14 @@ You drink the $Temp.
         You notice a burning desire for a <<if $Male is true>>woman<<else>>man<</if>>.
         <<set $Lust to true>>
     <<case 'Demon Potion'>>
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <</if>>\ 
         You grow talons, a snout, and wings. Your skeletal structure changes dramatically.
 
         You were born to sew chaos.
-        <<set $Demon to true>><<set $NoHands to false; $Gorgon to false; $Gargoyle to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
+        <<set $Demon to true; $Wings to true>>
     <<case 'Depression Potion'>>
         <<set $Depression to true>>
     <<case 'Temporary Death Potion'>>
@@ -528,10 +611,13 @@ You drink the $Temp.
     <<case 'Intangibility Potion'>>
         <<set $Intangibility to true>>
     <<case 'Gargoyle Potion'>>
-        You open the stopper and the once stationary liquid pours down your throat. 
-
+        You open the stopper and the once stationary liquid pours down your throat.
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>\
+        <</if>> 
         You sprout large wings and grow horns. You feel a compelling urge to stand still.
-        <<set $Gargoyle to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false>>
+        <<set $Gargoyle to true; $Wings to true>>
     <<case 'Octopus Potion'>>
         The slimy potion slides down your gullet. 
         <<set $Octopus to true>>
@@ -545,8 +631,12 @@ You drink the $Temp.
         <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
         </div> 
     <<case 'Slime Potion'>>
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <</if>>\ 
         You turn into a ball of slime. 
-        <<set $Slime to true; $NoHands to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Gargoyle to false; $Demon to false>>
+        <<set $Slime to true; $NoHands to true>>
     <<case 'Poison'>>
         You are fine for a while, but eventually the poison catches up to you.
 
