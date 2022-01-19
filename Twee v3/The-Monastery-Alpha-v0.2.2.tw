@@ -59,7 +59,7 @@ Incorporate Potion effects (Self)
     -(Requires NPC) Love: Player permanently falls in love with the first person they see. 
     -(Done - Verify) X-ray: Player can see through objects. 
     -Philosophy: Player has great insights when examining objects. 
-    -(WIP - New Mechanics) Vampire: Player can permanently suck blood and go hunting at night. 
+    -(WIP - New Mechanics; Incorporate transformation into menu) Vampire: Player can permanently suck blood and go hunting at night. 
     -Undead: Player permanently becomes undead. Limbs randomly come apart from time to time. 
     -(Requires NPC) Succubus: (F) Player permanently can seduce male NPCs. (M) Player is automatically seduced by female NPCs. 
     -(Requires NPC) Incubus: (M) Player permanently can seduce female NPCs. (F) Player is automatically seduced by male NPCs.
@@ -783,7 +783,7 @@ This is a demo for the currently in-development interactive fiction project "The
 
 This demo provides players with a teaser for the main project. It is intended to display gameplay without widening the scope to unwieldy levels inevitably required for developing the main project. 
 
-Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
+Source Code: https://github.com/TreebornGorz/The-Monastery
 
 -Black Dahlia 
 
@@ -992,16 +992,21 @@ The student passses out and you flee the scene.
 [[Return to campus|Demo]]
 
 :: Fly away
-You transform into a bat and fly out the window.
+You transform into a bat and fly outside.
 <<set $Bat to true; $NoHands to true>>
-[[Perch on top of the Monastery|Perch]]
+[[Fly onto the roof|Roof fly]]
 [[Find a window]]
 [[Fly into the forest|Cave Find]]
-[[Sleep]]
+/* [[Sleep]] */
 
-:: Perch
-You fly up to the roof and find a perch. You hang upside down looking out at the campus.
+:: Roof fly
+You fly up to the roof and [[find a perch|Roof]].
 
+:: Roof
+You are perched on the roof. You <<if $Bat is true>>hang upside down looking<<else>>look<</if>> out at the campus.
+<<if $Gargoyle is true>>
+    You feel the urge to stay still on your perch.
+<</if>>
 You notice a glowing light deep in the forest.
 
 [[Fly to the light|Cave Find]]
@@ -1009,12 +1014,68 @@ You notice a glowing light deep in the forest.
 [[Sleep|Perch Sleep]]
 
 :: Perch Sleep
-You sleep on the roof. 
+You sleep on the roof.<br>
+<<if $Lust is true>>\
+    The effects of the Lust Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<</if>>\
+<<if $Octopus is true>>\
+    The effects of the Octopus Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<<if $Octopus is true>>\
+    The effects of the Slime Potion wear off.
+    <<set $Slime to false>>
+<</if>>\
+<<if $Bat is true>>\
+    The effects of the Bat Potion wear off.
+    <<set $Bat to false; $NoHands to false>>
+<</if>>\
+<<if $Invisibility is true>>\
+    The effects of the Invisibility Potion wear off.
+    <<set $Invisibility to false>>
+<</if>>\
+<<if $Blind is true>>\
+    The effects of the Blinding Potion wear off.
+    <<set $Blind to false>>
+<</if>>\
+You dream of an odd future that awaits you, but you can't quite make out the ending.
+
+Maybe it involves <<print $Dream.random()>>...?
+
+[[Wake Up|Roof][$NightTime to false]]
+
+<<for _i to 0; _i lt $PlantAge.length; _i++>>
+    <<if $PlantAge[_i] gt 0>>
+        <<set $PlantAge[_i] += 1>>
+    <</if>>
+<</for>>
+
+<<set $Day += 1; $NightTime to true>> 
+
+[[Wake up|Roof]]
 
 :: Explore the roof
+<<if $Items.includes('Cabinet Key')>>\
+You find nothing of interest.
+
+<<else>>\
 After exploring for a while, you notice a key.
 
 [[Pick it up|Cabinet Key]]
+<</if>>/
+[[Fly to the forest|Cave Find]]
+[[Return to your perch|Perch]]
+[[Return to campus|Demo]]
+
+:: Cabinet Key
+<<if $NoHands is false>>\
+The Cabinet Key has been added to your inventory.
+<<run $Items.pushUnique('Cabinet Key')>>\
+<<else>>\
+You cannot pick up a key with no hands.
+<</if>>
 [[Fly to the forest|Cave Find]]
 [[Return to your perch|Perch]]
 [[Return to campus|Demo]]
@@ -1030,58 +1091,30 @@ You fly in through the window and find yourself in the infirmary. The nurse appe
 /* WIP */
 
 :: Cave Find
-You fly into the forest. You find a cave. You notice your fellows bats hangling from the rock.
+You fly into the forest. You notice a cave. 
 
-[[Transform and explore]]
-[[Sleep|Cave Sleep]]
+[[Enter Cave|Cave]]
+/* [[Continue|Forest]] WIP */
 
-:: Cave Sleep
+/* :: Cave Sleep
 You fall asleep in the cave hanging from the rock.
 <<set $Bat to true; $NoHands to true>>
 [[You awake the next day.|Cave]]
-<<set $NightTime to false>>
+<<set $NightTime to false>> WIP */
 
 :: Cave 
-It is <<if $NightTime is false>>morning<<else>>night<</if>> in the cave.
+It is <<if $NightTime is false>>morning<<else>>night<</if>> in the cave. <<if $Bat is true>>You notice your fellows bats hangling from the rock.<</if>>
 
 [[Fly back to campus|Demo]]
 [[Fly deeper into the cave|Fly cave]]
-[[Transform and explore]]
+[[Explore on foot|Explore Cave]]
 
-:: Fly cave
-You fly deeper into the cave. You hear strange noises in the distance.
+::Explore Cave 
+You explore deep into the cave passing a hole in the ceiling. You reach a fork.
 
-[[Continue]]
-[[Turn back|Cave]]
-
-:: Continue
-<<if $Bat is true>>\
-    You fly deep into the cave. The strange noises grow louder.
-
-    You hear a deep grumbling and feel vibrations. Suddenly, teeth gnash at you and envelop your body.
-
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-    </div>
-<<else>>
-    You walk deep into the cave. The strange noises grow louder.
-
-    You hear a deep grumbling and feel vibrations. You hear claws scraping against the rock and heavy breathing.
-
-    [[Confront the creature]]
-    [[Flee|Cave]]
-<</if>> 
-
-:: Confront the creature
-A large dragon stands before you. It has scales, wings, talons, and very large teeth.
-
-
-
-:: Transform and explore
-You return to your vampire form.
-<<set $Bat to false; $NoHands to false>>
-You explore deep into the cave. You reach a fork.
-
+<<if $Wings is true>>\
+[[Go back and fly into the hole|Cave Hole]]
+<</if>>\
 [[Go left|Cave fork][$Temp to random(1)]]
 [[Go right|Cave monster][$Temp to random(1)]]
 
@@ -1122,6 +1155,45 @@ You follow the path. As you tread, you hear strange noises in the distance.
 
 [[Continue]]
 [[Turn back|Cave]]
+
+:: Fly cave
+You fly deeper into the cave. 
+
+You notice a hole in the ceiling.
+
+[[Fly upwards|Cave Hole]]
+[[Continue Striaght|Explore Cave]]
+
+:: Cave Hole
+You enter a new chamber.
+
+You hear strange noises in the distance.
+
+[[Continue]]
+[[Turn back|Cave]]
+
+:: Continue
+<<if $Bat is true>>\
+    You fly deep into the cave. The strange noises grow louder.
+
+    You hear a deep grumbling and feel vibrations. Suddenly, teeth gnash at you and envelop your body.
+
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+    </div>
+<<else>>
+    You walk deep into the cave. The strange noises grow louder.
+
+    You hear a deep grumbling and feel vibrations. You hear claws scraping against the rock and heavy breathing.
+
+    [[Confront the creature]]
+    [[Flee|Cave]]
+<</if>> 
+
+:: Confront the creature
+A large dragon stands before you. It has scales, wings, talons, and very large teeth.
+
+/* WIP */
 
 :: Explore
 You explore the dormitory. \
