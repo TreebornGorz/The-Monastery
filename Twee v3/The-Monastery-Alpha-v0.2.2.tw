@@ -932,9 +932,9 @@ The other students freak out.
 <</if>>\
 <<if $Octopus is true>>\
     The effects of the Octopus Potion wear off.
-    <<set $Lust to false>>
+    <<set $Octopus to false>>
 <</if>>\
-<<if $Octopus is true>>\
+<<if $Slime is true>>\
     The effects of the Slime Potion wear off.
     <<set $Slime to false>>
 <</if>>\
@@ -1033,9 +1033,9 @@ You sleep on the roof.<br>
 <</if>>\
 <<if $Octopus is true>>\
     The effects of the Octopus Potion wear off.
-    <<set $Lust to false>>
+    <<set $Octopus to false>>
 <</if>>\
-<<if $Octopus is true>>\
+<<if $Slime is true>>\
     The effects of the Slime Potion wear off.
     <<set $Slime to false>>
 <</if>>\
@@ -3927,9 +3927,9 @@ You go to sleep.<br>
 <</if>>\
 <<if $Octopus is true>>\
     The effects of the Octopus Potion wear off.
-    <<set $Lust to false>>
+    <<set $Octopus to false>>
 <</if>>\
-<<if $Octopus is true>>\
+<<if $Slime is true>>\
     The effects of the Slime Potion wear off.
     <<set $Slime to false>>
 <</if>>\
