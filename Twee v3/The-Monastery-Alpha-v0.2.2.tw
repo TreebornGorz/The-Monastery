@@ -5,7 +5,18 @@ Test:
 Infirmary syntax fix
 Transformation Reversion
 
-Unfinished Tasks: 
+Unfinished Tasks:
+
+Current: Slime Potion
+
+Remaining: 
+Potions - Octopus, Gargoyle, Intangibility, temp Death, Depression, Nightmare, Curse, Undead, Philosophy, Magic Milk, Funky Dragon
+Map/Areas - Cave, Dungeon, Secret Bath, Tomb, Graveyard, Roof 
+Game Mechanics - Night, Wings
+NPC
+Quests 
+Items
+
 
 WIP - Here
 
@@ -40,7 +51,51 @@ Determine the number of NPCs
 
 Incorporate teacher item effects
 
-Incorporate Potion effects
+Incorporate Potion effects (Self)
+    -(Done) Gorgon: Turns others to stone if you look them in the eyes.
+    -(Done) Invisibility: Player cannot be seen by others. 
+    -(Done) Blinding: Player cannot see. 
+    -(Requires Quest) Vision: Player receives a vision of the future. 
+    -(Requires NPC) Love: Player permanently falls in love with the first person they see. 
+    -(Done - Verify) X-ray: Player can see through objects. 
+    -Philosophy: Player has great insights when examining objects. 
+    -(WIP - New Mechanics; Incorporate transformation into menu) Vampire: Player can permanently suck blood and go hunting at night. 
+    -Undead: Player permanently becomes undead. Limbs randomly come apart from time to time. 
+    -(Requires NPC) Succubus: (F) Player permanently can seduce male NPCs. (M) Player is automatically seduced by female NPCs. 
+    -(Requires NPC) Incubus: (M) Player permanently can seduce female NPCs. (F) Player is automatically seduced by male NPCs.
+    -(WIP) Bat: Player turns into a bat for the day. 
+    -Curse: Player becomes permanently unlucky for rolls. Random chance of death each day. 
+    -Nightmare: Player sees agonizing visions in their sleep for the remainder of the game. 
+    -(Requires NPC) Lust: Player will temporarily lose control of their behavior when confronted by an NPC of the opposite sex and ignore NPCs of the same sex.
+    -(Requires NPC) Demon: Player permanently turns into a demon. You will wreak havoc and kill NPCs occasionally.
+    -Depression: Player becomes sad. You lack the willpower to be brash.
+    -Temporary Death: Player temporarily dies and wakes up in the morgue or cemetery. 
+    -Intangibility: Player can traverse any physical barrier. 
+    -Gargoyle: Player temporarily turns into a gargoyle. 
+    -Octopus: Player temporarily grows tentacles. 
+    -(Done) Disintegration: Player disintegrates into a pile of dust and dies instantly. 
+    -Slime: Player temporarily turns into a blob of slime.
+    -(Done) Poison: Player dies eventually.
+
+    -Vision Milk: Player receives a weird vision.
+    -Vision Ale: Player receives a funny vision.
+    -(Done) Chocolate Milk: Tastes sugary.
+    -(Done) Porter: Tastes of hops and malt.
+    -(Done) Rotten Egg: Smells and tastes bad.
+    -Sedative: Player falls asleep.
+    -Perfume: Player smells good.
+    -Magic Milk: Player hears colors and tastes light. General synesthesia. 
+    -Funky Dragon: Player tastes colors and hears light. General synesthesia, opposite of Milk
+    -Green Milk: Player is tired and hungry.
+    -(Done) Milkshake: Tastes yummy!
+    -(Done) Milk Stout: Not your favorite beer, but you can appreciate it. 
+    -Droopy Juice: Player melts into the floor and wakes up the next day.
+    -(Done) Fragrant Ale: Smells good.
+    -(Requires NPC) Truth Serum: Blurt out a random secret about your past behavior. 
+    -Green Dragon: Player is tired and hungry.
+    -(Done) Pre-Workout: You feel buff.
+    -(Done) Sour Milk: Gross! Stomach ache.
+
 Establish NPCs/relationships
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
 Incorporate events that occur if player doesn't take an action in a certain amount of time 
@@ -67,6 +122,16 @@ Bug Log
 -History control causes $Temp to bug out and not randomize in the teacher's dorm when searching belongings (Test)
 -If player has all seeds, They find an error plant
 -Menu disappeared while invisible; Corrects on [[Demo]]
+
+Brainstorm:
+Dragon guards scroll of fire breathing
+Opus Pocus found in library dungeon - Used to enchant items
+Sword of Siren Slaying found in the mimic chest
+Skeleton Key found in the graveyard by enchanting the Sword of Siren Slaying, breathing fire on it to set it abalaze, and inserting the flaming sword into the ground, engulfing the skeletons in enchanted flame and forging the key 
+Dragon breath can be blocked with enchanted items
+Dragon scales can be penetrated with an enchanted weapon
+Dragon can be defeated with potion effects such as poison, etc. (weapon can be coated - one time use)
+Mimic kills player while human by defualt, protected by enchanted equipment - Killed by breathing fire, potion effects
 
 */
 
@@ -219,7 +284,7 @@ body.no-save #menu-item-saves {
 <<set $HolyPower to false>>
 <<set $NurseWork to false>>
 <<set $Dream to ["unicorns", "Greek gods", "dragons", "vampires", "leprechauns", "gnomes", "goblins", "ogres", "centaurs", "fairies", "mermaids", "werewolves", "golems", "trolls", "valkyries", "math homework"]>> 
-<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed tests! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","What's the 4,1,1? Give me the lowdown."]>> 
+<<set $Hint to ["Each time I visit the temple, I feel more spiritually awakened.","When I can't find something, it can be helpful to repeat things I've done before.","I have a deadline approaching, I better hurry up!","I heard there's something interesting in the professor's desk.","This milk tastes delicious! I bet it it's straight from the cow in the barn.","These eggs taste delicious! I bet they're straight from the chickens in the barn.","I took Seabiscuit for a ride into the forest the other day. I saw some gnarly plants!","I hate timed tests! I never finish before the time runs out...","Living to be old sounds boring! I would rather take risks and live in the moment.","Some people say everything happens for a reason. Maybe they are right, but I believe that some things are just random.","What's the <b>4,1,1</b>? Give me the lowdown.","Sometimes daydreaming can be useful."]>> 
 <<set $UnseenHints to clone($Hint)>>
 <<set $Notes to["I hear there's a mutant fish that lives in the pipes underneath the Balneary.","Never trust a snake. Their scales may be dry, but they are truly slimy.","Sometimes, persistence is key. Trying things again might be the key to better results."]>>
 <<set $Poison to false>>
@@ -277,10 +342,12 @@ body.no-save #menu-item-saves {
 <<set $Sneaky to false>>
 <<set $Items to []>>
 <<set $TeacherItems to ['Syringe','Glasses','Chisel','Knife','Coat','Thruible','Trowel','Spoon']>>
-<<set $LegendaryItems to ['Sword of Siren Slaying','Skeleton Key','Scroll of Fire Breathing','Opus Pocus']>> /* Opus Pocus is an artistic transforming item; Skeleton key is literally a key in the shape of a skull */
+<<set $LegendaryItems to ['Sword of Siren Slaying','Skeleton Key','Scroll of Fire Breathing','Opus Pocus']>> /* Opus Pocus is an artistic enchantment item; Skeleton key is literally a key in the shape of a skull */
 <<set $UserLegendaryItems to []>>
 <<set $Arms to 2; $Legs to 2>>
 <<set $NoHands to false>>
+<<set $Wings to false>>
+<<set $Daydream to false>>
 
 /* Potion Effects */
 <<set $Gorgon to false>>
@@ -360,16 +427,16 @@ You are a vampire. You can suck blood and transform into a bat.<br><br>
 You are undead. You have almost no intelligence remaining. You have $Arms arms and $Legs legs.<br><br>
 <</if>>\
 <<if $Succubus is true>>\
-You are a succubus. You can use your powers to seduce men.<br><br>
+You are a succubus. You have wings and a tail. You can use your powers to seduce men.<br><br>
 <</if>>\
 <<if $Seduced is true>>\
 You have been seduced. <<if $Male is true>>Women<<else>>Men<</if>> have control over you .<br><br>
 <</if>>\
 <<if $Incubus is true>>\
-You are an incubus. You can use your powers to seduce women.<br><br>
+You are an incubus. You have wings and a tail. You can use your powers to seduce women.<br><br>
 <</if>>\
 <<if $Bat is true>>\
-You are a bat. You have wings and you can fly.<br><br>
+You are a bat. You have wings and look creepy.<br><br>
 <</if>>\
 <<if $Curse is true>>\
 You are cursed. May God have mercy on your soul.<br><br>
@@ -442,6 +509,10 @@ You drink the $Temp.
 <<run $UserPotions.delete($Temp)>>\
 <<switch $Temp>>
     <<case 'Gorgon Potion'>>
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <</if>>\
         You hair transforms into living snakes.
 
         Your eyes become powerful, infused with energy.  
@@ -472,34 +543,53 @@ You drink the $Temp.
         You feel great insight overcome you. Pondering complex problems may now come easier. 
         <<set $Philosophy to true>>
     <<case 'Vampire Potion'>>
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <</if>>\
         Fangs sprout in your mouth and your skin turns pale.
 
         Beware sunlight.
-        <<set $Vampire to true; $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <<set $Vampire to true>>
     <<case 'Undead Potion'>>
         Or rather, chewing may be a better description.
-
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>\
+        <</if>>
         You turn undead. Your limbs rot in front of your eyes and your intelligence leaves you.
-        <<set $Undead to true; $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Gargoyle to false; $Succubus to false; $Incubus to false; $Slime to false>>
+        <<set $Undead to true>>
     <<case 'Succubus Potion'>>
-        <<if $Male is false>>
+        <<if $Male is false>>\
+            <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+                Your current form leaves you. 
+                <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+            <</if>>\        
             You sprout wings and a tail. You now have the ability to hypnotize men. 
-            <<set $Succubus to true; $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Gargoyle to false; $Incubus to false; $Slime to false>>
-        <<else>>
+            <<set $Succubus to true; $Wings to true>>
+        <<else>>\
             As a man, you fall victim to the powers of the succubi. Women will now have control over you. 
             <<set $Seduced to true>>
         <</if>>
     <<case 'Incubus Potion'>>
-        <<if $Male is true>>
+        <<if $Male is true>>\
+            <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+                Your current form leaves you. 
+                <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+            <</if>>\        
             You sprout wings and a tail. You now have the ability to hypnotize women.
-            <<set $Incubus to true; $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Gargoyle to false; $Slime to false>>
-        <<else>>
+            <<set $Incubus to true; $Wings to true>>
+        <<else>>\
             As a woman, you fall victim to the powers of the incubi. Men will now have control over you.
             <<set $Seduced to true>>
         <</if>>
     <<case 'Bat Potion'>>
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <</if>>\    
         You sprout wings and turn into a tiny bat.
-        <<set $Bat to true; $NoHands to true; $Gargoyle to false; $Gorgon to false; $Demon to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false>>
+        <<set $Bat to true; $NoHands to true; $Wings to true>>
     <<case 'Curse Potion'>>
         You have been cursed. 
 
@@ -512,10 +602,14 @@ You drink the $Temp.
         You notice a burning desire for a <<if $Male is true>>woman<<else>>man<</if>>.
         <<set $Lust to true>>
     <<case 'Demon Potion'>>
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <</if>>\ 
         You grow talons, a snout, and wings. Your skeletal structure changes dramatically.
 
         You were born to sew chaos.
-        <<set $Demon to true>><<set $NoHands to false; $Gorgon to false; $Gargoyle to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false>>
+        <<set $Demon to true; $Wings to true>>
     <<case 'Depression Potion'>>
         <<set $Depression to true>>
     <<case 'Temporary Death Potion'>>
@@ -528,10 +622,13 @@ You drink the $Temp.
     <<case 'Intangibility Potion'>>
         <<set $Intangibility to true>>
     <<case 'Gargoyle Potion'>>
-        You open the stopper and the once stationary liquid pours down your throat. 
-
+        You open the stopper and the once stationary liquid pours down your throat.
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>\
+        <</if>> 
         You sprout large wings and grow horns. You feel a compelling urge to stand still.
-        <<set $Gargoyle to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false>>
+        <<set $Gargoyle to true; $Wings to true>>
     <<case 'Octopus Potion'>>
         The slimy potion slides down your gullet. 
         <<set $Octopus to true>>
@@ -545,8 +642,12 @@ You drink the $Temp.
         <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
         </div> 
     <<case 'Slime Potion'>>
+        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+            Your current form leaves you. 
+            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <</if>>\ 
         You turn into a ball of slime. 
-        <<set $Slime to true; $NoHands to true>><<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Gargoyle to false>>
+        <<set $Slime to true; $NoHands to true>>
     <<case 'Poison'>>
         You are fine for a while, but eventually the poison catches up to you.
 
@@ -601,7 +702,7 @@ You drink the $Temp.
         It is chunky and disgusting. Your stomach is upset.
     <<case 'Holy Water'>>
         You have been purified. You are now fully human.
-        <<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+        <<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false; $Gargoyle to false>>
 <</switch>>\
 <<if $Disintegration is true or $Poison is true or $TempDeath is true or $Temp is 'Droopy Juice' or $Temp is 'Sedative'>>
 <<else>>\
@@ -693,7 +794,7 @@ This is a demo for the currently in-development interactive fiction project "The
 
 This demo provides players with a teaser for the main project. It is intended to display gameplay without widening the scope to unwieldy levels inevitably required for developing the main project. 
 
-Source Code: https://github.com/TreebornGorz/The-Archmage-Demo
+Source Code: https://github.com/TreebornGorz/The-Monastery
 
 -Black Dahlia 
 
@@ -747,7 +848,7 @@ Are you Male or Female?
     <</if>>\
     [[Wait for night|Demo][$NightTime to true]]
     <<set $Show to true>>\
-    <<if $Bat is true>>\
+    <<if $Wings is true>>\
     [[Fly into the forest|Cave Find]]
     [[Fly around campus]]
     <</if>>\
@@ -902,16 +1003,20 @@ The student passses out and you flee the scene.
 [[Return to campus|Demo]]
 
 :: Fly away
-You transform into a bat and fly out the window.
+You <<if $Vampire is true>>transform into a bat and <</if>>fly outside. 
 <<set $Bat to true; $NoHands to true>>
-[[Perch on top of the Monastery|Perch]]
+[[Fly onto the roof|Roof fly]]
 [[Find a window]]
 [[Fly into the forest|Cave Find]]
-[[Sleep]]
 
-:: Perch
-You fly up to the roof and find a perch. You hang upside down looking out at the campus.
+:: Roof fly
+You fly up to the roof and [[find a perch|Roof]].
 
+:: Roof
+You are perched on the roof. You <<if $Bat is true>>hang upside down looking<<else>>look<</if>> out at the campus.
+<<if $Gargoyle is true>>
+    You feel the urge to stay still on your perch.
+<</if>>
 You notice a glowing light deep in the forest.
 
 [[Fly to the light|Cave Find]]
@@ -919,12 +1024,68 @@ You notice a glowing light deep in the forest.
 [[Sleep|Perch Sleep]]
 
 :: Perch Sleep
-You sleep on the roof. 
+You sleep on the roof.<br>
+<<if $Lust is true>>\
+    The effects of the Lust Potion wear off.
+    <<set $Lust to false>>
+<</if>>\
+<</if>>\
+<<if $Octopus is true>>\
+    The effects of the Octopus Potion wear off.
+    <<set $Octopus to false>>
+<</if>>\
+<<if $Slime is true>>\
+    The effects of the Slime Potion wear off.
+    <<set $Slime to false>>
+<</if>>\
+<<if $Bat is true>>\
+    The effects of the Bat Potion wear off.
+    <<set $Bat to false; $NoHands to false>>
+<</if>>\
+<<if $Invisibility is true>>\
+    The effects of the Invisibility Potion wear off.
+    <<set $Invisibility to false>>
+<</if>>\
+<<if $Blind is true>>\
+    The effects of the Blinding Potion wear off.
+    <<set $Blind to false>>
+<</if>>\
+You dream of an odd future that awaits you, but you can't quite make out the ending.
+
+Maybe it involves <<print $Dream.random()>>...?
+
+[[Wake Up|Roof][$NightTime to false]]
+
+<<for _i to 0; _i lt $PlantAge.length; _i++>>
+    <<if $PlantAge[_i] gt 0>>
+        <<set $PlantAge[_i] += 1>>
+    <</if>>
+<</for>>
+
+<<set $Day += 1; $NightTime to true>> 
+
+[[Wake up|Roof]]
 
 :: Explore the roof
+<<if $Items.includes('Cabinet Key')>>\
+You find nothing of interest.
+
+<<else>>\
 After exploring for a while, you notice a key.
 
 [[Pick it up|Cabinet Key]]
+<</if>>/
+[[Fly to the forest|Cave Find]]
+[[Return to your perch|Perch]]
+[[Return to campus|Demo]]
+
+:: Cabinet Key
+<<if $NoHands is false>>\
+The Cabinet Key has been added to your inventory.
+<<run $Items.pushUnique('Cabinet Key')>>\
+<<else>>\
+You cannot pick up a key with no hands.
+<</if>>
 [[Fly to the forest|Cave Find]]
 [[Return to your perch|Perch]]
 [[Return to campus|Demo]]
@@ -940,58 +1101,30 @@ You fly in through the window and find yourself in the infirmary. The nurse appe
 /* WIP */
 
 :: Cave Find
-You fly into the forest. You find a cave. You notice your fellows bats hangling from the rock.
+You fly into the forest. You notice a cave. 
 
-[[Transform and explore]]
-[[Sleep|Cave Sleep]]
+[[Enter Cave|Cave]]
+[[Continue|WIP]] 
 
-:: Cave Sleep
+/* :: Cave Sleep
 You fall asleep in the cave hanging from the rock.
 <<set $Bat to true; $NoHands to true>>
 [[You awake the next day.|Cave]]
-<<set $NightTime to false>>
+<<set $NightTime to false>> WIP */
 
 :: Cave 
-It is <<if $NightTime is false>>morning<<else>>night<</if>> in the cave.
+It is <<if $NightTime is false>>morning<<else>>night<</if>> in the cave. <<if $Bat is true>>You notice your fellows bats hanging from the stalactites.<</if>>
 
 [[Fly back to campus|Demo]]
 [[Fly deeper into the cave|Fly cave]]
-[[Transform and explore]]
+[[Explore on foot|Explore Cave]]
 
-:: Fly cave
-You fly deeper into the cave. You hear strange noises in the distance.
+::Explore Cave 
+You explore deep into the cave passing a hole in the ceiling. You reach a fork.
 
-[[Continue]]
-[[Turn back|Cave]]
-
-:: Continue
-<<if $Bat is true>>\
-    You fly deep into the cave. The strange noises grow louder.
-
-    You hear a deep grumbling and feel vibrations. Suddenly, teeth gnash at you and envelop your body.
-
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-    </div>
-<<else>>
-    You walk deep into the cave. The strange noises grow louder.
-
-    You hear a deep grumbling and feel vibrations. You hear claws scraping against the rock and heavy breathing.
-
-    [[Confront the creature]]
-    [[Flee|Cave]]
-<</if>> 
-
-:: Confront the creature
-A large dragon stands before you. It has scales, wings, talons, and very large teeth.
-
-
-
-:: Transform and explore
-You return to your vampire form.
-<<set $Bat to false; $NoHands to false>>
-You explore deep into the cave. You reach a fork.
-
+<<if $Wings is true>>\
+[[Go back and fly into the hole|Cave Hole]]
+<</if>>\
 [[Go left|Cave fork][$Temp to random(1)]]
 [[Go right|Cave monster][$Temp to random(1)]]
 
@@ -1014,17 +1147,23 @@ You explore deep into the cave. You reach a fork.
 <</if>>
 
 :: Open Chest
-You open the chest.
-<<if $Mimic is true>
-    As your hand approaches the chest. It opens of its own accord, bearing gnarly fangs, and bites your head.
+<<if $NoHands is true>>
+You cannot open a chest with no hands.
 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-    </div> 
-<<else>>>
-    You find $TempString.
-    <<run $UserLegendaryItems.pushUnique('$TempString')>>
-    [[/* WIP - Here */]]
+[[Exit cave|Forest]] /* WIP */
+[[Backtrack|Cave]] /* WIP */    
+<<else>>
+    You open the chest.
+    <<if $Mimic is true>
+        As your hand approaches the chest. It opens of its own accord, bearing gnarly fangs, and bites at your head.
+
+        [[Fight back|WIP]] 
+    <<else>>>
+        You find $TempString.
+        <<run $UserLegendaryItems.pushUnique('$TempString')>>
+        [[Exit cave|Forest]] /* WIP */
+        [[Backtrack|Cave]] /* WIP */
+    <</if>>
 <</if>>
 
 :: Cave monster
@@ -1032,6 +1171,38 @@ You follow the path. As you tread, you hear strange noises in the distance.
 
 [[Continue]]
 [[Turn back|Cave]]
+
+:: Fly cave
+You fly deeper into the cave. 
+
+You notice a hole in the ceiling.
+
+[[Fly upwards|Cave Hole]]
+[[Continue Striaght|Explore Cave]]
+
+:: Cave Hole
+You enter a new chamber.
+
+You hear strange noises in the distance.
+
+[[Continue]]
+[[Turn back|Cave]]
+
+:: Continue
+You <<if $Wings is true>>fly<<else>>walk<</if>> deep into the cave. The strange noises grow louder.
+
+You hear a deep grumbling and feel vibrations. You hear claws scraping against the rock and heavy breathing.
+
+[[Confront the creature|Dragon]]
+[[Flee|Cave]]
+
+:: Dragon
+A large dragon stands before you. It has scales, wings, talons, and very large teeth.
+
+It is probably guarding something precious.
+
+[[Fight|WIP]]
+[[Flee|Cave]]
 
 :: Explore
 You explore the dormitory. \
@@ -1055,7 +1226,9 @@ Even though you probably shouldn't be in this dorm, you decide to stay anyway.
 
 Fortunately, there aren't many students around and you manage to avoid detection as you sneak your way through the dorm rooms.
 
+<<if $NoHands is false>>\ 
 [[Search student's belongings]]
+<</if>>\
 [[Eavesdrop]]
         
 :: Search student's belongings
@@ -1068,7 +1241,7 @@ You find nothing of interest.
 
 :: Eavesdrop
 <<if $Ostra is true and $Invisibility is false>> 
-The students notice you eavesdropping<<if $Gorgon is true and $Blind is false>>.
+The students notice <<if $Slime is true>>a slime ball<<else>>you<</if>> eavesdropping<<if $Gorgon is true and $Blind is false>>.
 
     [[Look them in the eyes]]
     [[Spare their lives]]
@@ -1109,7 +1282,7 @@ You will not receive a trial and you have not been notified of the duration of y
 Many days have passed...
 
 [[Wait patiently][$Day += 739]]
-/* [[Attempt escape|WIP]] */
+[[Attempt escape|WIP]]
 
 :: Wait patiently
 You waited patiently to be released from your jail cell.
@@ -1132,19 +1305,25 @@ You take your future into your own hands and attempt escape from your cell.
 /* IF player established a relationship with the guard previously, that may be helpful */
 
 :: Pull latch
-You pull the latch. 
+<<if $NoHands is false>>\
+    You pull the latch. 
 
-The door is locked, but you don't see a keyhole of any kind. 
-<<if $Xray is true>>
-Using your X-ray vision, you peer through the ceiling. You notice stairs leading into a corridor which presumably leads to some sort of secret room.
-<</if>>
-Maybe <<if $CeilingKey is false>>there is some other way of opening<<else>>the passphrase you learned will open<</if>> this door?
+    The door is locked, but you don't see a keyhole of any kind. 
+    <<if $Xray is true>>
+    Using your X-ray vision, you peer through the ceiling. You notice stairs leading into a corridor which presumably leads to some sort of secret room.
+    <</if>>
+    Maybe <<if $CeilingKey is false>>there is some other way of opening<<else>>the passphrase you learned will open<</if>> this door?
 
-[[Choose a dormitory|Dormitory]]
-<<if $CeilingKey is true>> \
-[[Utter the passphrase|Passphrase]]
-<</if>> \
-[[Leave|Demo]]
+    [[Choose a dormitory|Dormitory]]
+    <<if $CeilingKey is true>> \
+    [[Utter the passphrase|Passphrase]]
+    <</if>> \
+    [[Leave|Demo]]
+<<else>>\
+    You cannot pull a latch with no hands.
+
+    [[Return|previous()]] /* Test */
+<</if>>\
         
 :: Passphrase
 You utter the passphrase.
@@ -1154,63 +1333,83 @@ You hear a clicking noise and the latch unlocks.
 [[Enter the darkness]]
 
 :: Enter the darkness
-You swing a door down and climb into the ceiling.
+<<if $NoHands is false or $Wings is true>>\
+    You swing a door down and <<if $Wings is true>>fly<<else>>climb<</if>> into the ceiling.
+    <<if $Blind is false>>
+        The teacher's dorm appears quite similar to the student dorms, however there are fewer beds.
 
-The teacher's dorm appears quite similar to the student dorms, however there are fewer beds.
+        You notice teacher's belongings strewn about.
 
-You notice teacher's belongings strewn about.
+        There are currently no teachers around, but you may not want to press your luck.
+        <<if $Xray is true and $Blind is false>>
+        [[Use your X-ray vision to find a particular item|Teacher Belonging Xray][$TempBool to false]]
+        <</if>>\
+        [[Search teacher's belongings][$TempBool to false]]
+        [[Hide and wait for a teacher to show up|Hide][$TempBool to true]]
+    <</if>>\
+    [[Leave dorm]]
+<<else>>\
+    You cannot open the door without hands.
 
-There are currently no teachers around, but you may not want to press your luck.
-<<if $Xray is true and $Blind is false>>
-[[Use your X-ray vision to find a particular item|Teacher Belonging Xray][$TempBool to false]]
+    [[Return|Demo]]
 <</if>>\
-[[Search teacher's belongings][$TempBool to false]]
-[[Hide and wait for a teacher to show up|Hide][$TempBool to true]]
-[[Leave dorm]]
 
 :: Teacher Belonging Xray
-You traverse the dormitory, inspecting the teacher's various bags, chests, and miscellaneous containers. 
+    You traverse the dormitory, inspecting the teacher's various bags, chests, and miscellaneous containers. 
 
-Peering through them, you notice some interesting items.
+    Peering through them, you notice some interesting items.
 
-[[Take an item]]
-[[Leave dorm]]
+    [[Take an item]]
+    [[Leave dorm]]
+<<else>>\
+    You cannot climb into the ceiling without hands.
+
+    [[Return|Demo]]
+<</if>>\
 
 :: Take an item
-Select an item to take:
-<<nobr>>
-    <<set _Items to clone($TeacherItems)>>
-    <<for _i to 0; _i lt $Items.length; _i++>>
-        <<switch $Items[_i]>>
-            <<case 'Syringe'>>
-                <<run _Items.delete('Syringe')>>
-            <<case 'Glasses'>>
-                <<run _Items.delete('Glasses')>>
-            <<case 'Chisel'>>
-                <<run _Items.delete('Chisel')>>
-            <<case 'Knife'>>
-                <<run _Items.delete('Knife')>>
-            <<case 'Coat'>>
-                <<run _Items.delete('Coat')>>
-            <<case 'Thurible'>>
-                <<run _Items.delete('Thurible')>>
-            <<case 'Trowel'>>
-                <<run _Items.delete('Trowel')>>
-            <<case 'Spoon'>>
-                <<run _Items.delete('Spoon')>>
-        <</switch>>
+<<if $NoHands is false>>\
+    Select an item to take:
+    <<nobr>>
+        <<set _Items to clone($TeacherItems)>>
+        <<for _i to 0; _i lt $Items.length; _i++>>
+            <<switch $Items[_i]>>
+                <<case 'Syringe'>>
+                    <<run _Items.delete('Syringe')>>
+                <<case 'Glasses'>>
+                    <<run _Items.delete('Glasses')>>
+                <<case 'Chisel'>>
+                    <<run _Items.delete('Chisel')>>
+                <<case 'Knife'>>
+                    <<run _Items.delete('Knife')>>
+                <<case 'Coat'>>
+                    <<run _Items.delete('Coat')>>
+                <<case 'Thurible'>>
+                    <<run _Items.delete('Thurible')>>
+                <<case 'Trowel'>>
+                    <<run _Items.delete('Trowel')>>
+                <<case 'Spoon'>>
+                    <<run _Items.delete('Spoon')>>
+            <</switch>>
+        <</for>>
+    <</nobr>>
+    <<for _i to 0; _i lt _Items.length; _i++>>\
+        <<capture _i>>\
+            <<button [[_Items[_i]|Take xray item]]>><<set $TempString to _Items[_i]>><</button>>  \
+        <</capture>>\
     <</for>>
-<</nobr>>
-<<for _i to 0; _i lt _Items.length; _i++>>\
-    <<capture _i>>\
-        <<button [[_Items[_i]|Take xray item]]>><<set $TempString to _Items[_i]>><</button>>  \
-    <</capture>>\
-<</for>>
-<<set $Temp to _Items.length>>
+    <<set $Temp to _Items.length>>
+<<else>>\
+    You cannot obtain items with no hands.
+<</if>>\
 
 :: Take xray item
-You take: $TempString.
-<<run $Items.pushUnique($TempString)>>
+<<if $NoHands is false>>\
+    You take: $TempString.
+    <<run $Items.pushUnique($TempString)>>
+<<else>>\
+    You cannot take items with no hands.
+<</if>>\
 <<set $Temp to random($Temp)>>\
 <<if $Temp is 0>>
 You hear footsteps approaching.
@@ -1322,48 +1521,55 @@ You open some dressers and bags, searching for an interesting item.
 :: Hide
 <<if $TempBool is false>>You hide from the teacher. <</if>>You crouch in a corner in an attempt to avoid detection. <<if $TempBool is true>>A teacher enters the dormitory.<</if>>
 /* Incorporate other options */
-Your foot slips and you fall onto the floor, making a noise.
-/* Randomize this - WIP */
-<<if $TempBool is true>>The<<else>>A<</if>> teacher hears you and walks \
-<<if $Invisibility is true>>directly towards you.
+<<if $Slime is true>>\
+    As a ball of slime, you simply sit in a corner and nobody notices your presence.
 
-    Due to your invisibility, the teacher is unable to locate you and eventually exits the dormitory.
+    [[Leave dorm|Demo]]
+    [[Sleep]]
+<<else>>\
+    Your foot slips and you fall onto the floor, making a noise.
+    /* Randomize this - WIP */
+    <<if $TempBool is true>>The<<else>>A<</if>> teacher hears you and walks \
+    <<if $Invisibility is true>>directly towards you.
+
+        Due to your invisibility, the teacher is unable to locate you and eventually exits the dormitory.
+
+        [[Leave dorm]]
+    <<else>>\
+        over, staring you in the eyes. You have been caught.<br>
+    <</if>>\
+    <<if $Gorgon is true and $Blind is false>>\
+        [[Stare into their eyes]]
+    <</if>>\
+    <<if $UserPotions.length gt 0>>\
+        [[Douse the teacher with a potion]] 
+    <</if>>\
+    <<if $Gorgon is false and $UserPotions.length is false and $Invisibility is false>>\ 
+        <div align='center' style='font-size: 300%;'>\
+        <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+        </div>
+    <</if>>\
+<</if>>\
+
+:: Confront them
+You confront the teacher who now recognizes you as an intruder. 
+<<if $Invisibility is true>>
+    Due to your invisibility, the teacher has no idea you are there.
 
     [[Leave dorm]]
-<<else>>\
-    over, staring you in the eyes. You have been caught.<br>
+<<else>>
+    You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.<br><br>
 <</if>>\
 <<if $Gorgon is true and $Blind is false>>\
     [[Stare into their eyes]]
 <</if>>\
-<<if $UserPotions.length gt 0>>\
+<<if $UserPotions.length gt 0 and $NoHands is false>>\
     [[Douse the teacher with a potion]] 
 <</if>>\
 <<if $Gorgon is false and $UserPotions.length is false and $Invisibility is false>>\ 
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
     </div>
-<</if>>\
-
-:: Confront them
-You confront the teacher who now recognizes you as an intruder. 
-<<if $Invisibility is true>>
-Due to your invisibility, the teacher has no idea you are there.
-
-[[Leave dorm]]
-<<else>>
-You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.<br><br>
-<</if>>\
-<<if $Gorgon is true and $Blind is false>>\
-[[Stare into their eyes]]
-<</if>>\
-<<if $UserPotions.length gt 0>>\
-[[Douse the teacher with a potion]] 
-<</if>>\
-<<if $Gorgon is false and $UserPotions.length is false and $Invisibility is false>>\ 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
-</div>
 <</if>>\
 
 :: Douse the teacher with a potion
@@ -1460,31 +1666,35 @@ You spend the remainder of your day in deep introspection despite still feeling 
 [[Sleep]]
 
 :: Pray to the statue
-You kneel before the statue and begin praying to the imposing figure before you.
+You <<if $Slime is true>>roll up to<<else>>kneel before<</if>> the statue and begin praying to the imposing figure before you.
 <<if $Holy is 1>>    
-For a second you lose focus and your eyes open, revealing the statue before you. The figure's eyes are glowing a deep blue color.
+    For a second you lose focus and your eyes open, revealing the statue before you. The figure's eyes are glowing a deep blue color.
 
-In surprise, you blink a couple times and reinspect the statue's face. The glow is gone.
+    In surprise, you blink a couple times and reinspect the statue's face. The glow is gone.
 <<elseif $Holy is 3>>
-Your homage progresses entirely normally. However, when you finish your prayer and stand up to face the statue, something strange happens.
+    Your homage progresses entirely normally. However, when you finish your prayer and stand up to face the statue, something strange happens.
 
-You stare into the face of the statue and your own face stares back. Suddenly the eyes in the statue turn blue again and glow intensely until fizzling out and leaving behind the normal face of the statue. You feel tingling in your limbs. 
-<<set $HolyPower to true>>
-You have been imbued with a holy power.
+    You stare into the face of the statue and your own face stares back. Suddenly the eyes in the statue turn blue again and glow intensely until fizzling out and leaving behind the normal face of the statue. You feel tingling in your limbs. 
+    <<set $HolyPower to true>>
+    You have been imbued with a holy power.
 <</if>> \
 <<if $Holy isnot 3>>
-You spend the remainder of your day paying homage to the figure before you.
+    You spend the remainder of your day paying homage to the figure before you.
 <</if>> \
 <<if $$Xray is true>>
-Using your x-ray vision, you peer into the statue. You can see a light glowing within.<br>
+    Using your x-ray vision, you peer into the statue. You can see a light glowing within.<br>
 <</if>>\
 <<set $NightTime to true>>
 [[Eat dinner]]
 [[Sleep]]
 
 :: Search the temple
-You search the temple and find <<if $UserPotions.includes('Holy Water')>>nothing of interest.<<else>>Holy Water. <<run $UserPotions.pushUnique('Holy Water')>><</if>>
-
+You search the temple and find <<if $UserPotions.includes('Holy Water')>>nothing of interest.<<else>>Holy Water.<</if>> 
+<<if $Nohands is false>>\
+    <<run $UserPotions.pushUnique('Holy Water')>>
+<<else>>\
+    However, you cannot retrieve it without hands.
+<</if>>
 [[Pray at a pew]] 
 [[Pray to the statue][$Holy += 1]]
 [[Leave|Demo]]
@@ -1500,7 +1710,7 @@ You enter the cloister.
     Four walls surround the area in a square shape. Various bushes and flowers line the walls. 
     /* WIP - Option to interact with tree and unlock its secrets */
     [[Inspect the plants]]
-    <<if $Planting is true>> \
+    <<if $Planting is true and $NoHands is false>> \
     [[Plant seeds]]
     <</if>> \
     [[Daydream]]
@@ -1629,25 +1839,31 @@ You laze about the cloister, <<if $Blind is true>>blindly <</if>>daydreaming all
 You realize that you accomplished very little, but you also don't care about that at all.
 
 You feel peaceful and satisfied.
-<<set $Temp to random(7)>>
-<<set _LegendaryItems to clone($LegendaryItems); $TempString to ''>>\
-<<if $UserLegendaryItems.length gt 0>>\
-    <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>\
-        <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>\
-    <</for>>\
-<</if>>\
-<<if $Temp is 0>>\
-    <<if $UserLegendaryItems.length lt 4>>\
-        <<set $TempString to _LegendaryItems.random()>>\
-        As you <<if $Blind is true>>lay in the grass<<else>>stare up the sky<</if>>, something falls down and lands in the grass next to you.
-
-        You pick it up. You obtain a $TempString. 
-        <<run $UserLegendaryItems.pushUnique($TempString)>>
-    <<else>>\
-        A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.<br>
+<<if $Daydream is false>>\
+    <<set $Temp to random(7)>>
+    <<set $Daydream to true>>\
+    <<set _LegendaryItems to clone($LegendaryItems); $TempString to ''>>\
+    <<run _LegendaryItems.delete('Sekeleton Key')>>\
+    <<if $UserLegendaryItems.length gt 0>>\    
+        <<for _i to 0; _i lt $UserLegendaryItems.length; _i++>>\
+            <<run _LegendaryItems.delete($UserLegendaryItems[_i])>>\
+        <</for>>\
     <</if>>\
+    <<if $Temp is 0>>\
+        <<if $UserLegendaryItems.length lt 3>>\
+            <<set $TempString to _LegendaryItems.random()>>\
+            As you <<if $Blind is true>>lay in the grass<<else>>stare up the sky<</if>>, something falls down and lands in the grass next to you.
+
+            You pick it up. You obtain a $TempString. 
+            <<run $UserLegendaryItems.pushUnique($TempString)>>
+        <<else>>\
+            A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.<br>
+        <</if>>\
+    <</if>>\
+<<else>>
+    A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.<br>        
 <</if>>\
-<<set $NightTime to true>> /* Generate random daydreams to make this option more entertaining for the player */ \
+<<set $NightTime to true>> /* WIP - Generate random daydreams to make this option more entertaining for the player */ \
 [[Eat dinner]]
 [[Sleep]]
 
@@ -3743,6 +3959,7 @@ You go to sleep.<br>
 <<if $Lust is true>>\
     The effects of the Lust Potion wear off.
     <<set $Lust to false>>
+<</if>>\
 <</if>>\
 <<if $Octopus is true>>\
     The effects of the Octopus Potion wear off.
