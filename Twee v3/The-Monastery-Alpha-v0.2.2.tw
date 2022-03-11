@@ -111,7 +111,7 @@ Too many bad ends in bath house
 
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
-Changelog v0.2.2
+Changelog v0.3.0
 -New location: Cave
 -The teacher's important document can now be found in the desk even if a previous search attempt failed
 -Potions have effects (8/25: Vampire Potion, Bat Potion, X-ray Potion, Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
@@ -139,7 +139,7 @@ Mimic kills player while human by defualt, protected by enchanted equipment - Ki
 The Monastery
 
 :: StorySubtitle
-Version: Alpha 0.2.2
+Version: Alpha 0.3.0
 
 :: StoryData
 {
@@ -1119,7 +1119,7 @@ It is <<if $NightTime is false>>morning<<else>>night<</if>> in the cave. <<if $B
 [[Fly deeper into the cave|Fly cave]]
 [[Explore on foot|Explore Cave]]
 
-::Explore Cave 
+:: Explore Cave 
 You explore deep into the cave passing a hole in the ceiling. You reach a fork.
 
 <<if $Wings is true>>\
@@ -3959,7 +3959,6 @@ You go to sleep.<br>
 <<if $Lust is true>>\
     The effects of the Lust Potion wear off.
     <<set $Lust to false>>
-<</if>>\
 <</if>>\
 <<if $Octopus is true>>\
     The effects of the Octopus Potion wear off.
