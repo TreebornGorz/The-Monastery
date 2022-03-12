@@ -270,6 +270,48 @@ body.no-save #menu-item-saves {
 }
 */ 
 
+:: Widgets [widget]
+<<widget "NPCLocation">>
+    /* Clear NPC Locations */
+    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []>>
+    /* Assign NPC locations if alive */
+    <<if $NurseLife is true>>
+        <<run $InfirmaryNPC.pushUnique('Nurse')>>\
+    <</if>>
+    <<if $LibrarianLife is true>>
+        <<if $LibrarianQuest is true>>
+            <<run $LibrarianNPC.pushUnique('Librarian')>>\
+        <</if>>
+    <</if>>
+    <<if $BrewmasterLife is true>>
+        <<run $BreweryNPC.pushUnique('Brewmaster')>>\
+    <</if>>
+    <<if $SmithLife is true>>
+        <<run $ForgeNPC.pushUnique('Smith')>>\
+    <</if>>
+    <<if $ScientistLife is true>>
+        <<run $LaboratoryNPC.pushUnique('Scientist')>>\
+    <</if>>
+    <<if $FarmerLife is true>>
+        <<run $BarnNPC.pushUnique('Farmer')>>\ /* Alternate between barn and cloister for gardening */ 
+    <</if>>
+    <<if $PriestLife is true>>
+        <<run $TempleNPC.pushUnique('Priest')>>\
+    <</if>>
+    <<if $TeacherLife is true>>
+        <<run $ClassroomNPC.pushUnique('Teacher')>>\
+    <</if>>
+    <<if $HeadmasterLife is true>>
+        
+    <</if>>
+    <<if $GirlStudentLife is true>>
+
+    <</if>>
+    <<if $BoyStudentLife is true>>
+
+    <</if>>
+<</widget>>
+
 :: StoryInit
 /* Initializes starting variables before game loads */
 <<set $Show to false>>
@@ -353,6 +395,55 @@ body.no-save #menu-item-saves {
 <<set $Gorgon to false>>
 <<set $Invisibility to false>>
 <<set $Blind to false>>
+<<set $Xray to false>>
+
+/* NPCs */
+<<set $NurseLife to true>>
+<<set $LibrarianLife to true>>
+<<set $BrewmasterLife to true>>
+<<set $SmithLife to true>>
+<<set $ScientistLife to true>>
+<<set $FarmerLife to true>>
+<<set $PriestLife to true>>
+<<set $TeacherLife to true>>
+<<set $HeadmasterLife to true>>
+<<set $GirlStudentLife to true>>
+<<set $BoyStudentLife to true>>
+
+<<set $ClassroomNPC to []>>
+<<set $TempleNPC to []>>
+<<set $CloisterNPC to []>>
+<<set $RefectoryNPC to []>>
+<<set $LibraryNPC to []>>
+<<set $LaboratoryNPC to []>>
+<<set $BalnearyNPC to []>>
+<<set $InfirmaryNPC to []>>
+<<set $BarnNPC to []>>
+<<set $ForgeNPC to []>>
+<<set $BreweryNPC to []>>
+<<set $BathhouseNPC to []>>
+<<set $HallwayNPC to []>>
+<<set $ForestNPC to []>>
+<<set $MaleDormNPC to []>>
+<<set $FemaleDormNPC to []>>
+
+<<set $NurseShip to 0>>
+<<set $BrewmasterShip to 0>>
+<<set $SmithShip to 0>>
+<<set $ScientistShip to 0>>
+<<set $FarmerShip to 0>>
+<<set $PriestShip to 0>>
+<<set $TeacherShip to 0>>
+<<set $HeadmasterShip to 0>>
+<<set $GirlStudentShip to 0>>
+<<set $BoyStudentShip to 0>>
+
+/* Quest Progression */
+<<set $SirenQuest to false>>
+<<set $FemaleQuest to false>>
+<<set $MaleQuest to false>>
+<<set $HeadmasterQuest to false>>
+<<set $LibrarianQuest to false>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -1508,7 +1599,7 @@ You open some dressers and bags, searching for an interesting item.
         priest's thurible.\
         <<run $Items.pushUnique('Thurible')>>
         <<case 6>>\
-        gardener's trowel.\
+        farmer's trowel.\
         <<run $Items.pushUnique('Trowel')>>
         <<case 7>>\
         brewmaster's stirring spoon.\
@@ -1633,18 +1724,26 @@ You turn the teacher to stone and evade detection.
 :: Temple
 You enter the temple.
 <<if $Blind is true>>
-[[Pray][$Holy += 1]]
+    [[Pray][$Holy += 1]]
 <<else>>
-This is probably the most magnificent room in the entire campus. It is open and spacious, but also majestically decorated.
+    This is probably the most magnificent room in the entire campus. It is open and spacious, but also majestically decorated.
 
-The stained glass windows depict epic scenes in glorious colors as sunlight shines through, flooding the room. 
+    The stained glass windows depict epic scenes in glorious colors as sunlight shines through, flooding the room. 
 
-Wooden pews line the stone floors and an imposing statue watches over the space.
-
-[[Pray at a pew][$Holy += 1]] 
-[[Pray to the statue][$Holy += 1]]
-[[Search the temple]]
-[[Leave|Demo]]
+    Wooden pews line the stone floors and an imposing statue watches over the space.
+    <<if $TempleNPC.includes('Priest')>>
+        A priest prays in the corner of the temple, outfitted in holy garb.
+    <</if>>
+    <<if $TempleNPC.includes('Priest')>>\
+        [[Interrupt the priest's prayer|WIP]]
+        <<if $Weapon is true or $UserLegendaryItems.includes('Sword of Siren Slaying')>>\
+            [[Attack the priest with your weapon|WIP]]
+        <</if>>\
+    <</if>>\
+    [[Pray at a pew][$Holy += 1]] 
+    [[Pray to the statue][$Holy += 1]]
+    [[Search the temple]]
+    [[Leave|Demo]]
 <</if>>
 
 :: Pray
@@ -1708,7 +1807,16 @@ You enter the cloister.
     There is a large tree in the center of the field surrounded by open grass. 
 
     Four walls surround the area in a square shape. Various bushes and flowers line the walls. 
+    <<if $CloisterNPC.includes('Farmer')>>
+        You notice a woman in a garden friendly outfit tending to some crops. <<if $FarmerShip gt 0>>She is the same woman who tends to the animals in the barn.<</if>>
+    <</if>>\
     /* WIP - Option to interact with tree and unlock its secrets */
+    <<if $CloisterNPC.includes('Farmer')>>\
+        [[Talk to the woman|WIP]]
+        <<if $Weapon is true or $UserLegendaryItems.includes('Sword of Siren Slaying')>>\
+            [[Attack the woman with your weapon|WIP]]
+        <</if>>\ 
+    <</if>>\
     [[Inspect the plants]]
     <<if $Planting is true and $NoHands is false>> \
     [[Plant seeds]]
@@ -1870,13 +1978,13 @@ You feel peaceful and satisfied.
 :: Refectory
 You enter the refectory.
 <<if $Blind is false>>
-The vacuous hall has two long wooden dining tables that extend the length of the room. 
+    The vacuous hall has two long wooden dining tables that extend the length of the room. 
 
-Atop the tables lie lace tablecloths with chalices and dishes placed intermittently in front of chairs. Candles burn in the center of the tables. 
+    Atop the tables lie lace tablecloths with chalices and dishes placed intermittently in front of chairs. Candles burn in the center of the tables. 
 
-The stone floor is immaculate and the ceiling meets at a point with wooden rafters clearly visible. The walls are bare, giving the room an orderly and prestigious air.
+    The stone floor is immaculate and the ceiling meets at a point with wooden rafters clearly visible. The walls are bare, giving the room an orderly and prestigious air.
     <<if $Xray is true>>
-    Using your x-ray vision, you see cooks working busily in the kitchen on the other side of the wall.
+        Using your x-ray vision, you see cooks working busily in the kitchen on the other side of the wall.
     <</if>>
 <</if>>
 [[Help prepare dinner]]
@@ -1887,11 +1995,11 @@ You enter the kitchen.
 
 The cooks are preparing food in anticipation of the upcoming meal.
 <<if $Blind is true>>
-You fumbly around blinding, knocking over kitchen equipment and screwing up dinner preparation.
-<<set $Ostra to true>>
-<b>You have been socially ostracized.</b>
+    You fumbly around blinding, knocking over kitchen equipment and screwing up dinner preparation.
+    <<set $Ostra to true>>
+    <b>You have been socially ostracized.</b>
 
-[[Sleep]]
+    [[Sleep]]
 <<else>>
     <<if $Invisibility is true>>
         [[Mess with the cooks]]
@@ -2069,14 +2177,21 @@ You enjoy your meal and feel satisfied.
 :: Library
 You enter the library.
 <<if $Blind is false>>
-You notice many bookshelves and various students spread out across the room, diligently studying in silence. 
+    You notice many bookshelves and various students spread out across the room, diligently studying in silence.
+    <<if $LibraryNPC.includes('Librarian')>>
+        You catch sight of the librarian sorting books into various bookshelves.
+    <</if>>\
 <</if>>
 [[Study]]
 <<if $Invisibility is false and $Blind is false>>\
-[[Interrupt another student]]
+    [[Interrupt another student]]
 <</if>>\
 <<if $Blind is false>>\
-[[Find the librarian]]
+    <<if $LibraryNPC.includes('Librarian')>>\
+        [[Talk to the librarian|WIP]]
+    <<else>>\
+        [[Find the librarian]]
+    <</if>>\
 <</if>>\
 [[Leave|Demo]]
 
@@ -2130,12 +2245,12 @@ You search the library, unable to locate a librarian.
 
 You notice a door to a back room.
 <<if $Xray is true>>
-You peer through the door using your X-ray vison. On the other side you see a dim dungeon and various torture instruments. /* WIP - How do you find a key to open this door? */
+    You peer through the door using your X-ray vison. On the other side you see a dim dungeon and various torture instruments. /* WIP - How do you find a key to open this door? */
 <</if>>
 [[Open door|LibraryDoor]]
 [[Study]]
 <<if $Invisibiility is false>>\
-[[Interrupt another student]]
+    [[Interrupt another student]]
 <</if>>\
 [[Leave|Demo]]
 
@@ -2149,15 +2264,17 @@ The door is locked.
 [[Leave|Demo]]
 
 :: Laboratory
-You enter the laboratory.
+You enter the laboratory. /* This should not get rid of all descriptions when lab becomes true, change to $ScientistShip */
 <<if $Lab is false and $Blind is false>>
     There are beakers, test tubes, and other unrecognizable instruments neatly and fastidiously arranged around the room.
 
     You notice a metal chamber that has been locked shut. An experiment is in progress.
 
-    A strange lady sits in the corner staring at you without blinking.
+    <<if $LaboratoryNPC.includes('Scientist')>>\
+        A strange lady sits in the corner staring at you without blinking.
 
-    [[Talk to her]]
+        [[Talk to her]]
+    <</if>>\
     [[Inspect the chamber]]
 <<elseif $Blind is false>> 
     [[Brew potion]]
@@ -2665,41 +2782,52 @@ You twist the doorknob. The door is locked.
 
 :: Knock
 You knock on the door.
-<<if $NurseWork is false>> 
-    The lock clicks and the door opens to reveal an attractive young nurse.
+<<if $InfirmaryNPC.includes('Nurse')>>\
+    <<if $NurseWork is false>> 
+        The lock clicks and the door opens to reveal an attractive young nurse.
+        <<if $Xray is true>>
+            Using your X-ray vision, you gaze through her clothing. She has lovely skin, but in some places you notice scales where skin should be.
+        <</if>>
+        <<if $Invisibility is true>>
+            She stares directly through you and appears confused. She slams the door shut in your face.
+            <<set $Knock to 1>>
+            [[Knock again]]
+            [[Raid the cabinet]]
+            [[Leave|Demo]]
+        <<else>>
+            She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
+
+            You uncomfortably sit down across from her. She examines you for a while before talking.
+            <<if $Gorgon is true and $Blind is false>>
+                You make eye contact, but it has no effect on her.
+            <</if>>
+            She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
+
+            [[Accept][$NurseWork to true]]
+            [[Decline]]
+        <</if>>
+    <<else>> 
+    The lock clicks and the door opens to reveal the nurse looking very annoyed with you.
     <<if $Xray is true>>
         Using your X-ray vision, you gaze through her clothing. She has lovely skin, but in some places you notice scales where skin should be.
     <</if>>
-    <<if $Invisibility is true>>
-        She stares directly through you and appears confused. She slams the door shut in your face.
-        <<set $Knock to 1>>
-        [[Knock again]]
-        [[Raid the cabinet]]
-        [[Leave|Demo]]
-    <<else>>
-        She sizes you up before inviting you into her office. You are intimidated by her presence yet you find her oddly compelling for some reason and feel that you should follow her commands.
+    She asks why you are bothering her and you can't think of a good answer.
 
-        You uncomfortably sit down across from her. She examines you for a while before talking.
-        <<if $Gorgon is true and $Blind is false>>
-            You make eye contact, but it has no effect on her.
-        <</if>>
-        She explains that she is in need of a student assistant at the moment and you can help her with her work if you have the time.
-
-        [[Accept][$NurseWork to true]]
-        [[Decline]]
+    [[Apologize to her|Nurse Apology]]
+    [[Hug her|Hug Nurse]]
+    [[Insult her|Insult Nurse]]
     <</if>>
-<<else>> 
-The lock clicks and the door opens to reveal the nurse looking very annoyed with you.
-<<if $Xray is true>>
-    Using your X-ray vision, you gaze through her clothing. She has lovely skin, but in some places you notice scales where skin should be.
-<</if>>
-
-She asks why you are bothering her and you can't think of a good answer.
-
-[[Apologize to her|Nurse Apology]]
-[[Hug her|Hug Nurse]]
-[[Insult her|Insult Nurse]]
-<</if>>
+<<else>>
+    Nothing happens.
+    
+    [[Knock again|Knock]]
+    <<if $NurseWork is true>>\
+    [[Treat a patient]]
+    <</if>>\
+    [[Inspect the beds]]
+    [[Raid the cabinet]]
+    [[Leave|Demo]]
+<</if>>    
 
 :: Knock again
 You knock on the door again. 
@@ -3028,29 +3156,43 @@ You are excited to develop relationships with the animals.
     [[Approach the animals]]
     <</if>>\
 <<elseif $Blind is false>>
+    <<if $BarnNPC.includes('Farmer')>>\
+        You notice the farmer tending to some animals.
+
+        [[Approach the farmer|WIP]]
+    <</if>>\
     [[Take care of the animals]]
 <</if>> \
 [[Leave|Demo]]
 
 :: Look for a person
 You decide to look for a person instead of blindly messing around with the animals.
+<<if $BarnNPC.includes('Farmer')>>\
+    After a bit of searching, you eventually locate the campus farmer. 
+    <<if $Invisibility is true>>
+        You figure that talking to her will be more productive when you are not invisible.
 
-After a bit of searching, you eventually locate the campus farmer. 
-<<if $Invisibility is true>>
-    You figure that talking to her will be more productive when you are not invisible.
+        [[Leave|Demo]]
+    <<else>>
+        She works as a professor and tends to the animals and gardens in her down time with the help of some of the students.
+        <<if $Gorgon is true and $Blind is false>>
+            You avoid eye contact during your conversation.
+        <</if>>
+        In return for assisting her with her work, you will get access to the animals when she is not around.
 
-    [[Leave|Demo]]
-<<else>>
-    She works as a professor and tends to the animals in her down time with the help of some of the students.
-    <<if $Gorgon is true and $Blind is false>>
-    You avoid eye contact during your conversation.
+        [[Help her out]]
+        [[Decline|Decline farmer]]
     <</if>>
-    In return for assisting her with her work, you will get access to the animals when she is not around.
+<<else>>\
+    After a bit of searching, you conclude there are no people around.
+    <<if $BarnWork is false>>
+        [[Approach the animals]]
+    <<else>>
+        [[Take care of the animals]]
+    <</if>>
+    [[Leave|Demo]]
+<</if>>\
 
-    [[Help her out]]
-    [[Decline|Decline farmer]]
-<</if>>
-    
 :: Help her out
 You decide to help out the farmer with her work.
 <<set $BarnWork to true>>
@@ -3657,24 +3799,39 @@ You enter the forge.
     <<if $Weapon is false>>\
         <<if $UserLegendaryItems.includes('Sword of Siren Slaying') is false>>\
             [[Create weapon]]
+            [[Leave|Demo]]
         <<else>>\
-            You already have a weapon.<br>
+            You already have a weapon.<br><br>
         <</if>>\
     <<else>>\
-        You already have a weapon.<br>
+        You already have a weapon.<br><br>
     <</if>>\
     [[Leave|Demo]]
 <<else>>
-    You are no longer welcome here.
+    <<if $ForgeNPC.includes('Smith')>>\
+        You are no longer welcome here.
 
-    The smith stands in your way.
+        The smith stands in your way.
         <<if $Gorgon is true and $Blind is false>>
-        [[Make eye contact]]
+            [[Make eye contact]]
         <</if>>\
         <<if $UserPotions.length>>\
-        /* [[Throw a potion]] - WIP */
+            [[Throw a potion|WIP]]
         <</if>>\
-    [[Leave|Demo]].
+        [[Leave|Demo]].
+    <<else>>
+        <<if $Weapon is false>>\
+            <<if $UserLegendaryItems.includes('Sword of Siren Slaying') is false>>\
+                [[Create weapon]]
+                [[Leave|Demo]]
+            <<else>>\
+                You already have a weapon.<br><br>
+            <</if>>\
+        <<else>>\
+            You already have a weapon.<br><br>
+        <</if>>\
+        [[Leave|Demo]]
+    <</if>>
 <</if>>
 
 :: Make eye contact
@@ -3743,14 +3900,15 @@ You enter the brewery.
     This is where the real magic happens. Students love the reprieve of refreshing ale after a hard day's work. 
 
     You notice kettles, kegs, a boiler, tanks, and ingredients such as mash. 
+    <<if $BreweryNPC.includes('Brewmaster')>>\
+        The brewmaster is asleep in a corner.
 
-    The brewmaster is asleep in a corner.
-
-    [[Wake up the brewmaster|Wake Brewmaster]]
+        [[Wake up the brewmaster|Wake Brewmaster]]
+    <</if>>
 <<elseif $Blind is false>>
     [[Work on a brew|Brew]]
 <<else>>
-    [[Maybe Later|Demo]]
+    [[Leave|Demo]]
 <</if>>
 
 :: Wake Brewmaster
