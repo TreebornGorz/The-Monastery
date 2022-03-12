@@ -1823,10 +1823,10 @@ You harvested from your $Temp plant.
 <<set $Grow to "">> \
 Which seed will you plant?
 <<if $Seeds.length lt 1>>
-You currently have no seeds.
+    You currently have no seeds.
 
 <<else>>
-Select a seed to plant.
+    Select a seed to plant.
 
     <<for _i to 0; _i lt $Seeds.length; _i++>>\
         <<capture _i>>\
@@ -1840,26 +1840,25 @@ Select a seed to plant.
         
 :: Plant seed [Test]
 <<if $UserPlants.includes($Grow)>>\
-You have already planted this seed.
-<<if Fresh()>><<run $Seeds.pushUnique($Grow)>><</if>>
-You can only plant one of each seed type.
+    You have already planted this seed.
+    <<if Fresh()>><<run $Seeds.pushUnique($Grow)>><</if>>
+    You can only plant one of each seed type.
 
-Maybe you can find another use for this seed.
+    Maybe you can find another use for this seed.
 
-[[Try again|Plant seeds]]
-[[Eat dinner]]
-[[Sleep]]
+    [[Try again|Plant seeds]]
+    [[Eat dinner]]
+    [[Sleep]]
 <<else>>\
-You plant the $Grow seed.
-<<run $UserPlants.pushUnique($Grow)>>                
-Check back later to see if your plant is grown.<br>
-<<if $Seeds.length gt 0>>\
-[[Plant another seed|Plant seeds]]
-<</if>>\
-[[Eat dinner]]
-[[Sleep]]
-
-/* Better method using $MasterPlants? */ \
+    You plant the $Grow seed.
+    <<run $UserPlants.pushUnique($Grow)>>                
+    Check back later to see if your plant is grown.<br>
+    <<if $Seeds.length gt 0>>\
+    [[Plant another seed|Plant seeds]]
+    <</if>>\
+    [[Eat dinner]]
+    [[Sleep]]
+    /* Better method using $MasterPlants? */ 
     <<if Fresh()>>
         <<switch $Grow>>
             <<case "Marijuana">>
@@ -1906,7 +1905,7 @@ You feel peaceful and satisfied.
 <<else>>
     A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.<br>        
 <</if>>\
-<<set $NightTime to true>> <<NPCLocation>>/* WIP - Generate random daydreams to make this option more entertaining for the player */ \
+<<set $NightTime to true>> <<NPCLocation>> /* WIP - Generate random daydreams to make this option more entertaining for the player */ \
 [[Eat dinner]]
 [[Sleep]]
 
