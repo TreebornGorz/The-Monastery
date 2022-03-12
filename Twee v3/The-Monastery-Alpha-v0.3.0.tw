@@ -277,6 +277,12 @@ body.no-save #menu-item-saves {
     </div>
 <</widget>>
 
+<<widget "Explusion">>
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
+    </div>
+<</widget>>
+
 <<widget "NPCLocation">>
     /* Clear NPC Locations */
     <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []>>
@@ -1129,7 +1135,7 @@ You cannot pick up a key with no hands.
 :: Find a window
 You fly around the monastery searching for a window. Eventually, you notice one that is open.
 
-You fly in through the window and find yourself in the infirmary. The nurse appears annoyed and swips at you with a talon, cutting you in two pieces. 
+You fly in through the window and find yourself in the infirmary. The nurse appears annoyed and swipes at you with a talon, cutting you in two pieces. 
 
 <<Death>>
 /* WIP */
@@ -1577,9 +1583,7 @@ You open some dressers and bags, searching for an interesting item.
         [[Douse the teacher with a potion]] 
     <</if>>\
     <<if $Gorgon is false and $UserPotions.length is false and $Invisibility is false>>\ 
-        <div align='center' style='font-size: 300%;'>\
-        <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
-        </div>
+        <<Explusion>>
     <</if>>\
 <</if>>\
 
@@ -1599,9 +1603,7 @@ You confront the teacher who now recognizes you as an intruder.
     [[Douse the teacher with a potion]] 
 <</if>>\
 <<if $Gorgon is false and $UserPotions.length is false and $Invisibility is false>>\ 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
-    </div>
+    <<Expulsion>>
 <</if>>\
 
 :: Douse the teacher with a potion
@@ -1631,29 +1633,21 @@ They are doused in your $TempString.
     <<case 'Invisibility Potion'>>
     The teacher turns invisible and promptly reports your misbehavior.
 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
-    </div>
+    <<Expulsion>>>
     <<case 'Blindness Potion'>>
     The teacher becomes temporarily blind, but still remembered your face and eventually reports your misbehavior.
 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
-    </div>
+    <<Expulsion>>
     <<case 'X-ray Potion'>>
     The teacher's eyesight is enhanced. They report your misbehavior.
 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
-    </div>
+    <<Expulsion>>
     <<default>>
     It has no useful effect.
 
     The teacher apprehends you and reports your misbehavior.
 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
-    </div>
+    <<Expulsion>>
 <</switch>>
 
 :: Stare into their eyes
@@ -2016,9 +2010,7 @@ Unfortunately, there are some students who do not look you in the eyes.
 
 After realizing the situation, they nervously flee the refectory and report you to the headmaster.
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
-</div>
+<<Expulsion>>
 <<else>>\
 however, nobody can see your eyes.
 
