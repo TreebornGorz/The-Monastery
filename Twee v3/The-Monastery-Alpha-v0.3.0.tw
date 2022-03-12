@@ -313,6 +313,13 @@ body.no-save #menu-item-saves {
     <</if>>
 <</widget>>
 
+<<widget "Detransformation">>
+    <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
+        Your current form leaves you. 
+        <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
+    <</if>>\
+<</widget>>
+
 :: StoryInit
 /* Initializes starting variables before game loads */
 <<set $Show to false>>
@@ -597,14 +604,11 @@ You have been imbued with a holy power.
 <</if>>
 
 :: Drink Potion [noreturn]
-You drink the $Temp.
+You drink the $Temp. <<if $Temp is 'Undead Potion'>>Or rather, chewing may be a better description.<</if>><<if $Temp is 'Gargoyle Potion'>>You open the stopper and the once stationary liquid pours down your throat.<</if>>
 <<run $UserPotions.delete($Temp)>>\
 <<switch $Temp>>
+    <<Detransformation>>
     <<case 'Gorgon Potion'>>
-        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
-            Your current form leaves you. 
-            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
-        <</if>>\
         You hair transforms into living snakes.
 
         Your eyes become powerful, infused with energy.  
@@ -635,28 +639,15 @@ You drink the $Temp.
         You feel great insight overcome you. Pondering complex problems may now come easier. 
         <<set $Philosophy to true>>
     <<case 'Vampire Potion'>>
-        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
-            Your current form leaves you. 
-            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
-        <</if>>\
         Fangs sprout in your mouth and your skin turns pale.
 
         Beware sunlight.
         <<set $Vampire to true>>
     <<case 'Undead Potion'>>
-        Or rather, chewing may be a better description.
-        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>
-            Your current form leaves you. 
-            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>\
-        <</if>>
         You turn undead. Your limbs rot in front of your eyes and your intelligence leaves you.
         <<set $Undead to true>>
     <<case 'Succubus Potion'>>
-        <<if $Male is false>>\
-            <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
-                Your current form leaves you. 
-                <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
-            <</if>>\        
+        <<if $Male is false>>\      
             You sprout wings and a tail. You now have the ability to hypnotize men. 
             <<set $Succubus to true; $Wings to true>>
         <<else>>\
@@ -664,22 +655,14 @@ You drink the $Temp.
             <<set $Seduced to true>>
         <</if>>
     <<case 'Incubus Potion'>>
-        <<if $Male is true>>\
-            <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
-                Your current form leaves you. 
-                <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
-            <</if>>\        
+        <<if $Male is true>>\      
             You sprout wings and a tail. You now have the ability to hypnotize women.
             <<set $Incubus to true; $Wings to true>>
         <<else>>\
             As a woman, you fall victim to the powers of the incubi. Men will now have control over you.
             <<set $Seduced to true>>
         <</if>>
-    <<case 'Bat Potion'>>
-        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
-            Your current form leaves you. 
-            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
-        <</if>>\    
+    <<case 'Bat Potion'>>  
         You sprout wings and turn into a tiny bat.
         <<set $Bat to true; $NoHands to true; $Wings to true>>
     <<case 'Curse Potion'>>
@@ -694,10 +677,6 @@ You drink the $Temp.
         You notice a burning desire for a <<if $Male is true>>woman<<else>>man<</if>>.
         <<set $Lust to true>>
     <<case 'Demon Potion'>>
-        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
-            Your current form leaves you. 
-            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
-        <</if>>\ 
         You grow talons, a snout, and wings. Your skeletal structure changes dramatically.
 
         You were born to sew chaos.
@@ -714,11 +693,6 @@ You drink the $Temp.
     <<case 'Intangibility Potion'>>
         <<set $Intangibility to true>>
     <<case 'Gargoyle Potion'>>
-        You open the stopper and the once stationary liquid pours down your throat.
-        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>
-            Your current form leaves you. 
-            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>\
-        <</if>> 
         You sprout large wings and grow horns. You feel a compelling urge to stand still.
         <<set $Gargoyle to true; $Wings to true>>
     <<case 'Octopus Potion'>>
@@ -734,10 +708,6 @@ You drink the $Temp.
         <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
         </div> 
     <<case 'Slime Potion'>>
-        <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
-            Your current form leaves you. 
-            <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
-        <</if>>\ 
         You turn into a ball of slime. 
         <<set $Slime to true; $NoHands to true>>
     <<case 'Poison'>>
