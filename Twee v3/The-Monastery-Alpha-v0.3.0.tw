@@ -272,6 +272,12 @@ body.no-save #menu-item-saves {
 */ 
 
 :: Widgets [widget]
+<<widget "Death">>
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
+    </div>
+<</widget>>
+
 <<widget "NPCLocation">>
     /* Clear NPC Locations */
     <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []>>
@@ -704,9 +710,7 @@ You drink the $Temp. <<if $Temp is 'Undead Potion'>>Or rather, chewing may be a 
 
         You turn entirely to dust.
         <<set $Disintegration to true>>    
-        <div align='center' style='font-size: 300%;'>\
-        <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-        </div> 
+        <<Death>> 
     <<case 'Slime Potion'>>
         You turn into a ball of slime. 
         <<set $Slime to true; $NoHands to true>>
@@ -715,9 +719,7 @@ You drink the $Temp. <<if $Temp is 'Undead Potion'>>Or rather, chewing may be a 
 
         As you are going about a routine task, you topple over.
         <<set $Poison to true>>
-        <div align='center' style='font-size: 300%;'>\
-        <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-        </div>
+        <<Death>>
     <<case 'Vision Milk'>>
         You receive a strange vision. /* WIP */
     <<case 'Vision Ale'>>
@@ -1157,9 +1159,7 @@ You fly around the monastery searching for a window. Eventually, you notice one 
 
 You fly in through the window and find yourself in the infirmary. The nurse appears annoyed and swips at you with a talon, cutting you in two pieces. 
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-</div> 
+<<Death>>
 /* WIP */
 
 :: Cave Find
@@ -1353,9 +1353,7 @@ You have no clue how much time has passed since you entered this cell.
 
 You are skinny and haven't had a proper meal in a long time.
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU DIED OF STARVATION</b></span></span>
-</div> 
+<<Death>>
 
 :: Attempt escape
 You take your future into your own hands and attempt escape from your cell.
@@ -2123,9 +2121,7 @@ Another student poisoned your food! You cough up your guts and collapse dead in 
 
 Maybe some secrets are worth protecting...
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-</div> 
+<<Death>>
 <<else>>
 <<set $Sneaky to true>>\
 You make your way back to the dorm in peace.
@@ -2648,9 +2644,7 @@ Your guts slide out of your body and plop down onto the floor.
 
 As you bleed out and lose consciousness, a serpentine tongue flicks across your body...
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-</div> 
+<<Death>>
 
 :: Wait Nurse
 You stay still and wait for the creature to <<if $Invisibility is true>>pass<<else>>approach you<</if>>.
@@ -2844,35 +2838,25 @@ You throw the $TempString at her.
     <<case 'Gorgon Potion'>>
     The nurse sprouts snakes from her scalp and strangles you.
 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-    </div>
+    <<Death>>
     <<case 'Invisibility Potion'>>
     The nurse also turns invisible and strangles you.
 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-    </div>
+    <<Death>>
     <<case 'Blindness Potion'>>
     The nurse loses her sight and strangles you.
 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-    </div>
+    <<Death>>
     <<case 'X-ray Potion'>>
     The nurse's sight is enhanced and she strangles you.
 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-    </div>
+    <<Death>>
     <<default>>
     It has no useful effect.
 
     The nurse strangles you.
 
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-    </div>
+    <<Death>>
 <</switch>>
 
 :: Accept
@@ -2913,9 +2897,7 @@ She watches in anticipation as your entrails slowly slide out of your body as gr
 
 Your lose your balance and your vision fades as your body slams to the floor. You hear the nurse begin feasting upon your entrails.
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-</div> 
+<<Death>>
 <</if>>
 
 :: Hug Nurse
@@ -2972,9 +2954,7 @@ She watches in anticipation as your entrails slowly slide out of your body as gr
 
 Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-</div> 
+<<Death>> 
 <<else>>\
 she strikes at you.
 
@@ -2999,9 +2979,7 @@ She watches in anticipation as your entrails slowly slide out of your body as gr
 
 Your lose your balance and your vision fades as your body slams to the floor. You can hear the nurse feasting upon your entrails.
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-</div> 
+<<Death>> 
 
 :: Wait for her to strike
 You center yourself and prepare for her next attack.
@@ -3236,9 +3214,7 @@ The horse continues kicking around hay and unintentionally covers your body, con
 
 You are not found until you begin smelling bad<<if $Invisibility is true>> and your visibility has returned<</if>>. Nobody noticed you were missing.
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-</div> 
+<<Death>> 
 <</if>>
 
 :: Ride Horse
@@ -3361,9 +3337,7 @@ You slump to the ground and your vision fades. Your body melts into the ground.
 
 Your horse gets spooked for some reason and starts running. He tramples your chest crushing your heart.
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-</div> 
+<<Death>>
 <<case "Tulip">>
 It tastes aromatic and gross.
 
@@ -3599,9 +3573,7 @@ You punch at the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
 
     The poison paralyzes you and you die of starvation, lying in the forest.
     <</if>>
-    <div align='center' style='font-size: 300%;'>\
-    <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-    </div> 
+    <<Death>>
 <</if>>
 
 :: Run
@@ -3639,9 +3611,7 @@ The horse continues kicking around hay and unintentionally covers your body, con
 
 You are not found until you begin smelling bad. And nobody noticed you were missing either.
 
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
-</div> 
+<<Death>> 
 
 :: Cow
 You enter the barn and notice a dairy cow that seems to be in need of milking.
