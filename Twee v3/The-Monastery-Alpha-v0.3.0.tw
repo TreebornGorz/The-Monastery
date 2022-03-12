@@ -5,9 +5,9 @@ Test:
 Infirmary syntax fix
 Transformation Reversion
 
-Unfinished Tasks:
+Unfinished Tasks: Slime Potion
 
-Current: Slime Potion
+Current: Spawn NPCs at locations
 
 Remaining: 
 Potions - Octopus, Gargoyle, Intangibility, temp Death, Depression, Nightmare, Curse, Undead, Philosophy, Magic Milk, Funky Dragon
@@ -16,6 +16,7 @@ Game Mechanics - Night, Wings
 NPC
 Quests 
 Items
+Convert old code to widgets
 
 
 WIP - Here
@@ -937,11 +938,11 @@ Are you Male or Female?
             [[Ride Horse]]
         <</if>>\
     <</if>>\
-    [[Wait for night|Demo][$NightTime to true]]
+    <<link [[Wait for night|Demo]]>> <<set $NightTime to true>> <<NPCLocation>> <</link>>
     <<set $Show to true>>\
     <<if $Wings is true>>\
-    [[Fly into the forest|Cave Find]]
-    [[Fly around campus]]
+        [[Fly into the forest|Cave Find]]
+        [[Fly around campus]]
     <</if>>\
 <<else>> \
     You spent your time on campus doing a whole lot of nothing. Maybe you could have been more interesting or taken more risks.
@@ -1041,7 +1042,7 @@ The other students freak out.
     The effects of the Blinding Potion wear off.
     <<set $Blind to false>>
 <</if>>\
-
+<<NPCLocation>>
 [[Wake Up|Demo][$NightTime to false]]
 
 <<for _i to 0; _i lt $PlantAge.length; _i++>>
@@ -1201,7 +1202,7 @@ You fly into the forest. You notice a cave.
 You fall asleep in the cave hanging from the rock.
 <<set $Bat to true; $NoHands to true>>
 [[You awake the next day.|Cave]]
-<<set $NightTime to false>> WIP */
+<<set $NightTime to false>> <<NPCLocation>> WIP */
 
 :: Cave 
 It is <<if $NightTime is false>>morning<<else>>night<</if>> in the cave. <<if $Bat is true>>You notice your fellows bats hanging from the stalactites.<</if>>
@@ -1760,7 +1761,7 @@ You locate a pew that seems comfortable enough.
 You immerse yourself in prayer, increasing your reverence and probably making you a more likeable person.
 
 You spend the remainder of your day in deep introspection despite still feeling like a relatively similar person afterwards.
-<<set $NightTime to true>> /* Find an item/clue under the pew one day (rand) */
+<<set $NightTime to true>> <<NPCLocation>> /* Find an item/clue under the pew one day (rand) */
 [[Eat dinner]]
 [[Sleep]]
 
@@ -1783,7 +1784,7 @@ You <<if $Slime is true>>roll up to<<else>>kneel before<</if>> the statue and be
 <<if $$Xray is true>>
     Using your x-ray vision, you peer into the statue. You can see a light glowing within.<br>
 <</if>>\
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Eat dinner]]
 [[Sleep]]
 
@@ -1971,7 +1972,7 @@ You feel peaceful and satisfied.
 <<else>>
     A spirit reaches out to you. It begs you to search for a tomb in darkness and then disappears.<br>        
 <</if>>\
-<<set $NightTime to true>> /* WIP - Generate random daydreams to make this option more entertaining for the player */ \
+<<set $NightTime to true>> <<NPCLocation>>/* WIP - Generate random daydreams to make this option more entertaining for the player */ \
 [[Eat dinner]]
 [[Sleep]]
 
@@ -2059,7 +2060,7 @@ You eat your meal alongside them.
 
 :: Eat dinner
 After a hard day's work, you enter the refectory for a meal.
-<<set $NightTime to true>>    
+<<set $NightTime to true>>  <<NPCLocation>>  
 You take a seat at a table and eat your meal surrounded by the other students.
 
 <<if $Gorgon is true and $Blind is false>>\
@@ -2459,7 +2460,7 @@ She explains that she is the scientist in charge of the laboratory.
 You can work with her to perform experiments and brew potions or poisons.
 <<set $Lab to true>>
 She spends the day familiarizing you with the laboratory equipment.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Eat dinner]]
 [[Sleep]]
 
@@ -2714,7 +2715,7 @@ You patiently and creepily wait for another student to enter the balneary.
 Eventually, a student enters with a bucket and fills it with water at one of the faucets.
 
 He looks uncomfortable as he makes eye contact with you before leaving.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Eat dinner]]
 [[Sleep]]
 
@@ -2759,7 +2760,7 @@ You notice some patients in the beds.
 
 :: Treat a patient
 You approach a patient.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 You ask the patient some basic questions and fill out some forms in their medical file.
 
 You take measurements of their vitals and after examining their symptoms, perform some standard tests.
@@ -2910,7 +2911,7 @@ You accept the nurse's work offer.
 With a pleased smile, she spends the day explaining your duties as her student assistant.
 
 Once finished, she sees you out and requests your presence tomorrow.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Eat dinner]]
 [[Sleep]]
 
@@ -2926,7 +2927,7 @@ She frowns, seemingly disappointed and directs you out the door.
 You apologize for disturbing her and she rolls her eyes at you before slamming her door shut.
 <<set $NurseApology to true>>
 You fear that she might no be so patient with you the next time you disturb her.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Treat a patient]]
 [[Leave|Demo]]
 <<else>>
@@ -2974,7 +2975,7 @@ You have become [[completely obedient]] to her.
 You feel an overwhelming desire to follow all of her commands.
 <<set $SirenPet to true>>
 She hisses and gently runs her hand over your head like a lap dog.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 You are entirely under her control.
 
 While she lulls you into a state of relaxation, she speaks in a tongue that you cannot understand. 
@@ -3074,7 +3075,7 @@ She is now your enemy. Or maybe you are her target.
 Either way, she seems displeased with your answer and furiously slithers away..
 
 You may want to be more careful around her in the future.
-<<set $NightTime to true>>                  
+<<set $NightTime to true>> <<NPCLocation>>
 You let out a tired sigh of relief and thank your lucky stars for surviving the encounter.
 /* Explore secret bath - WIP */
 [[Eat dinner]]
@@ -3138,7 +3139,7 @@ You are somewhat embarrassed, but you have enough pride to realize that she is a
 
 She seems annoyed with you, but prescribes some pain pills to you for the injury and sees you off.
 <<run $Drugs.pushUnique("Pain Pills")>> \ 
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Eat dinner]]
 [[Sleep]]
 
@@ -3197,7 +3198,7 @@ You decide to look for a person instead of blindly messing around with the anima
 You decide to help out the farmer with her work.
 <<set $BarnWork to true>>
 She shows you around the barn, explaining how to take care of each animal and showing you where she keeps the animal food and tools.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Eat dinner]]
 [[Sleep]]
 
@@ -3299,7 +3300,7 @@ You are now definitely socially ostracized if you weren't already.
 
 :: Wait for nightfall
 You figure it might not be a great idea to take the horse for a ride when its owner has no idea where he went and might notice he is missing.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 You hide out and wait.
 
 Once night breaks and you're sure nobody will notice, you saddle him and [[spur him out of the barn|Ride]].
@@ -3591,7 +3592,7 @@ You fight the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
         <<run $UserIngredients.push($Reward)>> \
     <</if>>
     You obtain $Reward.
-    <<set $NightTime to true>>
+    <<set $NightTime to true>> <<NPCLocation>>
     You notice a tomb in the distance.
 
     [[Investigate the tomb|Tomb]]
@@ -3649,7 +3650,7 @@ You get spooked by the forest and turn around.
 
 :: Return to campus
 You are back in the barn.
-<<set $NightTime to true>>                                    
+<<set $NightTime to true>> <<NPCLocation>>
 You enter the stable and unsaddle your horse.
 
 After feeding him and getting him comfortable, you leave the barn.
@@ -3853,7 +3854,7 @@ You gain access to the forge.
 You smelt standard metals and create a basic weapon.
 <<set $Weapon to true>>
 You will now be able to defend yourself.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Eat dinner]]
 [[Sleep]]
 
@@ -3882,7 +3883,7 @@ You gladly agree. After showing you around the equipment, he hands you a hammer 
 You manage to forge a very crude, basic weapon that certainly would do no good in combat.
 
 You hold it in the air, admiring your handiwork with a goofy smile on your face.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Eat dinner]]
 [[Sleep]]
 <<set $Forge to 1>>
@@ -3934,7 +3935,7 @@ The brewmaster doesn't seem too bad and you decide to take up his craft.
 He takes you under his wing and teaches you about all the equipment and how to brew a traditional batch of ale.
 
 When you return to the brewery, you will be able to brew batches on your own. 
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Eat dinner]]
 [[Sleep]]
 
@@ -3949,7 +3950,7 @@ You decide to brew a batch of ale.
 <<if $Poison is true>>
 <<elseif $Potion is true>>
 <<else>>You prepare a keg. You can use this keg to throw a party!
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 [[Eat dinner]]
 [[Sleep]]
 <</if>>
@@ -4104,7 +4105,7 @@ The remaining seats fill up and the [[class begins|Class]].
 
 :: Class
 Your professor takes her podium and begins teaching.
-<<set $NightTime to true>>
+<<set $NightTime to true>> <<NPCLocation>>
 Today's lesson is on <<print $Dream.random()>>.
 
 You feel your brain growing with great knowledge.
@@ -4151,3 +4152,4 @@ Maybe it involves <<print $Dream.random()>>...?
 <</for>>
 
 <<set $Day += 1; $NightTime to true>>
+<<NPCLocation>>
