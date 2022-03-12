@@ -5,7 +5,7 @@ Test:
 Infirmary syntax fix
 Transformation Reversion
 
-Unfinished Tasks: Slime Potion
+Unfinished Tasks: Slime Potion, Convert old code to widgets
 
 Current: Spawn NPCs at locations
 
@@ -16,8 +16,6 @@ Game Mechanics - Night, Wings
 NPC
 Quests 
 Items
-Convert old code to widgets
-
 
 WIP - Here
 
@@ -97,7 +95,6 @@ Incorporate Potion effects (Self)
     -(Done) Pre-Workout: You feel buff.
     -(Done) Sour Milk: Gross! Stomach ache.
 
-Establish NPCs/relationships
 Incorporate Statue power into all relationships - Multiple endings for each relationship depending on situation??
 Incorporate events that occur if player doesn't take an action in a certain amount of time 
 Inspecting the stained glass foreshadows certain endings; begin with randomization; consider filtering based on available endings
@@ -114,9 +111,11 @@ Check fresh for history control. Does fresh work when going back and forth betwe
 
 Changelog v0.3.0
 -New location: Cave
+-Introduced NPC Spawning mechanic 
 -The teacher's important document can now be found in the desk even if a previous search attempt failed
--Potions have effects (8/25: Vampire Potion, Bat Potion, X-ray Potion, Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
+-Potions have effects (8/24: Vampire Potion (unf), Bat Potion, X-ray Potion, Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
 -Syntax bugfix in Infirmary
+-Code cleanup: Converted some old code into macros
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -324,6 +323,41 @@ body.no-save #menu-item-saves {
         Your current form leaves you. 
         <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
     <</if>>\
+<</widget>>
+
+<<widget "PotionExpiration">>
+    <<if $Lust is true>>\
+        The effects of the Lust Potion wear off.
+        <<set $Lust to false>>
+    <</if>>\
+    <<if $Octopus is true>>\
+        The effects of the Octopus Potion wear off.
+        <<set $Octopus to false>>
+    <</if>>\
+    <<if $Slime is true>>\
+        The effects of the Slime Potion wear off.
+        <<set $Slime to false>>
+    <</if>>\
+    <<if $Bat is true>>\
+        The effects of the Bat Potion wear off.
+        <<set $Bat to false; $NoHands to false>>
+    <</if>>\
+    <<if $Invisibility is true>>\
+        The effects of the Invisibility Potion wear off.
+        <<set $Invisibility to false>>
+    <</if>>\
+    <<if $Blind is true>>\
+        The effects of the Blinding Potion wear off.
+        <<set $Blind to false>>
+    <</if>>\
+<</widget>>
+
+<<widget "AgePlants">>
+    <<for _i to 0; _i lt $PlantAge.length; _i++>>
+        <<if $PlantAge[_i] gt 0>>
+            <<set $PlantAge[_i] += 1>>
+        <</if>>
+    <</for>>
 <</widget>>
 
 :: StoryInit
@@ -990,40 +1024,10 @@ Unfortunately, you are in the wrong dorm.
 The other students freak out.
 <<set $Ostra to true>>
 <b>You have been socially ostracized.</b><br>
-<<if $Lust is true>>\
-    The effects of the Lust Potion wear off.
-    <<set $Lust to false>>
-<</if>>\
-<<if $Octopus is true>>\
-    The effects of the Octopus Potion wear off.
-    <<set $Octopus to false>>
-<</if>>\
-<<if $Slime is true>>\
-    The effects of the Slime Potion wear off.
-    <<set $Slime to false>>
-<</if>>\
-<<if $Bat is true>>\
-    The effects of the Bat Potion wear off.
-    <<set $Bat to false; $NoHands to false>>
-<</if>>\
-<<if $Invisibility is true>>\
-    The effects of the Invisibility Potion wear off.
-    <<set $Invisibility to false>>
-<</if>>\
-<<if $Blind is true>>\
-    The effects of the Blinding Potion wear off.
-    <<set $Blind to false>>
-<</if>>\
-<<NPCLocation>>
+<<PotionExpiration>> <<NPCLocation>>
 [[Wake Up|Demo][$NightTime to false]]
 
-<<for _i to 0; _i lt $PlantAge.length; _i++>>
-    <<if $PlantAge[_i] gt 0>>
-        <<set $PlantAge[_i] += 1>>
-    <</if>>
-<</for>>
-
-<<set $Day += 1; $NightTime to true>>
+<<AgePlants>> <<set $Day += 1; $NightTime to true>>
 
 :: Female dorm
 You enter the <<if $Blind is false>>female <</if>>dorm\
@@ -1089,46 +1093,14 @@ You notice a glowing light deep in the forest.
 
 :: Perch Sleep
 You sleep on the roof.<br>
-<<if $Lust is true>>\
-    The effects of the Lust Potion wear off.
-    <<set $Lust to false>>
-<</if>>\
-<</if>>\
-<<if $Octopus is true>>\
-    The effects of the Octopus Potion wear off.
-    <<set $Octopus to false>>
-<</if>>\
-<<if $Slime is true>>\
-    The effects of the Slime Potion wear off.
-    <<set $Slime to false>>
-<</if>>\
-<<if $Bat is true>>\
-    The effects of the Bat Potion wear off.
-    <<set $Bat to false; $NoHands to false>>
-<</if>>\
-<<if $Invisibility is true>>\
-    The effects of the Invisibility Potion wear off.
-    <<set $Invisibility to false>>
-<</if>>\
-<<if $Blind is true>>\
-    The effects of the Blinding Potion wear off.
-    <<set $Blind to false>>
-<</if>>\
+
 You dream of an odd future that awaits you, but you can't quite make out the ending.
 
 Maybe it involves <<print $Dream.random()>>...?
 
 [[Wake Up|Roof][$NightTime to false]]
 
-<<for _i to 0; _i lt $PlantAge.length; _i++>>
-    <<if $PlantAge[_i] gt 0>>
-        <<set $PlantAge[_i] += 1>>
-    <</if>>
-<</for>>
-
-<<set $Day += 1; $NightTime to true>> 
-
-[[Wake up|Roof]]
+<<AgePlants>> <<set $Day += 1; $NightTime to true>> <<PotionExpiration>>
 
 :: Explore the roof
 <<if $Items.includes('Cabinet Key')>>\
@@ -4055,41 +4027,11 @@ You feel your brain growing with great knowledge.
 
 :: Sleep
 You go to sleep.<br>
-<<if $Lust is true>>\
-    The effects of the Lust Potion wear off.
-    <<set $Lust to false>>
-<</if>>\
-<<if $Octopus is true>>\
-    The effects of the Octopus Potion wear off.
-    <<set $Octopus to false>>
-<</if>>\
-<<if $Slime is true>>\
-    The effects of the Slime Potion wear off.
-    <<set $Slime to false>>
-<</if>>\
-<<if $Bat is true>>\
-    The effects of the Bat Potion wear off.
-    <<set $Bat to false; $NoHands to false>>
-<</if>>\
-<<if $Invisibility is true>>\
-    The effects of the Invisibility Potion wear off.
-    <<set $Invisibility to false>>
-<</if>>\
-<<if $Blind is true>>\
-    The effects of the Blinding Potion wear off.
-    <<set $Blind to false>>
-<</if>>\
+
 You dream of an odd future that awaits you, but you can't quite make out the ending.
 
 Maybe it involves <<print $Dream.random()>>...?
 
 [[Wake Up|Demo][$NightTime to false]]
 
-<<for _i to 0; _i lt $PlantAge.length; _i++>>
-    <<if $PlantAge[_i] gt 0>>
-        <<set $PlantAge[_i] += 1>>
-    <</if>>
-<</for>>
-
-<<set $Day += 1; $NightTime to true>>
-<<NPCLocation>>
+<<set $Day += 1; $NightTime to true>> <<NPCLocation>> <<PotionExpiration>> <<AgePlants>>
