@@ -910,7 +910,7 @@ Are you Male or Female?
 [[Female|Demo][$Male to false, $Day to 1]]
 
 :: Demo
-<<if $Day lt 50>> \
+<<if $Day lt 100>> \
     You are on campus.
     <<if $NightTime is true>>
         It is dark.<br>
