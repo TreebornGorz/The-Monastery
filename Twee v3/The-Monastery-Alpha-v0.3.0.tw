@@ -122,6 +122,8 @@ Bug Log
 -History control causes $Temp to bug out and not randomize in the teacher's dorm when searching belongings (Test)
 -If player has all seeds, They find an error plant
 -Menu disappeared while invisible; Corrects on [[Demo]]
+-Player randomly obtained Opus Pocus
+-Poppy plant fully grown, Marijuana planted but not grown, only Marijuana harvestable
 
 Brainstorm:
 Dragon guards scroll of fire breathing
@@ -271,67 +273,64 @@ body.no-save #menu-item-saves {
 */ 
 
 :: Widgets [widget]
-<<widget "Death">>
+<<widget "Death">>\
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU DIED</b></span></span>
     </div>
 <</widget>>
 
-<<widget "Explusion">>
+<<widget "Explusion">>\
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
     </div>
 <</widget>>
 
-<<widget "NPCLocation">>
-    /* Clear NPC Locations */
-    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []>>
-    /* Assign NPC locations if alive */
-    <<if $NurseLife is true>>
+<<widget "NPCLocation">>\
+    /* Clear NPC Locations */ \
+    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []>> \
+    /* Assign NPC locations if alive */ \
+    <<if $NurseLife is true>>\
         <<run $InfirmaryNPC.pushUnique('Nurse')>>\
-    <</if>>
-    <<if $LibrarianLife is true>>
-        <<if $LibrarianQuest is true>>
+    <</if>>\
+    <<if $LibrarianLife is true>>\
+        <<if $LibrarianQuest is true>>\
             <<run $LibrarianNPC.pushUnique('Librarian')>>\
-        <</if>>
-    <</if>>
-    <<if $BrewmasterLife is true>>
+        <</if>>\
+    <</if>>\
+    <<if $BrewmasterLife is true>>\
         <<run $BreweryNPC.pushUnique('Brewmaster')>>\
-    <</if>>
-    <<if $SmithLife is true>>
+    <</if>>\
+    <<if $SmithLife is true>>\
         <<run $ForgeNPC.pushUnique('Smith')>>\
-    <</if>>
-    <<if $ScientistLife is true>>
+    <</if>>\
+    <<if $ScientistLife is true>>\
         <<run $LaboratoryNPC.pushUnique('Scientist')>>\
-    <</if>>
-    <<if $FarmerLife is true>>
-        <<run $BarnNPC.pushUnique('Farmer')>>\ /* Alternate between barn and cloister for gardening */ 
-    <</if>>
-    <<if $PriestLife is true>>
+    <</if>>\
+    <<if $FarmerLife is true>>\
+        <<run $BarnNPC.pushUnique('Farmer')>>\ 
+    <</if>>\
+    <<if $PriestLife is true>>\
         <<run $TempleNPC.pushUnique('Priest')>>\
-    <</if>>
-    <<if $TeacherLife is true>>
+    <</if>>\
+    <<if $TeacherLife is true>>\
         <<run $ClassroomNPC.pushUnique('Teacher')>>\
-    <</if>>
-    <<if $HeadmasterLife is true>>
-        
-    <</if>>
-    <<if $GirlStudentLife is true>>
-
-    <</if>>
-    <<if $BoyStudentLife is true>>
-
-    <</if>>
+    <</if>>\
+    <<if $HeadmasterLife is true>>\      
+    <</if>>\
+    <<if $GirlStudentLife is true>>\
+    <</if>>\
+    <<if $BoyStudentLife is true>>\
+    <</if>>\
 <</widget>>
 
-<<widget "Detransformation">>
+<<widget "Detransformation">>\
     <<if $Gorgon is true or $Demon is true or $Bat is true or $Undead is true or $Succubus is true or $Incubus is true or $Slime is true or $Gargoyle is true>>\
         Your current form leaves you. 
         <<set $NoHands to false; $Wings to false; $Gorgon to false; $Demon to false; $Bat to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Gargoyle to false>>
     <</if>>\
 <</widget>>
 
-<<widget "PotionExpiration">>
+<<widget "PotionExpiration">>\
     <<if $Lust is true>>\
         The effects of the Lust Potion wear off.
         <<set $Lust to false>>
@@ -358,7 +357,7 @@ body.no-save #menu-item-saves {
     <</if>>\
 <</widget>>
 
-<<widget "AgePlants">>
+<<widget "AgePlants">>\
     <<for _i to 0; _i lt $PlantAge.length; _i++>>
         <<if $PlantAge[_i] gt 0>>
             <<set $PlantAge[_i] += 1>>
@@ -906,7 +905,7 @@ Source Code: https://github.com/TreebornGorz/The-Monastery
 
 :: Character
 Are you Male or Female?
-
+<<NPCLocation>>
 [[Male|Demo][$Day to 1]]
 [[Female|Demo][$Male to false, $Day to 1]]
 
@@ -996,14 +995,13 @@ The hallway forks. One direction leads to the male dorm, the other leads to the 
 You enter the <<if $Blind is false>>male <</if>>dorm\
 <<if $Male is false and $Blind is false>> even though you are female. 
 
-    You are worried that you are not supposed to be here and that somebody might notice you snooping around.
-    <<if $NightTime is true and $Vampire is true>>
+    You are worried that you are not supposed to be here and that somebody might notice you snooping around. <br>
+    <<if $NightTime is true and $Vampire is true>>\
     [[Suck a student's blood][$TempString to 'male']] 
     <</if>>\
     [[Leave dorm]]
     [[Stick around]]
 <<else>>.
-
     <<if $Blind is false>>
         This is where you belong.
         
@@ -1047,7 +1045,6 @@ You enter the <<if $Blind is false>>female <</if>>dorm\
     [[Leave dorm]]
     [[Stick around]]
 <<else>>.
-
     <<if $Blind is false>>
         This is where you belong.
 
@@ -1378,8 +1375,8 @@ You hear a clicking noise and the latch unlocks.
 
         You notice teacher's belongings strewn about.
 
-        There are currently no teachers around, but you may not want to press your luck.
-        <<if $Xray is true and $Blind is false>>
+        There are currently no teachers around, but you may not want to press your luck. <br>
+        <<if $Xray is true and $Blind is false>>\
         [[Use your X-ray vision to find a particular item|Teacher Belonging Xray][$TempBool to false]]
         <</if>>\
         [[Search teacher's belongings][$TempBool to false]]
@@ -1558,12 +1555,12 @@ You open some dressers and bags, searching for an interesting item.
 
 :: Hide
 <<if $TempBool is false>>You hide from the teacher. <</if>>You crouch in a corner in an attempt to avoid detection. <<if $TempBool is true>>A teacher enters the dormitory.<</if>>
-/* Incorporate other options */
-<<if $Slime is true>>\
-    As a ball of slime, you simply sit in a corner and nobody notices your presence.
+    /* Incorporate other options */
+    <<if $Slime is true>>\
+        As a ball of slime, you simply sit in a corner and nobody notices your presence.
 
-    [[Leave dorm|Demo]]
-    [[Sleep]]
+        [[Leave dorm|Demo]]
+        [[Sleep]]
 <<else>>\
     Your foot slips and you fall onto the floor, making a noise.
     /* Randomize this - WIP */
@@ -1575,6 +1572,7 @@ You open some dressers and bags, searching for an interesting item.
         [[Leave dorm]]
     <<else>>\
         over, staring you in the eyes. You have been caught.<br>
+        <<Expulsion>>
     <</if>>\
     <<if $Gorgon is true and $Blind is false>>\
         [[Stare into their eyes]]
@@ -1594,7 +1592,8 @@ You confront the teacher who now recognizes you as an intruder.
 
     [[Leave dorm]]
 <<else>>
-    You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.<br><br>
+    You do your best to convince them that you belong in the teacher's dormitory for some reason, but you aren't convincing.<br>
+    <<Expulsion>>
 <</if>>\
 <<if $Gorgon is true and $Blind is false>>\
     [[Stare into their eyes]]
@@ -1724,9 +1723,9 @@ You <<if $Slime is true>>roll up to<<else>>kneel before<</if>> the statue and be
 
 :: Search the temple
 You search the temple and find <<if $UserPotions.includes('Holy Water')>>nothing of interest.<<else>>Holy Water.<</if>> 
-<<if $Nohands is false>>\
+<<if $NoHands is false>>\
     <<run $UserPotions.pushUnique('Holy Water')>>
-<<else>>\
+<<else>>
     However, you cannot retrieve it without hands.
 <</if>>
 [[Pray at a pew]] 
@@ -1919,7 +1918,7 @@ You enter the refectory.
     The stone floor is immaculate and the ceiling meets at a point with wooden rafters clearly visible. The walls are bare, giving the room an orderly and prestigious air.
     <<if $Xray is true>>
         Using your x-ray vision, you see cooks working busily in the kitchen on the other side of the wall.
-    <</if>>
+    <</if>>\
 <</if>>
 [[Help prepare dinner]]
 [[Leave|Demo]]
@@ -1937,7 +1936,7 @@ The cooks are preparing food in anticipation of the upcoming meal.
 <<else>>
     <<if $Invisibility is true>>
         [[Mess with the cooks]]
-    <<else>>>\
+    <<else>>\
         You fall into line and begin working alongside them. You struggle to keep up, but you get better the more time you spend working.
         <<if $Ostra is true>>
             The students notice you and appreciate your work. Your social status increases and you are <b>no longer socially ostracized</b>.
@@ -2130,7 +2129,7 @@ You decide to brush up on your reading.
 <<if $Blind is true>>
     Unfortunately, you are blind, making it difficult to read.
 <<else>>
-    <<set $Temp to random(9)>>
+    <<set $Temp to random(9)>>\
     You pick out a book and read up on <<print $Dream.random()>>.
 
     You find a note left in the book that reads: \
@@ -2138,7 +2137,7 @@ You decide to brush up on your reading.
         $Faucets\
     <<else>>\
         <<print $Notes.random()>>.
-    <</if>> /* WIP - Prioritize notes? */
+    <</if>>\ 
 <</if>>
 [[Eat dinner]]
 [[Sleep]] 
@@ -2651,33 +2650,34 @@ You enter the infirmary.
 <<if $Blind is true>>
 You can't see anything.
 <<else>>
-    <<if $NurseWork is false>>
+    <<if $NurseWork is false>>\
     There are a few beds with hanging privacy sheets and an office behind a closed door.
 
     You notice a tray with various medical tools strewn across, such as a scalpel, thermometer, and needles. 
 
     There is a cabinet containing various prescription drugs. 
 
-    <<else>> 
+    <<else>>\
     You are ready to work. 
 
     [[Treat a patient]]
-    <</if>> \
+    <</if>>\
     [[Inspect the beds]]
     [[Enter the office]]
     [[Raid the cabinet]]
-<</if>>
+<</if>>\
 [[Leave|Demo]]
 
 :: Inspect the beds
-<<if $NurseWork is false>>You inspect the beds. They are empty.
+<<if $NurseWork is false>>\
+You inspect the beds. They are empty.
 
 Some of the sheets have stains of various colors. 
 
-There is nothing under the bed. /* Randomly or conditionally put something important under bed? */
-<<else>>
-You notice some patients in the beds.
-    <<if $Invisibility is false>>
+There is nothing under the bed. <br>
+<<else>>\
+You notice some patients in the beds. <br>
+    <<if $Invisibility is false>>\
     [[Treat a patient]]
     <</if>>\
 <</if>>\
@@ -2715,7 +2715,7 @@ You knock on the door.
         The lock clicks and the door opens to reveal an attractive young nurse.
         <<if $Xray is true>>
             Using your X-ray vision, you gaze through her clothing. She has lovely skin, but in some places you notice scales where skin should be.
-        <</if>>
+        <</if>>\
         <<if $Invisibility is true>>
             She stares directly through you and appears confused. She slams the door shut in your face.
             <<set $Knock to 1>>
@@ -3079,7 +3079,7 @@ You are excited to develop relationships with the animals.
 
 :: Look for a person
 You decide to look for a person instead of blindly messing around with the animals.
-<<if $BarnNPC.includes('Farmer')>>\
+<<if $BarnNPC.includes('Farmer')>>
     After a bit of searching, you eventually locate the campus farmer. 
     <<if $Invisibility is true>>
         You figure that talking to her will be more productive when you are not invisible.
@@ -3095,7 +3095,7 @@ You decide to look for a person instead of blindly messing around with the anima
         [[Help her out]]
         [[Decline|Decline farmer]]
     <</if>>
-<<else>>\
+<<else>>
     After a bit of searching, you conclude there are no people around.
     <<if $BarnWork is false>>
         [[Approach the animals]]
@@ -3804,13 +3804,15 @@ You enter the brewery.
     This is where the real magic happens. Students love the reprieve of refreshing ale after a hard day's work. 
 
     You notice kettles, kegs, a boiler, tanks, and ingredients such as mash. 
-    <<if $BreweryNPC.includes('Brewmaster')>>\
+    <<if $BreweryNPC.includes('Brewmaster')>>
         The brewmaster is asleep in a corner.
 
         [[Wake up the brewmaster|Wake Brewmaster]]
-    <</if>>
+    <</if>>\
+    [[Leave|Demo]]
 <<elseif $Blind is false>>
     [[Work on a brew|Brew]]
+    [[Leave|Demo]]
 <<else>>
     [[Leave|Demo]]
 <</if>>
@@ -3910,7 +3912,7 @@ You have made a very large enemy. May God have mercy on your soul.
 The professor enters and [[class begins|Class]]. 
         
 :: Ask how you can help her
-You polite ask her how you can help her.
+You politely ask her how you can help her.
 
 She looks a bit embarrassed and motions towards the inside of the desk.
 
@@ -4017,7 +4019,7 @@ You feel your brain growing with great knowledge.
 [[Sleep]]
 
 :: Sleep
-You go to sleep.<br>
+You go to sleep.
 
 You dream of an odd future that awaits you, but you can't quite make out the ending.
 
