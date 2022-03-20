@@ -1,5 +1,7 @@
 /* 
 
+Left off work here: *WIP*
+
 Test: 
 
 Infirmary syntax fix
@@ -16,8 +18,6 @@ Game Mechanics - Night, Wings
 NPC
 Quests 
 Items
-
-WIP - Here
 
 Mimic encounter
 
@@ -286,41 +286,49 @@ body.no-save #menu-item-saves {
 <</widget>>
 
 <<widget "NPCLocation">>\
-    /* Clear NPC Locations */ \
-    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []>> \
-    /* Assign NPC locations if alive */ \
-    <<if $NurseLife is true>>\
-        <<run $InfirmaryNPC.pushUnique('Nurse')>>\
-    <</if>>\
-    <<if $LibrarianLife is true>>\
-        <<if $LibrarianQuest is true>>\
-            <<run $LibrarianNPC.pushUnique('Librarian')>>\
-        <</if>>\
-    <</if>>\
-    <<if $BrewmasterLife is true>>\
-        <<run $BreweryNPC.pushUnique('Brewmaster')>>\
-    <</if>>\
-    <<if $SmithLife is true>>\
-        <<run $ForgeNPC.pushUnique('Smith')>>\
-    <</if>>\
-    <<if $ScientistLife is true>>\
-        <<run $LaboratoryNPC.pushUnique('Scientist')>>\
-    <</if>>\
-    <<if $FarmerLife is true>>\
-        <<run $BarnNPC.pushUnique('Farmer')>>\ 
-    <</if>>\
-    <<if $PriestLife is true>>\
-        <<run $TempleNPC.pushUnique('Priest')>>\
-    <</if>>\
-    <<if $TeacherLife is true>>\
-        <<run $ClassroomNPC.pushUnique('Teacher')>>\
-    <</if>>\
-    <<if $HeadmasterLife is true>>\      
-    <</if>>\
-    <<if $GirlStudentLife is true>>\
-    <</if>>\
-    <<if $BoyStudentLife is true>>\
-    <</if>>\
+    <<nobr>>
+    /* Clear NPC Locations */
+    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []>>
+    /* Assign NPC locations if alive */
+    <<if $NurseLife is true>>
+        <<run $InfirmaryNPC.pushUnique('Nurse')>>
+    <</if>>
+    <<if $LibrarianLife is true>>
+        <<if $LibrarianQuest is true>>
+            <<run $LibrarianNPC.pushUnique('Librarian')>>
+        <</if>>
+    <</if>>
+    <<if $BrewmasterLife is true>>
+        <<run $BreweryNPC.pushUnique('Brewmaster')>>
+    <</if>>
+    <<if $SmithLife is true>>
+        <<run $ForgeNPC.pushUnique('Smith')>>
+    <</if>>
+    <<if $ScientistLife is true>>
+        <<run $LaboratoryNPC.pushUnique('Scientist')>>
+    <</if>>
+    <<if $FarmerLife is true>>
+        <<run $BarnNPC.pushUnique('Farmer')>>
+    <</if>>
+    <<if $PriestLife is true>>
+        <<run $TempleNPC.pushUnique('Priest')>>
+    <</if>>
+    <<if $TeacherLife is true>>
+        <<run $ClassroomNPC.pushUnique('Teacher')>>
+    <</if>>
+    <<if $HeadmasterLife is true>>
+    <</if>>
+    <<if $FemaleStudentLife is true>>
+    <</if>>
+    <<if $MaleStudentLife is true>>
+        <<set $Temp to random(1)>>
+        <<if $Temp is 0 or $NightTime is true>>
+            <<run $BathhouseNPC.pushUnique('Male Student')>>
+        <<else>>
+            <<run $BalnearyNPC.pushUnique('Male Student')>>
+        <</if>>
+    <</if>>
+    <</nobr>>\
 <</widget>>
 
 <<widget "Detransformation">>\
@@ -358,11 +366,13 @@ body.no-save #menu-item-saves {
 <</widget>>
 
 <<widget "AgePlants">>\
+    <<nobr>>
     <<for _i to 0; _i lt $PlantAge.length; _i++>>
         <<if $PlantAge[_i] gt 0>>
             <<set $PlantAge[_i] += 1>>
         <</if>>
     <</for>>
+    <</nobr>>\
 <</widget>>
 
 :: StoryInit
@@ -460,8 +470,8 @@ body.no-save #menu-item-saves {
 <<set $PriestLife to true>>
 <<set $TeacherLife to true>>
 <<set $HeadmasterLife to true>>
-<<set $GirlStudentLife to true>>
-<<set $BoyStudentLife to true>>
+<<set $FemaleStudentLife to true>>
+<<set $MaleStudentLife to true>>
 
 <<set $ClassroomNPC to []>>
 <<set $TempleNPC to []>>
@@ -488,8 +498,8 @@ body.no-save #menu-item-saves {
 <<set $PriestShip to 0>>
 <<set $TeacherShip to 0>>
 <<set $HeadmasterShip to 0>>
-<<set $GirlStudentShip to 0>>
-<<set $BoyStudentShip to 0>>
+<<set $FemaleStudentShip to 0>>
+<<set $MaleStudentShip to 0>>
 
 /* Quest Progression */
 <<set $SirenQuest to false>>
@@ -497,6 +507,14 @@ body.no-save #menu-item-saves {
 <<set $MaleQuest to false>>
 <<set $HeadmasterQuest to false>>
 <<set $LibrarianQuest to false>>
+<<set $MarketQuest to false>>
+
+<<set $SirenQuestProg to 0>>
+<<set $FemaleQuestProg to 0>>
+<<set $MaleQuestProg to 0>>
+<<set $HeadmasterQuestProg to 0>>
+<<set $LibrarianQuestProg to 0>>
+<<set $MarketQuestProg to 0>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -2567,15 +2585,48 @@ You turn the handle of Faucet: $SingleFaucet.
 :: Secret bath
 You descend the secret passageway and find yourself in an underground bath house.
 
-You explore <<if $Blind is true>>blindly <</if>>for a while until your hear footsteps coming from the shadows. 
+You feel fuzzy as you soak in the water.
+<<if $SirenQuest is false>>
+    You explore <<if $Blind is true>>blindly <</if>>for a while until your hear footsteps coming from the shadows. 
 
-You start to feel a bit fuzzy the longer you stay in the water.
+    You start to feel a bit fuzzy the longer you stay in the water.
 
-Suddenly, you <<if $Blind is false>>hear faint footsteps <<else>>notice glowing eyes <</if>>approaching you.
+    Suddenly, you <<if $Blind is false>>hear faint footsteps <<else>>notice glowing eyes <</if>>approaching you.
 
-[[Attempt an escape|Escape Nurse]]
-[[Stand your ground|Wait Nurse]]
-[[Embrace the figure|Embrace Nurse]]
+    You feel its impending presence. You get the feeling that attempting to escape would be futile. 
+
+    [[Attempt an escape|Escape Nurse]]
+    [[Stand your ground|Wait Nurse]]
+    [[Embrace the figure|Embrace Nurse]]
+<<else>>
+<<if $BathhouseNPC includes 'Nurse'>>
+You notice the nurse licking her talons and contemplating her plots.
+<</if>>\
+<<if $BathhouseNPC includes 'Male Student'>>
+You notice a male student bathing in the water with glazed eyes.
+
+[[Approach the student|MaleStudentDialogue]]
+<</if>>\
+<<if $BathhouseNPC includes 'Nurse'>>
+[[Approach the Nurse|SirenBathDialogue]]
+<</if>>\
+[[Gather bath water|WIP]]
+<</if>>
+
+:: MaleStudentDialogue
+
+:: SirenBathDialogue
+The Nurse questions you on your progess, eagerly flicking her tongue as she polishes her talons.
+<<if $SirenQuestProg is lt 2>>
+    She chastises you for wasting her time. You haven't found anything useful yet. 
+
+    You need to find infgormation on the headmaster's vulnerabilities.
+<<else>>
+    You explain your discovery of the headmaster's vulernability to her. She chuckles with delight and happily flicks her tongue around your face as she gets closer to you.
+
+    *WIP*
+<</if>>
+[[Leave the bath|Demo]]
 
 :: Escape Nurse
 You attempt to escape... unsuccessfully.
@@ -2617,23 +2668,23 @@ She smells you with her tongue and approaches your location. <<else>><<if $Blind
 <<if $Invisibility is false and $Blind is false>>
 You notice she has some animalistic features. She surveys you like a predator would prey. A serpentine tongue flicks out of her mouth.
 <</if>>
-With some <<if $Invisibility is true>>curiousity<<else>>reservation<</if>>, she petitions your help.
+With some <<if $Invisibility is true>>curiousity<<else>>reservation<</if>>, she petitions your help in her plot to overthrow the headmaster.
 
-[[Escape Nurse]]
-[[Completely submit to her|Slavery]]
-[[Offer to help|Siren Partner]]
+[[Flee|Escape Nurse]]
+[[Submit to her|Slavery]]
+[[Offer your assistance|Siren Partner]]
 
 :: Embrace Nurse
 You run towards the glowing eyes and extend your arms out to embrace the shadowy figure. <<if $Invisibility is true>>The creature flinches in surprise.<</if>>
 
-You tighten your grip and feel breasts and long hair.
+As your grip tightens, you notice breasts and long hair.
 
 You loosen your grip and step backwards<<if $Blind is false>> into the light. You see the nurse standing before you with certain animalistic features<</if>>.
 
-<<if $Blind is false>>With gentle eyes, s<<else>>S<</if>>he <<if $Invisibility is true>>curiously <</if>>petitions your help.
+<<if $Blind is false>>With gentle eyes, s<<else>>S<</if>>he <<if $Invisibility is true>>curiously <</if>>petitions your help in her plot to overthrow the headmaster.
 
-[[Completely submit to her|Slavery]]
-[[Offer to help|Siren Partner]]
+[[Submit to her|Slavery]]
+[[Offer your assistance|Siren Partner]]
 
 :: Wait for another student
 You patiently and creepily wait for another student to enter the balneary. 
@@ -2965,13 +3016,15 @@ She offers that you work together with her to take control over the campus.
 [[Reject|Siren Enemy]]
 
 :: Siren Partner
-You accept the siren's offer to work together.
+You agree to assist the creature in her plot.
 
 She is now your accomplice. Or maybe your partner.
-<<set $SirenPartner to true>>
+<<set $SirenQuest to true; $SirenQuestProg to 1>>
 Either way, you get the impression that she will probably boss you around.
 
 Still, you reason that it's better than making her your enemy.
+
+She tasks you with gathering information on the headmaster's vulnerabilities and promises a reward if you succeed.
 
 She licks your cheek with a split tongue and happily slithers away.
 
