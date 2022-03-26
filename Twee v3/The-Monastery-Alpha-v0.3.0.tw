@@ -116,6 +116,7 @@ Changelog v0.3.0
 -New NPC: Headmaster
 -Raid the medicine cabinet
 -Introduced NPC Spawning Engine
+-Game remembers puzzle completion
 -The teacher's important document can now be found in the desk even if a previous search attempt failed
 -Potions have effects (8/24: Vampire Potion (unf), Bat Potion, X-ray Potion, Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
 -Syntax bugfix in Infirmary
@@ -1002,24 +1003,67 @@ Are you Male or Female?
 <</if>>
 
 :: Headmaster's Office
-You enter the headmaster's office. You see an ornate desk with papers strewn about. An impressive goblet sits by his quill.
+You enter the headmaster's office. You see an ornate desk with papers strewn about. An impressive goblet sits by his ink container.
+<<if $HeadmasterOfficeNPC.includes('Headmaster')>>
+    The headmaster sits at his desk working. He looks upward, abandoning his work, to acknowledge you.
+
+    [[Talk with the headmaster]]
+<<else>>
+    The headmaster is not currently in his office. 
+    <<if $UserPotions.length>>
+        [[Tamper with the goblet]]
+    <</if>>\
+<</if>>\
+[[Leave|Demo]]
+
+:: Tamper with the goblet
+<<if $UserPotions.includes('Truth Serum')>>
+    Your pour some of the truth serum into the goblet. You will need to return tomorrow to see if your scheming has been successful. <<set $GobletTamper to true; $GobletTamperDay to $Day>>
+<<else>>
+    You contemplate pouring one of your potions into the goblet, however, your scaly boss may be unhappy with you if you don't check her cabinet first.
+<</if>>
+[[Leave|Demo]]
 
 :: Talk with the headmaster
 You strike up a conversation with the headmaster.
 <<if $HeadmasterQuest is false>>
     He has caught wind of an evil figure lurking in the shadows plotting his destruction. He warns you and recommends you keep a watchful eye.
     <<set $HeadmasterQuest to true; $HeadmasterQuestProg to 1>>\ 
-<<elseif $HeadmasterQuestProg gt 0>>
+<<elseif $HeadmasterQuestProg gt 0 and $HeadmasterQuestProg lt 3>>
     He describes some issues with students throughout campus. He is seriously concerned with the prospering of his student body.
-    <<if $FemaleStudentShip gt 0 and $MaleStudentShip gt 0>> <<set $HeadmasterQuestProg to 3>>
+    <<if $FemaleStudentShip gt 0 and $MaleStudentShip gt 0>> 
         He acknowledges your commitment to assisting the student's on campus and confides a secret in you.
-
+        <<set $HeadmasterQuestProg to 3>><<set $SirenProtection to true>>
         He imbibes you with a special protection and counsels you that it will be instrumental in protecting you from his enemies.
     <<else>>
         You can earn his trust by strengthening relationships with other students. <<set $HeadmasterQuestProg to 2>>
     <</if>>\ 
+<<else>>
+    <<if $NurseLife is true>>\
+        His enemy continues to lurk in the shadows plotting his demise. 
+
+        He encourages you to use the protection which he have bestowed upon you to defeat them.
+    <<else>>\
+        You have succeeded in your task of eliminating the headmaster's enemy. 
+        
+        He thanks you graciously and as you progress in your studies, he eventually elevates you to a supervisory position within The Monastery. 
+
+        He eventually dies and you take over as his success ushering in an age of peace and prosperity. The students flourish under your guidance. 
+        <<set $HeadmasterQuestProg to 4>>
+        <div align='center' style='font-size: 300%;'>\
+        <span class='fadeIn'><span style="color:green"><b>YOU SUCCEED THE HEADMASTER</b></span></span>
+        </div>
 <</if>>
-[[Leave|Demo]]
+<<if $GobletTamper is true>>\
+    <<if $Day eq $GobletTamperDay + 1>>\
+        The effects of tampering with the headmaster's goblet causes him to spew truths. He informs you that within the confines of the Skeleton Tomb, he loses his ability to defend himself from magical attacks. <<set $SirenQuestProg to 3>><br>
+    <<else>>\
+        The truth serum effect only lasts for one day. You will have to try again if you want to learn the headmaster's magical weakness.
+    <</if>>\
+<</if\>>
+<<if $HeadmasterQuestProg lt 4>>\
+    [[Leave|Demo]]
+<</if>>
 
 :: Fly around campus
 You fly around campus. You notice some areas you can explore.
@@ -2483,20 +2527,23 @@ The horrendous <<if $Xray is true>>image<<else>>sound<</if>> is forever etched i
 :: Balneary
 You enter the balneary.
 <<if $Blind is false>>
-There is a large fountain in the middle of the room and a sink that spans across the entire back wall.
+    There is a large fountain in the middle of the room and a sink that spans across the entire back wall.
 
-There is a long mirror that spans across the sink. 
+    There is a long mirror that spans across the sink. 
 
-There are numbered faucets on both the fountain and the sink, although none of them are running at the moment.
+    There are numbered faucets on both the fountain and the sink, although none of them are running at the moment.
 
-Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
+    Students use this area to wash up before meals and collect water for bathing in the dorm rooms.
 <</if>>
 <<if $Xray is true>>
-Using your X-ray vision, you stare through the balneary wall and see an underground bath on the other side of the sink wall. <br>
+    Using your X-ray vision, you stare through the balneary wall and see an underground bath on the other side of the sink wall. <br>
 <</if>>\
-[[Turn on individual faucets]]
-[[Turn on all the faucets][$Temp to 0]] \
-/* WIP - Keep? Random NPC? [[Wait for another student]] */ 
+<<if $BathPuzzleCompletion is true>>\
+    [[Enter the secret bathhouse|Secret bath]]
+<<else>>\
+    [[Turn on individual faucets]]
+    [[Turn on all the faucets][$Temp to 0]] 
+<</if>>\
 [[Leave|Demo]]
 
 :: Turn on individual faucets
@@ -2629,7 +2676,7 @@ You turn the handle of Faucet: $SingleFaucet.
         <</for>> \
         <<if $BathHouse is true>> \
             You wait for a few seconds and then the floor begins to vibrate.
-            
+            <<set $BathPuzzleCompletion to true>>
             A passageway splits open in the wall. Water runs through the opening and down the steps.
 
             [[Enter the secret passage|Secret bath]]
@@ -2693,9 +2740,10 @@ The Nurse questions you on your progess, eagerly flicking her tongue as she poli
             You describe the headmaster's magical weakness to her. She listens intently, salivating. 
             <<set $SirenQuestProg3 to true>>
             With giddy delight, she explains that she will begin preparations for the final stage of her plot. 
-        <</if>>
-        You must lure the headmaster into the Skeleton Tomb at night. She will be waiting for you.
-    <</if>>
+        <<else>>
+            You must lure the headmaster into the Skeleton Tomb at night. She will be waiting for you.
+        <</if>>\
+    <</if>>\
 <</if>>
 [[Leave the bath|Demo]]
 
@@ -3641,25 +3689,33 @@ It won't budge.<br>
 :: Open Tomb
 You insert the Skeleton Key and the Skeleton Door slowly slides open, eating your key. 
 <<run $UserLegendaryItems.delete('Skeleton Key')>>
-You find yourself in a vast open chamber. Skeletons rise up from the ground and encircle you. Their eyes glow.
+<<if $NurseLife is false>>\
+    You find yourself in a vast open chamber. Skeletons rise up from the ground and encircle you. Their eyes glow.
 
-They brings their hands together in prayer and chant a hymn.
+    They brings their hands together in prayer and chant a hymn.
 
-In glorious worship, their beautiful, melodic voices praise you.
+    In glorious worship, their beautiful, melodic voices praise you.
 
-Your body tingles. You start glowing.
+    Your body tingles. You start glowing.
 
-Golden wings sprout from your back and you rise above the ground levitating.
+    Golden wings sprout from your back and you rise above the ground levitating.
 
-Great power courses through your veins. You raise your arms to your side and raise your head, instinctively joining in the holy hymn.
+    Great power courses through your veins. You raise your arms to your side and raise your head, instinctively joining in the holy hymn.
 
-A great vortex rages through the tomb and engulfs your acolytes, thrusting them into your body. You absorb their power and you are bombarded with visions of the world. 
+    A great vortex rages through the tomb and engulfs your acolytes, thrusting them into your body. You absorb their power and you are bombarded with visions of the world. 
 
-You can now monitor and control events that were once far beyond your comprehension or awareness. 
-/* WIP - Expand story to confront nurse before achieving victory */
-<div align='center' style='font-size: 300%;'>\
-<span class='fadeIn'><span style="color:yellow"><b>YOU HAVE BECOME GOD</b></span></span>
-</div>
+    You can now monitor and control events that were once far beyond your comprehension or awareness. 
+    /* WIP - Expand story to confront nurse before achieving victory */
+    <div align='center' style='font-size: 300%;'>\
+    <span class='fadeIn'><span style="color:yellow"><b>YOU HAVE BECOME GOD</b></span></span>
+    </div>
+<<else>>\
+    <<if $SirenQuestProg3 is true>>\
+        You managed to lure the headmaster to the tomb with you using his trust in you. 
+
+        The Siren has set up traps and lies in wait. *wip*
+    <<>>
+<</if>>
 
 :: Collect
 <<if Fresh()>>\
