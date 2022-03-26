@@ -13,7 +13,7 @@ Unfinished Tasks: Slime Potion, Convert old code to widgets
 Current: Spawn NPCs at locations
 
 Remaining: 
-Potions - Octopus, Gargoyle, Intangibility, temp Death, Depression, Nightmare, Curse, Undead, Philosophy, Magic Milk, Funky Dragon
+Potions - Octopus, Gargoyle, Intangibility, temp Death, Depression, Nightmare, Curse, Undead, Philosophy, Magic Milk, Funky Dragon, Morphine
 Map/Areas - Cave, Dungeon, Secret Bath, Tomb, Graveyard, Roof 
 Game Mechanics - Night, Wings
 NPC
@@ -111,12 +111,14 @@ Too many bad ends in bath house
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
 Changelog v0.3.0
--New location: Cave
--Introduced NPC Spawning mechanic 
+-New Location: Cave
+-New Quest: Siren 
+-Raid the medicine cabinet
+-Introduced NPC Spawning Engine
 -The teacher's important document can now be found in the desk even if a previous search attempt failed
 -Potions have effects (8/24: Vampire Potion (unf), Bat Potion, X-ray Potion, Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
 -Syntax bugfix in Infirmary
--Code cleanup: Converted some old code into macros
+-Code cleanup: Converted some unpotimized code into macros
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -825,8 +827,10 @@ You drink the $Temp. <<if $Temp is 'Undead Potion'>>Or rather, chewing may be a 
     <<case 'Holy Water'>>
         You have been purified. You are now fully human.
         <<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false; $Gargoyle to false>>
+    <<case 'Morphine'>> 
+        You get high on morphine and fall asleep. You [[awake the next day|Demo]], unaware of the night before. <<set $Day += 1; $NightTime to false>> <<NPCLocation>> <<PotionExpiration>> <<AgePlants>> 
 <</switch>>\
-<<if $Disintegration is true or $Poison is true or $TempDeath is true or $Temp is 'Droopy Juice' or $Temp is 'Sedative'>>
+<<if $Disintegration is true or $Poison is true or $TempDeath is true or $Temp is 'Droopy Juice' or $Temp is 'Sedative'or $Temp is 'Morphine'>>
 <<else>>\
 [[Continue|$return]]
 <</if>>
@@ -2678,11 +2682,21 @@ As you bleed out and lose consciousness, a serpentine tongue flicks across your 
 :: Wait Nurse
 You stay still and wait for the creature to <<if $Invisibility is true>>pass<<else>>approach you<</if>>.
 
-She emerges from the shadows. <<if $Invisibility is true>>You hold your breath as she walks past you.<<if $Blind is false>> You notice the creature is the nurse. She has talons and a forked tongue flicks from her mouth.<</if>>
+She emerges from the shadows. \
+<<if $Invisibility is true>>\
+    You hold your breath as she walks past you.\
+    <<if $Blind is false>>\ 
+    You notice the creature is the nurse. She has talons and a forked tongue flicks from her mouth.\
+    <</if>>
 
-She smells you with her tongue and approaches your location. <<else>><<if $Blind is flase>>The nurse stands before you gazing upon you<<if $Invisibility is true>>r location<</if>> with curiousity.<</if>> 
-<<if $Invisibility is false and $Blind is false>>
-You notice she has some animalistic features. She surveys you like a predator would prey. A serpentine tongue flicks out of her mouth.
+    She smells you with her tongue and approaches your location. \
+<<else>>\
+    <<if $Blind is false>>\
+        She stands before you gazing upon you<<if $Invisibility is true>>r location<</if>> with curiousity.\
+    <</if>> 
+    <<if $Invisibility is false and $Blind is false>>
+        You notice she has some animalistic features. She surveys you like a predator would prey. A serpentine tongue flicks out of her mouth.
+    <</if>>\
 <</if>>
 With some <<if $Invisibility is true>>curiousity<<else>>reservation<</if>>, she petitions your help in her plot to overthrow the headmaster.
 
@@ -3093,8 +3107,6 @@ The nurse appears from the shadows and strokes your hair while smiling.
 
 She welcomes you to her underground lair and informs you that you will spend the rest of your days as her slave.
 
-Maybe you shouldn't have been so rude to her...
-
 <div align='center' style='font-size: 300%;'>\
 <span class='fadeIn'><span style="color:red"><b>YOU ARE NO LONGER YOUR OWN</b></span></span>
 </div> 
@@ -3130,7 +3142,7 @@ You acquire the Skeleton Key. It is a key with a skull at the base. It emits a s
 
 :: Take drugs
 You peruse the drug selection in the medicine cabinet. You swipe some morphine.
-<<run $Items.pushUnique('Morphine')>>
+<<run $UserPotions.pushUnique('Morphine')>>
 <<if $CabinetEmpty isnot true>>\
     You notice one of the vials seems different from the others. A beautiful silver liquid swirls around the vial, producing mesmerizing striations. <br>
 <</if>>\
@@ -3244,10 +3256,10 @@ Some of them don't appear too friendly based on their body language.
 
 They might be dangerous if not handled properly.
 <<if $HorseFriend is false>>
-[[Take one for a ride]]
+    [[Take one for a ride]]
 <<else>> 
-[[Ride your friend immediately|Take him for a ride]]
-[[Wait for night to ride your friend|Wait for nightfall]]
+    [[Ride your friend immediately|Take him for a ride]]
+    [[Wait for night to ride your friend|Wait for nightfall]]
 <</if>> \
 [[Look for a person]]
 
