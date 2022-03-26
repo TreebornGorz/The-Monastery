@@ -4,6 +4,7 @@ Left off work here: *WIP*
 
 Test: 
 
+Siren Quest conditionals
 Infirmary syntax fix
 Transformation Reversion
 
@@ -2620,11 +2621,26 @@ The Nurse questions you on your progess, eagerly flicking her tongue as she poli
 <<if $SirenQuestProg is lt 2>>
     She chastises you for wasting her time. You haven't found anything useful yet. 
 
-    You need to find infgormation on the headmaster's vulnerabilities.
-<<else>>
+    You need to find information on the headmaster's vulnerabilities.
+<<elseif $Items.includes('Medicine Cabinet Key') is false>> 
     You explain your discovery of the headmaster's vulernability to her. She chuckles with delight and happily flicks her tongue around your face as she gets closer to you.
+    <<run $Items.pushUnique('Medicine Cabinet Key')>>
+    Her trust for you grows. She hands you the key to her medicine cabinet. The drugs may be useful in gathering futher information.
 
-    *WIP*
+    You are now tasked with determining the headmaster's magical weakness. 
+<<else>>
+    <<if $SirenQuestProg is lt 3>>
+        She chastises you for wasting her time.
+        
+        You have not yet discovered the headmaster's magical weakness. You must keep searching. 
+    <<else>>\
+        <<if $SirenQuestProg3 isnot true>>
+            You describe the headmaster's magical weakness to her. She listens intently, salivating. 
+            <<set $SirenQuestProg3 to true>>
+            With giddy delight, she explains that she will begin preparations for the final stage of her plot. 
+        <</if>>
+        You must lure the headmaster into the Skeleton Tomb at night. She will be waiting for you.
+    <</if>>
 <</if>>
 [[Leave the bath|Demo]]
 
@@ -3085,15 +3101,54 @@ Maybe you shouldn't have been so rude to her...
 
 :: Raid the cabinet
 You attempt to raid the cabinet in the hopes of acquiring drugs.
+<<if $Items.includes('Medicine Cabinet Key')>>
+    You unlock the cabinet using your key.
 
-Unfortunately, the cabinet is locked.
-<<if $Xray is true>>
-    Using your X-ray vision, you peer into the cabinet. You see pain pills, antiobiotics, and an odd key with a skull on it. /* WIP - Incorporate method for opening cabinet to make the game realistically winnable */
-<</if>>
-No drugs for you.
-/* Conditional for cabinet access */
-[[Inspect the beds]]
-[[Enter the office]]
+    You see pain pills, antiobiotics, and other drugs with various medicinal purposes. <br>
+    <<if $UserLegendaryItems.includes('Skeleton Key') is false>>\
+    You notice an odd key with a skull on it. 
+    
+    [[Take the key]]
+    <</if>>\
+    [[Take drugs]]
+<<else>>
+    Unfortunately, the cabinet is locked.
+    <<if $Xray is true>>
+        Using your X-ray vision, you peer into the cabinet. You see pain pills, antiobiotics, and an odd key with a skull on it. 
+    <</if>>
+    No drugs for you.<br>
+    [[Inspect the beds]]
+    [[Enter the office]]
+<</if>>\
+[[Leave|Demo]]
+
+:: Take the key
+You acquire the Skeleton Key. It is a key with a skull at the base. It emits a strange aura.
+<<run $UserLegendaryItems.pushUnique('Skeleton Key')>>
+[[Take drugs]]
+[[Leave|Demo]]
+
+:: Take drugs
+You peruse the drug selection in the medicine cabinet. You swipe some morphine.
+<<run $Items.pushUnique('Morphine')>>
+<<if $CabinetEmpty isnot true>>\
+    You notice one of the vials seems different from the others. A beautiful silver liquid swirls around the vial, producing mesmerizing striations. <br>
+<</if>>\
+<<if $UserLegendaryItems.includes('Skeleton Key') is false>>\
+    [[Take the key]]
+<</if>>\
+<<if $CabinetEmpty isnot true>>\
+    [[Take the vial]]
+<</if>>\
+[[Leave|Demo]]
+
+:: Take the vial
+You swipe the strange vial.
+<<run $UserPotions.pushUnique('Truth Serum')>> <<set $CabinetEmpty to true>>
+<<if $UserLegendaryItems.includes('Skeleton Key') is false>>\
+[[Take the key]]
+<</if>>\
+[[Take the vial]]
 [[Leave|Demo]]
 
 :: Injured butt
