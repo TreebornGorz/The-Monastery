@@ -111,8 +111,9 @@ Too many bad ends in bath house
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
 Changelog v0.3.0
--New Location: Cave
--New Quest: Siren 
+-New Locations: Cave, Headmaster's Office
+-New Quest: Siren's Quest
+-New NPC: Headmaster
 -Raid the medicine cabinet
 -Introduced NPC Spawning Engine
 -The teacher's important document can now be found in the desk even if a previous search attempt failed
@@ -291,7 +292,7 @@ body.no-save #menu-item-saves {
 <<widget "NPCLocation">>\
     <<nobr>>
     /* Clear NPC Locations */
-    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []>>
+    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []; $HeadmasterOfficeNPC to []; $OutskirtsNPC to []>>
     /* Assign NPC locations if alive */
     <<if $NurseLife is true>>
         <<run $InfirmaryNPC.pushUnique('Nurse')>>
@@ -320,6 +321,11 @@ body.no-save #menu-item-saves {
         <<run $ClassroomNPC.pushUnique('Teacher')>>
     <</if>>
     <<if $HeadmasterLife is true>>
+        <<if $NightTime is true>>
+            <<run $OutskirtsNPC.pushUnique('Headmaster')>>
+        <<else>>
+            <<run $HeadmasterOfficeNPC.pushUnique('Headmaster')>>
+        <</if>>
     <</if>>
     <<if $FemaleStudentLife is true>>
     <</if>>
@@ -413,8 +419,6 @@ body.no-save #menu-item-saves {
 <<set $AnimalShip to 0>>
 <<set $Eggs to 0>>
 <<set $Milk to 0>>
-<<set $BigFriend to false>>
-<<set $BigEnemy to false>>
 <<set $ClassSearch to false>>
 <<set $Weapon to false>>
 <<set $Plants to ["Marijuana","Poppy","Tulip"]>>
@@ -492,6 +496,8 @@ body.no-save #menu-item-saves {
 <<set $ForestNPC to []>>
 <<set $MaleDormNPC to []>>
 <<set $FemaleDormNPC to []>>
+<<set $HeadmasterOfficeNPC to []>>
+<<set $OutskirtsNPC to []>>
 
 <<set $NurseShip to 0>>
 <<set $BrewmasterShip to 0>>
@@ -978,6 +984,9 @@ Are you Male or Female?
         [[Fly into the forest|Cave Find]]
         [[Fly around campus]]
     <</if>>\
+    <<if $HeadmasterShip is gt 1>>\
+        [[Headmaster's Office]]
+    <</if>>
 <<else>> \
     You spent your time on campus doing a whole lot of nothing. Maybe you could have been more interesting or taken more risks.
 
@@ -991,6 +1000,26 @@ Are you Male or Female?
     <span class='fadeIn'><span style="color:red"><b>YOU EVENTUALLY DIED</b></span></span>
     </div> 
 <</if>>
+
+:: Headmaster's Office
+You enter the headmaster's office. You see an ornate desk with papers strewn about. An impressive goblet sits by his quill.
+
+:: Talk with the headmaster
+You strike up a conversation with the headmaster.
+<<if $HeadmasterQuest is false>>
+    He has caught wind of an evil figure lurking in the shadows plotting his destruction. He warns you and recommends you keep a watchful eye.
+    <<set $HeadmasterQuest to true; $HeadmasterQuestProg to 1>>\ 
+<<elseif $HeadmasterQuestProg gt 0>>
+    He describes some issues with students throughout campus. He is seriously concerned with the prospering of his student body.
+    <<if $FemaleStudentShip gt 0 and $MaleStudentShip gt 0>> <<set $HeadmasterQuestProg to 3>>
+        He acknowledges your commitment to assisting the student's on campus and confides a secret in you.
+
+        He imbibes you with a special protection and counsels you that it will be instrumental in protecting you from his enemies.
+    <<else>>
+        You can earn his trust by strengthening relationships with other students. <<set $HeadmasterQuestProg to 2>>
+    <</if>>\ 
+<</if>>
+[[Leave|Demo]]
 
 :: Fly around campus
 You fly around campus. You notice some areas you can explore.
@@ -2015,14 +2044,36 @@ You eat your meal alongside them.
 
 :: Eat dinner
 After a hard day's work, you enter the refectory for a meal.
-<<set $NightTime to true>>  <<NPCLocation>>  
-You take a seat at a table and eat your meal surrounded by the other students.
-
+<<set $NightTime to true>>  <<NPCLocation>>\
+<<if $FemaleStudentShip gt 0 and $MaleStudentShip gt 0>>
+    You notice your friends eating and take a seat next to them. 
+    <<if $SirenQuestProg is 1>>
+    [[Ask about the headmaster]]
+    <</if>>\
+<<elseif $FemaleStudentShip gt 0>>
+    You notice your female friend eating and take a seat next to her.
+    <<if $SirenQuestProg is 1>>
+    [[Ask about the headmaster]]
+    <</if>>\
+<<elseif $MaleStudentShip gt 0>>
+    You notice your male friend eating and take a seat next to him.
+<<else>>
+    You take a seat at a table and eat your meal surrounded by the other students.
+<</if>>
 <<if $Gorgon is true and $Blind is false>>\
 [[Turn them to stone]]
 <</if>>\
 [[Listen to gossip]]
 [[Eat in peace]]
+
+:: Ask about the headmaster
+You ask about about the headmaster, seeking information on his vulnerabilities.
+<<set $SirenQuestProg to 2>>
+Your female friend informs you that the headmaster often enjoys taking midnight strolls around the campus outskirts.
+
+You finish your meal and turn in your dishes. 
+
+[[Sleep]]
 
 :: Turn them to stone
 You make eye contact with individual students at the table, <<if $Invisibility is false>>progressively turning each one to stone.
@@ -3126,8 +3177,8 @@ You attempt to raid the cabinet in the hopes of acquiring drugs.
 <<else>>
     Unfortunately, the cabinet is locked.
     <<if $Xray is true>>
-        Using your X-ray vision, you peer into the cabinet. You see pain pills, antiobiotics, and an odd key with a skull on it. 
-    <</if>>
+        Using your X-ray vision, you peer into the cabinet. You see pain pills, antiobiotics, and other drugs with various medicinal purposes. You notice an odd key with a skull on it.
+    <</if>>    
     No drugs for you.<br>
     [[Inspect the beds]]
     [[Enter the office]]
@@ -3375,8 +3426,7 @@ Wildlife skitters around you.
     <</if>>
 <</nobr>>
 <<if $NightTime is true>>\
-It is difficult to see in the darkness.
-
+It is difficult to see in the darkness. <br>
 [[Dismount and search for plants in the dark]]
 <<else>>\
 You notice many interesting plants.
@@ -3384,7 +3434,30 @@ You notice many interesting plants.
 [[Inspect a plant]]
 <</if>> \
 [[Enter the forest]]
+<<if $SirenQuest is true>>\
+[[Search for the headmaster]]
+<</if>>\
 [[Return to campus]]
+
+:: Search for the headmaster
+<<if $OutskirtsNPC.includes('Headmaster')>>
+    <<if $HeadmasterShip lt 1>>\
+        You search for a while and eventually stumble upon a tall figure with a long beard staring up at the night sky. 
+
+        You dismount and approach him. He accepts your presence without acknowledging you. You stare up into the sky together in silence for a brief while. 
+        <<set $HeadmasterShip to 1>>
+        You have a discussion with him as he conveys to you his dreams for The Monastery. You feel the beginnings of a bond between the two of you.<br>
+    <<else>>\
+        You locate the headmaster at his usual stargazing location and join him once again. 
+
+        [[Talk with the headmaster]]
+    <</if>>\
+<<else>>
+    You search for a while, unable to locate the headmaster. He must not be in this area. 
+
+    [[Continue riding|Explore the campus outskirts]]
+<</if>>\
+[[Leave|Demo]]
 
 :: Dismount and search for plants in the dark
 You dismount and fumble around in the dark searching for a plant.
@@ -4026,8 +4099,8 @@ You can't imagine that this lady has a good reason for bothering you.
 You lash out at her, insulting her size and ugliness in front of the rest of the class.
 
 You get a couple chuckles from the crowd and she sinks back into a different seat while holding back tears.
-<<set $BigEnemy to true>>
-You have made a very large enemy. May God have mercy on your soul.
+
+You have an opportunity to make a friend. 
 
 The professor enters and [[class begins|Class]]. 
         
@@ -4041,7 +4114,7 @@ You are confused. She clears her throat and more obviously motions towards the i
 You look inside and notice some XL tampons she must have left behind last time she sat in this seat.
 
 You discreetly hand them over to her.
-<<set $BigFriend to true>>
+<<set $FemaleStudentShip to 1>>
 She happily takes them from you. She takes a seat with a smile on her face.
 
 You have made a friend<<if $Ostra is true>> despite being socially ostracized<</if>>.
