@@ -296,7 +296,11 @@ body.no-save #menu-item-saves {
     <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []; $HeadmasterOfficeNPC to []; $OutskirtsNPC to []>>
     /* Assign NPC locations if alive */
     <<if $NurseLife is true>>
-        <<run $InfirmaryNPC.pushUnique('Nurse')>>
+        <<if $NightTime is true>>
+            <<run $BathhouseNPC.pushUnique('Nurse')>>
+        <<else>>
+            <<run $InfirmaryNPC.pushUnique('Nurse')>>
+        <</if>>
     <</if>>
     <<if $LibrarianLife is true>>
         <<if $LibrarianQuest is true>>
@@ -677,7 +681,7 @@ You have been imbued with a holy power.
 <</if>>
 
 :: Drink Potion [noreturn]
-You drink the $Temp. <<if $Temp is 'Undead Potion'>>Or rather, chewing may be a better description.<</if>><<if $Temp is 'Gargoyle Potion'>>You open the stopper and the once stationary liquid pours down your throat.<</if>>
+<<if $Temp isnot 'Morphine'>>You drink the $Temp. <</if>><<if $Temp is 'Undead Potion'>>Or rather, chewing may be a better description.<</if>><<if $Temp is 'Gargoyle Potion'>>You open the stopper and the once stationary liquid pours down your throat.<</if>>
 <<run $UserPotions.delete($Temp)>>\
 <<switch $Temp>>
     <<Detransformation>>
@@ -835,11 +839,11 @@ You drink the $Temp. <<if $Temp is 'Undead Potion'>>Or rather, chewing may be a 
         You have been purified. You are now fully human.
         <<set $NoHands to false; $Gorgon to false; $Demon to false; $Bat to false; $Vampire to false; $Undead to false; $Succubus to false; $Incubus to false; $Slime to false; $Demon to false; $Gargoyle to false>>
     <<case 'Morphine'>> 
-        You get high on morphine and fall asleep. You [[awake the next day|Demo]], unaware of the night before. <<set $Day += 1; $NightTime to false>> <<NPCLocation>> <<PotionExpiration>> <<AgePlants>> 
+        You get high on morphine and [[fall asleep|Sleep]].  
 <</switch>>\
 <<if $Disintegration is true or $Poison is true or $TempDeath is true or $Temp is 'Droopy Juice' or $Temp is 'Sedative'or $Temp is 'Morphine'>>
 <<else>>\
-[[Continue|$return]]
+    [[Continue|$return]]
 <</if>>
 
 :: Examine Potion [menu noreturn]
@@ -943,9 +947,9 @@ Are you Male or Female?
 <<if $Day lt 100>> \
     You are on campus.
     <<if $NightTime is true>>
-        It is dark.<br>
+        It is dark.
         <<if $Vampire is true>>
-            The darkness comforts you.<br>
+            The darkness comforts you.
         <</if>>\
     <<elseif $Vampire is true>>
         The light seeping through the windows taunts you. You long for the darkness.<br>
@@ -979,13 +983,15 @@ Are you Male or Female?
             [[Ride Horse]]
         <</if>>\
     <</if>>\
-    <<link [[Wait for night|Demo]]>> <<set $NightTime to true>> <<NPCLocation>> <</link>>
+    <<if $NightTime is false>>\
+        <<link [[Wait for night|Demo]]>> <<set $NightTime to true>> <<NPCLocation>> <</link>>
+    <</if>>\
     <<set $Show to true>>\
     <<if $Wings is true>>\
         [[Fly into the forest|Cave Find]]
         [[Fly around campus]]
     <</if>>\
-    <<if $HeadmasterShip is gt 1>>\
+    <<if $HeadmasterShip gt 1>>\
         [[Headmaster's Office]]
     <</if>>
 <<else>> \
@@ -1026,41 +1032,46 @@ You enter the headmaster's office. You see an ornate desk with papers strewn abo
 
 :: Talk with the headmaster
 You strike up a conversation with the headmaster.
-<<if $HeadmasterQuest is false>>
-    He has caught wind of an evil figure lurking in the shadows plotting his destruction. He warns you and recommends you keep a watchful eye.
-    <<set $HeadmasterQuest to true; $HeadmasterQuestProg to 1>>\ 
-<<elseif $HeadmasterQuestProg gt 0 and $HeadmasterQuestProg lt 3>>
-    He describes some issues with students throughout campus. He is seriously concerned with the prospering of his student body.
-    <<if $FemaleStudentShip gt 0 and $MaleStudentShip gt 0>> 
-        He acknowledges your commitment to assisting the student's on campus and confides a secret in you.
-        <<set $HeadmasterQuestProg to 3>><<set $SirenProtection to true>>
-        He imbibes you with a special protection and counsels you that it will be instrumental in protecting you from his enemies.
+<<if $Day eq $GobletTamperDay + 1 is false>>
+    <<if $HeadmasterQuest is false>>
+        He has caught wind of an evil figure lurking in the shadows plotting his destruction. He warns you and recommends you keep a watchful eye.
+
+        Your bond improves further. He discloses the location of his office and extends an invitation to you for whenever you may be in need. 
+        <<set $HeadmasterQuest to true; $HeadmasterQuestProg to 1; $HeadmasterShip to 2>>\ 
+    <<elseif $HeadmasterQuestProg gt 0 and $HeadmasterQuestProg lt 3>>
+        He describes some issues with students throughout campus. He is seriously concerned with the prospering of his student body. You get the sense that he is not telling you something.
+        <<if $FemaleStudentShip gt 0 and $MaleStudentShip gt 0>> 
+            He acknowledges your commitment to assisting the student's on campus and confides a secret in you.
+            <<set $HeadmasterQuestProg to 3; $SirenProtection to true>>
+            He imbibes you with a special protection and counsels you that it will be instrumental in protecting you from his enemies.
+        <<else>>
+            You can further earn his trust by strengthening relationships with other students. <<set $HeadmasterQuestProg to 2>>
+        <</if>>\ 
     <<else>>
-        You can earn his trust by strengthening relationships with other students. <<set $HeadmasterQuestProg to 2>>
-    <</if>>\ 
-<<else>>
-    <<if $NurseLife is true>>\
-        His enemy continues to lurk in the shadows plotting his demise. 
+        <<if $NurseLife is true>>\
+            His enemy continues to lurk in the shadows plotting his demise. 
 
-        He encourages you to use the protection which he have bestowed upon you to defeat them.
-    <<else>>\
-        You have succeeded in your task of eliminating the headmaster's enemy. 
-        
-        He thanks you graciously and as you progress in your studies, he eventually elevates you to a supervisory position within The Monastery. 
+            He encourages you to use the protection which he have bestowed upon you to defeat them.
+        <<else>>\
+            You have succeeded in your task of eliminating the headmaster's enemy. 
+            
+            He thanks you graciously and as you progress in your studies, he eventually elevates you to a supervisory position within The Monastery. 
 
-        He eventually dies and you take over as his success ushering in an age of peace and prosperity. The students flourish under your guidance. 
-        <<set $HeadmasterQuestProg to 4>>
-        <div align='center' style='font-size: 300%;'>\
-        <span class='fadeIn'><span style="color:green"><b>YOU SUCCEED THE HEADMASTER</b></span></span>
-        </div>
-<</if>>
+            He eventually dies and you take over as his success ushering in an age of peace and prosperity. The students flourish under your guidance. 
+            <<set $HeadmasterQuestProg to 4>>
+            <div align='center' style='font-size: 300%;'>\
+            <span class='fadeIn'><span style="color:green"><b>YOU SUCCEED THE HEADMASTER</b></span></span>
+            </div>
+        <</if>>\
+    <</if>>\
+<</if>>\
 <<if $GobletTamper is true>>\
-    <<if $Day eq $GobletTamperDay + 1>>\
-        The effects of tampering with the headmaster's goblet causes him to spew truths. He informs you that within the confines of the Skeleton Tomb, he loses his ability to defend himself from magical attacks. <<set $SirenQuestProg to 3>><br>
+    <<if $Day eq $GobletTamperDay + 1>>
+        The effects of tampering with the headmaster's goblet causes him to spew random truths. He informs you that within the confines of the Skeleton Tomb, he loses his ability to defend himself from magical attacks. <<set $SirenQuestProg to 3>><br>
     <<else>>\
         The truth serum effect only lasts for one day. You will have to try again if you want to learn the headmaster's magical weakness.
     <</if>>\
-<</if\>>
+<</if>>\
 <<if $HeadmasterQuestProg lt 4>>\
     [[Leave|Demo]]
 <</if>>
@@ -1124,7 +1135,7 @@ Unfortunately, you are in the wrong dorm.
 The other students freak out.
 <<set $Ostra to true>>
 <b>You have been socially ostracized.</b><br>
-<<PotionExpiration>> <<NPCLocation>>
+<<PotionExpiration>> <<set $NightTime to false>> <<NPCLocation>>
 [[Wake Up|Demo][$NightTime to false]]
 
 <<AgePlants>> <<set $Day += 1; $NightTime to true>>
@@ -2095,15 +2106,15 @@ After a hard day's work, you enter the refectory for a meal.
     [[Ask about the headmaster]]
     <</if>>\
 <<elseif $FemaleStudentShip gt 0>>
-    You notice your female friend eating and take a seat next to her.
-    <<if $SirenQuestProg is 1>>
+    You notice your female friend eating and take a seat next to her.<br>
+    <<if $SirenQuestProg is 1>>\
     [[Ask about the headmaster]]
     <</if>>\
 <<elseif $MaleStudentShip gt 0>>
-    You notice your male friend eating and take a seat next to him.
+    You notice your male friend eating and take a seat next to him.<br>
 <<else>>
-    You take a seat at a table and eat your meal surrounded by the other students.
-<</if>>
+    You take a seat at a table and eat your meal surrounded by the other students.<br>
+<</if>>\
 <<if $Gorgon is true and $Blind is false>>\
 [[Turn them to stone]]
 <</if>>\
@@ -2701,37 +2712,39 @@ You feel fuzzy as you soak in the water.
     [[Attempt an escape|Escape Nurse]]
     [[Stand your ground|Wait Nurse]]
     [[Embrace the figure|Embrace Nurse]]
-<<else>>
-<<if $BathhouseNPC includes 'Nurse'>>
-You notice the nurse licking her talons and contemplating her plots.
-<</if>>\
-<<if $BathhouseNPC includes 'Male Student'>>
-You notice a male student bathing in the water with glazed eyes.
+<<else>>\
+    <<if $BathhouseNPC.includes('Nurse')>>
+        You notice the nurse licking her talons and contemplating her plots.<br>
+    <</if>>\
+    <<if $BathhouseNPC.includes('Male Student')>>\
+        You notice a male student bathing in the water with glazed eyes.
 
-[[Approach the student|MaleStudentDialogue]]
-<</if>>\
-<<if $BathhouseNPC includes 'Nurse'>>
-[[Approach the Nurse|SirenBathDialogue]]
-<</if>>\
-[[Gather bath water|WIP]]
+        [[Approach the student|WIP]]
+    <</if>>\
+    <<if $BathhouseNPC.includes('Nurse')>>\
+        [[Approach the Nurse|SirenBathDialogue]]
+    <</if>>\
+    [[Gather bath water|WIP]]
+    [[Leave|Demo]]
 <</if>>
 
 :: MaleStudentDialogue
+*wip*
 
 :: SirenBathDialogue
 The Nurse questions you on your progess, eagerly flicking her tongue as she polishes her talons.
-<<if $SirenQuestProg is lt 2>>
+<<if $SirenQuestProg lt 2>>
     She chastises you for wasting her time. You haven't found anything useful yet. 
 
     You need to find information on the headmaster's vulnerabilities.
 <<elseif $Items.includes('Medicine Cabinet Key') is false>> 
-    You explain your discovery of the headmaster's vulernability to her. She chuckles with delight and happily flicks her tongue around your face as she gets closer to you.
+    You explain your discovery of the headmaster's location to her. She chuckles with delight and happily flicks her tongue around your face as she gets closer to you.
     <<run $Items.pushUnique('Medicine Cabinet Key')>>
     Her trust for you grows. She hands you the key to her medicine cabinet. The drugs may be useful in gathering futher information.
 
-    You are now tasked with determining the headmaster's magical weakness. 
-<<else>>
-    <<if $SirenQuestProg is lt 3>>
+    She gives you another task. You must determine the headmaster's magical weakness. 
+<<else>>\
+    <<if $SirenQuestProg lt 3>>
         She chastises you for wasting her time.
         
         You have not yet discovered the headmaster's magical weakness. You must keep searching. 
@@ -2750,11 +2763,11 @@ The Nurse questions you on your progess, eagerly flicking her tongue as she poli
 :: Escape Nurse
 You attempt to escape... unsuccessfully.
 <<if $Invisibility is true>>
-Despite being invisible, fleeing through the water provided the creature with a clear indication of your location.
+    Despite being invisible, fleeing through the water provided the creature with a clear indication of your location.
 <</if>>
 The creature catches you<<if $Invisibility is false>> and stares its prey in the eyes<</if>>.
 <<if $Gorgon is true and $Blind is false>>
-Your gaze has no effect on her<<if $Invisibility is true>> since she can't see your eyes<<if>>.
+    Your gaze has no effect on her<<if $Invisibility is true>> since she can't see your eyes<</if>>.
 <</if>>
 She lifts you into the air. You feel talons on your skin.
 
@@ -2791,7 +2804,7 @@ She emerges from the shadows. \
     She smells you with her tongue and approaches your location. \
 <<else>>\
     <<if $Blind is false>>\
-        She stands before you gazing upon you<<if $Invisibility is true>>r location<</if>> with curiousity.\
+        She stands gazing upon you<<if $Invisibility is true>>r location<</if>> with curiousity.\
     <</if>> 
     <<if $Invisibility is false and $Blind is false>>
         You notice she has some animalistic features. She surveys you like a predator would prey. A serpentine tongue flicks out of her mouth.
@@ -3259,7 +3272,6 @@ You swipe the strange vial.
 <<if $UserLegendaryItems.includes('Skeleton Key') is false>>\
 [[Take the key]]
 <</if>>\
-[[Take the vial]]
 [[Leave|Demo]]
 
 :: Injured butt
@@ -3485,27 +3497,42 @@ You notice many interesting plants.
 <<if $SirenQuest is true>>\
 [[Search for the headmaster]]
 <</if>>\
+<<if $NightTime is false>>\
+    <<link [[Wait for nightfall|Explore the campus outskirts]]>> <<set $NightTime to true>> <<NPCLocation>> <</link>>
+<</if>>\
 [[Return to campus]]
 
 :: Search for the headmaster
-<<if $OutskirtsNPC.includes('Headmaster')>>
-    <<if $HeadmasterShip lt 1>>\
-        You search for a while and eventually stumble upon a tall figure with a long beard staring up at the night sky. 
+<<if $OutskirtsNPC.includes('Headmaster')>>\
+    <<if $SirenQuestProg3 is true>>\
+        <<set $HeadmasterLure to true>>\
+        You find the headmaster stargazing once again.
 
-        You dismount and approach him. He accepts your presence without acknowledging you. You stare up into the sky together in silence for a brief while. 
-        <<set $HeadmasterShip to 1>>
-        You have a discussion with him as he conveys to you his dreams for The Monastery. You feel the beginnings of a bond between the two of you.<br>
-    <<else>>\
-        You locate the headmaster at his usual stargazing location and join him once again. 
+        With a great deal of urgency, you convince him that one of his students is in mortal danger and he must follow you immediately. 
 
-        [[Talk with the headmaster]]
-    <</if>>\
+        [[Lure him into the tomb|Tomb]]
+    <<else>>
+        <<if $HeadmasterShip lt 1>>\
+            You search for a while and eventually stumble upon a tall figure with a long beard staring up at the night sky. 
+
+            You dismount and approach him. He accepts your presence without acknowledging you. You stare up into the sky together in silence for a brief while. 
+            <<set $HeadmasterShip to 1>>
+            You have a discussion with him as he conveys to you his dreams for The Monastery. You feel the beginnings of a bond between the two of you.
+
+            [[Return to campus and sleep|Sleep]]
+        <<else>>\
+            You locate the headmaster at his usual stargazing location and join him once again. 
+
+            [[Talk with the headmaster]]
+        <</if>>\
+    <</if>>
 <<else>>
     You search for a while, unable to locate the headmaster. He must not be in this area. 
 
     [[Continue riding|Explore the campus outskirts]]
+    [[Leave|Demo]]
 <</if>>\
-[[Leave|Demo]]
+
 
 :: Dismount and search for plants in the dark
 You dismount and fumble around in the dark searching for a plant.
@@ -3672,6 +3699,9 @@ You forge onwards, deep into the forest.
     <<if $Xray is true>>
         You attempt to see through the door using your X-ray vision, but a magical force prevents you from seeing through. 
     <</if>>
+    <<if $HeadmasterLure is true>>\
+        The headmaster accompanies you. He is nervous and concerned.<br>
+    <</if>>\
     <<if $UserLegendaryItems.includes('Skeleton Key')>>\
     [[Use the Skeleton Key on the Skeleton Door|Open Tomb]]
     <</if>>\
@@ -3688,7 +3718,6 @@ It won't budge.<br>
 
 :: Open Tomb
 You insert the Skeleton Key and the Skeleton Door slowly slides open, eating your key. 
-<<run $UserLegendaryItems.delete('Skeleton Key')>>
 <<if $NurseLife is false>>\
     You find yourself in a vast open chamber. Skeletons rise up from the ground and encircle you. Their eyes glow.
 
@@ -3710,11 +3739,43 @@ You insert the Skeleton Key and the Skeleton Door slowly slides open, eating you
     <span class='fadeIn'><span style="color:yellow"><b>YOU HAVE BECOME GOD</b></span></span>
     </div>
 <<else>>\
-    <<if $SirenQuestProg3 is true>>\
-        You managed to lure the headmaster to the tomb with you using his trust in you. 
+    <<if $SirenQuestProg3 is true and $HeadmasterLure is true>>\
+        You managed to lure the headmaster to the tomb owing to his trust in you. 
 
-        The Siren has set up traps and lies in wait. *wip*
-    <<>>
+        The Siren has set up traps and lies in wait. 
+
+        As the headmaster slowly steps inside, crossing the entrance barrier, his radiant sheen leaves him, and his skin begins to wither as his old age shows. 
+
+        He frantically searches for the student in distress, calling out. He turns to look back at you, eventually realizing there is no such student. 
+
+        As he makes eye contact with you, flames engulf him completely. He cries out in agony and you watch as he shrinks to the ground, never to take another breath. 
+
+        The Siren slithers from her perch in delight. Her jaw pops open and she devours his charred body completely, savoring the meal. 
+
+        She absorbs his magical strength and so begins her rule of terror. She rewards for your part in her plot and makes you her head servant, allowing you to boss around her more lowly servants.
+
+        You feel some regret for your actions, but you eventually learn to accept your lot in life.
+
+        <div align='center' style='font-size: 300%;'>\
+        <span class='fadeIn'><span style="color:red"><b>YOU ARE NO LONGER YOUR OWN</b></span></span>
+        </div> 
+    <<elseif $SirenQuestProg3 is true>>
+        The Siren has set up traps and lies in wait.
+
+        However, you did not bring the headmaster with you. 
+
+        You accidentally set off her traps. You become engulfed by magical flames, burning in agony.
+
+        <<Death>>
+    <<else>>
+        You find yourself in a vast open chamber. Skeletons litter the floor. An odd glow emanates around them.
+
+        You hear a deep voice bellow. It instructs you to slay the evil serpent.
+
+        You exit the tomb and you key slides back out of the door. 
+
+        [[Return to the dorm and go to sleep|Sleep]]
+    <</if>>
 <</if>>
 
 :: Collect
@@ -4156,7 +4217,7 @@ You lash out at her, insulting her size and ugliness in front of the rest of the
 
 You get a couple chuckles from the crowd and she sinks back into a different seat while holding back tears.
 
-You have an opportunity to make a friend. 
+You lost an opportunity to make a friend. 
 
 The professor enters and [[class begins|Class]]. 
         
@@ -4268,7 +4329,7 @@ You feel your brain growing with great knowledge.
 [[Sleep]]
 
 :: Sleep
-You go to sleep.
+You go to sleep in the dorm.
 
 You dream of an odd future that awaits you, but you can't quite make out the ending.
 
@@ -4276,4 +4337,4 @@ Maybe it involves <<print $Dream.random()>>...?
 
 [[Wake Up|Demo][$NightTime to false]]
 
-<<set $Day += 1; $NightTime to true>> <<NPCLocation>> <<PotionExpiration>> <<AgePlants>>
+<<set $NightTime to false>> <<NPCLocation>> <<PotionExpiration>> <<AgePlants>> <<set $Day += 1; $NightTime to true>>
