@@ -1,3 +1,15 @@
+Changelog v0.3.0
+-New Locations: Cave, Headmaster's Office
+-New Quest: Siren's Quest, Headmaster's Quest (Unfinished)
+-New NPC: Headmaster
+-Raid the medicine cabinet
+-Introduced NPC Spawning Engine
+-Game remembers puzzle completion
+-The teacher's important document can now be found in the desk even if a previous search attempt failed
+-Potions have effects (8/24: Vampire Potion (unf), Bat Potion, X-ray Potion, Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
+-Syntax bugfix in Infirmary
+-Code cleanup: Converted some unoptimized code into macros
+
 v0.2.1
 -Players can drink potions
 -Potions have effects (5/25: Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
