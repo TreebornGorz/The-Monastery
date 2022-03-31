@@ -110,17 +110,8 @@ Too many bad ends in bath house
 
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
-Changelog v0.3.0
--New Locations: Cave, Headmaster's Office
--New Quest: Siren's Quest, Headmaster's Quest (Unfinished)
--New NPC: Headmaster
--Raid the medicine cabinet
--Introduced NPC Spawning Engine
--Game remembers puzzle completion
--The teacher's important document can now be found in the desk even if a previous search attempt failed
--Potions have effects (8/24: Vampire Potion (unf), Bat Potion, X-ray Potion, Poison, Disintegration Potion, Gorgon Potion, Invisibility Potion, & Blindness Potion)
--Syntax bugfix in Infirmary
--Code cleanup: Converted some unoptimized code into macros
+Changelog v0.3.1
+-
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -146,7 +137,7 @@ Mimic kills player while human by defualt, protected by enchanted equipment - Ki
 The Monastery
 
 :: StorySubtitle
-Version: Alpha 0.3.0
+Version: Alpha 0.3.1
 
 :: StoryData
 {
