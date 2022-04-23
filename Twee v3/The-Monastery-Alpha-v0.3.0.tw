@@ -291,7 +291,7 @@ body.no-save #menu-item-saves {
 <<widget "NPCLocation">>\
     <<nobr>>
     /* Clear NPC Locations */
-    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []; $HeadmasterOfficeNPC to []; $OutskirtsNPC to []>>
+    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []; $HeadmasterOfficeNPC to []; $OutskirtsNPC to []; $TeachDormNPC to []; $DungeonNPC to []; $CaveNPC to []; $TombNPC to []>>
     /* Assign NPC locations if alive */
     <<if $NurseLife is true>>
         <<if $NightTime is true>>
@@ -300,28 +300,102 @@ body.no-save #menu-item-saves {
             <<run $InfirmaryNPC.pushUnique('Nurse')>>
         <</if>>
     <</if>>
-    <<if $LibrarianLife is true>>
-        <<if $LibrarianQuest is true>>
-            <<run $LibrarianNPC.pushUnique('Librarian')>>
+    <<if $LibrarianLife is true>>        
+        <<if $NightTime is true>>
+            <<set $Temp to random(9)>>
+            <<if $LibrarianQuest is true>>
+                <<run $DungeonNPC.pushUnique('Librarian')>>
+            <<elseif $Temp lt 3>>
+                <<run $ForestNPC.pushUnique('Librarian')>>
+            <<else>>
+                <<run $DungeonNPC.pushUnique('Librarian')>>
+            <</if>>
+        <<else>>
+            <<if $LibrarianQuest is true>>
+                <<run $LibraryNPC.pushUnique('Librarian')>>
+            <<else>>
+                <<run $TeacherDormNPC.pushUnique('Librarian')>>
+            <</if>>
         <</if>>
     <</if>>
     <<if $BrewmasterLife is true>>
-        <<run $BreweryNPC.pushUnique('Brewmaster')>>
+        <<if $NightTime is true>>
+            <<set $Temp to random(1)>>
+            <<if $Temp is 0>>
+                <<run $BreweryNPC.pushUnique('Brewmaster')>>
+            <<else>>
+                <<run $TeacherDormNPC.pushUnique('Brewmaster')>>
+            <</if>>
+        <<else>>
+            <<run $BreweryNPC.pushUnique('Brewmaster')>>
+        <</if>>       
     <</if>>
     <<if $SmithLife is true>>
-        <<run $ForgeNPC.pushUnique('Smith')>>
+        <<if $NightTime is true>>
+            <<set $Temp to random(9)>>
+            <<if $Temp is 0>>
+                <<run $CaveNPC.pushUnique('Smith')>>
+            <<else>>
+                <<run $TeacherDormNPC.pushUnique('Smith')>>
+            <</if>>
+        <<else>>
+            <<run $ForgeNPC.pushUnique('Smith')>>
+        <</if>>
     <</if>>
     <<if $ScientistLife is true>>
-        <<run $LaboratoryNPC.pushUnique('Scientist')>>
+        <<if $NightTime is true>>
+            <<set $Temp to random(4)>>
+            <<if $Temp is 0>>
+                <<run $TombNPC.pushUnique('Scientist')>>
+            <<elseif $Temp is lt 3>>
+                <<run $ForestNPC.pushUnique('Scientist')>>
+            <<else>>
+                <<run $TeacherDormNPC.pushUnique('Scientist')>>
+            <</if>>
+        <<else>>
+            <<run $LaboratoryNPC.pushUnique('Scientist')>>
+        <</if>>        
     <</if>>
     <<if $FarmerLife is true>>
-        <<run $BarnNPC.pushUnique('Farmer')>>
+        <<if $NightTime is true>>
+            <<set $Temp to random(4)>>
+            <<if $Temp lt 2>>
+                <<run $OutskirtsNPC.pushUnique('Farmer')>>
+            <<else>>
+                <<run $TeacherDormNPC.pushUnique('Farmer')>>
+            <</if>>
+        <<else>>
+            <<set $Temp to random(9)>>
+            <<if $Temp lt 3>>
+                <<run $CloisterNPC.pushUnique('Farmer')>>
+            <<else>>
+                <<run $BarnNPC.pushUnique('Farmer')>>
+            <</if>>
+        <</if>>         
     <</if>>
     <<if $PriestLife is true>>
-        <<run $TempleNPC.pushUnique('Priest')>>
+        <<if $NightTime is true>>
+            <<set $Temp to random(4)>>
+            <<if $Temp is 0>>
+                <<run $CloisterNPC.pushUnique('Priest')>>
+            <<else>>
+                <<run $TeacherDormNPC.pushUnique('Priest')>>
+            <</if>>
+        <<else>>
+            <<set $Temp to random(4)>>
+            <<if $Temp lt 2>>
+                <<run $CloisterNPC.pushUnique('Priest')>>
+            <<else>>
+                <<run $TempleNPC.pushUnique('Priest')>>
+            <</if>>
+        <</if>> 
     <</if>>
     <<if $TeacherLife is true>>
-        <<run $ClassroomNPC.pushUnique('Teacher')>>
+        <<if $NightTime is true>>
+            <<run $TeacherDormNPC.pushUnique('Teacher')>>
+        <<else>>
+            <<run $ClassroomNPC.pushUnique('Teacher')>>
+        <</if>>        
     <</if>>
     <<if $HeadmasterLife is true>>
         <<if $NightTime is true>>
@@ -331,13 +405,32 @@ body.no-save #menu-item-saves {
         <</if>>
     <</if>>
     <<if $FemaleStudentLife is true>>
+        <<if $NightTime is true>>
+            <<run $FemaleDormNPC.pushUnique('Female Student')>>
+        <<else>>
+            <<set $Temp to random(1)>>
+            <<if $Temp is 0>>
+                <<run $CloisterNPC.pushUnique('Female Student')>>
+            <<else>>
+                <<run $BarnNPC.pushUnique('Female Student')>>
+            <</if>>
+        <</if>> 
     <</if>>
     <<if $MaleStudentLife is true>>
-        <<set $Temp to random(1)>>
-        <<if $Temp is 0 or $NightTime is true>>
-            <<run $BathhouseNPC.pushUnique('Male Student')>>
+        <<if $NightTime is true>>
+            <<set $Temp to random(4)>>
+            <<if $Temp lt 3>>
+                <<run $BathhouseNPC.pushUnique('Male Student')>>
+            <<else>>
+                <<run $MaleDormNPC.pushUnique('Male Student')>>
+            <</if>>
         <<else>>
-            <<run $BalnearyNPC.pushUnique('Male Student')>>
+            <<set $Temp to random(1)>>
+            <<if $Temp is 0 or $NightTime is true>>
+                <<run $BathhouseNPC.pushUnique('Male Student')>>
+            <<else>>
+                <<run $BalnearyNPC.pushUnique('Male Student')>>
+            <</if>>
         <</if>>
     <</if>>
     <</nobr>>\
@@ -499,8 +592,12 @@ body.no-save #menu-item-saves {
 <<set $ForestNPC to []>>
 <<set $MaleDormNPC to []>>
 <<set $FemaleDormNPC to []>>
+<<set $TeacherDormNPC to []>>
 <<set $HeadmasterOfficeNPC to []>>
 <<set $OutskirtsNPC to []>>
+<<set $DungeonNPC to []>>
+<<set $CaveNPC to []>>
+<<set $TombNPC to []>>
 
 <<set $NurseShip to 0>>
 <<set $BrewmasterShip to 0>>
