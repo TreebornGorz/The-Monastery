@@ -1572,18 +1572,44 @@ You hear a clicking noise and the latch unlocks.
 
 :: Enter the darkness
 <<if $NoHands is false or $Wings is true>>\
-    You swing a door down and <<if $Wings is true>>fly<<else>>climb<</if>> into the ceiling.
+    You swing a door down and <<if $Wings is true>>fly<<else>>climb<</if>> into the ceiling to find the teacher's dormitory.
     <<if $Blind is false>>
         The teacher's dorm appears quite similar to the student dorms, however there are fewer beds.
 
-        You notice teacher's belongings strewn about.
-
-        There are currently no teachers around, but you may not want to press your luck. <br>
+        You creep forward peering around, but keping yourself concealed to avoid detection. You notice teacher's belongings strewn about.
+        <<if $TeacherDormNPC>>
+            <<if $TeacherDormNPC.include('Librarian')>>\
+                The librarian is laying on her bed, reading a book with great concentration and intrigue. \
+            <</if>>\
+            <<if $TeacherDormNPC.include('Brewmaster')>>\
+                The brewmaster is passed out, snoring loudly. \
+            <</if>>\
+            <<if $TeacherDormNPC.include('Smith')>>\
+                The smith is methodically sharpening a knife. \
+            <</if>>\
+            <<if $TeacherDormNPC.include('Scientist')>>\
+                The scientist is staring into a colorful phial. She has a mischevious look on her face. \
+            <</if>>\
+            <<if $TeacherDormNPC.include('Farmer')>>\
+                The farmer is brushing her hair. It is very messy from a hard day's work. \
+            <</if>>\
+            <<if $TeacherDormNPC.include('Priest')>>\
+                The priest has is eyes closed in prayer with his hands clasped together. \
+            <</if>>\
+            <<if $TeacherDormNPC.include('Teacher')>>\
+                The classroom teacher is reading over her lesson plan for the next day. \
+            <</if>>\
+        <<else>>
+            There are currently no teachers around, but they might show up at any moment. 
+        <</if>>
         <<if $Xray is true and $Blind is false>>\
         [[Use your X-ray vision to find a particular item|Teacher Belonging Xray][$TempBool to false]]
         <</if>>\
         [[Search teacher's belongings][$TempBool to false]]
-        [[Hide and wait for a teacher to show up|Hide][$TempBool to true]]
+        /* [[Hide and wait for a teacher to show up|Hide][$TempBool to true]] - Figure out what to do with this */
+    <</if>>\
+    <<if $TeacherDormNPC is false>>\
+        [[Approach a teacher|Teacher Dorm Interact]]
     <</if>>\
     [[Leave dorm]]
 <<else>>\
@@ -1591,6 +1617,32 @@ You hear a clicking noise and the latch unlocks.
 
     [[Return|Demo]]
 <</if>>\
+
+::Teacher Dorm Interact
+Who do you want to approach?
+
+<<if $TeacherDormNPC.include('Librarian')>>\
+    [Librarian|WIP]
+<</if>>\
+<<if $TeacherDormNPC.include('Brewmaster')>>\
+    [[Brewmaster|WIP]]
+<</if>>\
+<<if $TeacherDormNPC.include('Smith')>>\
+    [[Smith|WIP]]
+<</if>>\
+<<if $TeacherDormNPC.include('Scientist')>>\
+    [[Scientist|WIP]]
+<</if>>\
+<<if $TeacherDormNPC.include('Farmer')>>\
+    [[Farmer|WIP]]
+<</if>>\
+<<if $TeacherDormNPC.include('Priest')>>\
+    [[Priest|WIP]]
+<</if>>\
+<<if $TeacherDormNPC.include('Teacher')>>\
+    [[Classroom Teacher|WIP]]
+<</if>>\
+[[Change your mind and leave|Leave dorm]]
 
 :: Teacher Belonging Xray
     You traverse the dormitory, inspecting the teacher's various bags, chests, and miscellaneous containers. 
