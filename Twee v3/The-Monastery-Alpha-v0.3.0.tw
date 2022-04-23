@@ -1618,7 +1618,7 @@ You hear a clicking noise and the latch unlocks.
     [[Return|Demo]]
 <</if>>\
 
-::Teacher Dorm Interact
+:: Teacher Dorm Interact
 Who do you want to approach?
 
 <<if $TeacherDormNPC.include('Librarian')>>\
