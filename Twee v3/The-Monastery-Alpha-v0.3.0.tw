@@ -1622,7 +1622,7 @@ You hear a clicking noise and the latch unlocks.
 Who do you want to approach?
 
 <<if $TeacherDormNPC.include('Librarian')>>\
-    [Librarian|WIP]
+    [[Librarian|Librarian Interact]]
 <</if>>\
 <<if $TeacherDormNPC.include('Brewmaster')>>\
     [[Brewmaster|WIP]]
@@ -1643,6 +1643,28 @@ Who do you want to approach?
     [[Classroom Teacher|WIP]]
 <</if>>\
 [[Change your mind and leave|Leave dorm]]
+
+:: Librarian Interact [noreturn]
+You approach the librarian. Her attention leaves her current task and shifts towards you.
+<<if $LibrarianQuestProg is 0>>
+    <<if $LibrarianQuest is false>>
+        She apologizes for not being present in the library. She explains that she is often distracted and tends to lock herself in her office, abosrbed in her reading.
+
+        Sometimes she ventures out into the forest, searching for interesting specimens which she reads about in her books. 
+        <<set $LibrarianQuest to true>>
+        If you find one such interesting specimen and bring it to her, she will give you a key to her office.    
+    <<else>>
+        <<if >> /* Check for specimen */
+            You have found a specimen that she is interested in. You turn it over to her and she hands you a key to her office.
+            <<run $Items.pushUnique('Dungeon Key')>> <<set $LibrarianQuestProg to 1>> \
+        <<else>>
+            You have not found a specimen that she is interested in. You will have to keep looking if you want a key to her office.
+        <</if>>
+    <</if>>
+<<else>>
+    Under Consruction - WIP
+<</if>>
+[[Leave|Demo]]
 
 :: Teacher Belonging Xray
     You traverse the dormitory, inspecting the teacher's various bags, chests, and miscellaneous containers. 
