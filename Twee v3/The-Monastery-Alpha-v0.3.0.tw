@@ -283,7 +283,7 @@ body.no-save #menu-item-saves {
     </div>
 <</widget>>
 
-<<widget "Explusion">>\
+<<widget "Expulsion">>\
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
     </div>
