@@ -3657,7 +3657,7 @@ It is very dark outside the campus.
 You can explore the outskirts of the campus as well as the surrounding forest.
 
 [[Explore the campus outskirts]]
-[[Enter the forest]]
+[[Enter the forest|Forest]]
 
 :: Explore the campus outskirts
 You ride along the campus outskirts.
@@ -3697,7 +3697,7 @@ You notice many interesting plants.
                             
 [[Inspect a plant]]
 <</if>> \
-[[Enter the forest]]
+[[Enter the forest|Forest]]
 <<if $SirenQuest is true>>\
 [[Search for the headmaster]]
 <</if>>\
@@ -3808,7 +3808,7 @@ You collect $TempString leaves.
 <</if>>
 [[Return to campus]]
 
-:: Enter the forest
+:: Forest
 The forest is dark and spooky.
 <<if $Weapon is true or $UserLegendaryItems.includes('Sword of Siren Slaying')>>
 You are comforted by your weapon. 
