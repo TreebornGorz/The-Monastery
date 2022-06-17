@@ -2460,7 +2460,7 @@ You enter the library.
 <</if>>\
 <<if $Blind is false>>\
     <<if $LibraryNPC.includes('Librarian')>>\
-        [[Talk to the librarian|WIP]]
+        [[Talk to the librarian|Librarian Interact]]
     <<else>>\
         [[Find the librarian]]
     <</if>>\
