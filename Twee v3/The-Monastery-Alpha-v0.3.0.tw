@@ -2528,12 +2528,45 @@ You notice a door to a back room.
 
 :: LibraryDoor
 You turn the knob.
-/* Where is the key? In the teacher's dorm */
-The door is locked.
+<<if $Items.includes('Dungeon Key')>>
+    You use your key. The door opens.
 
-[[Study]]
-[[Interrupt another student]]
-[[Leave|Demo]]
+    [[Enter|Dungeon]]
+    [[Leave|Demo]]
+<<else>>
+    The door is locked.
+
+    [[Study]]
+    [[Interrupt another student]]
+    [[Leave|Demo]]
+<</if>>
+
+:: Dungeon
+<<if $LibrarianQuestProg is 1>>
+    You close the door behind you and descend a spiraling staircase. Torches flicker on the stone walls, casting your shadow.
+
+    You reach the bottom of the staircase. The dim sound of water droplets falling echoes throughout the chamber.
+
+    In the dim lighitng, you notice strange contraptions. There are metal cages and other starnge devices. 
+
+    [[Investigate|WIP]]
+    [[Turn Around|Leave Dungeon]]
+<<else>> *WIP*
+    You enter the dungeon. 
+
+    A student is trapped in a device begginf for your help. 
+
+    [[Help them]]
+    [[Leave|Library]]
+<</if>>
+
+:: Leave Dungeon
+Afraid of what you might find, you turn around to leave the dungeon.
+
+As you reach the staircase, you swear you can hear a faint whisper asking for your help.
+
+[[Investigate|WIP]]
+[[Leave|Library]]
 
 :: Laboratory
 You enter the laboratory. /* This should not get rid of all descriptions when lab becomes true, change to $ScientistShip */
