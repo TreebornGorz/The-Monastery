@@ -120,8 +120,11 @@ Too many bad ends in bath house
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
 Changelog v0.3.1
--Completed NPC Spawning Engine
--Customized NPC Interaction (Incomplete)
+-Completed NPC Spawning Engine (Verify)
+-Completed NPC Interactions (Incomplete)
+-Completed a Siren Questline (Incomplete)
+-Started Librarian Questline 
+-Priest and Scientist can be killed
 -Fixed Expulsion Syntax Bug
 
 Bug Log 
@@ -2042,9 +2045,9 @@ You enter the temple.
         A priest prays in the corner of the temple, outfitted in holy garb.
     <</if>>
     <<if $TempleNPC.includes('Priest')>>\
-        [[Interrupt the priest's prayer|WIP]]
+        [[Interrupt the priest's prayer|Priest Interact]]
         <<if $Weapon is true or $UserLegendaryItems.includes('Sword of Siren Slaying')>>\
-            [[Attack the priest with your weapon|WIP]]
+            [[Attack the priest with your weapon|Attack Priest]]
         <</if>>\
     <</if>>\
     [[Pray at a pew][$Holy += 1]] 
@@ -2052,6 +2055,15 @@ You enter the temple.
     [[Search the temple]]
     [[Leave|Demo]]
 <</if>>
+
+:: Attack Priest [noreturn]
+You swing at the priest with your weapon.
+
+Surprisingly, he remains fully engrossed in his prayer, making no effort to block your attack.
+<<set $PriestLife to false>> <<run $TempleNPC.delete('Priest')>>
+You cleanly slice through his neck, killing him instantly. His body lays on the temple floor in pieces.
+
+[[Dispose of the body and clean up the scene|previous()]]
 
 :: Pray
 You pray blindly.
