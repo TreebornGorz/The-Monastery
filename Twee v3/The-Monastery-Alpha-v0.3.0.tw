@@ -27,6 +27,8 @@ NPC
 Quests 
 Items
 
+Update growing system for golden seed
+
 Mimic encounter
 
 Turn sleeping into a function
@@ -1105,6 +1107,56 @@ Are you Male or Female?
     </div> 
 <</if>>
 
+:: Scientist Interact [noreturn]
+You approach the scientist. \
+<<if $LaboratoryNPC.includes('Scientist')>>\
+    She asks how your protion brewing is coming along. 
+
+    She doesn't seem very impressed with your progress.
+<<elseif $TeacherDormNPC.includes('Scientist')>>\
+    She stares blankly at the ceiling, not even acknowledging your existence.
+
+    You can hear her muttering under her breath, but you can't make out the words. It doesn't seem to be English anyway.
+<<elseif $ForestNPC.includes('Scientist')>>\
+    She is rifling through the greenery apparently searching for particular plants. 
+
+    She seems anxious and focused, unwilling to acknowledge your presence no matter how you try to get her attention.
+<<elseif $TombNPC.includes('Scientist')>>\
+    She welcomes you to the tomb, flashing a devilish grin.
+
+    Suddenly, she lets out a hysterical scream of ecstacy. Her arms extend outwards as her body vibrates. 
+    <<set $ScientistLife to false>>
+    She goes limp and falls dead onto the stone floow below. The lights flicker around you. Quiet laughter echoes around you.
+<</if>>
+[[Return|previous()]]
+
+:: Farmer Interact [noreturn]
+You approach the farmer. \
+<<if $BarnNPC.includes('Farmer') or $CloisterNPC.includes('Farmer')>>\
+    She takes a break from her work to ask how the animal caretaking is coming along. You explain your progress.
+
+    She <<if $AnimalShip gt 2>>\
+            is grateful for your help. \
+            <<if $Seeds.includes('Golden Seed') is false>>\
+                As a token of her thanks, she hands you a golden seed.<<run $Seeds.pushUnique('Golden Seed')>>\
+            <</if>>\
+            <<else>>is unimpressed with your efforts so far.\
+        <</if>>
+<<elseif $TeacherDormNPC.includes('Farmer')>>\
+    She is in the middle of removing her overalls when she notices you.
+    <<run $TeacherDormNPC.delete('Farmer')>>
+    She clutches her clothes to her chest and runs off embarrased.
+<<elseif $OutskirtsNPC.includes('Farmer')>>\
+    She is on horseback.
+    <<run $OutskirtsNPC.delete('Farmer')>>
+    She spares a moment to wish you luck in your adventures before riding off into the distance.
+<</if>>
+[[Return|previous()]]
+
+:: Priest Interact [noreturn]
+
+:: Classroom Teacher Interact [noreturn]
+
 :: Smith Interact [noreturn]
 You approach the smith. \
 <<if $ForgeNPC.includes('Smith')>>\
@@ -1121,7 +1173,7 @@ You approach the smith. \
     He welcomes you to the cave.
 
     He often finds interesting gems and metals here. He will not accompany you out of fear of venturing too deep.
-
+    
     If you wish to unlock the secrets of the cave, you must venture alone.
 <</if>>
 [[Return|previous()]]
@@ -1247,7 +1299,7 @@ You enter the dormitory.
 The hallway forks. One direction leads to the male dorm, the other leads to the female dorm. 
 <<if $Blind is true>>
     [[Go left|Male dorm]]
-    [[Gor right|Female dorm]]
+    [[Go right|Female dorm]]
 <<else>>
     You notice a suspicious latch on the ceiling.
 
@@ -1691,22 +1743,22 @@ Who do you want to approach?
     [[Librarian|Librarian Interact]]
 <</if>>\
 <<if $TeacherDormNPC.include('Brewmaster')>>\
-    [[Brewmaster|WIP]]
+    [[Brewmaster|Brewmaster Interact]]
 <</if>>\
 <<if $TeacherDormNPC.include('Smith')>>\
     [[Smith|Smith Interact]]
 <</if>>\
 <<if $TeacherDormNPC.include('Scientist')>>\
-    [[Scientist|WIP]]
+    [[Scientist|Scientist Interact]]
 <</if>>\
 <<if $TeacherDormNPC.include('Farmer')>>\
-    [[Farmer|WIP]]
+    [[Farmer|Farmer Interact]]
 <</if>>\
 <<if $TeacherDormNPC.include('Priest')>>\
-    [[Priest|WIP]]
+    [[Priest|Priest Interact]]
 <</if>>\
 <<if $TeacherDormNPC.include('Teacher')>>\
-    [[Classroom Teacher|WIP]]
+    [[Classroom Teacher|Classroom Teacher Interact]]
 <</if>>\
 [[Change your mind and leave|Leave dorm]]
 
@@ -4390,6 +4442,8 @@ You enter the brewery.
     [[Work on a brew|Brew]]
     [[Leave|Demo]]
 <<else>>
+    It is dark and cold.
+
     [[Leave|Demo]]
 <</if>>
 
