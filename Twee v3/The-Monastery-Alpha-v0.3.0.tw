@@ -1157,8 +1157,10 @@ You approach the farmer. \
 [[Return|previous()]]
 
 :: Priest Interact [noreturn]
+*WIP*
 
 :: Classroom Teacher Interact [noreturn]
+*WIP*
 
 :: Smith Interact [noreturn]
 You approach the smith. \
@@ -1675,7 +1677,7 @@ You take your future into your own hands and attempt escape from your cell.
 
     [[Choose a dormitory|Dormitory]]
     <<if $CeilingKey is true>> \
-    [[Utter the passphrase|Passphrase]]
+        [[Utter the passphrase|Passphrase]]
     <</if>> \
     [[Leave|Demo]]
 <<else>>\
@@ -1689,9 +1691,9 @@ You utter the passphrase.
 
 You hear a clicking noise and the latch unlocks.
 
-[[Enter the darkness]]
+[[Enter the darkness|Teacher Dorm]]
 
-:: Enter the darkness
+:: Teacher Dorm
 <<if $NoHands is false or $Wings is true>>\
     You swing a door down and <<if $Wings is true>>fly<<else>>climb<</if>> into the ceiling to find the teacher's dormitory.
     <<if $Blind is false>>
@@ -3922,7 +3924,7 @@ The forest is dark and spooky.
 <<else>>
     You wish you had a weapon right about now...
 <</if>>
-<<if $ForestNPC.includs('Librarian')>>
+<<if $ForestNPC.includes('Librarian')>>
     You notice a figure moving in the distance.
 
     [[Approach the figure|Librarian Interact]] 
