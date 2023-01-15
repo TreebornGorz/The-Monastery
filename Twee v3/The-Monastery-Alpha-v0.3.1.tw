@@ -13,6 +13,7 @@ Unfinished Tasks: Slime Potion, Convert old code to widgets
 Current: Spawn NPCs at locations
 
 Remaining: 
+Player Log
 Potions - Octopus, Gargoyle, Intangibility, temp Death, Depression, Nightmare, Curse, Undead, Philosophy, Magic Milk, Funky Dragon, Morphine
 Map/Areas - Cave, Dungeon, Secret Bath, Tomb, Graveyard, Roof 
 Game Mechanics - Night, Wings
@@ -380,6 +381,19 @@ body.no-save #menu-item-saves {
     <</nobr>>\
 <</widget>>
 
+/* Game Notifications */
+<<widget "BarnProgress">>\
+    <<if $AnimalShip is 0>>\
+        """*""" You now have access to chickens """*""" \
+    <</if>>\
+    <<if $AnimalShip is 1>>\
+        """*""" You now have access to cows """*""" \
+    <</if>>\
+    <<if $AnimalShip is 2>>\
+        """*""" You now have access to horses """*""" \
+    <</if>>\
+<</widget>>
+
 :: StoryInit
 /* Initializes starting variables before game loads */
 <<set $Show to false>>
@@ -521,6 +535,9 @@ body.no-save #menu-item-saves {
 <<set $LibrarianQuestProg to 0>>
 <<set $MarketQuestProg to 0>>
 
+/* Player Log Events */
+
+
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
 <<if $Show is true>>Sex: <<if $Male is true>>Male<<else>>Female<</if>><</if>> /* Player Sex */
@@ -570,11 +587,23 @@ Legendary Items: $UserLegendaryItems
 [[Return|previous()][$Show to true]]
 
 :: Logbook [noreturn menu]
+<<if $BarnWork is true>>\
+You have decided to help the farmer care for the animals. You now have acces to care for: \
+    <<if $AnimalShip is 0>> \
+    chickens.
+    <</if>> \
+    <<if $AnimalShip is 1>> \
+    chickens and cows.
+    <</if>> \
+    <<if $AnimalShip gt 1>> \
+    chickens, cows, and horses.
+    <</if>> \
+<</if>>\
+<<if $Dreaming is true>>\ /* WIP */
+You have dreamt about:<br><br>
+<</if>>\
 
 [[Return|previous()][$Show to true]]
-<<if $Gorgon is true>>\
-You are a gorgon. You have snakes for hair and a powerful gaze.<br><br>
-<</if>>\
 
 :: Status [noreturn menu]
 <<if $Gorgon is true>>\
@@ -3332,10 +3361,12 @@ You decide to look for a person instead of blindly messing around with the anima
 <</if>>\
 
 :: Help her out
-You decide to help out the farmer with her work.
+You decide to help the farmer with her work.
 <<set $BarnWork to true>>
 She shows you around the barn, explaining how to take care of each animal and showing you where she keeps the animal food and tools.
 <<set $NightTime to true>> <<NPCLocation>>
+"""*""" You can now take care of the barn animals """*"""
+
 [[Eat dinner]]
 [[Sleep]]
 
@@ -3949,7 +3980,7 @@ You have //definitely// been socially ostracized if you weren't already.
 You take care of each group of animals, feeding them and tending to their individual needs.
 
 You notice they are more familiar with you and your relationship increases.
-<<set $AnimalShip += 1>>
+<<set $AnimalShip += 1>> 
 [[Approach the animals individually]] 
 [[Eat dinner]]
 [[Sleep]]
@@ -3973,7 +4004,9 @@ You approach the chicken.
 The chicken is not very interested and basically ignores you.
 <<set $Eggs += 1>>
 However, you do get some eggs.
-
+<<if $AnimalShip lt 3>> 
+    <<BarnProgress>>
+<</if>> 
 [[Eat dinner]]
 [[Sleep]]
 
@@ -3985,7 +4018,9 @@ She seems like she needs to be milked.
 You milk her and gain a bottle of milk.
 <<set $Milk += 1>>
 She moos happily.
-
+<<if $AnimalShip lt 3>> 
+    <<BarnProgress>>
+<</if>> 
 [[Eat dinner]]
 [[Sleep]]
 
