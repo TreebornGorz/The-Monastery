@@ -2,7 +2,7 @@
 
 Left off work here: *WIP*
 
-Untested: 
+Test: 
 
 All Quest conditionals (Siren, Headmaster, Female Student)
 Infirmary syntax fix
@@ -12,13 +12,6 @@ Unfinished Tasks: Slime Potion, Convert old code to widgets
 
 Current: Spawn NPCs at locations
 
-Priority:
-NPC Creation
-Quests
-Mechanics
-Items
-Map
-
 Remaining: 
 Potions - Octopus, Gargoyle, Intangibility, temp Death, Depression, Nightmare, Curse, Undead, Philosophy, Magic Milk, Funky Dragon, Morphine
 Map/Areas - Cave, Dungeon, Secret Bath, Tomb, Graveyard, Roof 
@@ -26,8 +19,6 @@ Game Mechanics - Night, Wings
 NPC
 Quests 
 Items
-
-Update growing system for golden seed
 
 Mimic encounter
 
@@ -120,12 +111,7 @@ Too many bad ends in bath house
 Check fresh for history control. Does fresh work when going back and forth between passages? Add fresh tag to passages?
 
 Changelog v0.3.1
--Completed NPC Spawning Engine (Verify)
--Completed NPC Interactions (Incomplete)
--Completed a Siren Questline (Incomplete)
--Started Librarian Questline 
--Priest and Scientist can be killed (Incomplete - Scientsit)
--Fixed Expulsion Syntax Bug
+-Added Player Log
 
 Bug Log 
 -Planting a seed and then opening the inventory gives the player a misleading text when returning to the passage because the seed has been removed from the inventory, allows player to plant all seeds without incrementing time
@@ -169,7 +155,7 @@ postdisplay['fadeIn-text'] = function (taskName) {
     $('.fadeIn').hide().fadeIn(5000);  
 };
 
-/* Prevents passages from re-executing functions when enterting a menu and coming back using [menu] tag */
+/* Prevents passages from re-executing functions when entering a menu and coming back using [menu] tag */
 window.Fresh = function () {
     return !tags(previous()).includes('menu');
 };
@@ -289,7 +275,7 @@ body.no-save #menu-item-saves {
     </div>
 <</widget>>
 
-<<widget "Expulsion">>\
+<<widget "Explusion">>\
     <div align='center' style='font-size: 300%;'>\
     <span class='fadeIn'><span style="color:red"><b>YOU ARE EXPELLED</b></span></span>
     </div>
@@ -298,7 +284,7 @@ body.no-save #menu-item-saves {
 <<widget "NPCLocation">>\
     <<nobr>>
     /* Clear NPC Locations */
-    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []; $HeadmasterOfficeNPC to []; $OutskirtsNPC to []; $TeachDormNPC to []; $DungeonNPC to []; $CaveNPC to []; $TombNPC to []>>
+    <<set $ClassroomNPC to []; $TempleNPC to []; $CloisterNPC to []; $RefectoryNPC to []; $LibraryNPC to []; $LaboratoryNPC to []; $BalnearyNPC to []; $InfirmaryNPC to []; $BarnNPC to []; $ForgeNPC to []; $BreweryNPC to []; $BathhouseNPC to []; $HallwayNPC to []; $ForestNPC to []; $MaleDormNPC to []; $FemaleDormNPC to []; $HeadmasterOfficeNPC to []; $OutskirtsNPC to []>>
     /* Assign NPC locations if alive */
     <<if $NurseLife is true>>
         <<if $NightTime is true>>
@@ -307,102 +293,28 @@ body.no-save #menu-item-saves {
             <<run $InfirmaryNPC.pushUnique('Nurse')>>
         <</if>>
     <</if>>
-    <<if $LibrarianLife is true>>        
-        <<if $NightTime is true>>
-            <<set $Temp to random(9)>>
-            <<if $LibrarianQuest is true>>
-                <<run $ForestNPC.pushUnique('Librarian')>>
-            <<elseif $Temp lt 3>>
-                <<run $ForestNPC.pushUnique('Librarian')>>
-            <<else>>
-                <<run $DungeonNPC.pushUnique('Librarian')>>
-            <</if>>
-        <<else>>
-            <<if $LibrarianQuest is true>>
-                <<run $LibraryNPC.pushUnique('Librarian')>>
-            <<else>>
-                <<run $TeacherDormNPC.pushUnique('Librarian')>>
-            <</if>>
+    <<if $LibrarianLife is true>>
+        <<if $LibrarianQuest is true>>
+            <<run $LibrarianNPC.pushUnique('Librarian')>>
         <</if>>
     <</if>>
     <<if $BrewmasterLife is true>>
-        <<if $NightTime is true>>
-            <<set $Temp to random(1)>>
-            <<if $Temp is 0>>
-                <<run $BreweryNPC.pushUnique('Brewmaster')>>
-            <<else>>
-                <<run $TeacherDormNPC.pushUnique('Brewmaster')>>
-            <</if>>
-        <<else>>
-            <<run $BreweryNPC.pushUnique('Brewmaster')>>
-        <</if>>       
+        <<run $BreweryNPC.pushUnique('Brewmaster')>>
     <</if>>
     <<if $SmithLife is true>>
-        <<if $NightTime is true>>
-            <<set $Temp to random(9)>>
-            <<if $Temp is 0>>
-                <<run $CaveNPC.pushUnique('Smith')>>
-            <<else>>
-                <<run $TeacherDormNPC.pushUnique('Smith')>>
-            <</if>>
-        <<else>>
-            <<run $ForgeNPC.pushUnique('Smith')>>
-        <</if>>
+        <<run $ForgeNPC.pushUnique('Smith')>>
     <</if>>
     <<if $ScientistLife is true>>
-        <<if $NightTime is true>>
-            <<set $Temp to random(4)>>
-            <<if $Temp is 0>>
-                <<run $TombNPC.pushUnique('Scientist')>>
-            <<elseif $Temp is lt 3>>
-                <<run $ForestNPC.pushUnique('Scientist')>>
-            <<else>>
-                <<run $TeacherDormNPC.pushUnique('Scientist')>>
-            <</if>>
-        <<else>>
-            <<run $LaboratoryNPC.pushUnique('Scientist')>>
-        <</if>>        
+        <<run $LaboratoryNPC.pushUnique('Scientist')>>
     <</if>>
     <<if $FarmerLife is true>>
-        <<if $NightTime is true>>
-            <<set $Temp to random(4)>>
-            <<if $Temp lt 2>>
-                <<run $OutskirtsNPC.pushUnique('Farmer')>>
-            <<else>>
-                <<run $TeacherDormNPC.pushUnique('Farmer')>>
-            <</if>>
-        <<else>>
-            <<set $Temp to random(9)>>
-            <<if $Temp lt 3>>
-                <<run $CloisterNPC.pushUnique('Farmer')>>
-            <<else>>
-                <<run $BarnNPC.pushUnique('Farmer')>>
-            <</if>>
-        <</if>>         
+        <<run $BarnNPC.pushUnique('Farmer')>>
     <</if>>
     <<if $PriestLife is true>>
-        <<if $NightTime is true>>
-            <<set $Temp to random(4)>>
-            <<if $Temp is 0>>
-                <<run $CloisterNPC.pushUnique('Priest')>>
-            <<else>>
-                <<run $TeacherDormNPC.pushUnique('Priest')>>
-            <</if>>
-        <<else>>
-            <<set $Temp to random(4)>>
-            <<if $Temp lt 2>>
-                <<run $CloisterNPC.pushUnique('Priest')>>
-            <<else>>
-                <<run $TempleNPC.pushUnique('Priest')>>
-            <</if>>
-        <</if>> 
+        <<run $TempleNPC.pushUnique('Priest')>>
     <</if>>
     <<if $TeacherLife is true>>
-        <<if $NightTime is true>>
-            <<run $TeacherDormNPC.pushUnique('Teacher')>>
-        <<else>>
-            <<run $ClassroomNPC.pushUnique('Teacher')>>
-        <</if>>        
+        <<run $ClassroomNPC.pushUnique('Teacher')>>
     <</if>>
     <<if $HeadmasterLife is true>>
         <<if $NightTime is true>>
@@ -412,32 +324,13 @@ body.no-save #menu-item-saves {
         <</if>>
     <</if>>
     <<if $FemaleStudentLife is true>>
-        <<if $NightTime is true>>
-            <<run $FemaleDormNPC.pushUnique('Female Student')>>
-        <<else>>
-            <<set $Temp to random(1)>>
-            <<if $Temp is 0>>
-                <<run $CloisterNPC.pushUnique('Female Student')>>
-            <<else>>
-                <<run $BarnNPC.pushUnique('Female Student')>>
-            <</if>>
-        <</if>> 
     <</if>>
     <<if $MaleStudentLife is true>>
-        <<if $NightTime is true>>
-            <<set $Temp to random(4)>>
-            <<if $Temp lt 3>>
-                <<run $BathhouseNPC.pushUnique('Male Student')>>
-            <<else>>
-                <<run $MaleDormNPC.pushUnique('Male Student')>>
-            <</if>>
+        <<set $Temp to random(1)>>
+        <<if $Temp is 0 or $NightTime is true>>
+            <<run $BathhouseNPC.pushUnique('Male Student')>>
         <<else>>
-            <<set $Temp to random(1)>>
-            <<if $Temp is 0 or $NightTime is true>>
-                <<run $BathhouseNPC.pushUnique('Male Student')>>
-            <<else>>
-                <<run $BalnearyNPC.pushUnique('Male Student')>>
-            <</if>>
+            <<run $BalnearyNPC.pushUnique('Male Student')>>
         <</if>>
     <</if>>
     <</nobr>>\
@@ -599,12 +492,8 @@ body.no-save #menu-item-saves {
 <<set $ForestNPC to []>>
 <<set $MaleDormNPC to []>>
 <<set $FemaleDormNPC to []>>
-<<set $TeacherDormNPC to []>>
 <<set $HeadmasterOfficeNPC to []>>
 <<set $OutskirtsNPC to []>>
-<<set $DungeonNPC to []>>
-<<set $CaveNPC to []>>
-<<set $TombNPC to []>>
 
 <<set $NurseShip to 0>>
 <<set $BrewmasterShip to 0>>
@@ -638,6 +527,7 @@ body.no-save #menu-item-saves {
 <<if $Show is true>>Day: $Day<</if>> /* Game Days Passed */
 <<if $Show is true>>Time: <<if $NightTime is false>>Day<<else>>Night<</if>><</if>> /* Time of Day */
 
+<<if $Show is true>>[[Logbook][$Show to false]]<</if>>
 <<if $Show is true>>[[Inventory][$Show to false]]<</if>>
 <<if $Show is true>>[[Status][$Show to false]]<</if>>
 
@@ -678,6 +568,13 @@ Items: $Items
 Legendary Items: $UserLegendaryItems
 <</if>> 
 [[Return|previous()][$Show to true]]
+
+:: Logbook [noreturn menu]
+
+[[Return|previous()][$Show to true]]
+<<if $Gorgon is true>>\
+You are a gorgon. You have snakes for hair and a powerful gaze.<br><br>
+<</if>>\
 
 :: Status [noreturn menu]
 <<if $Gorgon is true>>\
@@ -750,20 +647,16 @@ You have synesthesia. You now hear colors and taste lights.<br><br>
 You have synesthesia. You now taste colors and hear lights.<br><br>
 <</if>>\
 <<if $Ostra is true>> \
-You are socially ostracized. You must be very careful.
-
+You are socially ostracized. You must be very careful.<br><br>
 <</if>> \
 <<if $SirenPet is true>> \
-You are the Siren's pet. You will be ultimately obedient to her desires.
-
+You are the Siren's pet. You will be ultimately obedient to her desires.<br><br>
 <</if>> \
 <<if $SirenPartner is true>> \
-You are the Siren's accomplice. She expects you to complete certain tasks.
-
+You are the Siren's accomplice. She expects you to complete certain tasks.<br><br>
 <</if>> \
 <<if $HolyPower is true>> \
-You have been imbued with a holy power.
-
+You have been imbued with a holy power.<br><br>
 <</if>> \
 
 [[Return|previous()][$Show to true]]
@@ -1110,119 +1003,6 @@ Are you Male or Female?
     </div> 
 <</if>>
 
-:: Scientist Interact [noreturn]
-You approach the scientist. \
-<<if $LaboratoryNPC.includes('Scientist')>>\
-    She asks how your protion brewing is coming along. 
-
-    She doesn't seem very impressed with your progress.
-<<elseif $TeacherDormNPC.includes('Scientist')>>\
-    She stares blankly at the ceiling, not even acknowledging your existence.
-
-    You can hear her muttering under her breath, but you can't make out the words. It doesn't seem to be English anyway.
-<<elseif $ForestNPC.includes('Scientist')>>\
-    She is rifling through the greenery apparently searching for particular plants. 
-
-    She seems anxious and focused, unwilling to acknowledge your presence no matter how you try to get her attention.
-<<elseif $TombNPC.includes('Scientist')>>\
-    She welcomes you to the tomb, flashing a devilish grin.
-
-    Suddenly, she lets out a hysterical scream of ecstacy. Her arms extend outwards as her body vibrates. 
-    <<set $ScientistLife to false>>
-    She goes limp and falls dead onto the stone floow below. The lights flicker around you. Quiet laughter echoes around you.
-<</if>>
-[[Return|previous()]]
-
-:: Farmer Interact [noreturn]
-You approach the farmer. \
-<<if $BarnNPC.includes('Farmer') or $CloisterNPC.includes('Farmer')>>\
-    She takes a break from her work to ask how the animal caretaking is coming along. You explain your progress.
-
-    She <<if $AnimalShip gt 2>>\
-            is grateful for your help. \
-            <<if $Seeds.includes('Golden Seed') is false>>\
-                As a token of her thanks, she hands you a golden seed.<<run $Seeds.pushUnique('Golden Seed')>>\
-            <</if>>\
-            <<else>>is unimpressed with your efforts so far.\
-        <</if>>
-<<elseif $TeacherDormNPC.includes('Farmer')>>\
-    She is in the middle of removing her overalls when she notices you.
-    <<run $TeacherDormNPC.delete('Farmer')>>
-    She clutches her clothes to her chest and runs off embarrased.
-<<elseif $OutskirtsNPC.includes('Farmer')>>\
-    She is on horseback.
-    <<run $OutskirtsNPC.delete('Farmer')>>
-    She spares a moment to wish you luck in your adventures before riding off into the distance.
-<</if>>
-[[Return|previous()]]
-
-:: Priest Interact [noreturn]
-*WIP*
-
-:: Classroom Teacher Interact [noreturn]
-*WIP*
-
-:: Smith Interact [noreturn]
-You approach the smith. \
-<<if $ForgeNPC.includes('Smith')>>\
-    He describes you about his smithing process.
-
-    He often ventures to a cave located outside the boundaries of the Monastery in search fo forging materials.
-
-    He describes that this cave is difficult to reach and the travel cannot be accomplished by ordinary means.
-<<elseif $TeacherDormNPC.includes('Smith')>>\
-    He diverts his attention away from his knife sharpening.
-
-    He tells you that in order to find the cave, you must harness the power of flight.
-<<else>>\
-    He welcomes you to the cave.
-
-    He often finds interesting gems and metals here. He will not accompany you out of fear of venturing too deep.
-    
-    If you wish to unlock the secrets of the cave, you must venture alone.
-<</if>>
-[[Return|previous()]]
-
-:: Brewmaster Interact [noreturn]
-You approach the brewmaster. He acknowledges you and takes some time to give you tips about brewing.
-<<if $BreweryNPC.includes('Brewmaster')>>
-    He walks you through the steps and shows you some examples of how to make a great brew.
-<<else>>
-    He is fast asleep. There is no use trying to wake him.
-<</if>>
-[[Return|previous()]]
-
-:: Librarian Interact [noreturn]
-You approach the librarian. Her attention leaves her current task and shifts towards you.
-<<if $LibrarianQuestProg is 0>>
-    <<if $LibrarianQuest is false>>
-        She apologizes for not being present in the library. She explains that she is often distracted and tends to lock herself in her office, abosrbed in her reading.
-
-        Sometimes she ventures out into the forest, searching for interesting specimens which she reads about in her books. 
-        <<set $LibrarianQuest to true>>
-        If you find one such interesting specimen and bring it to her, she will give you a key to her office.    
-    <<else>>
-        <<if $UserIngredients.includesAny('Bat Wing','Slime','Eye of Newt')>>
-            You have a specimen that she is interested in. She takes notice of your \
-            <<if $UserIngredients.includes('Bat Wing')>>\
-                Bat Wing. <<run $UserIngredients.delete('Bat Wing')>>
-            <<elseif $UserIngredients.includes('Slime')>>\
-                Slime. <<run $UserIngredients.delete('Slime')>>
-            <<else>>\
-                Eye of Newt. <<run $UserIngredients.delete('Eye of Newt')>>
-            <</if>>\
-
-            You turn it over to her and she hands you a key to her office.
-            <<run $Items.pushUnique('Dungeon Key')>> <<set $LibrarianQuestProg to 1>> \
-        <<else>>
-            You have not found a specimen that she is interested in. You will have to keep looking if you want a key to her office.
-        <</if>>
-    <</if>>
-<<else>>
-    She asks if you have been inside of her office yet??? *WIP*
-<</if>>
-[[Leave|Demo]]
-
 :: Headmaster's Office
 You enter the headmaster's office. You see an ornate desk with papers strewn about. An impressive goblet sits by his ink container.
 <<if $HeadmasterOfficeNPC.includes('Headmaster')>>
@@ -1304,7 +1084,7 @@ You enter the dormitory.
 The hallway forks. One direction leads to the male dorm, the other leads to the female dorm. 
 <<if $Blind is true>>
     [[Go left|Male dorm]]
-    [[Go right|Female dorm]]
+    [[Gor right|Female dorm]]
 <<else>>
     You notice a suspicious latch on the ceiling.
 
@@ -1473,11 +1253,7 @@ You fall asleep in the cave hanging from the rock.
 
 :: Cave 
 It is <<if $NightTime is false>>morning<<else>>night<</if>> in the cave. <<if $Bat is true>>You notice your fellows bats hanging from the stalactites.<</if>>
-<<if $CaveNPC.includes('Smith')>>
-    You see the smith inspecting a rock.
 
-    [[Approach smith|Smith Interact]]
-<</if>>\
 [[Fly back to campus|Demo]]
 [[Fly deeper into the cave|Fly cave]]
 [[Explore on foot|Explore Cave]]
@@ -1677,7 +1453,7 @@ You take your future into your own hands and attempt escape from your cell.
 
     [[Choose a dormitory|Dormitory]]
     <<if $CeilingKey is true>> \
-        [[Utter the passphrase|Passphrase]]
+    [[Utter the passphrase|Passphrase]]
     <</if>> \
     [[Leave|Demo]]
 <<else>>\
@@ -1691,48 +1467,22 @@ You utter the passphrase.
 
 You hear a clicking noise and the latch unlocks.
 
-[[Enter the darkness|Teacher Dorm]]
+[[Enter the darkness]]
 
-:: Teacher Dorm
+:: Enter the darkness
 <<if $NoHands is false or $Wings is true>>\
-    You swing a door down and <<if $Wings is true>>fly<<else>>climb<</if>> into the ceiling to find the teacher's dormitory.
+    You swing a door down and <<if $Wings is true>>fly<<else>>climb<</if>> into the ceiling.
     <<if $Blind is false>>
         The teacher's dorm appears quite similar to the student dorms, however there are fewer beds.
 
-        You creep forward peering around, but keping yourself concealed to avoid detection. You notice teacher's belongings strewn about.
-        <<if $TeacherDormNPC>>
-            <<if $TeacherDormNPC.include('Librarian')>>\
-                The librarian is laying on her bed, reading a book with great concentration and intrigue. \
-            <</if>>\
-            <<if $TeacherDormNPC.include('Brewmaster')>>\
-                The brewmaster is passed out, snoring loudly. \
-            <</if>>\
-            <<if $TeacherDormNPC.include('Smith')>>\
-                The smith is methodically sharpening a knife. \
-            <</if>>\
-            <<if $TeacherDormNPC.include('Scientist')>>\
-                The scientist is staring into a colorful phial. She has a mischevious look on her face. \
-            <</if>>\
-            <<if $TeacherDormNPC.include('Farmer')>>\
-                The farmer is brushing her hair. It is very messy from a hard day's work. \
-            <</if>>\
-            <<if $TeacherDormNPC.include('Priest')>>\
-                The priest has is eyes closed in prayer with his hands clasped together. \
-            <</if>>\
-            <<if $TeacherDormNPC.include('Teacher')>>\
-                The classroom teacher is reading over her lesson plan for the next day. \
-            <</if>>\
-        <<else>>
-            There are currently no teachers around, but they might show up at any moment. 
-        <</if>>
+        You notice teacher's belongings strewn about.
+
+        There are currently no teachers around, but you may not want to press your luck. <br>
         <<if $Xray is true and $Blind is false>>\
         [[Use your X-ray vision to find a particular item|Teacher Belonging Xray][$TempBool to false]]
         <</if>>\
         [[Search teacher's belongings][$TempBool to false]]
-        /* [[Hide and wait for a teacher to show up|Hide][$TempBool to true]] - Figure out what to do with this */
-    <</if>>\
-    <<if $TeacherDormNPC is false>>\
-        [[Approach a teacher|Teacher Dorm Interact]]
+        [[Hide and wait for a teacher to show up|Hide][$TempBool to true]]
     <</if>>\
     [[Leave dorm]]
 <<else>>\
@@ -1740,32 +1490,6 @@ You hear a clicking noise and the latch unlocks.
 
     [[Return|Demo]]
 <</if>>\
-
-:: Teacher Dorm Interact
-Who do you want to approach?
-
-<<if $TeacherDormNPC.include('Librarian')>>\
-    [[Librarian|Librarian Interact]]
-<</if>>\
-<<if $TeacherDormNPC.include('Brewmaster')>>\
-    [[Brewmaster|Brewmaster Interact]]
-<</if>>\
-<<if $TeacherDormNPC.include('Smith')>>\
-    [[Smith|Smith Interact]]
-<</if>>\
-<<if $TeacherDormNPC.include('Scientist')>>\
-    [[Scientist|Scientist Interact]]
-<</if>>\
-<<if $TeacherDormNPC.include('Farmer')>>\
-    [[Farmer|Farmer Interact]]
-<</if>>\
-<<if $TeacherDormNPC.include('Priest')>>\
-    [[Priest|Priest Interact]]
-<</if>>\
-<<if $TeacherDormNPC.include('Teacher')>>\
-    [[Classroom Teacher|Classroom Teacher Interact]]
-<</if>>\
-[[Change your mind and leave|Leave dorm]]
 
 :: Teacher Belonging Xray
     You traverse the dormitory, inspecting the teacher's various bags, chests, and miscellaneous containers. 
@@ -2047,9 +1771,9 @@ You enter the temple.
         A priest prays in the corner of the temple, outfitted in holy garb.
     <</if>>
     <<if $TempleNPC.includes('Priest')>>\
-        [[Interrupt the priest's prayer|Priest Interact]]
+        [[Interrupt the priest's prayer|WIP]]
         <<if $Weapon is true or $UserLegendaryItems.includes('Sword of Siren Slaying')>>\
-            [[Attack the priest with your weapon|Attack Priest]]
+            [[Attack the priest with your weapon|WIP]]
         <</if>>\
     <</if>>\
     [[Pray at a pew][$Holy += 1]] 
@@ -2057,15 +1781,6 @@ You enter the temple.
     [[Search the temple]]
     [[Leave|Demo]]
 <</if>>
-
-:: Attack Priest [noreturn]
-You swing at the priest with your weapon.
-
-Surprisingly, he remains fully engrossed in his prayer, making no effort to block your attack.
-<<set $PriestLife to false>> <<run $TempleNPC.delete('Priest')>>
-You cleanly slice through his neck, killing him instantly. His body lays on the temple floor in pieces.
-
-[[Dispose of the body and clean up the scene|previous()]]
 
 :: Pray
 You pray blindly.
@@ -2526,7 +2241,7 @@ You enter the library.
 <</if>>\
 <<if $Blind is false>>\
     <<if $LibraryNPC.includes('Librarian')>>\
-        [[Talk to the librarian|Librarian Interact]]
+        [[Talk to the librarian|WIP]]
     <<else>>\
         [[Find the librarian]]
     <</if>>\
@@ -2594,45 +2309,12 @@ You notice a door to a back room.
 
 :: LibraryDoor
 You turn the knob.
-<<if $Items.includes('Dungeon Key')>>
-    You use your key. The door opens.
+/* Where is the key? In the teacher's dorm */
+The door is locked.
 
-    [[Enter|Dungeon]]
-    [[Leave|Demo]]
-<<else>>
-    The door is locked.
-
-    [[Study]]
-    [[Interrupt another student]]
-    [[Leave|Demo]]
-<</if>>
-
-:: Dungeon
-<<if $LibrarianQuestProg is 1>>
-    You close the door behind you and descend a spiraling staircase. Torches flicker on the stone walls, casting your shadow.
-
-    You reach the bottom of the staircase. The dim sound of water droplets falling echoes throughout the chamber.
-
-    In the dim lighitng, you notice strange contraptions. There are metal cages and other starnge devices. 
-
-    [[Investigate|WIP]]
-    [[Turn Around|Leave Dungeon]]
-<<else>> *WIP*
-    You enter the dungeon. 
-
-    A student is trapped in a device begginf for your help. 
-
-    [[Help them]]
-    [[Leave|Library]]
-<</if>>
-
-:: Leave Dungeon
-Afraid of what you might find, you turn around to leave the dungeon.
-
-As you reach the staircase, you swear you can hear a faint whisper asking for your help.
-
-[[Investigate|WIP]]
-[[Leave|Library]]
+[[Study]]
+[[Interrupt another student]]
+[[Leave|Demo]]
 
 :: Laboratory
 You enter the laboratory. /* This should not get rid of all descriptions when lab becomes true, change to $ScientistShip */
@@ -3766,7 +3448,7 @@ It is very dark outside the campus.
 You can explore the outskirts of the campus as well as the surrounding forest.
 
 [[Explore the campus outskirts]]
-[[Enter the forest|Forest]]
+[[Enter the forest]]
 
 :: Explore the campus outskirts
 You ride along the campus outskirts.
@@ -3806,7 +3488,7 @@ You notice many interesting plants.
                             
 [[Inspect a plant]]
 <</if>> \
-[[Enter the forest|Forest]]
+[[Enter the forest]]
 <<if $SirenQuest is true>>\
 [[Search for the headmaster]]
 <</if>>\
@@ -3917,17 +3599,12 @@ You collect $TempString leaves.
 <</if>>
 [[Return to campus]]
 
-:: Forest
+:: Enter the forest
 The forest is dark and spooky.
 <<if $Weapon is true or $UserLegendaryItems.includes('Sword of Siren Slaying')>>
-    You are comforted by your weapon. 
+You are comforted by your weapon. 
 <<else>>
-    You wish you had a weapon right about now...
-<</if>>
-<<if $ForestNPC.includes('Librarian')>>
-    You notice a figure moving in the distance.
-
-    [[Approach the figure|Librarian Interact]] 
+You wish you had a weapon right about now...
 <</if>>
 <<link [[Forge onwards]]>>
     <<set _Plants to []>>
@@ -4112,7 +3789,7 @@ You take the $TempString1 seeds.
 
 [[Leave forest]]
 
-:: Fight 
+:: Fight
 You fight the <<if $NightTime is true>>monster<<else>>$TempString<</if>>.
 <<if $Weapon is true or $UserLegendaryItems.includes('Sword of Siren Slaying')>>
     You defeat the <<if $NightTime is true>>monster<<else>>$TempString<</if>> using your weapon.
@@ -4328,11 +4005,16 @@ You enter the forge.
 
     [[Mess around with the tools randomly|Mess around]]
 <<elseif $Forge is 1>>
-    <<if $ForgeNPC.includes('Smith')>>\
-        The smith is hammering away at an anvil. He produces loud clanging sounds as his hammer connects with hot metal.
-        [[Approach smith|Smith Interact]]
+    <<if $Weapon is false>>\
+        <<if $UserLegendaryItems.includes('Sword of Siren Slaying') is false>>\
+            [[Create weapon]]
+            [[Leave|Demo]]
+        <<else>>\
+            You already have a weapon.<br><br>
+        <</if>>\
+    <<else>>\
+        You already have a weapon.<br><br>
     <</if>>\
-    [[Create Weapon]]
     [[Leave|Demo]]
 <<else>>
     <<if $ForgeNPC.includes('Smith')>>\
@@ -4376,23 +4058,13 @@ You gain access to the forge.
 [[Leave|Demo]]
 
 
-:: Create weapon [noreturn]
-<<if $Weapon is false>>\
-    <<if $UserLegendaryItems.includes('Sword of Siren Slaying') is false>>\
-        You smelt standard metals and create a basic weapon.
-        <<set $Weapon to true>>
-        You will now be able to defend yourself.
-        <<set $NightTime to true>> <<NPCLocation>>
-        [[Eat dinner]]
-        [[Sleep]]
-    <<else>>\
-        You already have a weapon.<br>
-        [[Return|previous()]]
-    <</if>>\
-<<else>>\
-    You already have a weapon.<br>
-    [[Return|previous()]]
-<</if>>\
+:: Create weapon
+You smelt standard metals and create a basic weapon.
+<<set $Weapon to true>>
+You will now be able to defend yourself.
+<<set $NightTime to true>> <<NPCLocation>>
+[[Eat dinner]]
+[[Sleep]]
 
 :: Mess around
 You sling tools around like a doofus.
@@ -4444,20 +4116,9 @@ You enter the brewery.
     <</if>>\
     [[Leave|Demo]]
 <<elseif $Blind is false>>
-    <<if $BreweryNPC.includes('Brewmaster')>>\
-        <<if $NightTime is false>>\
-            The brewmaster is in the middle of working on a new brew.
-
-            [[Talk to the brewmaster|Brewmaster Interact]]
-        <<else>>\
-            The brewmaster is asleep in a corner. Empty bottles litter the floor around him.
-        <</if>>\    
-    <</if>>\
     [[Work on a brew|Brew]]
     [[Leave|Demo]]
 <<else>>
-    It is dark and cold.
-
     [[Leave|Demo]]
 <</if>>
 
