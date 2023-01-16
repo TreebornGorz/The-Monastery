@@ -536,7 +536,7 @@ body.no-save #menu-item-saves {
 <<set $MarketQuestProg to 0>>
 
 /* Player Log Events */
-
+<<set $DreamLog to []>>
 
 :: StoryCaption 
 /* Displays game information to the player on the left side of the screen */
@@ -599,10 +599,18 @@ You have decided to help the farmer care for the animals. You now have acces to 
     chickens, cows, and horses.
     <</if>> \
 <</if>>\
-<<if $Dreaming is true>>\ /* WIP */
-You have dreamt about:<br><br>
+<<if $FemaleStudentShip gt 0>>\ 
+You are friends with a burly female student.<br><br>
 <</if>>\
-
+<<if $CeilingKey is true>>\ 
+You have memorized the passphrase for the staff dormitory.<br><br>
+<</if>>\
+<<if $Gossip is true>>\ /* WIP */
+You have overhead the following gossip:<br><br>
+<</if>>\
+<<if $Dreaming is true>>\ /* WIP */
+You have dreamt about: $DreamLog <br><br>
+<</if>>\
 [[Return|previous()][$Show to true]]
 
 :: Status [noreturn menu]
@@ -2165,7 +2173,7 @@ After realizing the situation, they nervously flee the refectory and report you 
 <<else>>\
 however, nobody can see your eyes.
 
-[[Listen to gossip]]
+[[Listen to gossip][$Gossip to true]]
 [[Eat in peace]]
 <</if>>
 :: Listen to gossip
@@ -4254,15 +4262,15 @@ The professor enters and [[class begins|Class]].
 :: Ask how you can help her
 You politely ask her how you can help her.
 
-She looks a bit embarrassed and motions towards the inside of the desk.
+She looks a bit embarrassed and motions towards the inside of your desk.
 
-You are confused. She clears her throat and more obviously motions towards the inside of the desk.
+You are confused. She clears her throat and more obviously points towards the inside of your desk.
 
 You look inside and notice some XL tampons she must have left behind last time she sat in this seat.
 
 You discreetly hand them over to her.
 <<set $FemaleStudentShip to 1>>
-She happily takes them from you. She takes a seat with a smile on her face.
+She happily takes them from you and takes her seat.
 
 You have made a friend<<if $Ostra is true>> despite being socially ostracized<</if>>.
 
@@ -4317,7 +4325,7 @@ You read through the document. It is an onboarding document for new professors.
 
 It describes the accommodations in the staff dormitory and provides a passphrase for access.
 
-You <b>memorize the passphrase</b> and <<if $Invisibility is true>>find a spot in the back of the classroom to invisibly observe and [[class begins|Class]]<<else>>[[return to your seat|Return to your seat]].<</if>>
+You //<b>memorize the passphrase</b>// and <<if $Invisibility is true>>find a spot in the back of the classroom to invisibly observe and [[class begins|Class]]<<else>>[[return to your seat|Return to your seat]].<</if>>
 <<else>>
 Just as you do, the professor and multiple students walk through the door.
 <<if $Invisibility is true>>
@@ -4329,7 +4337,7 @@ Just as you do, the professor and multiple students walk through the door.
 
     It describes the accommodations in the staff dormitory and provides a passphrase for access.
 
-    You <b>memorize the passphrase</b>.
+    You //<b>memorize the passphrase</b>//.
     <<set $CeilingKey to true>>
     [[Eat dinner]]
     [[Sleep]] 
@@ -4362,9 +4370,9 @@ You feel your brain growing with great knowledge.
 You go to sleep in the dorm.
 
 You dream of an odd future that awaits you, but you can't quite make out the ending.
-
-Maybe it involves <<print $Dream.random()>>...?
-
+<<set $Temp to $Dream.random()>> <<run $DreamLog.pushUnique($Temp)>>
+Maybe it involves <<print $Temp>>...?
+<<set $Dreaming to true>>
 [[Wake Up|Demo][$NightTime to false]]
 
 <<set $NightTime to false>> <<NPCLocation>> <<PotionExpiration>> <<AgePlants>> <<set $Day += 1; $NightTime to true>>
